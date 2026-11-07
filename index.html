@@ -101,6 +101,18 @@ h1 .grow{flex:1}
 .bg-g{background:rgba(52,211,153,.14);color:var(--green)} .bg-a{background:rgba(251,191,36,.14);color:var(--amber)}
 .bg-r{background:rgba(248,113,113,.14);color:var(--red)} .bg-b{background:rgba(96,150,255,.16);color:var(--blue)} .bg-m{background:var(--card2);color:var(--muted)}
 .bg-g.pulse{animation:pulse 2.2s ease-in-out infinite}
+html[data-theme=light]{--bg:#f3f5fa;--bg2:#e9edf5;--card:#ffffff;--card2:#eef2f9;--line:#d5dcea;--text:#141b2d;--muted:#5b6784;--dim:#8792ad;
+  --green:#0f9f6e;--red:#d64545;--amber:#b7791f;--blue:#2f6bff;--violet:#7c5cf0;--track:#e1e7f2}
+html[data-theme=light] body{background:radial-gradient(900px 340px at 50% -80px,rgba(47,107,255,.10),transparent 70%),var(--bg)}
+.fd{display:inline-block;width:22px;height:22px;border-radius:50%;margin-right:4px;font-size:11px;font-weight:800;line-height:22px;text-align:center;color:#06101f}
+.fd.W{background:var(--green)}.fd.D{background:var(--amber)}.fd.L{background:var(--red)}
+.frow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0}
+.tbl td.me,.tbl tr.me td{font-weight:800;color:var(--blue)}
+.nbox{margin-top:8px}.nbox textarea{width:100%;min-height:54px;background:var(--card2);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:8px;font:inherit;resize:vertical}
+.nlink{color:var(--blue);font-size:12px;margin-top:6px;display:inline-block}
+.ntxt{margin-top:6px;font-size:13px;color:var(--muted);white-space:pre-wrap}
+.score{font-weight:700;font-size:20px;margin-top:8px;letter-spacing:.04em}
+.pause{color:var(--amber,#e0a030)}
 .live{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--red);margin-right:6px;animation:blink 1.2s infinite}
 
 /* страница матча */
@@ -280,6 +292,17 @@ let SNAP=null, SNAP_AT=0, SNAP_P=null, _keyCache=null;
 const lsGet=k=>{ try{ return localStorage.getItem(k); }catch(e){ return null; } };
 const lsSet=(k,v)=>{ try{ localStorage.setItem(k,v); }catch(e){} };
 const lsDel=k=>{ try{ localStorage.removeItem(k); }catch(e){} };
+/* тема: авто (как в Telegram) / светлая / тёмная; выбор хранится локально */
+function applyTheme(){
+  const pref = lsGet("theme") || "auto";
+  const sys = (tg && tg.colorScheme) || ((window.matchMedia && matchMedia("(prefers-color-scheme: light)").matches) ? "light" : "dark");
+  const th = pref==="auto" ? sys : pref;
+  document.documentElement.dataset.theme = th;
+  const c = th==="light" ? "#f3f5fa" : "#090d16";
+  try { tg && tg.setHeaderColor && tg.setHeaderColor(c); tg && tg.setBackgroundColor && tg.setBackgroundColor(c); } catch(e){}
+}
+applyTheme();
+try { tg && tg.onEvent && tg.onEvent("themeChanged", applyTheme); } catch(e){}
 const normKey = p=>String(p||"").replace(/[\s\-]/g,"").toUpperCase();
 const unb64 = s=>Uint8Array.from(atob(s), c=>c.charCodeAt(0));
 async function decryptEnv(env, pass){
@@ -387,11 +410,21 @@ const fmtDay = d=>{const t=new Date(),y=new Date(Date.now()+864e5),s=x=>x.toDate
 const fmtTime = d=>d.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});
 function ago(iso){ if(!iso) return ""; const s=(Date.now()-new Date(iso).getTime())/1000; if(s<90) return "только что"; if(s<3600) return Math.round(s/60)+" мин назад";
   if(s<86400) return Math.round(s/3600)+" ч назад"; return Math.round(s/86400)+" дн назад"; }
-/* обратный отсчёт до начала */
+/* фаза матча по часам (v25). Живого счёта нет — это ОЦЕНКА от заявленного старта; зеркало matchphase.py (сверяется тестом) */
+function phaseAt(t){
+  if (t < 0) return {code:"pre", label:""};
+  if (t < 47) { const n=Math.floor(t)+1; return n>45 ? {code:"1h", label:"1-й тайм ~45+′"} : {code:"1h", label:"1-й тайм ~"+n+"′"}; }
+  if (t < 62) return {code:"ht", label:"перерыв"};
+  if (t < 111) { const n=45+Math.floor(t-62)+1; return n>90 ? {code:"2h", label:"2-й тайм ~90+′"} : {code:"2h", label:"2-й тайм ~"+n+"′"}; }
+  if (t < 360) return {code:"ft", label:"завершён · итог ожидается"};
+  return {code:"old", label:""};
+}
+function phaseOf(ms){ return phaseAt((Date.now()-ms)/60000); }
+/* обратный отсчёт до начала / фаза матча */
 function etaText(ms){
   const diff = ms - Date.now(), m = Math.round(Math.abs(diff)/60000);
   if (diff > 0) { if (m < 1) return "сейчас начнётся"; if (m < 60) return "через "+m+" мин"; const h=Math.floor(m/60); if (h < 24) return "через "+h+" ч"+(m%60?" "+(m%60)+" мин":""); return ""; }
-  if (m <= 150) return "идёт · "+m+" мин"; return "";
+  return phaseOf(ms).label;
 }
 setInterval(()=>document.querySelectorAll("[data-eta]").forEach(el=>{ el.textContent=etaText(+el.dataset.eta); }),30000);
 
@@ -444,15 +477,15 @@ function renderList(anim){
   for(const m of items){
     const w = when(m), day = fmtDay(w.d);
     if(!byConf && day!==cur){ cur=day; out += `<div class="day cap">${esc(day)}</div>`; }
-    const started = w.hasTime && w.d.getTime() < Date.now() && Date.now()-w.d.getTime() < 150*60000;
+    const ph = (w.hasTime && !m.score) ? phaseOf(w.d.getTime()).code : "", started = ph==="1h"||ph==="2h", paused = ph==="ht";
     const bd = [];
     if(m.n_placed) bd.push('<span class="badge bg-b">поставлено</span>');
     else if(m.n_rec) bd.push('<span class="badge bg-g pulse">есть перевес</span>');
     if(m.quality!=null && m.quality<.35) bd.push('<span class="badge bg-r">мало данных</span>');
     const when_ = w.hasTime?(byConf?fmtDay(w.d)+" · ":"")+fmtTime(w.d):(byConf?fmtDay(w.d):"");
     out += `<button class="row" data-id="${m.event_id}"><div class="top"><span><span style="color:${LCOL[m.league]||"var(--muted)"}">●</span> ${esc(LEAGUES[m.league]||m.league)}</span>
-      <span class="num">${started?'<span class="live"></span>':""}${w.hasTime?`<span class="eta" data-eta="${w.d.getTime()}">${esc(etaText(w.d.getTime()))}</span> · `:""}${esc(when_)}</span></div>
-      <div class="teams"><span>${isFav(m.home)?'<b class="fv">★</b>':""}${esc(nmH(m))}</span><span>${isFav(m.away)?'<b class="fv">★</b>':""}${esc(nmA(m))}</span></div>${pbar(m.p)}
+      <span class="num">${started?'<span class="live"></span>':paused?'<span class="pause">⏸</span> ':""}${m.score?`<span class="eta">завершён</span> · `:w.hasTime?`<span class="eta" data-eta="${w.d.getTime()}">${esc(etaText(w.d.getTime()))}</span> · `:""}${esc(when_)}</span></div>
+      <div class="teams"><span>${isFav(m.home)?'<b class="fv">★</b>':""}${esc(nmH(m))}</span><span>${isFav(m.away)?'<b class="fv">★</b>':""}${esc(nmA(m))}</span></div>${m.score?`<div class="score num">${m.score[0]} : ${m.score[1]}</div>`:pbar(m.p)}
       ${bd.length?`<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">${bd.join("")}</div>`:""}</button>`;
   }
   el.innerHTML = out;
@@ -544,6 +577,8 @@ async function viewMatch(id){
   mount(`<div style="height:14px"></div>${skel(3)}`);
   let m; try { m = await api("/api/match/"+id); } catch(e){ return errView(e, ()=>viewMatch(id)); }
   if(state.detail!==id) return;
+  state.cur = m;
+  if(state.me===undefined){ try{ state.me = await api("/api/me"); }catch(e){ state.me = null; } }
   const a = m.analysis, w = when(m);
   let h = `<div style="height:12px"></div><div class="card hero"><span class="badge bg-m lg" style="color:${LCOL[m.league]||"var(--muted)"}">${esc(LEAGUES[m.league]||m.league)}</span>
    <div class="sub" style="margin-bottom:4px">${esc(w.d.toLocaleDateString("ru-RU",{weekday:"short",day:"numeric",month:"long"}))}${w.hasTime?" · "+fmtTime(w.d):""}</div>
@@ -583,6 +618,7 @@ async function viewMatch(id){
       [["Пуассон (вес 0.5)",c.poisson],["Бустинг (0.3)",c.gbm],["Эло (0.2)",c.elo],["Ансамбль",a.p]].filter(r=>r[1]).map(([n,v],i,arr)=>`<tr style="${i==arr.length-1?"font-weight:800":""}"><td>${n}</td>${v.map(x=>`<td class="num">${pc(x,1)}</td>`).join("")}</tr>`).join("") + `</table></div>`;
     h += `<div id="calcbox">${calcCard(a)}</div>`;
   }
+  h += extraCards(m) + actionCard(m);
   if((m.bets||[]).length){
     h += `<div class="card"><div class="cap">Ставки бота по матчу</div><div style="margin-top:12px">` + m.bets.map(b=>betRow(b,true)).join("") + `</div></div>`;
   } else if (a) h += `<div class="card"><div class="cap">Ставки бота по матчу</div><div class="sub" style="margin-top:8px">Пока нет. Бот добавит ставку, когда найдёт перевес по актуальным кэфам.</div></div>`;
@@ -608,6 +644,63 @@ function betStatus(b){
   if(b.result!=null) return b.result===1?'<span class="badge bg-g">выиграла</span>':b.result===2?'<span class="badge bg-m">возврат</span>':'<span class="badge bg-r">проиграла</span>';
   return b.placed?'<span class="badge bg-b">поставлена</span>':b.recommended?'<span class="badge bg-a">открыта</span>':'<span class="badge bg-m">теневая</span>';
 }
+/* v25: форма, личные встречи, таблица, движение кэфов (рисуем только то, для чего есть данные) */
+function formDots(arr){ return (arr||[]).slice().reverse().map(x=>`<span class="fd ${x.r}" title="${esc(x.opp)} ${x.gf}:${x.ga}">${x.r==="W"?"В":x.r==="D"?"Н":"П"}</span>`).join(""); }
+function extraCards(m){
+  const x = m.extra; if(!x) return "";
+  let h = "";
+  const fh=(x.form||{}).home||[], fa=(x.form||{}).away||[];
+  if(fh.length||fa.length){
+    h += `<div class="card"><div class="cap">Форма · последние матчи</div><div style="margin-top:8px">
+      <div class="frow"><span>${esc(nmH(m))}</span><span>${fh.length?formDots(fh):'<span class="dim">нет данных</span>'}</span></div>
+      <div class="frow"><span>${esc(nmA(m))}</span><span>${fa.length?formDots(fa):'<span class="dim">нет данных</span>'}</span></div></div>
+      <div class="note">Слева — давно, справа — недавно.</div></div>`;
+  }
+  const hh=x.h2h;
+  if(hh&&hh.games&&hh.games.length){
+    h += `<div class="card"><div class="cap">Личные встречи · ${hh.games.length}</div><div class="sub" style="margin-top:4px">${esc(nmH(m))}: ${hh.w} · ничьих: ${hh.d} · ${esc(nmA(m))}: ${hh.l}</div><div style="margin-top:8px">` +
+      hh.games.map(g=>`<div class="frow"><span class="dim num" style="font-size:12px">${esc(String(g.date).slice(0,10))}</span><span style="flex:1;font-size:13px;text-align:center">${esc(g.home)} — ${esc(g.away)}</span><b class="num">${g.hg}:${g.ag}</b></div>`).join("") + `</div></div>`;
+  }
+  const tb=x.table||[];
+  if(tb.length){
+    const idx = tb.reduce((a,r,i)=>{ if(r.team===m.home||r.team===m.away) a.push(i); return a; },[]);
+    if(idx.length){
+      const keep=new Set(); idx.forEach(i=>{ for(let k=i-1;k<=i+1;k++) if(k>=0&&k<tb.length) keep.add(k); });
+      const rows=[...keep].sort((a,b)=>a-b);
+      h += `<div class="card"><div class="cap">Таблица · ${esc(LEAGUES[m.league]||m.league)}</div><table class="tbl" style="margin-top:6px"><tr><th>#</th><th>Команда</th><th>И</th><th>М</th><th>О</th></tr>` +
+        rows.map(i=>{ const r=tb[i], me=(r.team===m.home||r.team===m.away); return `<tr class="${me?"me":""}"><td class="num">${r.pos}</td><td>${esc(state.lang==="ru"&&(r.team===m.home||r.team===m.away)?(r.team===m.home?nmH(m):nmA(m)):r.team)}</td><td class="num">${r.p}</td><td class="num">${r.gf}:${r.ga}</td><td class="num">${r.pts}</td></tr>`; }).join("") +
+        `</table><div class="note">По сыгранным матчам из базы бота (без учёта пропущенных туров) — ориентир, не официальная таблица.</div></div>`;
+    }
+  }
+  const om=x.odds_moves;
+  if(om&&om.series){
+    const row=(k,t)=>{ const v=om.series[k]||[]; if(v.length<3) return ""; const a=v[0][1], b=v[v.length-1][1], d=(b/a-1)*100; return `<tr><td>${t}</td><td class="num">${a.toFixed(2)}</td><td class="num">${b.toFixed(2)}</td><td class="num ${d<0?"g":d>0?"r":"dim"}">${d>0?"+":""}${d.toFixed(1)}%</td><td class="num dim">${v.length}</td></tr>`; };
+    h += `<div class="card"><div class="cap">Движение кэфов · ${esc(om.source)}</div><table style="margin-top:6px"><tr><th></th><th>было</th><th>стало</th><th>Δ</th><th>снимков</th></tr>${row("P1","П1")}${row("X","Х")}${row("P2","П2")}</table>
+      <div class="note">Кэф падает — рынок верит в исход сильнее. Показано, только когда есть минимум 3 снимка.</div></div>`;
+  }
+  return h;
+}
+/* действия: «Поставил» (через бота, с подтверждением), календарь, поделиться */
+function openTg(url){ try{ if(tg&&tg.openTelegramLink&&/^https:\/\/t\.me\//.test(url)) return tg.openTelegramLink(url); }catch(e){} window.open(url,"_blank"); }
+function ymd(d){ return d.toISOString().replace(/[-:]/g,"").replace(/\.\d+/,""); }
+function actionCard(m){
+  const open=(m.bets||[]).filter(b=>b.recommended&&!b.placed&&b.result==null), bot=state.me&&state.me.bot, ko=m.kickoff_at?new Date(m.kickoff_at):null, okd=ko&&!isNaN(ko);
+  let btn="";
+  if(open.length&&bot) btn+=`<button class="btn" data-act="place" style="margin:0 8px 8px 0">✅ Поставил (${open.length})</button>`;
+  if(okd) btn+=`<button class="btn" data-act="cal" style="margin:0 8px 8px 0;background:var(--card2);color:var(--text)">📅 В календарь</button>`;
+  btn+=`<button class="btn" data-act="share" style="margin:0 0 8px;background:var(--card2);color:var(--text)">↗ Поделиться</button>`;
+  return `<div class="card" id="acts"><div class="cap">Действия</div><div style="margin-top:8px">${btn}</div>${open.length&&!bot?'<div class="note">Кнопка «Поставил» появится после первого запуска бота новой версии.</div>':""}</div>`;
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]"); if(!b) return; const m=state.cur; if(!m) return;
+  if(b.dataset.act==="place"){ const bot=state.me&&state.me.bot; if(bot) openTg(`https://t.me/${bot}?start=place_${m.event_id}`); }
+  else if(b.dataset.act==="cal"){ const ko=new Date(m.kickoff_at), en=new Date(ko.getTime()+115*60000);
+    window.open("https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent(m.home+" — "+m.away)+"&dates="+ymd(ko)+"/"+ymd(en)+"&details="+encodeURIComponent(LEAGUES[m.league]||m.league),"_blank"); }
+  else if(b.dataset.act==="share"){ const a=m.analysis, t=`${nmH(m)} — ${nmA(m)}`+(a&&a.p?` · П1 ${(a.p[0]*100).toFixed(0)}% / Х ${(a.p[1]*100).toFixed(0)}% / П2 ${(a.p[2]*100).toFixed(0)}%`:""), bot=state.me&&state.me.bot;
+    openTg("https://t.me/share/url?url="+encodeURIComponent(bot?"https://t.me/"+bot:"https://t.me")+"&text="+encodeURIComponent(t)); }
+});
+/* заметки к ставкам (журнал): хранятся у вас — в Telegram CloudStorage / браузере, на сервер не уходят */
+const noteKey = b => "note:"+b.event_id+"|"+b.market+"|"+b.selection;
 function betRow(b, inMatch){
   const odds = b.placed&&b.placed_odds?b.placed_odds:b.taken_odds, stake = b.placed&&b.placed_stake?b.placed_stake:b.stake;
   const meta = [`EV ${sgn(b.ev)}`, stake?`ставка ${mon(stake)}`:null, b.tier?esc(b.tier):null, b.clv_pct!=null?`CLV ${b.clv_pct>=0?"+":""}${b.clv_pct.toFixed(1)}%`:null, b.pnl!=null?`PnL ${mon(b.pnl)}`:null].filter(Boolean).join(" · ");
@@ -632,9 +725,20 @@ async function viewBets(){
   if(settled.length) sum.push(`<span class="badge bg-m">рассчитано: ${settled.length}</span>`);
   if(realSet.length){ const pn=realSet.reduce((s,b)=>s+(b.pnl||0),0); sum.push(`<span class="badge ${pn>=0?"bg-g":"bg-r"}">PnL реальных: ${mon(pn)}</span>`); }
   document.getElementById("sum").innerHTML = `<div class="sumrow">${sum.join("")}</div>`;
-  el.innerHTML = rows.map(b=>`<div class="card tap" data-id="${b.event_id}" style="cursor:pointer"><div class="sub" style="margin-bottom:6px">${esc(LEAGUES[b.league]||b.league)} · ${esc(String(b.match_date||""))}</div>${betRow(b,false)}</div>`).join("");
+  el.innerHTML = rows.map((b,i)=>`<div class="card tap" data-id="${b.event_id}" style="cursor:pointer"><div class="sub" style="margin-bottom:6px">${esc(LEAGUES[b.league]||b.league)} · ${esc(String(b.match_date||""))}</div>${betRow(b,false)}
+    <div class="nbox" data-n="${i}"><div class="ntxt" id="nt${i}"></div><a class="nlink" data-edit="${i}">✎ заметка</a></div></div>`).join("");
   stagger(el,".card");
-  el.onclick = e=>{const c=e.target.closest("[data-id]"); if(c) { haptic(); openMatch(+c.dataset.id); }};
+  rows.forEach(async (b,i)=>{ const v=await store.get(noteKey(b)); const t=document.getElementById("nt"+i); if(t&&v) t.textContent=v; });
+  el.onclick = e=>{
+    const ed=e.target.closest("[data-edit]");
+    if(ed){ const i=+ed.dataset.edit, b=rows[i], box=ed.closest(".nbox"); if(box.querySelector("textarea")) return;
+      const cur=(document.getElementById("nt"+i)||{}).textContent||"";
+      box.insertAdjacentHTML("beforeend",`<textarea maxlength="500" placeholder="Почему поставили, что заметили…">${esc(cur)}</textarea><a class="nlink" data-save="${i}">Сохранить</a>`); ed.style.display="none"; return; }
+    const sv=e.target.closest("[data-save]");
+    if(sv){ const i=+sv.dataset.save, box=sv.closest(".nbox"), ta=box.querySelector("textarea"), v=ta.value.trim().slice(0,500); store.set(noteKey(rows[i]), v);
+      document.getElementById("nt"+i).textContent=v; ta.remove(); sv.remove(); const l=box.querySelector("[data-edit]"); l.style.display=""; l.textContent=v?"✎ изменить":"✎ заметка"; haptic("ok"); return; }
+    if(e.target.closest("textarea")) return;
+    const c=e.target.closest("[data-id]"); if(c) { haptic(); openMatch(+c.dataset.id); }};
 }
 
 /* ─────────── Статистика ─────────── */
@@ -644,6 +748,48 @@ function mkLabel(c){
   const n=m[2].replace("-","−"); return {TB:"Тотал",ITB1:"Инд. тотал 1",ITB2:"Инд. тотал 2",F1:"Фора 1",CORN:"Угловые",CARD:"Карточки"}[m[1]]+" "+(m[1]==="F1"&&!n.startsWith("−")?"+"+n:n);
 }
 function pfmt(p){return p==null?"":(p<0.0001?"<0.0001":"="+p.toFixed(4));}
+/* максимальная просадка по накопленному PnL */
+function ddNote(eq){
+  if(!eq||eq.length<2) return "";
+  let peak=0, dd=0; eq.forEach(p=>{ peak=Math.max(peak,p[1]); dd=Math.max(dd,peak-p[1]); });
+  const cur=eq[eq.length-1][1];
+  return `<div class="sub" style="margin-top:8px">Макс. просадка: <b class="num ${dd>0?"r":""}">${dd>0?"−":""}${mon(dd)}</b> · сейчас: <b class="num">${mon(cur)}</b></div>`;
+}
+/* диаграмма надёжности: насколько прогнозируемая вероятность совпадает с долей сбывшихся */
+function calibCard(c){
+  if(!c||!c.bins||!c.bins.length) return "";
+  const S=260,P=30,X=v=>P+v*(S-P-8),Y=v=>S-P+8-v*(S-P-8);
+  const dots=c.bins.map(b=>`<circle cx="${X(b.pred)}" cy="${Y(b.freq)}" r="${Math.min(11,4+Math.sqrt(b.n)*.7)}" fill="var(--blue)" opacity=".75"><title>прогноз ${(b.pred*100).toFixed(0)}% · сбылось ${(b.freq*100).toFixed(0)}% · n=${b.n}</title></circle>`).join("");
+  const grid=[0,.25,.5,.75,1].map(v=>`<line x1="${X(0)}" x2="${X(1)}" y1="${Y(v)}" y2="${Y(v)}" style="stroke:var(--line)"/><text x="${P-6}" y="${Y(v)+4}" text-anchor="end" font-size="10" style="fill:var(--dim)">${v*100}</text><text x="${X(v)}" y="${S-P+22}" text-anchor="middle" font-size="10" style="fill:var(--dim)">${v*100}</text>`).join("");
+  const mk=c.brier_market!=null?` · рынок: Brier ${c.brier_market.toFixed(3)} / logloss ${c.logloss_market.toFixed(3)}`:"";
+  return `<div class="card"><div class="cap">Надёжность прогнозов <span class="sub" style="text-transform:none;letter-spacing:0;font-weight:400">· n=${c.n}</span></div>
+   <svg viewBox="0 0 ${S} ${S+12}" style="width:100%;max-width:300px;display:block;margin:8px auto 0">${grid}<line x1="${X(0)}" y1="${Y(0)}" x2="${X(1)}" y2="${Y(1)}" style="stroke:var(--dim)" stroke-dasharray="4 4"/>${dots}
+   <text x="${S/2}" y="${S+8}" text-anchor="middle" font-size="10" style="fill:var(--muted)">прогноз, %</text></svg>
+   <div class="sub" style="margin-top:6px">Brier <b class="num">${c.brier.toFixed(3)}</b> · logloss <b class="num">${c.logloss.toFixed(3)}</b>${mk}</div>
+   <div class="note">Точки на диагонали — прогноз честный; выше — события случались чаще, чем прогноз. Это ставки, которые бот выбрал (с перевесом), а не все матчи подряд, поэтому сравнение с рынком здесь не доказывает преимущества.</div></div>`;
+}
+/* ROI-карта: лига × группа рынков, только рекомендованные рассчитанные ставки */
+function heatCard(h){
+  if(!h||!h.cells||!h.cells.length) return "";
+  const gs=[...new Set(h.cells.map(c=>c.group))], ls=[...new Set(h.cells.map(c=>c.league))];
+  const get=(l,g)=>h.cells.find(c=>c.league===l&&c.group===g);
+  const col=c=>{ if(!c) return ""; const a=Math.min(.6,Math.abs(c.roi)*1.5)+.08, noise=c.n<h.min_n; return `background:${c.roi>=0?"rgba(52,211,153,":"rgba(248,113,113,"}${noise?a*.35:a})`; };
+  return `<div class="card"><div class="cap">ROI-карта <span class="sub" style="text-transform:none;letter-spacing:0;font-weight:400">· лига × рынок · n&lt;${h.min_n} — шум</span></div>
+   <table style="margin-top:8px"><tr><th></th>${gs.map(g=>`<th>${esc(g)}</th>`).join("")}</tr>${ls.map(l=>`<tr><td>${esc(LEAGUES[l]||l)}</td>${gs.map(g=>{const c=get(l,g); return `<td class="num" style="${col(c)};text-align:center;border-radius:6px">${c?(c.roi*100>=0?"+":"")+(c.roi*100).toFixed(0)+"%<br><span class='dim' style='font-size:10px'>n="+c.n+"</span>":""}</td>`;}).join("")}</tr>`).join("")}</table>
+   <div class="note">ROI = прибыль / сумма ставок. На малых n цифры случайны — смотрите на цвет только там, где n велико.</div></div>`;
+}
+/* советы по сегментам (CLV к справедливой закрывающей линии). Только совет — ничего не отключается */
+async function loadSegments(){
+  let sg; try { sg = await api("/api/segments"); } catch(e){ return; }
+  const el=document.getElementById("segbox"); if(!el||!sg) return;
+  const rows=sg.rows||[];
+  el.dataset.x = "1"; const ex = document.getElementById("segx"); if(ex) ex.innerHTML = calibCard(sg.calib) + heatCard(sg.heat);
+  if(!rows.length){ el.innerHTML=`<div class="card"><div class="cap">Где CLV хуже</div><div class="sub" style="margin-top:6px">Пока мало данных: нужно ≥${sg.min_n} ставок с закрытием в сегменте (сейчас ${sg.n_total||0}).</div></div>`; return; }
+  const ic={"минус":"🔴","плюс":"🟢","неясно":"⚪"};
+  el.innerHTML=`<div class="card"><div class="cap">Где CLV хуже <span class="sub" style="text-transform:none;letter-spacing:0;font-weight:400">· к справедливой закрывающей линии</span></div><div style="margin-top:8px">`+
+    rows.map(r=>`<div class="seg-row"><span>${ic[r.verdict]||""} ${esc(r.key)}</span><span class="num">${sgn(r.mean,1)} · n=${r.n}</span></div>`).join("")+
+    `</div><div class="note">95%-интервалы: ${rows.slice(0,4).map(r=>esc(r.key)+" "+(r.lo*100).toFixed(1)+"…"+(r.hi*100).toFixed(1)+"%").join("; ")}. ${esc(sg.note||"")}</div></div>`;
+}
 function chart(eq){
   if(!eq||eq.length<2) return '<div class="empty">Недостаточно рассчитанных ставок для графика</div>';
   const W=600,H=220,L=44,R=12,T=12,B=26, ys=eq.map(p=>p[1]), lo=Math.min(0,...ys), hi=Math.max(0,...ys), pad=(hi-lo||1)*.1, y0=lo-pad, y1=hi+pad;
@@ -691,14 +837,17 @@ async function viewStats(){
     const bad = clv<0 && s.clv_sign_p<.05, good = clv>0 && s.clv_sign_p<.05;
     h += `<div class="alert ${good?"ok":bad?"":"neutral"}">${bad?`CLV значимо ниже нуля: лишь ${pos} из ${nClv} ставок обогнали закрытие (p${pfmt(s.clv_sign_p)}, n=${nClv})`:good?`CLV значимо выше нуля: ${pos} из ${nClv} ставок обогнали закрытие (p${pfmt(s.clv_sign_p)})`:`Пока нельзя отличить CLV от нуля (p${pfmt(s.clv_sign_p)}, n=${nClv})`}</div>`;
   } else h += `<div class="alert neutral">Пока мало ставок с закрытием (${nClv}): выводы о CLV преждевременны.</div>`;
-  h += `<div class="card"><div class="cap">Накопленный PnL · ${esc(s.equity_label||"нет данных")}${s.equity&&s.equity.length<N?' <span class="sub" style="text-transform:none;letter-spacing:0;font-weight:400">· мало ставок — график шумит</span>':""}</div><div style="margin-top:10px">${chart(s.equity)}</div></div>`;
+  h += `<div class="card"><div class="cap">Накопленный PnL · ${esc(s.equity_label||"нет данных")}${s.equity&&s.equity.length<N?' <span class="sub" style="text-transform:none;letter-spacing:0;font-weight:400">· мало ставок — график шумит</span>':""}</div><div style="margin-top:10px">${chart(s.equity)}</div>${ddNote(s.equity)}</div>`;
   const g=(r.groups||[]);
   if(g.length) h += `<div class="card"><div class="cap">Сегменты <span class="sub" style="text-transform:none;letter-spacing:0;font-weight:400">· лига / рынок · n · средний CLV · n&lt;${nS} — шум</span></div><div style="margin-top:8px">` +
      g.slice(0,12).map(([lg,mk,n,w,m])=>`<div class="seg-row"><span class="${n<nS?"dim":""}">${esc(LEAGUES[lg]||lg)} · ${esc(mkLabel(mk))}</span><span class="num ${n<nS?"dim":m<0?"r":"g"}">n=${n} · ${sgn(m,2)}</span></div>`).join("") + `</div></div>`;
+  h += `<div id="segbox"></div><div id="segx"></div><div class="card"><div class="cap">Тема оформления</div><div class="seg" id="thm" style="margin-top:8px">${[["auto","Авто"],["light","Светлая"],["dark","Тёмная"]].map(([k,t])=>`<button data-th="${k}" class="${(lsGet("theme")||"auto")===k?"on":""}">${t}</button>`).join("")}</div></div>`;
   h += `<div class="foot">ROI на малой выборке — шум. Решающий показатель — средний CLV на сотнях ставок.<br>Расчёт ставок обновляет бот (команда «Статистика» в чате).</div>`;
   mount(h);
   document.getElementById("rf").onclick = ()=>refresh();
   bindChart(s.equity);
+  document.getElementById("thm").onclick = e=>{ const b=e.target.closest("[data-th]"); if(!b) return; lsSet("theme",b.dataset.th); applyTheme(); document.querySelectorAll("#thm button").forEach(x=>x.classList.toggle("on",x===b)); haptic(); };
+  loadSegments();
 }
 
 /* ─────────── обновление и жест «потянуть вниз» ─────────── */
