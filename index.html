@@ -5,6 +5,8 @@
 <meta name="fb-static" content="1">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>Football Value</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 :root{
@@ -250,8 +252,8 @@ html[data-fx="on"] h1 .iconbtn,html[data-fx="on"] h1 .badge{-webkit-text-fill-co
 .bgpick .b-grid{background:linear-gradient(#0b0620 45%,#ff2fa0 46%,#1b0b3c 47%),#0b0620}
 .bgpick .b-pitch{background:radial-gradient(circle at 20% 0,#fff6,transparent 45%),radial-gradient(circle at 85% 0,#fff5,transparent 45%),#0a3b2a}
 .bgpick .b-off{background:var(--card2);color:var(--muted);text-shadow:none}
-.accpick{display:flex;gap:12px;margin-top:10px}
-.accpick button{width:34px;height:34px;border-radius:50%;border:2px solid transparent;box-shadow:inset 0 0 0 2px var(--bg);transition:transform .2s var(--ease)}
+.accpick{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+.accpick button{width:44px;height:44px;border-radius:50%;border:2px solid transparent;box-shadow:inset 0 0 0 2px var(--bg);transition:transform .2s var(--ease)}
 .accpick button.on{border-color:var(--text);transform:scale(1.15)}
 
 /* ═════════ v27: живые матчи, кольцо вероятностей, плавающая навигация, недели ═════════ */
@@ -290,12 +292,113 @@ html[data-fxl="off"] .row.is-live,html[data-fxl="off"] .row.is-ht{animation:none
 @keyframes growy{from{transform:scaleY(0)}to{transform:scaleY(1)}}
 .wk .v{font-size:10px;font-weight:700}
 #conf{position:fixed;inset:0;width:100%;height:100%;z-index:60;pointer-events:none}
+
+/* ═════════ v29 «Premium»: глубина, типографика, плавающая навигация, a11y ═════════ */
+:root{
+  --font:"Inter",-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Arial,sans-serif;
+  --font-d:"Manrope","Inter",-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;
+  --bg:#070a12;--bg2:#0b101c;--card:#111827;--card2:#1a2438;--line:#26334d;--text:#f1f5fc;
+  --muted:#a9b5cd;--dim:#8f9bb5;           /* контраст на --card ≥ 7:1 и ≥ 5:1 (WCAG AA/AAA) */
+  --sh1:0 1px 0 rgba(255,255,255,.05) inset,0 10px 30px -16px rgba(0,0,0,.7);
+  --sh2:0 1px 0 rgba(255,255,255,.08) inset,0 18px 44px -18px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.02);
+  --glow:color-mix(in srgb,var(--blue) 45%,transparent);
+  --safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
+}
+html[data-theme=light]{--muted:#4b5876;--dim:#65728f;--sh1:0 1px 0 #fff inset,0 10px 28px -16px rgba(30,45,90,.35);--sh2:0 1px 0 #fff inset,0 18px 40px -18px rgba(30,45,90,.45)}
+html,body{font-family:var(--font);font-feature-settings:"cv11","ss01";letter-spacing:-.005em}
+h1,.hero .p,.tile .v,.score,.eta-big{font-family:var(--font-d)}
+h1{font-weight:800;letter-spacing:-.025em;font-size:26px}
+.cap{font-weight:700;letter-spacing:.09em;font-size:11.5px}
+.num,.hero .p,.tile .v,.bet .o{font-variant-numeric:tabular-nums;font-feature-settings:"tnum","cv11"}
+.tile .v{font-weight:800;font-size:24px;letter-spacing:-.02em}
+body{padding-bottom:calc(112px + var(--safe-b))}
+
+/* карточки: глубина и «стекло» */
+.card,.row,.tile{box-shadow:var(--sh1);transition:transform .35s var(--ease),box-shadow .35s var(--ease),border-color .3s,background .3s}
+.card{border-radius:22px;padding:18px;margin-bottom:14px}
+.row{border-radius:20px;padding:15px 16px;margin-bottom:12px}
+@media (hover:hover){.row:hover,.tile:hover{transform:translateY(-2px);box-shadow:var(--sh2),0 0 0 1px var(--glow);border-color:color-mix(in srgb,var(--blue) 55%,var(--line))}}
+.row:active{transform:scale(.985)}
+.row .teams{font-family:var(--font-d);font-weight:700;font-size:16.5px;letter-spacing:-.015em}
+.hero{background:linear-gradient(160deg,color-mix(in srgb,var(--card2) 85%,var(--blue)),var(--card) 70%);box-shadow:var(--sh2);transform-style:preserve-3d;will-change:transform}
+.hero.tilting{transition:transform .08s linear}
+.hero:not(.tilting){transition:transform .6s var(--ease)}
+.hero .sheen{position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;
+  background:radial-gradient(260px circle at var(--sx,50%) var(--sy,0%),rgba(255,255,255,.16),transparent 60%)}
+.hero.tilting .sheen{opacity:1}
+
+/* прогресс-бары: свечение + шкала */
+.pbar{height:8px;border-radius:6px;background:var(--track)}
+.pbar i{box-shadow:0 0 12px -2px currentColor;position:relative;border-radius:2px}
+.pbar i:first-child{box-shadow:0 0 14px -2px var(--glow)}
+
+/* чипы, переключатели, кнопки: зона нажатия ≥ 44px */
+.chip{min-height:44px;display:inline-flex;align-items:center;padding:0 16px;font-size:13.5px}
+.seg button{min-height:44px}
+.sort button{min-height:36px;position:relative}
+.sort button::after,.iconbtn::after{content:"";position:absolute;inset:-4px}
+.iconbtn{width:44px;height:44px;position:relative;box-shadow:var(--sh1);transition:transform .2s var(--ease),border-color .2s}
+.iconbtn:active{transform:scale(.9)}
+.tools{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;gap:8px;scrollbar-width:none;margin-left:calc(-1*var(--pad));margin-right:calc(-1*var(--pad));padding:2px var(--pad) 12px;align-items:center}
+.tools::-webkit-scrollbar{display:none}.tools>*{flex:none}.tools .sp{flex:1 0 0;min-width:0}
+.bet,.btn,.actions button{min-height:44px}
+.chip.on,.seg button.on{box-shadow:0 0 0 1px color-mix(in srgb,var(--blue) 60%,transparent),0 6px 18px -8px var(--glow)}
+button:focus-visible,.row:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.search{min-height:48px;border-radius:16px;font-size:15px}
+
+/* плавающая стеклянная навигация */
+.nav{left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));bottom:calc(10px + var(--safe-b));border-radius:28px;padding:8px;
+  border:1px solid color-mix(in srgb,var(--text) 12%,transparent);
+  background:color-mix(in srgb,var(--bg2) 66%,transparent);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:0 22px 50px -14px rgba(0,0,0,.75),0 0 0 1px rgba(0,0,0,.25),0 1px 0 rgba(255,255,255,.1) inset,0 0 38px -16px var(--glow);
+  max-width:520px;margin:0 auto}
+html[data-fx="on"] .nav{background:color-mix(in srgb,var(--bg2) 58%,transparent)}
+.nav button{min-height:52px;border-radius:20px;font-size:11.5px;letter-spacing:.01em;padding:7px 4px}
+.nav button.on{color:var(--text)}
+.nav button.on svg{filter:drop-shadow(0 0 7px var(--blue));stroke:var(--blue)}
+.nav .pill{top:8px;bottom:8px;border-radius:20px;background:linear-gradient(180deg,color-mix(in srgb,var(--blue) 22%,var(--card2)),var(--card2));
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--blue) 40%,transparent),0 8px 22px -8px var(--glow)}
+#toast{bottom:calc(100px + var(--safe-b))}
+
+/* липкая мини-шапка */
+#mini{position:fixed;top:0;left:0;right:0;z-index:25;padding:calc(8px + var(--safe-t)) 16px 8px;display:flex;align-items:center;justify-content:center;gap:8px;
+  font-family:var(--font-d);font-weight:800;font-size:15.5px;letter-spacing:-.01em;
+  background:color-mix(in srgb,var(--bg2) 70%,transparent);-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%);
+  border-bottom:1px solid color-mix(in srgb,var(--text) 9%,transparent);transform:translateY(-110%);opacity:0;transition:transform .35s var(--ease),opacity .25s;pointer-events:none}
+#mini.on{transform:none;opacity:1}
+#mini i{width:7px;height:7px;border-radius:50%;background:var(--blue);box-shadow:0 0 10px var(--blue)}
+
+/* появление карточек при прокрутке */
+.rv{opacity:0;transform:translateY(18px) scale(.985)}
+.rv.in{opacity:1;transform:none;transition:opacity .6s var(--ease),transform .7s var(--ease);transition-delay:var(--rd,0ms)}
+html[data-fxl="off"] .rv{opacity:1;transform:none}
+
+/* скелетоны: переливание */
+.skel{height:112px;border-radius:20px;border:1px solid var(--line);position:relative;overflow:hidden;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--card) 90%,transparent) 20%,color-mix(in srgb,var(--card2) 95%,#fff 3%) 50%,color-mix(in srgb,var(--card) 90%,transparent) 80%);background-size:220% 100%;animation:sh 1.4s linear infinite}
+.skel::before{content:"";position:absolute;left:16px;top:16px;width:38%;height:11px;border-radius:6px;background:color-mix(in srgb,var(--text) 9%,transparent)}
+.skel::after{content:"";position:absolute;left:16px;right:16px;bottom:18px;height:8px;border-radius:5px;background:color-mix(in srgb,var(--text) 9%,transparent)}
+
+/* пустые состояния */
+.empty{padding:44px 16px;font-size:15px;animation:emptyin .7s var(--ease) both}
+.empty::before{content:"";display:block;width:76px;height:76px;margin:0 auto 14px;border-radius:24px;opacity:.9;
+  background:color-mix(in srgb,var(--blue) 12%,transparent) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236096ff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='8.5'/><path d='M12 7.5l3.6 2.6-1.4 4.2H9.8L8.4 10.1z'/></svg>") center/46px no-repeat;
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--blue) 30%,transparent),0 14px 34px -14px var(--glow);animation:float 4s ease-in-out infinite}
+@keyframes emptyin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+/* график */
+.chartbox .tip{background:color-mix(in srgb,var(--card2) 88%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid var(--line);box-shadow:var(--sh2);border-radius:12px;padding:7px 11px;font-weight:700}
+.chart .draw{filter:drop-shadow(0 0 6px var(--lc,#9aa7c7))}
+@media (max-width:360px){h1{font-size:23px}.tile .v{font-size:21px}.row .teams{font-size:15.5px}}
 </style>
 </head>
 <body>
 <div id="ptr"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.5-5.8M20 4v4h-4"/></svg></div>
 <canvas id="fx" aria-hidden="true"></canvas><canvas id="conf" aria-hidden="true"></canvas>
 <div class="wrap" id="app"></div>
+<div id="mini" aria-hidden="true"><i></i><span id="minit"></span></div>
 <div id="toast"></div>
 <nav class="nav" id="nav">
   <button data-t="matches"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7l4 3-1.5 5h-5L8 10z"/></svg>Матчи</button>
@@ -702,7 +805,7 @@ async function viewMatch(id){
     const f = a.f1x2 || {}, ts = a.top_scores||[], q=a.quality||0, qc = q>=.7?"var(--green)":q>=.35?"var(--amber)":"var(--red)";
     h += `<div class="tiles"><div class="tile"><div class="cap">Прогноз</div><div class="v b">${esc(f.pick||"—")}${f.prob!=null?" · "+cntp(f.prob):""}</div>
       <div class="sub">${f.hist_acc!=null?`в прошлом ${pc(f.hist_acc)}${f.hist_lcb!=null?" · мин. "+pc(f.hist_lcb):""}`:""}</div></div>
-     <div class="tile"><div class="cap">Счёт</div><div class="v num">${ts[0]?ts[0][0][0]+":"+ts[0][0][1]:"—"}</div><div class="sub">${ts[0]?pc(ts[0][1])+(ts[1]?" · затем "+ts[1][0][0]+":"+ts[1][0][1]+" "+pc(ts[1][1]):""):""}</div></div>
+     <div class="tile"><div class="cap">Ожид. голы</div><div class="v num">${(a.xg&&a.xg[0]!=null&&a.xg[1]!=null)?(+a.xg[0]).toFixed(1)+" : "+(+a.xg[1]).toFixed(1):(ts[0]?ts[0][0][0]+":"+ts[0][0][1]:"—")}</div><div class="sub">${ts.length?"точный счёт — не прогноз: "+ts.slice(0,3).map(x=>x[0][0]+":"+x[0][1]+" "+pc(x[1])).join(" · "):""}</div></div>
      <div class="tile"><div class="cap">Данные</div><div class="v" style="color:${qc};font-size:16px">${q>=.7?"достаточно":q>=.35?"мало":"очень мало"}</div>
       <div class="dots">${[0,1,2,3,4].map(i=>`<i style="${i<Math.round(q*5)?"background:"+qc:""}"></i>`).join("")}</div></div></div>`;
     const fcs = a.forecasts||{};
@@ -854,7 +957,7 @@ function pfmt(p){return p==null?"":(p<0.0001?"<0.0001":"="+p.toFixed(4));}
    «уменьшить анимацию» — фон рисуется один раз без движения. Всё хранится локально. */
 const FX = (()=>{
   const cv = document.getElementById("fx"), cx = cv.getContext("2d", {alpha:false});
-  const ACC = {blue:"#6096ff", teal:"#2dd4bf", violet:"#a78bfa", pink:"#f472b6", orange:"#fb923c"};
+  const ACC = {tg:(tg&&tg.themeParams&&tg.themeParams.button_color)||"#3390ec", blue:"#6096ff", teal:"#2dd4bf", violet:"#a78bfa", pink:"#f472b6", orange:"#fb923c"};
   const reduce = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
   let mode="aurora", level="max", raf=0, t0=performance.now(), last=0, W=0, H=0, stars=[], tilt={x:0,y:0}, ptr=null;
   const get=(k,d)=>lsGet(k)||d;
@@ -959,7 +1062,7 @@ const FX = (()=>{
   return {start, applyAccent, recolor(){ if(document.documentElement.dataset.fx==="on") size(); }};
 })();
 const BGS=[["aurora","Аврора"],["nebula","Космос"],["grid","Неон"],["pitch","Стадион"],["off","Без фона"]];
-const ACCS=[["blue","#6096ff"],["teal","#2dd4bf"],["violet","#a78bfa"],["pink","#f472b6"],["orange","#fb923c"]];
+const ACCS=[["tg",(tg&&tg.themeParams&&tg.themeParams.button_color)||"#3390ec"],["blue","#6096ff"],["teal","#2dd4bf"],["violet","#a78bfa"],["pink","#f472b6"],["orange","#fb923c"]];
 function lookCard(){
   const bg=lsGet("bg")||"aurora", ac=lsGet("acc")||"blue", fl=lsGet("fxl")||"max";
   return `<div class="card"><div class="cap">Оформление</div>
@@ -1096,13 +1199,14 @@ function chart(eq){
   const W=600,H=220,L=44,R=12,T=12,B=26, ys=eq.map(p=>p[1]), lo=Math.min(0,...ys), hi=Math.max(0,...ys), pad=(hi-lo||1)*.1, y0=lo-pad, y1=hi+pad;
   const X=i=>L+(W-L-R)*(i/(eq.length-1)), Y=v=>T+(H-T-B)*(1-(v-y0)/(y1-y0));
   const pts=eq.map((p,i)=>X(i).toFixed(1)+","+Y(p[1]).toFixed(1)).join(" "), z=Y(0).toFixed(1);
-  const last=ys[ys.length-1], col="#9aa7c7";
+  const last=ys[ys.length-1], col=last>=0?"#34d399":"#f87171";
   const ticks=[y0+pad,(lo+hi)/2,hi].map(v=>Math.round(v));
   return `<div class="chartbox" id="cb"><svg class="chart" id="cs" viewBox="0 0 ${W} ${H}" role="img" aria-label="График накопленного PnL" data-w="${W}" data-l="${L}" data-r="${R}">
    ${ticks.map(v=>`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="#28354f" stroke-width="1"/><text x="${L-6}" y="${Y(v)+4}" text-anchor="end" font-size="11" fill="#626e8a">${v}</text>`).join("")}
    <line x1="${L}" x2="${W-R}" y1="${z}" y2="${z}" stroke="#3a4a6c" stroke-dasharray="4 4"/>
-   <polygon class="area" points="${L},${z} ${pts} ${X(eq.length-1)},${z}" fill="rgba(154,167,199,.14)"/>
-   <polyline class="draw" pathLength="1" points="${pts}" fill="none" stroke="${col}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+   <defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity=".38"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>
+   <polygon class="area" points="${L},${z} ${pts} ${X(eq.length-1)},${z}" fill="url(#cg)"/>
+   <polyline class="draw" style="--lc:${col}" pathLength="1" points="${pts}" fill="none" stroke="${col}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
    <circle class="area" cx="${X(eq.length-1)}" cy="${Y(last)}" r="4.5" fill="${col}"/>
    <line id="cl" x1="0" x2="0" y1="${T}" y2="${H-B}" stroke="#6096ff" stroke-width="1.2" opacity="0"/><circle id="cc" r="5" fill="#6096ff" stroke="#090d16" stroke-width="2" opacity="0"/>
    <text x="${L}" y="${H-6}" font-size="11" fill="#626e8a">${esc(eq[0][0])}</text><text x="${W-R}" y="${H-6}" text-anchor="end" font-size="11" fill="#626e8a">${esc(eq[eq.length-1][0])}</text></svg>
@@ -1176,6 +1280,52 @@ function render(){
 document.getElementById("nav").onclick = e=>{const b=e.target.closest("[data-t]"); if(!b) return; haptic(); if(state.detail&&history.state&&history.state.m){ state.detail=null; syncBack(); history.back(); }
   const to=b.dataset.t; state.dir = TABS.indexOf(to)>TABS.indexOf(state.tab)?"fwd":TABS.indexOf(to)<TABS.indexOf(state.tab)?"bwd":null; state.tab=to; state.detail=null; syncBack(); render(); window.scrollTo(0,0);};
 Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensureSnap(); }catch(e){} } render(); });
+
+/* ═════════ v29: мини-шапка, появление при прокрутке, 3D-наклон, themeParams ═════════ */
+(function(){
+  const root=document.documentElement, mini=document.getElementById("mini"), mt=document.getElementById("minit");
+  /* Telegram themeParams → переменные (используются как дополнение, свой стиль остаётся) */
+  function tgVars(){ try{ const p=(tg&&tg.themeParams)||{}; if(p.button_color) root.style.setProperty("--tg-accent",p.button_color); if(p.link_color) root.style.setProperty("--tg-link",p.link_color);
+    if(tg){ const sa=tg.safeAreaInset||{}, ca=tg.contentSafeAreaInset||{}; root.style.setProperty("--tg-top",(ca.top||0)+(sa.top||0)+"px"); } }catch(e){} }
+  tgVars(); try{ tg&&tg.onEvent&&tg.onEvent("themeChanged",tgVars); tg&&tg.onEvent&&tg.onEvent("safeAreaChanged",tgVars); tg&&tg.onEvent&&tg.onEvent("contentSafeAreaChanged",tgVars); }catch(e){}
+  if(mini) mini.style.paddingTop="calc(8px + max(env(safe-area-inset-top,0px), var(--tg-top,0px)))";
+  /* липкая шапка */
+  let tick=false;
+  function onScroll(){ if(tick) return; tick=true; requestAnimationFrame(()=>{ tick=false;
+    const h=document.querySelector("#app h1"), y=window.scrollY;
+    if(h && mini){ const t=(h.childNodes[0]&&h.childNodes[0].textContent||h.textContent||"").trim(); if(mt.textContent!==t) mt.textContent=t; }
+    const on = y>90 && !state.detail; mini&&mini.classList.toggle("on",on); }); }
+  addEventListener("scroll",onScroll,{passive:true});
+  /* появление карточек при прокрутке */
+  const RMX = RM || !("IntersectionObserver" in window);
+  const io = RMX ? null : new IntersectionObserver(es=>{ es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } }); },{rootMargin:"0px 0px -6% 0px",threshold:.06});
+  let order=0, ot=0;
+  function scan(){
+    if(!io) return;
+    document.querySelectorAll("#app .card:not(.rvd)").forEach(el=>{
+      el.classList.add("rvd"); const r=el.getBoundingClientRect();
+      if(r.top<innerHeight*.9){ el.style.setProperty("--rd",Math.min(order++,6)*70+"ms"); el.classList.add("rv"); requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add("in"))); }
+      else { el.classList.add("rv"); io.observe(el); }
+    });
+    clearTimeout(ot); ot=setTimeout(()=>{order=0;},400);
+  }
+  new MutationObserver(()=>{ scan(); onScroll(); }).observe(document.getElementById("app"),{childList:true,subtree:true});
+  /* 3D-наклон главной карточки матча: палец/курсор + гироскоп уже используется фоном */
+  let hero=null;
+  document.addEventListener("pointermove",e=>{
+    if(RM||root.dataset.fxl==="off") return;
+    const h=e.target.closest&&e.target.closest(".hero"); if(!h){ if(hero){ hero.classList.remove("tilting"); hero.style.transform=""; hero=null; } return; }
+    if(e.pointerType==="touch" && !(e.buttons||e.pressure>0)) return;
+    hero=h; const b=h.getBoundingClientRect(), x=(e.clientX-b.left)/b.width-.5, y=(e.clientY-b.top)/b.height-.5;
+    h.classList.add("tilting"); h.style.transform=`perspective(900px) rotateX(${(-y*7).toFixed(2)}deg) rotateY(${(x*9).toFixed(2)}deg) translateZ(0)`;
+    h.style.setProperty("--sx",(x+.5)*100+"%"); h.style.setProperty("--sy",(y+.5)*100+"%");
+    if(!h.querySelector(".sheen")){ const s=document.createElement("i"); s.className="sheen"; h.appendChild(s); }
+  },{passive:true});
+  const rel=()=>{ if(hero){ hero.classList.remove("tilting"); hero.style.transform=""; hero=null; } };
+  document.addEventListener("pointerup",rel,{passive:true}); document.addEventListener("pointercancel",rel,{passive:true}); document.addEventListener("pointerleave",rel,{passive:true});
+  /* заголовок мини-шапки сразу после первого рендера */
+  setTimeout(()=>{ scan(); onScroll(); },0);
+})();
 </script>
 </body>
 </html>
