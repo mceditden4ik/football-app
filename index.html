@@ -210,10 +210,87 @@ svg.chart{width:100%;height:auto;display:block}
 #toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--card2);border:1px solid var(--line);border-radius:999px;
   padding:9px 16px;font-weight:600;font-size:13px;z-index:40;display:none;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
 #toast.on{display:block;animation:toastin .25s var(--ease) both}
+
+/* ═════════ v26 «Эффекты»: живой фон, стекло, подсветка, акценты ═════════ */
+@property --ang{syntax:'<angle>';initial-value:0deg;inherits:false}
+@keyframes ang{to{--ang:360deg}}
+@keyframes rip{from{transform:scale(0);opacity:.35}to{transform:scale(1);opacity:0}}
+#fx{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;display:none}
+html[data-fx="on"] #fx{display:block}
+html[data-fx="on"] body{background:none}
+/* стекло: карточки полупрозрачные, фон просвечивает */
+html[data-fx="on"] .card,html[data-fx="on"] .tile,html[data-fx="on"] .row,html[data-fx="on"] .seg,html[data-fx="on"] .chip,html[data-fx="on"] .search{
+  background:color-mix(in srgb,var(--card) 70%,transparent)}
+html[data-fx="on"] .nav{background:color-mix(in srgb,var(--bg2) 72%,transparent)}
+html[data-fxl="max"] .card,html[data-fxl="max"] .tile,html[data-fxl="max"] .row{-webkit-backdrop-filter:blur(14px) saturate(150%);backdrop-filter:blur(14px) saturate(150%)}
+html[data-fx="on"] .card,html[data-fx="on"] .tile,html[data-fx="on"] .row{border-color:color-mix(in srgb,var(--text) 10%,transparent);box-shadow:0 8px 28px -14px rgba(0,0,0,.55),inset 0 1px 0 color-mix(in srgb,var(--text) 7%,transparent)}
+/* световое пятно под пальцем */
+.card,.row,.tile{position:relative}
+.card::after,.row::after,.tile::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;
+  background:radial-gradient(180px circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--blue) 28%,transparent),transparent 65%)}
+html[data-fx="on"] .lit::after{opacity:1}
+/* бегущий свет по рамке плиток KPI */
+html[data-fxl="max"] .tile::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;
+  background:conic-gradient(from var(--ang),transparent 0 72%,var(--blue) 86%,transparent 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
+  animation:ang 7s linear infinite;opacity:.9}
+/* волна при нажатии */
+.rip-host{position:relative;overflow:hidden}
+.rip{position:absolute;border-radius:50%;background:color-mix(in srgb,var(--blue) 55%,#fff);pointer-events:none;animation:rip .6s var(--ease) forwards}
+html[data-fxl="off"] .rip{display:none}
+/* заголовки с мягким градиентом */
+html[data-fx="on"] h1{background:linear-gradient(92deg,var(--text) 30%,var(--blue));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+html[data-fx="on"] h1 .iconbtn,html[data-fx="on"] h1 .badge{-webkit-text-fill-color:currentColor}
+/* оформление: выбор фона и акцента */
+.bgpick{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
+.bgpick button{aspect-ratio:1;border-radius:14px;border:2px solid transparent;position:relative;overflow:hidden;font-size:10px;font-weight:700;color:#fff;display:flex;align-items:flex-end;justify-content:center;padding:4px;text-shadow:0 1px 3px rgba(0,0,0,.7);transition:transform .2s var(--ease),border-color .2s}
+.bgpick button.on{border-color:var(--text);transform:scale(1.06)}
+.bgpick .b-aurora{background:radial-gradient(circle at 25% 30%,#2dd4bf,transparent 55%),radial-gradient(circle at 75% 35%,#7c5cf0,transparent 55%),radial-gradient(circle at 50% 90%,#2f6bff,transparent 60%),#0a1020}
+.bgpick .b-nebula{background:radial-gradient(circle at 30% 70%,#c026d3,transparent 55%),radial-gradient(circle at 70% 25%,#3b82f6,transparent 55%),#070816}
+.bgpick .b-grid{background:linear-gradient(#0b0620 45%,#ff2fa0 46%,#1b0b3c 47%),#0b0620}
+.bgpick .b-pitch{background:radial-gradient(circle at 20% 0,#fff6,transparent 45%),radial-gradient(circle at 85% 0,#fff5,transparent 45%),#0a3b2a}
+.bgpick .b-off{background:var(--card2);color:var(--muted);text-shadow:none}
+.accpick{display:flex;gap:12px;margin-top:10px}
+.accpick button{width:34px;height:34px;border-radius:50%;border:2px solid transparent;box-shadow:inset 0 0 0 2px var(--bg);transition:transform .2s var(--ease)}
+.accpick button.on{border-color:var(--text);transform:scale(1.15)}
+
+/* ═════════ v27: живые матчи, кольцо вероятностей, плавающая навигация, недели ═════════ */
+@keyframes livepulse{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.0),inset 0 0 0 1px rgba(52,211,153,.35)}50%{box-shadow:0 0 22px 2px rgba(52,211,153,.22),inset 0 0 0 1px rgba(52,211,153,.7)}}
+@keyframes htpulse{0%,100%{box-shadow:inset 0 0 0 1px rgba(251,191,36,.30)}50%{box-shadow:0 0 18px 1px rgba(251,191,36,.18),inset 0 0 0 1px rgba(251,191,36,.6)}}
+.row.is-live{animation:livepulse 2.2s ease-in-out infinite}
+.row.is-ht{animation:htpulse 2.6s ease-in-out infinite}
+html[data-fxl="off"] .row.is-live,html[data-fxl="off"] .row.is-ht{animation:none;box-shadow:inset 0 0 0 1px rgba(52,211,153,.5)}
+@keyframes ringdraw{from{stroke-dashoffset:var(--len)}to{stroke-dashoffset:0}}
+@keyframes ringpop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
+.ring{display:block;margin:14px auto 2px;width:190px;height:190px;overflow:visible}
+.ring .rseg{fill:none;stroke-width:13;stroke-linecap:round;stroke-dasharray:var(--len) 999;stroke-dashoffset:var(--len);animation:ringdraw 1.1s var(--ease) forwards;animation-delay:var(--d,0s);filter:drop-shadow(0 0 6px var(--gl))}
+.ring .trk{fill:none;stroke:var(--track);stroke-width:13;opacity:.6}
+.ring .ctr{animation:ringpop .6s var(--ease) .5s both;transform-origin:center}
+.ring .big{font-size:30px;font-weight:800;fill:var(--text)}
+.ring .lab{font-size:12px;fill:var(--muted);letter-spacing:.06em}
+.ringleg{display:flex;justify-content:center;gap:16px;font-size:12px;color:var(--muted);margin-bottom:4px}
+.ringleg i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}
+/* плавающая «пилюля» активной вкладки */
+.nav{position:fixed}
+.nav .pill{position:absolute;top:8px;bottom:calc(8px + env(safe-area-inset-bottom));left:0;width:0;border-radius:14px;background:var(--card2);z-index:0;transition:transform .45s cubic-bezier(.3,1.35,.5,1),width .3s var(--ease);pointer-events:none;box-shadow:0 0 18px -4px var(--blue)}
+.nav.has-pill button{position:relative;z-index:1}
+.nav.has-pill button.on{background:transparent}
+@keyframes tabL{from{opacity:0;transform:translateX(-26px)}to{opacity:1;transform:none}}
+.view.bwd{animation:tabL .32s var(--ease) both}
+/* предупреждение по слабому сегменту */
+.segwarn{margin-top:8px;font-size:12px;color:var(--amber);background:color-mix(in srgb,var(--amber) 12%,transparent);border:1px solid color-mix(in srgb,var(--amber) 35%,transparent);border-radius:10px;padding:6px 9px;line-height:1.35}
+/* недели */
+.wk{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:6px;align-items:end;height:120px;margin-top:14px}
+.wk>div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:10px;color:var(--dim);gap:4px}
+.wk .bar{width:100%;max-width:34px;border-radius:7px 7px 3px 3px;transform-origin:bottom;animation:growy .9s var(--ease) both;animation-delay:calc(var(--i)*60ms)}
+@keyframes growy{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.wk .v{font-size:10px;font-weight:700}
+#conf{position:fixed;inset:0;width:100%;height:100%;z-index:60;pointer-events:none}
 </style>
 </head>
 <body>
 <div id="ptr"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.5-5.8M20 4v4h-4"/></svg></div>
+<canvas id="fx" aria-hidden="true"></canvas><canvas id="conf" aria-hidden="true"></canvas>
 <div class="wrap" id="app"></div>
 <div id="toast"></div>
 <nav class="nav" id="nav">
@@ -261,7 +338,7 @@ function countUp(root){
 function stagger(root,sel){ [...(root.querySelectorAll(sel)||[])].forEach((c,i)=>c.style.setProperty("--i",Math.min(i,10))); }
 /* показать вид: плавное появление, каскад карточек, набегающие числа */
 function mount(html, kind){
-  $app.innerHTML = `<div class="view ${kind||""}">${snapNote()}${html}</div>`;
+  $app.innerHTML = `<div class="view ${kind||(state.dir==="bwd"?"bwd":state.dir==="fwd"?"fwd":"")}">${snapNote()}${html}</div>`; state.dir=null;
   const v = $app.firstElementChild; [...v.children].forEach((c,i)=>c.style.setProperty("--i",Math.min(i,10)));
   countUp(v); return v;
 }
@@ -483,7 +560,7 @@ function renderList(anim){
     else if(m.n_rec) bd.push('<span class="badge bg-g pulse">есть перевес</span>');
     if(m.quality!=null && m.quality<.35) bd.push('<span class="badge bg-r">мало данных</span>');
     const when_ = w.hasTime?(byConf?fmtDay(w.d)+" · ":"")+fmtTime(w.d):(byConf?fmtDay(w.d):"");
-    out += `<button class="row" data-id="${m.event_id}"><div class="top"><span><span style="color:${LCOL[m.league]||"var(--muted)"}">●</span> ${esc(LEAGUES[m.league]||m.league)}</span>
+    out += `<button class="row${started?" is-live":paused?" is-ht":""}" data-id="${m.event_id}"><div class="top"><span><span style="color:${LCOL[m.league]||"var(--muted)"}">●</span> ${esc(LEAGUES[m.league]||m.league)}</span>
       <span class="num">${started?'<span class="live"></span>':paused?'<span class="pause">⏸</span> ':""}${m.score?`<span class="eta">завершён</span> · `:w.hasTime?`<span class="eta" data-eta="${w.d.getTime()}">${esc(etaText(w.d.getTime()))}</span> · `:""}${esc(when_)}</span></div>
       <div class="teams"><span>${isFav(m.home)?'<b class="fv">★</b>':""}${esc(nmH(m))}</span><span>${isFav(m.away)?'<b class="fv">★</b>':""}${esc(nmA(m))}</span></div>${m.score?`<div class="score num">${m.score[0]} : ${m.score[1]}</div>`:pbar(m.p)}
       ${bd.length?`<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">${bd.join("")}</div>`:""}</button>`;
@@ -577,7 +654,7 @@ async function viewMatch(id){
   mount(`<div style="height:14px"></div>${skel(3)}`);
   let m; try { m = await api("/api/match/"+id); } catch(e){ return errView(e, ()=>viewMatch(id)); }
   if(state.detail!==id) return;
-  state.cur = m;
+  state.cur = m; await ensureSeg();
   if(state.me===undefined){ try{ state.me = await api("/api/me"); }catch(e){ state.me = null; } }
   const a = m.analysis, w = when(m);
   let h = `<div style="height:12px"></div><div class="card hero"><span class="badge bg-m lg" style="color:${LCOL[m.league]||"var(--muted)"}">${esc(LEAGUES[m.league]||m.league)}</span>
@@ -591,7 +668,7 @@ async function viewMatch(id){
     const p=a.p, mx=Math.max(...p);
     h += `<div class="card"><div class="cap">Вероятности исхода</div><div class="sub">ансамбль Пуассон + бустинг + Эло · кэф — справедливый, без маржи</div>
      <div class="probs" style="margin-top:12px">${["П1 хозяева","Х ничья","П2 гости"].map((t,i)=>`<div><div class="k">${t}</div><div class="p num" style="color:${p[i]===mx?(i==0?"var(--blue)":i==2?"var(--violet)":"var(--text)"):"var(--muted)"}">${cntp(p[i],1)}</div><div class="f num">кэф ${fair(p[i])}</div></div>`).join("")}</div>
-     <div class="pbar" style="height:8px;margin:14px 0 0">${p.map((v,i)=>`<i style="width:${v*100}%;background:${["var(--blue)","#4a5878","var(--violet)"][i]}"></i>`).join("")}</div></div>
+     ${ringSvg(p)}</div>
      <div class="actions"><button id="share"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>Копировать прогноз</button>
        <button id="gocalc"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M12 12h2M8 16h2M12 16h2"/></svg>Проверить кэф</button></div>`;
     const od = (m.odds_1x2||[]);
@@ -705,7 +782,7 @@ function betRow(b, inMatch){
   const odds = b.placed&&b.placed_odds?b.placed_odds:b.taken_odds, stake = b.placed&&b.placed_stake?b.placed_stake:b.stake;
   const meta = [`EV ${sgn(b.ev)}`, stake?`ставка ${mon(stake)}`:null, b.tier?esc(b.tier):null, b.clv_pct!=null?`CLV ${b.clv_pct>=0?"+":""}${b.clv_pct.toFixed(1)}%`:null, b.pnl!=null?`PnL ${mon(b.pnl)}`:null].filter(Boolean).join(" · ");
   return `<div class="bet ${b.recommended?"rec":"sk"}"><div class="h"><span>${esc(lbl(b))}</span><span class="num a o">@ ${Number(odds).toFixed(2)}</span></div>${inMatch?"":`<div class="mt">${esc(nm(b.home_team,b.home_ru))} — ${esc(nm(b.away_team,b.away_ru))}</div>`}
-   <div class="m">${meta}</div><div style="margin-top:6px">${betStatus(b)}</div></div>`;
+   <div class="m">${meta}</div><div style="margin-top:6px">${betStatus(b)}</div>${b.result==null&&b.recommended?segWarn(b):""}</div>`;
 }
 
 /* ─────────── Ставки ─────────── */
@@ -714,7 +791,7 @@ async function viewBets(){
     <div class="seg" id="bt">${[["open","Открытые"],["settled","Рассчитанные"],["all","Все"]].map(([k,t])=>`<button data-k="${k}" class="${state.betsTab===k?"on":""}">${t}</button>`).join("")}</div><div id="sum"></div><div id="bl" class="stag">${skel(3)}</div>`);
   document.getElementById("bt").onclick = e=>{const b=e.target.closest("[data-k]"); if(b){state.betsTab=b.dataset.k; haptic(); viewBets();}};
   document.getElementById("rf").onclick = ()=>refresh();
-  let rows; try { rows = await api("/api/bets?status="+state.betsTab+"&limit=120"); } catch(e){ return errView(e, viewBets); }
+  let rows; try { rows = await api("/api/bets?status="+state.betsTab+"&limit=120"); await ensureSeg(); } catch(e){ return errView(e, viewBets); }
   const el = document.getElementById("bl"); if(!el) return;
   if(!rows.length){ el.innerHTML = '<div class="empty">Ставок в этом списке нет.</div>'; return; }
   // сводка по списку
@@ -724,7 +801,8 @@ async function viewBets(){
   if(placedOpen.length) sum.push(`<span class="badge bg-b">поставлено в игре: ${placedOpen.length} · ${mon(placedOpen.reduce((s,b)=>s+(b.placed_stake||b.stake||0),0))}</span>`);
   if(settled.length) sum.push(`<span class="badge bg-m">рассчитано: ${settled.length}</span>`);
   if(realSet.length){ const pn=realSet.reduce((s,b)=>s+(b.pnl||0),0); sum.push(`<span class="badge ${pn>=0?"bg-g":"bg-r"}">PnL реальных: ${mon(pn)}</span>`); }
-  document.getElementById("sum").innerHTML = `<div class="sumrow">${sum.join("")}</div>`;
+  document.getElementById("sum").innerHTML = `<div class="sumrow">${sum.join("")}</div>` + (state.betsTab!=="open"?weeksCard(rows):"");
+  checkWins(rows);
   el.innerHTML = rows.map((b,i)=>`<div class="card tap" data-id="${b.event_id}" style="cursor:pointer"><div class="sub" style="margin-bottom:6px">${esc(LEAGUES[b.league]||b.league)} · ${esc(String(b.match_date||""))}</div>${betRow(b,false)}
     <div class="nbox" data-n="${i}"><div class="ntxt" id="nt${i}"></div><a class="nlink" data-edit="${i}">✎ заметка</a></div></div>`).join("");
   stagger(el,".card");
@@ -748,6 +826,208 @@ function mkLabel(c){
   const n=m[2].replace("-","−"); return {TB:"Тотал",ITB1:"Инд. тотал 1",ITB2:"Инд. тотал 2",F1:"Фора 1",CORN:"Угловые",CARD:"Карточки"}[m[1]]+" "+(m[1]==="F1"&&!n.startsWith("−")?"+"+n:n);
 }
 function pfmt(p){return p==null?"":(p<0.0001?"<0.0001":"="+p.toFixed(4));}
+
+/* ═════════ v26: движок живого фона и эффектов ═════════
+   Фоны рисуются на canvas маленького размера и масштабируются (дёшево и плавно), 30 кадров/с, на паузе когда приложение скрыто.
+   Уровни: «Макс» (стекло + рамки + фон), «Лёгкий» (фон в низком разрешении, без размытия), «Выкл» (однотонный). Если в системе включено
+   «уменьшить анимацию» — фон рисуется один раз без движения. Всё хранится локально. */
+const FX = (()=>{
+  const cv = document.getElementById("fx"), cx = cv.getContext("2d", {alpha:false});
+  const ACC = {blue:"#6096ff", teal:"#2dd4bf", violet:"#a78bfa", pink:"#f472b6", orange:"#fb923c"};
+  const reduce = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+  let mode="aurora", level="max", raf=0, t0=performance.now(), last=0, W=0, H=0, stars=[], tilt={x:0,y:0}, ptr=null;
+  const get=(k,d)=>lsGet(k)||d;
+  const hex=(h,a)=>{ const n=parseInt(h.slice(1),16); return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`; };
+  const isLight=()=>document.documentElement.dataset.theme==="light";
+  const accent=()=>ACC[get("acc","blue")]||ACC.blue;
+  function size(){
+    const sc = level==="max" ? (mode==="grid"||mode==="nebula"?.6:.4) : .28;
+    W = Math.max(60,Math.round(innerWidth*sc)); H = Math.max(80,Math.round(innerHeight*sc));
+    cv.width=W; cv.height=H; cv.style.imageRendering="auto";
+    stars = Array.from({length: level==="max"?90:40}, ()=>({x:Math.random(),y:Math.random(),z:.2+Math.random()*.8,p:Math.random()*6.28}));
+  }
+  /* ── аврора: большие светящиеся пятна ── */
+  function aurora(t){
+    const L=isLight(), a=accent();
+    cx.globalCompositeOperation="source-over"; cx.fillStyle=L?"#eef2fa":"#070b15"; cx.fillRect(0,0,W,H);
+    cx.globalCompositeOperation=L?"multiply":"lighter";
+    const cols=[a,"#7c5cf0","#2dd4bf","#3b82f6","#c026d3"], R=Math.max(W,H)*(L?.55:.62), k=L?.28:.34;
+    for(let i=0;i<5;i++){
+      const ph=i*1.7, x=W*(.5+.42*Math.sin(t*.00011*(1+i*.23)+ph)) + tilt.x*W*.05*(i%2?1:-1), y=H*(.5+.42*Math.cos(t*.00009*(1+i*.31)+ph*1.3)) + tilt.y*H*.04;
+      const g=cx.createRadialGradient(x,y,0,x,y,R*(.7+.25*Math.sin(t*.0002+i)));
+      g.addColorStop(0,hex(cols[i],k)); g.addColorStop(1,hex(cols[i],0));
+      cx.fillStyle=g; cx.fillRect(0,0,W,H);
+    }
+    cx.globalCompositeOperation="source-over";
+  }
+  /* ── туманность + звёзды с параллаксом ── */
+  function nebula(t){
+    aurora(t*.6);
+    if(isLight()) return;
+    cx.fillStyle="#fff";
+    for(const s of stars){
+      const tw=.45+.55*Math.sin(t*.002*s.z+s.p), x=((s.x*W + tilt.x*W*.06*s.z + t*.004*s.z)%W+W)%W, y=(s.y*H + tilt.y*H*.05*s.z)%H;
+      cx.globalAlpha=tw*s.z*.9; cx.fillRect(x,y,s.z>.8?1.6:1,s.z>.8?1.6:1);
+    }
+    cx.globalAlpha=1;
+  }
+  /* ── неон-сетка: «ретровейв» с движением к горизонту ── */
+  function grid(t){
+    const a=accent(), hz=H*.5;
+    const sky=cx.createLinearGradient(0,0,0,hz); sky.addColorStop(0,"#05020f"); sky.addColorStop(1,"#2a0a4a");
+    cx.fillStyle=sky; cx.fillRect(0,0,W,hz);
+    cx.fillStyle="#0a0418"; cx.fillRect(0,hz,W,H-hz);
+    const sun=cx.createRadialGradient(W/2,hz,0,W/2,hz,W*.55); sun.addColorStop(0,"rgba(255,60,170,.55)"); sun.addColorStop(.5,"rgba(255,120,60,.16)"); sun.addColorStop(1,"rgba(0,0,0,0)");
+    cx.fillStyle=sun; cx.fillRect(0,0,W,hz+4);
+    cx.lineWidth=1; cx.strokeStyle=hex(a,.75);
+    for(let i=-14;i<=14;i++){ cx.beginPath(); cx.moveTo(W/2+i*W*.02,hz); cx.lineTo(W/2+i*W*.22,H); cx.stroke(); }
+    const sp=(t*.00035)%1;
+    for(let i=0;i<14;i++){ const f=((i+sp)/14), y=hz+(H-hz)*f*f; cx.globalAlpha=.25+.75*f; cx.beginPath(); cx.moveTo(0,y); cx.lineTo(W,y); cx.stroke(); }
+    cx.globalAlpha=1; cx.fillStyle="rgba(5,2,15,.35)"; cx.fillRect(0,0,W,H);
+  }
+  /* ── стадион: ночное поле и качающиеся лучи прожекторов ── */
+  function pitch(t){
+    const g=cx.createLinearGradient(0,0,0,H); g.addColorStop(0,"#04120d"); g.addColorStop(1,"#0a3b2a"); cx.fillStyle=g; cx.fillRect(0,0,W,H);
+    cx.strokeStyle="rgba(255,255,255,.10)"; cx.lineWidth=1.2;
+    const m=W*.08; cx.strokeRect(m,H*.12,W-2*m,H*.76); cx.beginPath(); cx.moveTo(m,H/2); cx.lineTo(W-m,H/2); cx.stroke();
+    cx.beginPath(); cx.arc(W/2,H/2,W*.16,0,6.283); cx.stroke();
+    cx.strokeRect(W*.28,H*.12,W*.44,H*.12); cx.strokeRect(W*.28,H*.76,W*.44,H*.12);
+    cx.globalCompositeOperation="lighter";
+    for(const [bx,dir] of [[0,1],[W,-1]]){
+      const ang=.6+.18*Math.sin(t*.0003+(dir>0?0:2)), x2=bx+dir*Math.cos(ang)*H*1.2, y2=Math.sin(ang)*H*1.2;
+      const gl=cx.createLinearGradient(bx,0,x2,y2); gl.addColorStop(0,"rgba(255,255,230,.26)"); gl.addColorStop(1,"rgba(255,255,230,0)");
+      cx.fillStyle=gl; cx.beginPath(); cx.moveTo(bx,0); cx.lineTo(x2-dir*W*.25,y2); cx.lineTo(x2+dir*W*.25,y2); cx.closePath(); cx.fill();
+    }
+    cx.globalCompositeOperation="source-over"; cx.fillStyle="rgba(4,12,10,.28)"; cx.fillRect(0,0,W,H);
+  }
+  const DRAW={aurora,nebula,grid,pitch};
+  function frame(now){
+    raf=requestAnimationFrame(frame);
+    const fps=level==="max"?33:50; if(now-last<fps) return; last=now;
+    let m=mode; if(isLight() && (m==="grid"||m==="pitch")) m="aurora";
+    (DRAW[m]||aurora)(now-t0);
+  }
+  function stop(){ if(raf) cancelAnimationFrame(raf); raf=0; }
+  function start(){
+    stop();
+    const root=document.documentElement;
+    mode=get("bg","aurora"); level=get("fxl", reduce?"off":"max");
+    const on = mode!=="off" && level!=="off";
+    root.dataset.fx = on?"on":"off"; root.dataset.fxl = level;
+    if(!on){ stop(); return; }
+    size();
+    if(reduce){ (DRAW[mode]||aurora)(0); return; }                 // без движения: один кадр
+    if(!document.hidden) raf=requestAnimationFrame(frame);
+  }
+  document.addEventListener("visibilitychange",()=>{ if(document.hidden) stop(); else if(document.documentElement.dataset.fx==="on"&&!reduce&&!raf) raf=requestAnimationFrame(frame); });
+  let rz; addEventListener("resize",()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(document.documentElement.dataset.fx==="on"){ size(); } },200); });
+  addEventListener("deviceorientation",e=>{ if(e.gamma==null) return; tilt.x=Math.max(-1,Math.min(1,e.gamma/30)); tilt.y=Math.max(-1,Math.min(1,(e.beta-45)/30)); },{passive:true});
+  /* акцентный цвет */
+  function applyAccent(){
+    const a=accent(), r=document.documentElement.style; r.setProperty("--blue",a);
+  }
+  /* световое пятно и волна при нажатии */
+  document.addEventListener("pointerdown",e=>{
+    if(document.documentElement.dataset.fxl==="off") return;
+    const el=e.target.closest(".card,.row,.tile"); if(el){ const b=el.getBoundingClientRect(); el.style.setProperty("--mx",(e.clientX-b.left)+"px"); el.style.setProperty("--my",(e.clientY-b.top)+"px"); el.classList.add("lit"); setTimeout(()=>el.classList.remove("lit"),420); }
+    const bt=e.target.closest(".chip,.seg button,.nav button,.btn,.bgpick button,.sort button");
+    if(bt){ bt.classList.add("rip-host"); const b=bt.getBoundingClientRect(), d=Math.max(b.width,b.height)*2, sp=document.createElement("span");
+      sp.className="rip"; sp.style.cssText=`width:${d}px;height:${d}px;left:${e.clientX-b.left-d/2}px;top:${e.clientY-b.top-d/2}px`; bt.appendChild(sp); setTimeout(()=>sp.remove(),650); }
+  },{passive:true});
+  applyAccent(); start();
+  return {start, applyAccent, recolor(){ if(document.documentElement.dataset.fx==="on") size(); }};
+})();
+const BGS=[["aurora","Аврора"],["nebula","Космос"],["grid","Неон"],["pitch","Стадион"],["off","Без фона"]];
+const ACCS=[["blue","#6096ff"],["teal","#2dd4bf"],["violet","#a78bfa"],["pink","#f472b6"],["orange","#fb923c"]];
+function lookCard(){
+  const bg=lsGet("bg")||"aurora", ac=lsGet("acc")||"blue", fl=lsGet("fxl")||"max";
+  return `<div class="card"><div class="cap">Оформление</div>
+   <div class="sub" style="margin-top:10px">Тема</div><div class="seg" id="thm" style="margin-top:6px">${[["auto","Авто"],["light","Светлая"],["dark","Тёмная"]].map(([k,t])=>`<button data-th="${k}" class="${(lsGet("theme")||"auto")===k?"on":""}">${t}</button>`).join("")}</div>
+   <div class="sub">Живой фон</div><div class="bgpick" id="bgp">${BGS.map(([k,t])=>`<button class="b-${k} ${bg===k?"on":""}" data-bg="${k}">${t}</button>`).join("")}</div>
+   <div class="sub" style="margin-top:14px">Акцентный цвет</div><div class="accpick" id="accp">${ACCS.map(([k,c])=>`<button data-ac="${k}" class="${ac===k?"on":""}" style="background:${c}" aria-label="${k}"></button>`).join("")}</div>
+   <div class="sub" style="margin-top:14px">Эффекты</div><div class="seg" id="fxl" style="margin-top:6px">${[["max","Макс"],["lite","Лёгкий"],["off","Выкл"]].map(([k,t])=>`<button data-fl="${k}" class="${fl===k?"on":""}">${t}</button>`).join("")}</div>
+   <div class="note">«Лёгкий» — без размытия и бегущих рамок, меньше нагрузка на батарею. «Выкл» — спокойный однотонный фон. Настройки хранятся только на этом телефоне.</div></div>`;
+}
+function bindLook(){
+  const sel=(id,attr,key,after)=>{ const el=document.getElementById(id); if(!el) return; el.onclick=e=>{ const b=e.target.closest("["+attr+"]"); if(!b) return; lsSet(key,b.getAttribute(attr)); [...el.children].forEach(x=>x.classList.toggle("on",x===b)); after&&after(); haptic(); }; };
+  sel("bgp","data-bg","bg",()=>FX.start()); sel("accp","data-ac","acc",()=>{ FX.applyAccent(); FX.start(); }); sel("fxl","data-fl","fxl",()=>FX.start());
+  const th=document.getElementById("thm"); if(th) th.onclick=e=>{ const b=e.target.closest("[data-th]"); if(!b) return; lsSet("theme",b.dataset.th); applyTheme(); [...th.children].forEach(x=>x.classList.toggle("on",x===b)); FX.start(); haptic(); };
+}
+
+
+/* ═════════ v27 ═════════ */
+/* кольцо вероятностей: три дуги рисуются по очереди, в центре — самый вероятный исход */
+function ringSvg(p){
+  const R=70, C=2*Math.PI*R, gap=6, cols=["var(--blue)","#8b97b5","var(--violet)"], gl=["rgba(96,150,255,.6)","rgba(139,151,181,.4)","rgba(167,139,250,.6)"], names=["П1","Х","П2"];
+  let off=0, segs="";
+  p.forEach((v,i)=>{ const len=Math.max(0.1, v*C-gap); segs+=`<circle class="rseg" cx="100" cy="100" r="${R}" style="--len:${len.toFixed(1)};--d:${(i*.18).toFixed(2)}s;--gl:${gl[i]};stroke:${cols[i]}" stroke-dashoffset="${len}" transform="rotate(${(-90+off/C*360).toFixed(2)} 100 100)"/>`; off+=v*C; });
+  const mx=p.indexOf(Math.max(...p));
+  return `<svg class="ring" viewBox="0 0 200 200" role="img" aria-label="Вероятности исхода"><circle class="trk" cx="100" cy="100" r="${R}"/>${segs}
+    <g class="ctr"><text class="lab" x="100" y="88" text-anchor="middle">${["ХОЗЯЕВА","НИЧЬЯ","ГОСТИ"][mx]}</text><text class="big num" x="100" y="122" text-anchor="middle">${(p[mx]*100).toFixed(0)}%</text></g></svg>
+   <div class="ringleg">${p.map((v,i)=>`<span><i style="background:${cols[i]}"></i>${names[i]} ${(v*100).toFixed(0)}%</span>`).join("")}</div>`;
+}
+/* слабые сегменты (из /api/segments): предупреждение у ставки. Только совет */
+const mgroup = m => { m=m||""; return ["P1","X","P2","1X2"].includes(m)?"1X2":/^(TB|TM|ITB|ITM)/.test(m)?"тоталы":/^(F1|F2)/.test(m)?"форы":/^(CORN|YC|CARD)/.test(m)?"угловые/карточки":/^(BTT|BTS)/.test(m)?"обе забьют":"прочее"; };
+async function ensureSeg(){ if(state.seg===undefined){ try{ state.seg = await api("/api/segments"); }catch(e){ state.seg = null; } } return state.seg; }
+function segWarn(b){
+  const sg=state.seg; if(!sg||!sg.rows) return "";
+  const keys=["рынок: "+mgroup(b.market)]; const p=b.model_prob, od=b.placed&&b.placed_odds?b.placed_odds:b.taken_odds;
+  if(p!=null) keys.push(p<.35?"вероятность модели: <35%":p<.5?"вероятность модели: 35–50%":"вероятность модели: ≥50%");
+  if(od!=null) keys.push(od>2.2?"кэф: >2.2":"кэф: ≤2.2");
+  const bad=sg.rows.filter(r=>r.verdict==="минус"&&r.n>=(sg.min_n||20)&&keys.includes(r.key));
+  if(!bad.length) return "";
+  return `<div class="segwarn">⚠ Слабый сегмент: ${bad.map(r=>esc(r.key.replace(/^рынок: /,"рынок «")+(r.key.startsWith("рынок")?"»":""))+` (CLV ${(r.mean*100).toFixed(1)}%, n=${r.n})`).join("; ")}. Это совет, решение за вами.</div>`;
+}
+/* плавающая пилюля вкладки + свайп между вкладками */
+const TABS=["matches","bets","stats"];
+function movePill(){
+  const nav=document.getElementById("nav"); if(!nav) return;
+  let pill=nav.querySelector(".pill"); if(!pill){ pill=document.createElement("i"); pill.className="pill"; nav.prepend(pill); nav.classList.add("has-pill"); }
+  const on=nav.querySelector("button.on"); if(!on) return;
+  pill.style.width=on.offsetWidth+"px"; pill.style.transform=`translateX(${on.offsetLeft}px)`;
+}
+addEventListener("resize",movePill);
+function gotoTab(t,dir){
+  if(t===state.tab) return; state.tab=t; state.detail=null; syncBack(); state.dir=dir; render(); window.scrollTo(0,0); haptic();
+}
+(function(){
+  let x0=0,y0=0,t0=0,ok=false;
+  addEventListener("touchstart",e=>{ if(e.touches.length!==1){ ok=false; return; } const t=e.target;
+    ok = !state.detail && !t.closest("input,textarea,.chips,svg,.pinch,.nbox,table") ; x0=e.touches[0].clientX; y0=e.touches[0].clientY; t0=Date.now(); },{passive:true});
+  addEventListener("touchend",e=>{ if(!ok) return; ok=false; const c=e.changedTouches[0], dx=c.clientX-x0, dy=c.clientY-y0;
+    if(Math.abs(dx)<80||Math.abs(dx)<Math.abs(dy)*1.8||Date.now()-t0>600) return;
+    const i=TABS.indexOf(state.tab), j=dx<0?i+1:i-1; if(j<0||j>=TABS.length) return; gotoTab(TABS[j], dx<0?"fwd":"bwd"); },{passive:true});
+})();
+/* конфетти за новый выигрыш (один раз на ставку) */
+function confetti(n){
+  const cv=document.getElementById("conf"); if(!cv||document.documentElement.dataset.fxl==="off") return;
+  const cx=cv.getContext("2d"); cv.width=innerWidth; cv.height=innerHeight;
+  const cols=["#34d399","#6096ff","#fbbf24","#f472b6","#a78bfa"], ps=Array.from({length:n||90},()=>({x:innerWidth/2+(Math.random()-.5)*80,y:innerHeight*.35,vx:(Math.random()-.5)*11,vy:-Math.random()*11-4,r:3+Math.random()*4,c:cols[Math.random()*5|0],a:Math.random()*6,w:(Math.random()-.5)*.4}));
+  let f=0; (function step(){ cx.clearRect(0,0,cv.width,cv.height); f++;
+    ps.forEach(p=>{ p.vy+=.32; p.x+=p.vx; p.y+=p.vy; p.vx*=.992; p.a+=p.w; cx.save(); cx.translate(p.x,p.y); cx.rotate(p.a); cx.globalAlpha=Math.max(0,1-f/110); cx.fillStyle=p.c; cx.fillRect(-p.r,-p.r/2,p.r*2,p.r); cx.restore(); });
+    if(f<115) requestAnimationFrame(step); else cx.clearRect(0,0,cv.width,cv.height); })();
+}
+function checkWins(rows){
+  try{
+    const wins=rows.filter(b=>b.placed&&b.result!=null&&(b.pnl||0)>0).map(b=>b.event_id+"|"+b.market+"|"+b.selection);
+    const seen=JSON.parse(lsGet("wonseen")||"null");
+    if(seen===null){ lsSet("wonseen",JSON.stringify(wins)); return; }            // первый запуск: старые выигрыши не празднуем
+    const fresh=wins.filter(k=>!seen.includes(k));
+    if(fresh.length){ lsSet("wonseen",JSON.stringify([...new Set([...seen,...wins])].slice(-400))); confetti(110); haptic("ok"); }
+  }catch(e){}
+}
+/* недели: итог по расчитанным ставкам (реальные — если их хватает, иначе рекомендованные «на бумаге») */
+function weeksCard(rows){
+  const real=rows.filter(b=>b.result!=null&&b.placed&&b.stake!=null), paper=rows.filter(b=>b.result!=null&&b.recommended&&b.pnl!=null);
+  const src=real.length>=3?real:paper, label=real.length>=3?"реальные ставки":"рекомендованные (бумажные)";
+  const wk={}; src.forEach(b=>{ const d=new Date(String(b.match_date||"").slice(0,10)+"T00:00:00Z"); if(isNaN(d)) return; const day=(d.getUTCDay()+6)%7; d.setUTCDate(d.getUTCDate()-day); const k=d.toISOString().slice(0,10); (wk[k]=wk[k]||{pnl:0,n:0}); wk[k].pnl+=b.pnl||0; wk[k].n++; });
+  const ks=Object.keys(wk).sort().slice(-8); if(ks.length<2) return "";
+  const mx=Math.max(...ks.map(k=>Math.abs(wk[k].pnl)),1), tot=ks.reduce((s,k)=>s+wk[k].pnl,0);
+  return `<div class="card"><div class="cap">По неделям · ${label}</div><div class="sub" style="margin-top:4px">за ${ks.length} нед.: <b class="num ${tot>=0?"g":"r"}">${mon(tot)}</b></div>
+   <div class="wk" style="--n:${ks.length}">${ks.map((k,i)=>{ const v=wk[k].pnl, h=Math.max(6,Math.abs(v)/mx*84); return `<div><span class="v ${v>=0?"g":"r"}">${v>=0?"+":"−"}${Math.abs(Math.round(v))}</span><div class="bar" style="--i:${i};height:${h}px;background:${v>=0?"var(--green)":"var(--red)"};opacity:${.55+.45*Math.abs(v)/mx}"></div><span>${k.slice(8,10)}.${k.slice(5,7)}</span></div>`; }).join("")}</div>
+   <div class="note">Неделя считается с понедельника. Слева — давно, справа — недавно. Небольшие суммы — шум, не тренд.</div></div>`;
+}
+
 /* максимальная просадка по накопленному PnL */
 function ddNote(eq){
   if(!eq||eq.length<2) return "";
@@ -841,12 +1121,12 @@ async function viewStats(){
   const g=(r.groups||[]);
   if(g.length) h += `<div class="card"><div class="cap">Сегменты <span class="sub" style="text-transform:none;letter-spacing:0;font-weight:400">· лига / рынок · n · средний CLV · n&lt;${nS} — шум</span></div><div style="margin-top:8px">` +
      g.slice(0,12).map(([lg,mk,n,w,m])=>`<div class="seg-row"><span class="${n<nS?"dim":""}">${esc(LEAGUES[lg]||lg)} · ${esc(mkLabel(mk))}</span><span class="num ${n<nS?"dim":m<0?"r":"g"}">n=${n} · ${sgn(m,2)}</span></div>`).join("") + `</div></div>`;
-  h += `<div id="segbox"></div><div id="segx"></div><div class="card"><div class="cap">Тема оформления</div><div class="seg" id="thm" style="margin-top:8px">${[["auto","Авто"],["light","Светлая"],["dark","Тёмная"]].map(([k,t])=>`<button data-th="${k}" class="${(lsGet("theme")||"auto")===k?"on":""}">${t}</button>`).join("")}</div></div>`;
+  h += `<div id="segbox"></div><div id="segx"></div>${lookCard()}`;
   h += `<div class="foot">ROI на малой выборке — шум. Решающий показатель — средний CLV на сотнях ставок.<br>Расчёт ставок обновляет бот (команда «Статистика» в чате).</div>`;
   mount(h);
   document.getElementById("rf").onclick = ()=>refresh();
   bindChart(s.equity);
-  document.getElementById("thm").onclick = e=>{ const b=e.target.closest("[data-th]"); if(!b) return; lsSet("theme",b.dataset.th); applyTheme(); document.querySelectorAll("#thm button").forEach(x=>x.classList.toggle("on",x===b)); haptic(); };
+  bindLook();
   loadSegments();
 }
 
@@ -868,12 +1148,12 @@ async function refresh(){
 
 /* ─────────── роутер ─────────── */
 function render(){
-  document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on", b.dataset.t===state.tab));
+  document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on", b.dataset.t===state.tab)); movePill();
   if(state.detail) return viewMatch(state.detail);
   return ({matches:viewMatches,bets:viewBets,stats:viewStats})[state.tab]();
 }
 document.getElementById("nav").onclick = e=>{const b=e.target.closest("[data-t]"); if(!b) return; haptic(); if(state.detail&&history.state&&history.state.m){ state.detail=null; syncBack(); history.back(); }
-  state.tab=b.dataset.t; state.detail=null; syncBack(); render(); window.scrollTo(0,0);};
+  const to=b.dataset.t; state.dir = TABS.indexOf(to)>TABS.indexOf(state.tab)?"fwd":TABS.indexOf(to)<TABS.indexOf(state.tab)?"bwd":null; state.tab=to; state.detail=null; syncBack(); render(); window.scrollTo(0,0);};
 Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensureSnap(); }catch(e){} } render(); });
 </script>
 </body>
