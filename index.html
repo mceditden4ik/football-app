@@ -257,6 +257,10 @@ html[data-fx="on"] h1 .iconbtn,html[data-fx="on"] h1 .badge{-webkit-text-fill-co
 /* ═════════ v27: живые матчи, кольцо вероятностей, плавающая навигация, недели ═════════ */
 @keyframes livepulse{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.0),inset 0 0 0 1px rgba(52,211,153,.35)}50%{box-shadow:0 0 22px 2px rgba(52,211,153,.22),inset 0 0 0 1px rgba(52,211,153,.7)}}
 @keyframes htpulse{0%,100%{box-shadow:inset 0 0 0 1px rgba(251,191,36,.30)}50%{box-shadow:0 0 18px 1px rgba(251,191,36,.18),inset 0 0 0 1px rgba(251,191,36,.6)}}
+.row{transition:height .55s cubic-bezier(.4,0,.2,1),opacity .45s,transform .55s,margin .55s,padding .55s}
+.row.leaving{opacity:0;transform:scale(.94) translateX(40px);height:0!important;margin-top:0!important;margin-bottom:0!important;padding-top:0!important;padding-bottom:0!important;overflow:hidden;border-width:0;pointer-events:none}
+.row.is-done{opacity:.72}
+.nowhead{display:flex;align-items:center;gap:8px;color:#34d399}
 .row.is-live{animation:livepulse 2.2s ease-in-out infinite}
 .row.is-ht{animation:htpulse 2.6s ease-in-out infinite}
 html[data-fxl="off"] .row.is-live,html[data-fxl="off"] .row.is-ht{animation:none;box-shadow:inset 0 0 0 1px rgba(52,211,153,.5)}
@@ -311,7 +315,7 @@ const LEAGUES = {EPL:"АПЛ",La_Liga:"Ла Лига",Bundesliga:"Бундесл
 const LCOL = {EPL:"#a770ff",La_Liga:"#ff9646",Bundesliga:"#f05a5a",Serie_A:"#5aa0ff",Ligue_1:"#50cdeb",RFPL:"#eb5564",Champions_League:"#5082ff",
   Europa_League:"#ff8c3c",Conference_League:"#46c882",Eredivisie:"#ff783c",Portugal:"#3cbe78",Turkey:"#f04650",Belgium:"#fac83c"};
 const MARKETS = [["TB_2.5","Тотал 2.5",["Больше","Меньше"]],["BTTS","Обе забьют",["Да","Нет"]],["CORN_9.5","Угловые 9.5",["Больше","Меньше"]],["CARD_3.5","Карточки 3.5",["Больше","Меньше"]]];
-const state = {tab:"matches", league:"", days:4, q:"", detail:null, betsTab:"open", sort:"time", favOnly:false, recOnly:false, cache:{}, favs:[], scroll:0, lang:"ru", today:null};
+const state = {tab:"matches", league:"", days:4, q:"", detail:null, betsTab:"open", sort:"time", favOnly:false, recOnly:false, showDone:false, cache:{}, favs:[], scroll:0, lang:"ru", today:null};
 
 /* ─────────── утилиты ─────────── */
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
@@ -513,6 +517,15 @@ function pbar(p){
   return `<div class="pbar">${p.map((v,i)=>`<i style="width:${(v*100).toFixed(1)}%;background:${col[i]};opacity:${v===mx?1:.65}"></i>`).join("")}</div>
   <div class="pnum num"><span class="${p[0]===mx?"b":"muted"}">П1 ${pc(p[0])}</span><span class="${p[1]===mx?"":"muted"}">Х ${pc(p[1])}</span><span class="${p[2]===mx?"":"muted"}" style="${p[2]===mx?"color:var(--violet)":""}">П2 ${pc(p[2])}</span></div>`;
 }
+function isDone(m){ if(m.score) return true; const w=when(m); if(!w.hasTime) return false; const c=phaseOf(w.d.getTime()).code; return c==="ft"||c==="old"; }
+/* Закончившиеся матчи исчезают сами: раз в 20 с находим строки, плавно схлопываем и пересчитываем список */
+setInterval(()=>{
+  if(state.showDone||state.detail) return;
+  const rows=[...document.querySelectorAll("#list .row[data-ko]")].filter(r=>r.dataset.ko&&!r.dataset.sc&&!r.classList.contains("is-done")&&["ft","old"].includes(phaseOf(+r.dataset.ko).code));
+  if(!rows.length) return;
+  rows.forEach(r=>{ r.style.height=r.offsetHeight+"px"; void r.offsetHeight; r.classList.add("leaving"); });
+  setTimeout(()=>{ try{ renderList(false); }catch(e){} },650);
+},20000);
 function matchesKey(){ return state.days+"|"+state.league; }
 async function viewMatches(force){
   const key = matchesKey(), have = state.cache.mkey===key && state.cache.matches;
@@ -520,7 +533,7 @@ async function viewMatches(force){
    <div id="today"></div>
    <input class="search" id="q" placeholder="Поиск команды (рус. или англ.)" value="${esc(state.q)}" autocomplete="off">
    <div class="chips" id="lg"></div><div class="seg" id="days"></div>
-   <div class="tools"><button class="chip fav ${state.favOnly?"on":""}" id="tf">★ Мои команды</button><button class="chip rec ${state.recOnly?"on":""}" id="tr">С перевесом</button><span class="sp"></span>
+   <div class="tools"><button class="chip fav ${state.favOnly?"on":""}" id="tf">★ Мои команды</button><button class="chip rec ${state.recOnly?"on":""}" id="tr">С перевесом</button><button class="chip ${state.showDone?"on":""}" id="td" style="display:none">🏁 Завершённые</button><span class="sp"></span>
      <div class="sort" id="so"><button data-s="time" class="${state.sort==="time"?"on":""}">Время</button><button data-s="conf" class="${state.sort==="conf"?"on":""}">Уверенность</button></div></div>
    <div id="list">${have?"":skel(4)}</div><div class="foot" id="upd"></div>`, have?"":"");
   const lg = document.getElementById("lg");
@@ -531,6 +544,7 @@ async function viewMatches(force){
   dz.onclick = e=>{const b=e.target.closest("[data-d]"); if(!b) return; state.days=+b.dataset.d; haptic(); viewMatches();};
   document.getElementById("q").oninput = e=>{state.q=e.target.value; renderList(false);};
   document.getElementById("tf").onclick = e=>{state.favOnly=!state.favOnly; e.currentTarget.classList.toggle("on",state.favOnly); haptic(); renderList(true);};
+  document.getElementById("td").onclick = e=>{state.showDone=!state.showDone; e.currentTarget.classList.toggle("on",state.showDone); haptic(); renderList(true);};
   document.getElementById("tr").onclick = e=>{state.recOnly=!state.recOnly; e.currentTarget.classList.toggle("on",state.recOnly); haptic(); renderList(true);};
   document.getElementById("so").onclick = e=>{const b=e.target.closest("[data-s]"); if(!b) return; state.sort=b.dataset.s; document.querySelectorAll("#so button").forEach(x=>x.classList.toggle("on",x===b)); haptic(); renderList(true);};
   document.getElementById("rf").onclick = ()=>refresh();
@@ -547,21 +561,28 @@ function renderList(anim){
   const el = document.getElementById("list"); if(!el) return;
   const q = state.q.trim().toLowerCase();
   let items = (state.cache.matches||[]).filter(m=>(!q || (m.home+" "+m.away+" "+(m.home_ru||"")+" "+(m.away_ru||"")).toLowerCase().includes(q)) && (!state.favOnly || isFav(m.home)||isFav(m.away)) && (!state.recOnly || m.n_rec>0));
+  const doneN = items.filter(isDone).length;
+  const tdb = document.getElementById("td"); if(tdb){ tdb.style.display = doneN||state.showDone ? "" : "none"; tdb.textContent = "🏁 Завершённые"+(doneN?" ("+doneN+")":""); }
+  if(!state.showDone) items = items.filter(m=>!isDone(m));
   if(!items.length){ el.innerHTML = `<div class="empty">${state.favOnly&&!state.favs.length?"Нажмите ★ рядом с названием команды на странице матча — и она появится здесь.":"Матчей не найдено."}<br><span class="sub">${state.favOnly&&!state.favs.length?"":"Попробуйте другой период, лигу или фильтр. Календарь обновляет бот."}</span></div>`; return; }
   const byConf = state.sort==="conf";
   if(byConf) items = items.slice().sort((a,b)=>(b.p?Math.max(...b.p):0)-(a.p?Math.max(...a.p):0));
-  let out="", cur="";
+  if(!byConf){ const L=m=>{const w=when(m); const ph=(!m.score&&w.hasTime)?phaseOf(w.d.getTime()).code:""; return ph==="1h"||ph==="2h"||ph==="ht"?0:1;}; items = items.slice().sort((a,b)=>L(a)-L(b)); }   // «Сейчас идёт» наверх
+  let out="", cur="", liveHead=false;
   for(const m of items){
     const w = when(m), day = fmtDay(w.d);
-    if(!byConf && day!==cur){ cur=day; out += `<div class="day cap">${esc(day)}</div>`; }
+    const isNow = !byConf && !m.score && w.hasTime && ["1h","2h","ht"].includes(phaseOf(w.d.getTime()).code);
+    if(isNow && !liveHead){ liveHead=true; out += `<div class="day cap nowhead"><span class="live"></span> Сейчас идёт</div>`; cur="@now"; }
+    else if(!isNow && cur==="@now") cur="";
+    if(!byConf && !isNow && day!==cur){ cur=day; out += `<div class="day cap">${esc(day)}</div>`; }
     const ph = (w.hasTime && !m.score) ? phaseOf(w.d.getTime()).code : "", started = ph==="1h"||ph==="2h", paused = ph==="ht";
     const bd = [];
     if(m.n_placed) bd.push('<span class="badge bg-b">поставлено</span>');
     else if(m.n_rec) bd.push('<span class="badge bg-g pulse">есть перевес</span>');
     if(m.quality!=null && m.quality<.35) bd.push('<span class="badge bg-r">мало данных</span>');
     const when_ = w.hasTime?(byConf?fmtDay(w.d)+" · ":"")+fmtTime(w.d):(byConf?fmtDay(w.d):"");
-    out += `<button class="row${started?" is-live":paused?" is-ht":""}" data-id="${m.event_id}"><div class="top"><span><span style="color:${LCOL[m.league]||"var(--muted)"}">●</span> ${esc(LEAGUES[m.league]||m.league)}</span>
-      <span class="num">${started?'<span class="live"></span>':paused?'<span class="pause">⏸</span> ':""}${m.score?`<span class="eta">завершён</span> · `:w.hasTime?`<span class="eta" data-eta="${w.d.getTime()}">${esc(etaText(w.d.getTime()))}</span> · `:""}${esc(when_)}</span></div>
+    out += `<button class="row${started?" is-live":paused?" is-ht":""}${isDone(m)?" is-done":""}" data-id="${m.event_id}" data-ko="${w.hasTime?w.d.getTime():""}"${m.score?' data-sc="1"':""}><div class="top"><span><span style="color:${LCOL[m.league]||"var(--muted)"}">●</span> ${esc(LEAGUES[m.league]||m.league)}</span>
+      <span class="num">${started?'<span class="live"></span>':paused?'<span class="pause">⏸</span> ':""}${isDone(m)&&!m.score?`<span class="eta">завершён · итог ожидается</span> · `:m.score?`<span class="eta">завершён</span> · `:w.hasTime?`<span class="eta" data-eta="${w.d.getTime()}">${esc(etaText(w.d.getTime()))}</span> · `:""}${esc(when_)}</span></div>
       <div class="teams"><span>${isFav(m.home)?'<b class="fv">★</b>':""}${esc(nmH(m))}</span><span>${isFav(m.away)?'<b class="fv">★</b>':""}${esc(nmA(m))}</span></div>${m.score?`<div class="score num">${m.score[0]} : ${m.score[1]}</div>`:pbar(m.p)}
       ${bd.length?`<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">${bd.join("")}</div>`:""}</button>`;
   }
