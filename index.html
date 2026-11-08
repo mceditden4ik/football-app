@@ -519,6 +519,96 @@ html[data-vt=tab]::view-transition-new(root){animation:vt-i .45s var(--spring) b
 @keyframes bounce{0%,100%{transform:translateY(0) scaleY(1)}8%{transform:translateY(0) scaleY(.9) scaleX(1.06)}50%{transform:translateY(-22px) rotate(180deg)}}
 @keyframes shadow{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.55);opacity:.45}}
 @media (prefers-reduced-motion:reduce){#noise{display:none}}
+
+/* ═════════ v31 «God Tier»: WebGL-фон, liquid glass, радар, ачивки, копилот, жесты ═════════ */
+#gl{position:fixed;inset:0;width:100vw;height:100vh;height:100lvh;z-index:-1;display:none;pointer-events:none}
+html[data-gl="on"] #gl{display:block}
+html[data-gl="on"] #fx{display:none!important}
+html[data-gl="on"] body{background:var(--bg)!important}
+.bgpick{grid-template-columns:repeat(3,1fr)!important}.bgpick button{aspect-ratio:1.55!important}
+.bgpick .b-fluid{background:radial-gradient(circle at 20% 30%,var(--blue),transparent 55%),radial-gradient(circle at 80% 70%,#c026d3,transparent 55%),radial-gradient(circle at 60% 20%,#22d3ee,transparent 50%),#070816}
+
+/* liquid glass: преломление на кромке, блик, внутреннее свечение */
+.nav,#sheet{--glare:-60%;
+  box-shadow:0 26px 60px -16px rgba(0,0,0,.8),0 0 0 1px rgba(0,0,0,.22),
+   inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255,.1),inset 1.5px 0 0 rgba(255,255,255,.18),inset -1.5px 0 0 rgba(255,255,255,.18),
+   inset 0 0 26px rgba(255,255,255,.07),0 0 40px -16px var(--glow)}
+.nav{-webkit-backdrop-filter:blur(18px) saturate(200%) brightness(1.06);backdrop-filter:blur(18px) saturate(200%) brightness(1.06);-webkit-backdrop-filter:url(#lens) blur(14px) saturate(200%) brightness(1.06);backdrop-filter:url(#lens) blur(14px) saturate(200%) brightness(1.06)}
+.nav::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:2;mix-blend-mode:soft-light;opacity:.9;
+  background:linear-gradient(112deg,transparent 28%,rgba(255,255,255,.55) 46%,rgba(255,255,255,.15) 52%,transparent 66%) var(--glare) 0/220% 100% no-repeat}
+.nav::before{background:linear-gradient(180deg,rgba(255,255,255,.2),transparent 45%),radial-gradient(120% 90% at 50% 130%,color-mix(in srgb,var(--blue) 30%,transparent),transparent 60%)!important}
+.nav .pill{-webkit-backdrop-filter:url(#lens) blur(6px) saturate(220%) brightness(1.12);backdrop-filter:url(#lens) blur(6px) saturate(220%) brightness(1.12);
+  background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,.05)),color-mix(in srgb,var(--blue) 18%,transparent)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.6),inset 0 -8px 18px -8px color-mix(in srgb,var(--blue) 40%,transparent),0 0 0 1px rgba(255,255,255,.18),0 8px 24px -8px var(--glow)!important}
+#sheet{-webkit-backdrop-filter:blur(26px) saturate(190%);backdrop-filter:blur(26px) saturate(190%);background:color-mix(in srgb,var(--bg2) 72%,transparent)!important}
+
+/* радар */
+.radar{display:block;width:100%;max-width:330px;margin:6px auto 0;overflow:visible}
+.radar .gr{fill:none;stroke:color-mix(in srgb,var(--text) 14%,transparent);stroke-width:1}
+.radar .ax{stroke:color-mix(in srgb,var(--text) 12%,transparent);stroke-width:1}
+.radar .lb{font:600 11px var(--font,system-ui);fill:var(--muted);text-anchor:middle}
+.radar .pg{transform-origin:130px 130px;transform:scale(.02);opacity:0;transition:transform 1s var(--spring),opacity .5s;stroke-width:2.2;stroke-linejoin:round}
+.radar.in .pg{transform:scale(1);opacity:1}.radar.in .pg.b{transition-delay:.15s}
+.radar .pd{opacity:0;transition:opacity .4s .8s}.radar.in .pd{opacity:1}
+.rlegend{display:flex;justify-content:center;gap:18px;font-size:13px;font-weight:700;margin-top:6px}
+.rlegend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.rvals{width:100%;margin-top:10px;font-size:13px;border-collapse:collapse}.rvals td{padding:5px 2px;border-top:1px solid var(--line)}.rvals td:nth-child(2){text-align:center;color:var(--muted)}.rvals td:last-child{text-align:right}
+.hm{display:grid;grid-template-columns:auto repeat(5,1fr);gap:5px;align-items:center;margin-top:10px;font-size:12px}
+.hm .t{grid-column:1/-1;font-weight:700;margin-top:8px;color:var(--text)}
+.hm .c{height:36px;border-radius:10px;display:grid;place-items:center;font-weight:800;font-size:15px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4);opacity:0;transform:scale(.6);animation:hmin .5s var(--spring) forwards;animation-delay:calc(var(--i)*60ms)}
+@keyframes hmin{to{opacity:1;transform:none}}
+.hm .l{color:var(--muted);padding-right:4px}
+
+/* копилот */
+#fab{position:fixed;right:16px;bottom:calc(104px + var(--safe-b,0px));z-index:30;width:56px;height:56px;border-radius:20px;border:0;display:grid;place-items:center;font-size:24px;color:#fff;cursor:pointer;
+  background:linear-gradient(135deg,var(--blue),color-mix(in srgb,var(--blue) 40%,#c026d3));box-shadow:0 14px 34px -8px var(--glow),inset 0 1px 0 rgba(255,255,255,.5);
+  transform:translateY(90px) scale(.5);opacity:0;pointer-events:none;transition:transform .7s var(--spring),opacity .3s}
+#fab.on{transform:none;opacity:1;pointer-events:auto}
+#fab:active{transform:scale(.9)}
+#fab::after{content:"";position:absolute;inset:-6px;border-radius:24px;border:2px solid var(--blue);opacity:0;animation:fabp 2.6s ease-out infinite}
+@keyframes fabp{0%{opacity:.7;transform:scale(.9)}100%{opacity:0;transform:scale(1.35)}}
+.cp{display:flex;flex-direction:column;gap:10px;max-height:56vh;overflow:auto;padding:4px 2px 8px;scrollbar-width:none}
+.cp .bub{max-width:88%;padding:11px 14px;border-radius:18px;font-size:14.5px;line-height:1.4;animation:bubin .5s var(--spring) both}
+.cp .bub.ai{background:color-mix(in srgb,var(--card2) 85%,transparent);border:1px solid var(--line);border-bottom-left-radius:6px;align-self:flex-start}
+.cp .bub.me{background:linear-gradient(135deg,var(--blue),color-mix(in srgb,var(--blue) 50%,#7c3aed));color:#fff;border-bottom-right-radius:6px;align-self:flex-end}
+.cp .bub p{margin:0 0 6px}.cp .bub p:last-child{margin:0}
+.cp .dots{display:inline-flex;gap:4px}.cp .dots i{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:dt 1s infinite}.cp .dots i:nth-child(2){animation-delay:.15s}.cp .dots i:nth-child(3){animation-delay:.3s}
+@keyframes dt{0%,60%,100%{transform:none;opacity:.4}30%{transform:translateY(-5px);opacity:1}}
+@keyframes bubin{from{opacity:0;transform:translateY(10px) scale(.96)}}
+.cpq{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.cpq button{min-height:44px;padding:0 14px;border-radius:22px;border:1px solid var(--line);background:var(--card2);color:var(--text);font:600 13.5px var(--font,system-ui);cursor:pointer}
+.cpq button:active{transform:scale(.94)}
+.cpn{font-size:11.5px;color:var(--dim);margin-top:8px}
+
+/* ачивки */
+.ach{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.ach .bd{border-radius:18px;padding:12px 6px 10px;text-align:center;border:1px solid var(--line);background:color-mix(in srgb,var(--card2) 70%,transparent);position:relative;overflow:hidden}
+.ach .bd .ic{font-size:30px;filter:grayscale(1) opacity(.35);transition:filter .4s}
+.ach .bd.on .ic{filter:none;animation:pop .8s var(--spring)}
+.ach .bd.on{border-color:color-mix(in srgb,var(--blue) 50%,var(--line));box-shadow:0 10px 26px -14px var(--glow)}
+.ach .bd .tt{font-size:12px;font-weight:700;margin-top:6px;line-height:1.2}.ach .bd .dd{font-size:10.5px;color:var(--dim);margin-top:3px;line-height:1.25}
+.ach .bd .pr{height:4px;border-radius:3px;background:var(--track,rgba(255,255,255,.08));margin-top:7px;overflow:hidden}.ach .bd .pr i{display:block;height:100%;background:var(--blue);border-radius:3px}
+@keyframes pop{0%{transform:scale(.3) rotate(-25deg)}60%{transform:scale(1.25) rotate(6deg)}100%{transform:none}}
+#achT{position:fixed;left:50%;top:calc(12px + max(env(safe-area-inset-top,0px),var(--tg-top,0px)));z-index:90;transform:translate(-50%,-140%);display:flex;align-items:center;gap:12px;padding:12px 18px 12px 12px;border-radius:24px;
+  background:color-mix(in srgb,var(--bg2) 70%,transparent);-webkit-backdrop-filter:blur(22px) saturate(190%);backdrop-filter:blur(22px) saturate(190%);
+  border:1px solid color-mix(in srgb,var(--blue) 55%,transparent);box-shadow:0 20px 50px -12px var(--glow),inset 0 1px 0 rgba(255,255,255,.4);transition:transform .8s var(--spring);max-width:92vw}
+#achT.on{transform:translate(-50%,0)}
+#achT .ic{font-size:34px;width:52px;height:52px;border-radius:18px;display:grid;place-items:center;background:color-mix(in srgb,var(--blue) 22%,transparent)}
+#achT.on .ic{animation:pop .9s var(--spring)}
+#achT b{display:block;font:800 15px var(--font-d,system-ui)}#achT span{font-size:12.5px;color:var(--muted)}
+.vbtn{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:14px;border:0;background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;font-size:20px}
+.vbtn.rec{color:#f87171;animation:fabp2 1s infinite}@keyframes fabp2{50%{transform:translateY(-50%) scale(1.18)}}
+.qwrap{position:relative}.qwrap .search{padding-right:54px}
+.swh{position:absolute;top:0;bottom:0;display:flex;align-items:center;font-size:26px;pointer-events:none;opacity:0;transition:opacity .15s}
+.row{touch-action:pan-y;position:relative}
+.row.sw{transition:none!important;z-index:2}
+.row.swb{transition:transform .5s var(--spring)!important}
+#undo{position:fixed;left:50%;bottom:calc(104px + var(--safe-b,0px));transform:translate(-50%,calc(100% + 160px));z-index:70;display:flex;align-items:center;gap:14px;padding:6px 8px 6px 18px;border-radius:22px;background:color-mix(in srgb,var(--card2) 86%,transparent);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border:1px solid var(--line);box-shadow:var(--sh2);font-size:14px;transition:transform .6s var(--spring)}
+#undo.on{transform:translate(-50%,0)}#undo button{min-height:44px;padding:0 14px;border:0;border-radius:16px;background:var(--blue);color:#fff;font-weight:700;cursor:pointer}
+.stars{border-radius:18px;padding:14px;border:1px solid color-mix(in srgb,#f5b301 45%,var(--line));background:linear-gradient(135deg,rgba(245,179,1,.12),rgba(245,179,1,.02));margin-top:10px}
+.stars .pl{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid var(--line);font-weight:700}.stars .pl:first-of-type{border-top:0}
+.demo{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.08em;padding:3px 8px;border-radius:8px;background:rgba(245,179,1,.18);color:#f5b301}
+.shimg{width:100%;max-height:56vh;object-fit:contain;border-radius:18px;box-shadow:var(--sh2)}
+@media (prefers-reduced-motion:reduce){#fab::after,.ach .bd.on .ic,#achT.on .ic{animation:none}}
 </style>
 </head>
 <body>
@@ -1246,7 +1336,7 @@ function gotoTab(t,dir){
 (function(){
   let x0=0,y0=0,t0=0,ok=false;
   addEventListener("touchstart",e=>{ if(e.touches.length!==1){ ok=false; return; } const t=e.target;
-    ok = !state.detail && !t.closest("input,textarea,.chips,svg,.pinch,.nbox,table") ; x0=e.touches[0].clientX; y0=e.touches[0].clientY; t0=Date.now(); },{passive:true});
+    ok = !state.detail && !t.closest("input,textarea,.chips,svg,.pinch,.nbox,table,.row") ; x0=e.touches[0].clientX; y0=e.touches[0].clientY; t0=Date.now(); },{passive:true});
   addEventListener("touchend",e=>{ if(!ok) return; ok=false; const c=e.changedTouches[0], dx=c.clientX-x0, dy=c.clientY-y0;
     if(Math.abs(dx)<80||Math.abs(dx)<Math.abs(dy)*1.8||Date.now()-t0>600) return;
     const i=TABS.indexOf(state.tab), j=dx<0?i+1:i-1; if(j<0||j>=TABS.length) return; gotoTab(TABS[j], dx<0?"fwd":"bwd"); },{passive:true});
@@ -1683,6 +1773,318 @@ Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensu
   /* звук/эффекты при выигрышах */
   try{ const _c=confetti; confetti=function(){ haptic("ok"); return _c.apply(this,arguments); }; }catch(e){}
   try{ const _g=gotoTab; gotoTab=function(){ Snd.play("swipe"); return _g.apply(this,arguments); }; }catch(e){}
+})();
+
+/* ═════════ v31 «God Tier» ═════════ */
+(function(){
+  "use strict";
+  const root=document.documentElement, RMX=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const $=(s,r)=>(r||document).querySelector(s), $$=(s,r)=>[...(r||document).querySelectorAll(s)];
+  const J=(k,d)=>{ try{ const v=JSON.parse(lsGet(k)||"null"); return v==null?d:v; }catch(e){ return d; } };
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), avg=a=>a.reduce((s,x)=>s+x,0)/a.length;
+
+  /* ───────── цвета ───────── */
+  function hex2rgb(h){ h=(h||"").trim(); let m=/^#([0-9a-f]{6})$/i.exec(h); if(m){ const n=parseInt(m[1],16); return [n>>16&255,n>>8&255,n&255]; }
+    m=/^#([0-9a-f]{3})$/i.exec(h); if(m){ const s=m[1]; return [parseInt(s[0]+s[0],16),parseInt(s[1]+s[1],16),parseInt(s[2]+s[2],16)]; }
+    m=/rgba?\(\s*(\d+)[ ,]+(\d+)[ ,]+(\d+)/.exec(h); return m?[+m[1],+m[2],+m[3]]:null; }
+  function rgb2hsl([r,g,b]){ r/=255;g/=255;b/=255; const mx=Math.max(r,g,b), mn=Math.min(r,g,b), l=(mx+mn)/2; let h=0,s=0; if(mx!==mn){ const d=mx-mn; s=l>.5?d/(2-mx-mn):d/(mx+mn); h=mx===r?(g-b)/d+(g<b?6:0):mx===g?(b-r)/d+2:(r-g)/d+4; h*=60; } return [h,s,l]; }
+  function hsl2hex(h,s,l){ const k=n=>(n+h/30)%12, a=s*Math.min(l,1-l), f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1))); const t=x=>Math.round(x*255).toString(16).padStart(2,"0"); return "#"+t(f(0))+t(f(8))+t(f(4)); }
+  const lightTheme=()=>{ const c=hex2rgb(getComputedStyle(root).getPropertyValue("--bg")); return c?(0.2126*c[0]+0.7152*c[1]+0.0722*c[2])/255>.6:false; };
+  const TC=[["chelsea","#3d7bff"],["arsenal","#ef4444"],["liverpool","#e5383b"],["manchester city","#6cc3ef"],["man city","#6cc3ef"],["manchester united","#ef4444"],["man united","#ef4444"],["tottenham","#8aa8ff"],["newcastle","#cbd5e6"],["aston villa","#c0457a"],["west ham","#b5467a"],["brighton","#3aa0ff"],["everton","#3d7bff"],["leicester","#3d7bff"],["wolves","#f5b301"],["wolverhampton","#f5b301"],["fulham","#dfe6f5"],["crystal palace","#4f7cff"],["brentford","#ef4444"],["nottingham","#ef4444"],["bournemouth","#ef4444"],["real madrid","#dfe6f5"],["barcelona","#d6336c"],["atl","#ef4444"],["sevilla","#ef4444"],["valencia","#f59e0b"],["villarreal","#f5d90a"],["real sociedad","#3d7bff"],["athletic","#ef4444"],["betis","#2fbf71"],
+    ["bayern","#ef3e4a"],["dortmund","#fdd835"],["leverkusen","#ef3e2a"],["leipzig","#ef4444"],["frankfurt","#e5e7eb"],["stuttgart","#ef4444"],["juventus","#cfd6e4"],["inter","#3d7bff"],["milan","#ef3e3e"],["napoli","#35a8ee"],["roma","#f08a2b"],["lazio","#6cc3ef"],["atalanta","#4f7cff"],["fiorentina","#a855f7"],
+    ["paris","#3d6bff"],["psg","#3d6bff"],["marseille","#35b8f0"],["lyon","#3d6bff"],["monaco","#ef4444"],["lille","#ef4444"],["nice","#ef4444"],["ajax","#ef4444"],["psv","#ef4444"],["feyenoord","#ef4444"],["twente","#ef4444"],["benfica","#ef4444"],["porto","#3d7bff"],["sporting","#2fbf71"],["braga","#ef4444"],
+    ["zenit","#35b8f0"],["spartak","#ef4444"],["cska","#ef4444"],["lokomotiv","#2fbf71"],["dynamo","#4f8fe0"],["krasnodar","#2fbf71"],["rostov","#f5b301"],["akhmat","#2fbf71"],["sochi","#35b8f0"],["galatasaray","#f5a524"],["fenerbahce","#f2d21f"],["besiktas","#cbd5e6"],["trabzon","#c0467a"],["celtic","#2fbf71"],["rangers","#3d7bff"],["brugge","#3d7bff"],["anderlecht","#9b6bff"],["genk","#3d7bff"],["union","#f5d90a"]];
+  function teamColor(name){ const n=String(name||"").toLowerCase(); let c=null; for(const [k,v] of TC) if(n.includes(k)){ c=v; break; }
+    if(!c){ let h=0; for(let i=0;i<n.length;i++) h=(h*31+n.charCodeAt(i))%360; c=hsl2hex(h,.72,.62); }
+    const [h,s,l]=rgb2hsl(hex2rgb(c)), lt=lightTheme(); return hsl2hex(h,clamp(s,.5,.95),lt?clamp(l,.36,.5):clamp(l,.56,.74)); }
+
+  /* ───────── 1. WebGL «жидкий» фон ───────── */
+  const GL=(()=>{
+    const cv=document.createElement("canvas"); cv.id="gl"; cv.setAttribute("aria-hidden","true"); document.body.insertBefore(cv,document.getElementById("fx"));
+    let gl=null, prog=null, U={}, raf=0, t0=performance.now(), W=0, H=0, ok=null, lastF=0;
+    const rip=[]; let tx=0,ty=0,mx=0,my=0,sy=0,tsy=0, acc=[.38,.59,1], tacc=[.38,.59,1], lt=0,tlt=0, lastRip=0, accT=0, glareP=-60;
+    const VS="attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
+    const FS=`#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+uniform vec2 R;uniform float T;uniform vec3 A;uniform vec2 M;uniform float S;uniform float L;uniform vec3 P[6];
+float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1.,0.)),f.x),mix(h(i+vec2(0.,1.)),h(i+vec2(1.,1.)),f.x),f.y);}
+float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*n(p);p=p*2.02+vec2(1.7,9.2);a*=.5;}return v;}
+void main(){
+  vec2 uv=gl_FragCoord.xy/R; vec2 q=(gl_FragCoord.xy-.5*R)/R.y;
+  q+=M*.07; q.y+=S*.3;
+  float t=T*.05;
+  vec2 w=vec2(fbm(q*1.5+vec2(t,-t)),fbm(q*1.5+vec2(5.2-t,1.3+t)));
+  float rp=0.;
+  for(int i=0;i<6;i++){ vec3 pt=P[i]; if(pt.z>0.){ vec2 d=uv-pt.xy; d.x*=R.x/R.y; float r=length(d); float age=T-pt.z; float ring=exp(-pow((r-age*.55)*8.,2.))*exp(-age*1.5); rp+=ring; w+=normalize(d+vec2(1e-4))*ring*.14; } }
+  float f=fbm(q*1.3+w*1.8+t);
+  vec3 base=mix(vec3(.026,.034,.07),vec3(.93,.95,.99),L);
+  vec3 c2=A.bgr*.6+vec3(.16,.04,.34)*(1.-L)*.6;
+  vec3 col=base;
+  col=mix(col,A*.85,smoothstep(.34,.86,f)*mix(.46,.30,L));
+  col=mix(col,c2,smoothstep(.42,.96,w.x)*mix(.36,.22,L));
+  col=mix(col,vec3(.12,.82,.95),smoothstep(.62,1.,w.y*f*1.6)*mix(.12,.07,L));
+  col+=A*rp*mix(.32,.18,L);
+  col*=1.-.32*dot(uv-.5,uv-.5)*(1.-L*.6);
+  col+=(h(gl_FragCoord.xy+fract(T))-.5)*.016;
+  gl_FragColor=vec4(col,1.);
+}`;
+    function sh(type,src){ const s=gl.createShader(type); gl.shaderSource(s,src); gl.compileShader(s); if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; }
+    function init(){
+      if(ok!==null) return ok;
+      try{ gl=cv.getContext("webgl",{antialias:false,alpha:false,powerPreference:"high-performance",preserveDrawingBuffer:false})||cv.getContext("experimental-webgl"); if(!gl) throw 0;
+        prog=gl.createProgram(); gl.attachShader(prog,sh(gl.VERTEX_SHADER,VS)); gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,FS)); gl.linkProgram(prog); if(!gl.getProgramParameter(prog,gl.LINK_STATUS)) throw new Error("link");
+        gl.useProgram(prog); const b=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,b); gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+        const loc=gl.getAttribLocation(prog,"p"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+        ["R","T","A","M","S","L","P"].forEach(k=>U[k]=gl.getUniformLocation(prog,k)); ok=true;
+      }catch(e){ ok=false; console.warn("WebGL недоступен, используется обычный фон",e); } return ok; }
+    function size(){ const lv=root.dataset.fxl, dpr=Math.min(devicePixelRatio||1,2), sc=lv==="lite"?.38:.62;
+      W=Math.max(2,Math.round(innerWidth*dpr*sc)); H=Math.max(2,Math.round(innerHeight*dpr*sc)); if(cv.width!==W||cv.height!==H){ cv.width=W; cv.height=H; } if(gl) gl.viewport(0,0,W,H); }
+    function readColors(){ const a=hex2rgb(getComputedStyle(root).getPropertyValue("--blue")); if(a) tacc=[a[0]/255,a[1]/255,a[2]/255]; tlt=lightTheme()?1:0; }
+    function frame(now){
+      raf=0; if(document.hidden||root.dataset.gl!=="on") return;
+      raf=requestAnimationFrame(frame);
+      const lite=root.dataset.fxl==="lite"; if(lite&&now-lastF<33) return; lastF=now;
+      if(now-accT>400){ accT=now; readColors(); }
+      for(let i=0;i<3;i++){ acc[i]+=(tacc[i]-acc[i])*.06; } lt+=(tlt-lt)*.08; mx+=(tx-mx)*.06; my+=(ty-my)*.06; tsy=scrollY/Math.max(1,innerHeight); sy+=(tsy-sy)*.08;
+      const T=(now-t0)/1000; const pa=new Float32Array(18);
+      for(let i=rip.length-1;i>=0;i--){ if(T-rip[i].t>2.4) rip.splice(i,1); }
+      rip.slice(-6).forEach((r,i)=>{ pa[i*3]=r.x; pa[i*3+1]=r.y; pa[i*3+2]=r.t+.0001; });
+      gl.uniform2f(U.R,W,H); gl.uniform1f(U.T,T); gl.uniform3f(U.A,acc[0],acc[1],acc[2]); gl.uniform2f(U.M,mx,my); gl.uniform1f(U.S,sy); gl.uniform1f(U.L,lt); gl.uniform3fv(U.P,pa);
+      gl.drawArrays(gl.TRIANGLES,0,3);
+      /* блик на liquid-glass следует за прокруткой и наклоном */
+      const gp=-60+((scrollY*.12+mx*55)%160); if(Math.abs(gp-glareP)>1.2){ glareP=gp; root.style.setProperty("--glare",gp.toFixed(0)+"%"); }
+    }
+    function drop(x,y){ const T=(performance.now()-t0)/1000; if(T-lastRip<.07) return; lastRip=T; rip.push({x:x/innerWidth,y:1-y/innerHeight,t:T}); }
+    document.addEventListener("pointerdown",e=>{ if(root.dataset.gl==="on") drop(e.clientX,e.clientY); },{passive:true});
+    document.addEventListener("pointermove",e=>{ if(root.dataset.gl!=="on") return; if(e.buttons||e.pressure>0) drop(e.clientX,e.clientY); if(e.pointerType==="mouse"){ tx=(e.clientX/innerWidth-.5)*2; ty=-(e.clientY/innerHeight-.5)*2; } },{passive:true});
+    addEventListener("deviceorientation",e=>{ if(e.gamma==null) return; tx=clamp(e.gamma/25,-1,1); ty=-clamp((e.beta-50)/25,-1,1); },{passive:true});
+    document.addEventListener("visibilitychange",()=>{ if(!document.hidden&&root.dataset.gl==="on"&&!raf) raf=requestAnimationFrame(frame); });
+    addEventListener("resize",()=>{ if(root.dataset.gl==="on") size(); });
+    return {
+      on(){ if(!init()) return false; root.dataset.gl="on"; size(); readColors(); acc=tacc.slice(); lt=tlt; if(RMX){ frame(performance.now()); cancelAnimationFrame(raf); raf=0; return true; } if(!raf) raf=requestAnimationFrame(frame); return true; },
+      off(){ root.dataset.gl="off"; if(raf){ cancelAnimationFrame(raf); raf=0; } }, supported:()=>init() };
+  })();
+  /* «Жидкость» — новый пункт «Живого фона» и режим по умолчанию (один раз переводим, потом выбор пользователя) */
+  BGS.unshift(["fluid","Жидкость"]);
+  if(!lsGet("v31mig")){ lsSet("v31mig","1"); if(GL.supported()) lsSet("bg","fluid"); }
+  const _fxStart=FX.start;
+  FX.start=function(){
+    const bg=lsGet("bg"), lv=lsGet("fxl")||"max";
+    if(bg==="fluid"&&lv!=="off"&&GL.supported()){ lsSet("bg","off"); try{ _fxStart(); }finally{ lsSet("bg","fluid"); } root.dataset.fx="on"; root.dataset.fxl=lv; GL.on(); }
+    else { GL.off(); if(bg==="fluid"){ lsSet("bg","off"); try{ _fxStart(); }finally{ lsSet("bg","fluid"); } } else _fxStart(); }
+  };
+
+  /* ───────── 4. Динамическая тема по цветам команд ───────── */
+  let themed=false;
+  function applyTeam(m){ const ch=teamColor(m.home), ca=teamColor(m.away); themed=true;
+    root.style.setProperty("--blue",ch); root.style.setProperty("--violet",ca); root.style.setProperty("--team-h",ch); root.style.setProperty("--team-a",ca);
+    const mo=$$(".hero .mono"); if(mo[0]) mo[0].style.color=ch; if(mo[1]) mo[1].style.color=ca; }
+  function clearTeam(){ if(!themed) return; themed=false; root.style.removeProperty("--violet"); root.style.removeProperty("--team-h"); root.style.removeProperty("--team-a"); try{ FX.applyAccent(); }catch(e){} }
+  const _render=render; render=function(){ if(!state.detail) clearTeam(); return _render.apply(this,arguments); };
+
+  /* ───────── 3. Радар и тепловая карта формы ───────── */
+  const rf=a=>a&&a.length>=3?{gf:avg(a.map(g=>g.gf)),ga:avg(a.map(g=>g.ga)),pts:a.reduce((s,g)=>s+(g.r==="W"?3:g.r==="D"?1:0),0)/(a.length*3),pn:a.reduce((s,g)=>s+(g.r==="W"?3:g.r==="D"?1:0),0),n:a.length}:null;
+  function axes(m){
+    const x=m.extra||{}, F=x.form||{}, a=m.analysis, h=rf(F.home), v=rf(F.away), out=[];
+    if(h&&v){ out.push({k:"Атака",h:clamp(h.gf/2.6,0,1),a:clamp(v.gf/2.6,0,1),th:h.gf.toFixed(1),ta:v.gf.toFixed(1),u:"гол/матч"});
+      out.push({k:"Оборона",h:clamp(1-h.ga/2.6,0,1),a:clamp(1-v.ga/2.6,0,1),th:h.ga.toFixed(1),ta:v.ga.toFixed(1),u:"пропущ./матч"});
+      out.push({k:"Форма",h:h.pts,a:v.pts,th:h.pn+"/"+h.n*3,ta:v.pn+"/"+v.n*3,u:"очки"}); }
+    const tb=x.table||[], th=tb.find(r=>r.team===m.home), ta=tb.find(r=>r.team===m.away);
+    if(th&&ta&&th.p&&ta.p) out.push({k:"Класс",h:clamp(th.pts/th.p/3,0,1),a:clamp(ta.pts/ta.p/3,0,1),th:(th.pts/th.p).toFixed(2),ta:(ta.pts/ta.p).toFixed(2),u:"очки/матч (таблица)"});
+    if(a&&a.xg) out.push({k:"Ожид. голы",h:clamp(a.xg[0]/3,0,1),a:clamp(a.xg[1]/3,0,1),th:a.xg[0].toFixed(2),ta:a.xg[1].toFixed(2),u:"модель"});
+    if(a&&a.p) out.push({k:"Шанс победы",h:clamp(a.p[0]/.8,0,1),a:clamp(a.p[2]/.8,0,1),th:(a.p[0]*100).toFixed(0)+"%",ta:(a.p[2]*100).toFixed(0)+"%",u:"модель"});
+    return out.length>=3?out:[];
+  }
+  function radarCard(m){
+    const A=axes(m); if(!A.length) return ""; const n=A.length, C=130, R=88, ang=i=>-Math.PI/2+i*2*Math.PI/n, pt=(i,r)=>[C+Math.cos(ang(i))*R*r, C+Math.sin(ang(i))*R*r];
+    const poly=k=>A.map((s,i)=>pt(i,.08+.92*s[k]).map(v=>v.toFixed(1)).join(",")).join(" ");
+    const rings=[.25,.5,.75,1].map(r=>`<polygon class="gr" points="${A.map((_,i)=>pt(i,r).map(v=>v.toFixed(1)).join(",")).join(" ")}"/>`).join("");
+    const lines=A.map((_,i)=>{ const p=pt(i,1); return `<line class="ax" x1="${C}" y1="${C}" x2="${p[0].toFixed(1)}" y2="${p[1].toFixed(1)}"/>`; }).join("");
+    const labs=A.map((s,i)=>{ const p=pt(i,1.2); return `<text class="lb" x="${p[0].toFixed(1)}" y="${(p[1]+4).toFixed(1)}">${esc(s.k)}</text>`; }).join("");
+    const dots=k=>A.map((s,i)=>{ const p=pt(i,.08+.92*s[k]); return `<circle class="pd" cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.4" fill="var(--team-${k==="h"?"h":"a"},var(--blue))"/>`; }).join("");
+    return `<div class="card" id="radarc"><div class="cap">Сравнение команд</div>
+      <svg class="radar" viewBox="-16 -8 292 276" role="img" aria-label="Радар сравнения команд">${rings}${lines}
+        <polygon class="pg a" points="${poly("a")}" fill="color-mix(in srgb,var(--team-a,var(--violet)) 28%,transparent)" stroke="var(--team-a,var(--violet))"/>
+        <polygon class="pg b" points="${poly("h")}" fill="color-mix(in srgb,var(--team-h,var(--blue)) 30%,transparent)" stroke="var(--team-h,var(--blue))"/>
+        ${dots("a")}${dots("h")}${labs}</svg>
+      <div class="rlegend"><span><i style="background:var(--team-h,var(--blue))"></i>${esc(nmH(m))}</span><span><i style="background:var(--team-a,var(--violet))"></i>${esc(nmA(m))}</span></div>
+      <table class="rvals">${A.map(s=>`<tr><td class="num">${s.th}</td><td>${esc(s.k)} <span class="dim" style="font-size:11px">· ${esc(s.u)}</span></td><td class="num">${s.ta}</td></tr>`).join("")}</table>
+      <div class="note">Форма — последние матчи из базы бота; «Ожид. голы» и «Шанс победы» — расчёт модели. Это сравнение, а не прогноз.</div></div>`;
+  }
+  function heatCard(m){
+    const F=(m.extra||{}).form||{}, hh=F.home||[], aa=F.away||[]; if(!hh.length&&!aa.length) return "";
+    const cell=(g,kind,col,i)=>{ const v=kind==="gf"?g.gf:g.ga, k=clamp(v/4,0,1), bgc=v===0?"color-mix(in srgb,var(--text) 8%,transparent)":`color-mix(in srgb,${col} ${Math.round(28+k*62)}%,transparent)`;
+      return `<div class="c" style="--i:${i};background:${bgc}" title="${esc(String(g.date).slice(0,10))} · ${esc(g.opp)}">${v}</div>`; };
+    const block=(name,arr,col)=>{ if(!arr.length) return ""; let h=`<div class="t">${esc(name)}</div>`;
+      [["gf","Забито",col],["ga","Пропущено","#f87171"]].forEach(([k,lab,c],r)=>{ h+=`<div class="l">${lab}</div>`+arr.map((g,i)=>cell(g,k,c,r*5+i)).join("")+Array(5-arr.length).fill('<div></div>').join(""); }); return h; };
+    return `<div class="card" id="heatc"><div class="cap">Тепловая карта форм</div><div class="sub" style="margin-top:4px">Голы в последних матчах (слева — давно, справа — недавно). Чем ярче клетка — тем больше голов.</div>
+      <div class="hm">${block(nmH(m),hh,"var(--team-h,var(--blue))")}${block(nmA(m),aa,"var(--team-a,var(--violet))")}</div>
+      <div class="note">Минуты голов бот не получает от источников данных, поэтому карта «по минутам» не строится — показываются только реальные результаты матчей.</div></div>`;
+  }
+
+  /* ───────── 6. AI-копилот (считает по данным бота, без внешних ИИ) ───────── */
+  const RU={W:"В",D:"Н",L:"П"};
+  const unb=a=>{ let k=0; for(let i=a.length-1;i>=0&&a[i].r!=="L";i--) k++; return k; };
+  const form=(nm,a)=>{ const f=rf(a); if(!f) return `<p><b>${esc(nm)}</b>: данных о последних матчах мало.</p>`; const sc=a.filter(g=>g.gf>0).length, cs=a.filter(g=>g.ga===0).length;
+    return `<p><b>${esc(nm)}</b>: ${a.map(g=>RU[g.r]).join("")} — ${f.pn} очк. из ${f.n*3}. Забивал в ${sc} из ${f.n}, сухих матчей ${cs}${unb(a)>=3?`, без поражений ${unb(a)} подряд`:""}.</p>`; };
+  const INS={
+    "Форма":m=>{ const F=(m.extra||{}).form||{}; return form(nmH(m),F.home||[])+form(nmA(m),F.away||[]); },
+    "Голы":m=>{ const F=(m.extra||{}).form||{}, h=F.home||[], a=F.away||[], x=m.analysis&&m.analysis.xg; let s="";
+      if(h.length>=3&&a.length>=3){ if(h.every(g=>g.gf>0)&&a.every(g=>g.gf>0)) s+=`<p>Обе команды забивали в каждом из последних матчей (${h.length} и ${a.length}).</p>`;
+        const o=g=>g.filter(t=>t.gf+t.ga>=3).length; s+=`<p>Матчей с 3+ голами: ${esc(nmH(m))} — ${o(h)} из ${h.length}, ${esc(nmA(m))} — ${o(a)} из ${a.length}.</p>`; }
+      if(x) s+=`<p>Модель ждёт ${x[0].toFixed(2)} + ${x[1].toFixed(2)} = <b>${(x[0]+x[1]).toFixed(2)}</b> гола за матч.</p>`; return s||"<p>Для вывода по голам данных пока мало.</p>"; },
+    "Очные":m=>{ const hh=(m.extra||{}).h2h; if(!hh||!hh.games||!hh.games.length) return "<p>Очных встреч в базе бота нет.</p>"; const g=hh.games, tot=avg(g.map(t=>t.hg+t.ag));
+      return `<p>Последние ${g.length} очных: ${esc(nmH(m))} — ${hh.w}, ничьих — ${hh.d}, ${esc(nmA(m))} — ${hh.l}. В среднем ${tot.toFixed(1)} гола за матч.</p>`; },
+    "Где перевес?":m=>{ const b=(m.bets||[]).filter(x=>x.recommended&&x.result==null); if(!b.length) return "<p>По этому матчу бот перевеса не нашёл и ставку не рекомендует.</p>";
+      return b.slice(0,3).map(x=>`<p>⚡ <b>${esc(lbl(x))}</b> @ ${Number(x.placed&&x.placed_odds?x.placed_odds:x.taken_odds).toFixed(2)} · EV ${sgn(x.ev)}${x.tier?` · ${esc(x.tier)}`:""}.</p>`).join("")+"<p>EV — расчётный ориентир модели; на малой выборке он случаен.</p>"; },
+    "Риски":m=>{ const a=m.analysis, r=[]; if(a&&a.p){ const mx=Math.max(...a.p); if(mx<.45) r.push("Исход открытый: ни один вариант не набирает 45%."); if(a.p[1]>=.28) r.push(`Ничья реальна: ${(a.p[1]*100).toFixed(0)}%.`); }
+      const F=(m.extra||{}).form||{}; if(!(F.home||[]).length||!(F.away||[]).length) r.push("Мало данных о форме одной из команд."); r.push("Модель — это вероятности, а не гарантия; у бота пока мало расчётных ставок для выводов о реальном перевесе.");
+      return r.map(t=>`<p>⚠️ ${esc(t)}</p>`).join(""); }
+  };
+  function headline(m){ const a=m.analysis; if(!a||!a.p) return `Привет! Я собрал факты по матчу ${esc(nmH(m))} — ${esc(nmA(m))}. Спросите, что интересно.`;
+    const mx=Math.max(...a.p), i=a.p.indexOf(mx), who=i===0?esc(nmH(m)):i===2?esc(nmA(m)):"ничья";
+    return `Модель ставит на <b>${who}</b> (${(mx*100).toFixed(0)}%), ожидаемые голы ${a.xg?a.xg[0].toFixed(1)+" : "+a.xg[1].toFixed(1):"—"}. Выберите, что показать подробнее:`; }
+  function openCopilot(){
+    const m=state.cur; if(!m) return; haptic(); try{ Snd.play("open"); }catch(e){}
+    Sheet.open("✨ AI-копилот",`<div class="cp" id="cp"></div><div class="cpq" id="cpq">${Object.keys(INS).map(k=>`<button data-q="${esc(k)}">${esc(k)}</button>`).join("")}</div><div class="cpn">Копилот собирает ответы из данных бота (форма, очные, модель). Внешний ИИ не используется — всё считается на устройстве.</div>`,B=>{
+      const cp=B.querySelector("#cp"), say=(cls,html)=>{ const d=document.createElement("div"); d.className="bub "+cls; d.innerHTML=html; cp.appendChild(d); cp.scrollTop=cp.scrollHeight; return d; };
+      const typing=say("ai",'<span class="dots"><i></i><i></i><i></i></span>'); setTimeout(()=>{ typing.innerHTML=headline(m); haptic("soft"); },650);
+      B.querySelector("#cpq").onclick=e=>{ const b=e.target.closest("[data-q]"); if(!b) return; haptic(); const q=b.dataset.q; say("me",esc(q)); const t=say("ai",'<span class="dots"><i></i><i></i><i></i></span>');
+        setTimeout(()=>{ try{ t.innerHTML=INS[q](m); }catch(er){ t.innerHTML="<p>Не получилось собрать ответ.</p>"; } haptic("soft"); cp.scrollTop=cp.scrollHeight; },520+Math.random()*350); };
+    });
+  }
+  const fab=document.createElement("button"); fab.id="fab"; fab.type="button"; fab.setAttribute("aria-label","AI-копилот"); fab.textContent="✨"; fab.onclick=openCopilot; document.body.appendChild(fab);
+
+  /* ───────── 5. Открытка для сторис + Stars (макет) ───────── */
+  function cardCanvas(m){
+    const W=1080,H=1920, c=document.createElement("canvas"); c.width=W; c.height=H; const g=c.getContext("2d"), ch=teamColor(m.home), ca=teamColor(m.away), a=m.analysis;
+    g.fillStyle="#070a14"; g.fillRect(0,0,W,H);
+    const blob=(x,y,r,col,al)=>{ const gr=g.createRadialGradient(x,y,0,x,y,r); gr.addColorStop(0,col+Math.round(al*255).toString(16).padStart(2,"0")); gr.addColorStop(1,col+"00"); g.fillStyle=gr; g.fillRect(0,0,W,H); };
+    blob(180,420,820,ch,.7); blob(920,1280,900,ca,.62); blob(540,1750,700,"#7c3aed",.4);
+    for(let i=0;i<260;i++){ g.fillStyle=`rgba(255,255,255,${Math.random()*.08})`; g.fillRect(Math.random()*W,Math.random()*H,2,2); }
+    const F='"Manrope","Inter",system-ui,sans-serif', ctr=(t,y,font,col)=>{ g.font=font; g.fillStyle=col; g.textAlign="center"; g.fillText(t,W/2,y); };
+    g.fillStyle="rgba(255,255,255,.08)"; g.strokeStyle="rgba(255,255,255,.25)"; g.lineWidth=2; const rr=(x,y,w,h,r)=>{ g.beginPath(); g.roundRect?g.roundRect(x,y,w,h,r):g.rect(x,y,w,h); }; rr(90,150,W-180,1620,64); g.fill(); g.stroke();
+    ctr((LEAGUES[m.league]||m.league).toUpperCase(),260,`800 40px ${F}`,"rgba(255,255,255,.7)");
+    const w=when(m); ctr(w.d.toLocaleDateString("ru-RU",{weekday:"long",day:"numeric",month:"long"})+(w.hasTime?" · "+fmtTime(w.d):""),322,`600 38px ${F}`,"rgba(255,255,255,.55)");
+    [[300,ch,nmH(m)],[780,ca,nmA(m)]].forEach(([x,col,nm])=>{ g.beginPath(); g.arc(x,610,150,0,7); g.fillStyle=col+"33"; g.fill(); g.lineWidth=8; g.strokeStyle=col; g.stroke(); g.textAlign="center"; g.fillStyle=col; g.font=`800 96px ${F}`; g.fillText(mono(nm),x,642);
+      g.fillStyle="#fff"; g.font=`800 52px ${F}`; let t=nm; while(g.measureText(t).width>420&&t.length>4) t=t.slice(0,-1); g.fillText(t,x,860); });
+    ctr("VS",640,`800 52px ${F}`,"rgba(255,255,255,.45)");
+    if(a&&a.p){ const labs=["П1","Х","П2"], cols=[ch,"#9aa7c7",ca], x0=150, ww=W-300; let x=x0; a.p.forEach((p,i)=>{ const w=ww*p; g.fillStyle=cols[i]; rr(x+3,980,Math.max(w-6,4),34,17); g.fill(); x+=w; });
+      [[250,0],[540,1],[830,2]].forEach(([cx,i])=>{ g.textAlign="center"; g.fillStyle="#fff"; g.font=`800 104px ${F}`; g.fillText((a.p[i]*100).toFixed(0)+"%",cx,1150); g.fillStyle="rgba(255,255,255,.55)"; g.font=`700 40px ${F}`; g.fillText(labs[i],cx,1210); });
+      const mx=Math.max(...a.p), i=a.p.indexOf(mx); ctr("ПРОГНОЗ МОДЕЛИ",1380,`800 38px ${F}`,"rgba(255,255,255,.5)"); ctr((i===0?nmH(m):i===2?nmA(m):"Ничья"),1470,`800 84px ${F}`,"#fff");
+      if(a.xg) ctr(`ожидаемые голы ${a.xg[0].toFixed(1)} : ${a.xg[1].toFixed(1)}`,1550,`600 42px ${F}`,"rgba(255,255,255,.6)"); }
+    const bot=state.me&&state.me.bot; ctr(bot?"@"+bot:"Football value bot",1690,`700 40px ${F}`,"rgba(255,255,255,.75)"); ctr("модель, не гарантия результата",1740,`500 30px ${F}`,"rgba(255,255,255,.4)");
+    return c;
+  }
+  async function shareCard(m){
+    haptic(); let cv; try{ cv=cardCanvas(m); }catch(e){ toast("Не удалось создать картинку"); return; }
+    const blob=await new Promise(r=>cv.toBlob(r,"image/png")); if(!blob){ toast("Не удалось создать картинку"); return; }
+    const url=URL.createObjectURL(blob), file=new File([blob],"prognoz.png",{type:"image/png"}), canShare=navigator.canShare&&navigator.canShare({files:[file]});
+    Sheet.open("Открытка для сторис",`<img class="shimg" src="${url}" alt="Открытка"><div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">${canShare?'<button class="btn" id="shn" style="flex:1">↗ Поделиться</button>':""}<a class="btn" id="shd" href="${url}" download="prognoz.png" style="flex:1;text-align:center;text-decoration:none;background:var(--card2);color:var(--text)">⬇ Сохранить</a></div>
+      <div class="note">Сохраните картинку и добавьте в сторис Telegram: прямой публикации из мини-приложения Telegram без загрузки картинки на сервер не разрешает.</div>`,B=>{ const s=B.querySelector("#shn"); if(s) s.onclick=()=>navigator.share({files:[file],title:"Прогноз"}).catch(()=>{}); });
+  }
+  function starsSheet(){ haptic(); Sheet.open("⭐ Premium-сигналы",`<span class="demo">ДЕМО-МАКЕТ</span><div class="stars"><div class="pl"><span>Неделя<br><span class="dim" style="font-size:12px">ранние сигналы и push</span></span><span>— ⭐</span></div><div class="pl"><span>Месяц<br><span class="dim" style="font-size:12px">+ расширенная аналитика</span></span><span>— ⭐</span></div><div class="pl"><span>Сезон<br><span class="dim" style="font-size:12px">всё включено</span></span><span>— ⭐</span></div></div>
+    <button class="btn" disabled style="width:100%;margin-top:12px;opacity:.5">Оплата Stars не подключена</button><div class="note">Это интерфейсная заглушка: цены и оплата не настроены, ничего не списывается.</div>`); }
+
+  /* ───────── 2. Достижения ───────── */
+  const DEFS=[
+    {id:"first",ic:"🥇",t:"Первая победа",d:"Выиграна первая ставка",p:s=>[s.wins,1]},
+    {id:"odds3",ic:"🎯",t:"Кэф 3.0",d:"Выиграна ставка с кэфом от 3.0",p:s=>[s.maxWinOdds,3]},
+    {id:"odds5",ic:"🏹",t:"Снайпер 5.0",d:"Выиграна ставка с кэфом от 5.0",p:s=>[s.maxWinOdds,5]},
+    {id:"st3",ic:"🔥",t:"Три подряд",d:"3 победы подряд",p:s=>[s.best,3]},
+    {id:"st5",ic:"⚡",t:"Пять подряд",d:"5 побед подряд",p:s=>[s.best,5]},
+    {id:"st10",ic:"👑",t:"10 подряд",d:"10 побед подряд",p:s=>[s.best,10]},
+    {id:"b10",ic:"📘",t:"Десятка",d:"10 рассчитанных ставок",p:s=>[s.n,10]},
+    {id:"b50",ic:"📗",t:"Полтинник",d:"50 рассчитанных ставок",p:s=>[s.n,50]},
+    {id:"b100",ic:"💎",t:"Сотня",d:"100 рассчитанных ставок",p:s=>[s.n,100]},
+    {id:"plus",ic:"📈",t:"В плюсе",d:"PnL > 0 при 20+ ставках",p:s=>[s.n>=20&&s.pnl>0?1:0,1]},
+    {id:"peak",ic:"🏆",t:"Рекорд PnL",d:"Накопленный PnL обновил максимум",p:s=>[s.peak>0?1:0,1]}];
+  function statsOf(rows){ const R=rows.filter(b=>b.placed&&b.result!=null).sort((a,b)=>String(a.match_date||"").localeCompare(String(b.match_date||""))); let cur=0,best=0,pnl=0,peak=0,maxO=0,wins=0;
+    R.forEach(b=>{ const w=(b.pnl||0)>0; pnl+=b.pnl||0; peak=Math.max(peak,pnl); if(w){ wins++; cur++; best=Math.max(best,cur); maxO=Math.max(maxO,Number(b.placed_odds||b.taken_odds)||0); } else cur=0; });
+    return {n:R.length,wins,best,cur,pnl,peak,maxWinOdds:maxO}; }
+  let achBusy=0;
+  function toastAch(def,title,sub,ic){ let t=$("#achT"); if(!t){ t=document.createElement("div"); t.id="achT"; t.setAttribute("role","status"); document.body.appendChild(t); }
+    t.innerHTML=`<div class="ic">${ic||def.ic}</div><div><b>${esc(title||def.t)}</b><span>${esc(sub||def.d)}</span></div>`; t.classList.remove("on"); void t.offsetWidth; t.classList.add("on");
+    try{ Snd.play("ok"); }catch(e){} haptic("ok"); confetti(def?90:150); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("on"),4200); }
+  async function achRefresh(force){
+    if(Date.now()-achBusy<25000&&!force) return; achBusy=Date.now();
+    let rows; try{ rows=await api("/api/bets?status=settled&limit=500"); }catch(e){ return; } if(!Array.isArray(rows)) return;
+    const s=statsOf(rows), have=J("ach",null), now=Date.now(), nu={...(have||{})}, fresh=[];
+    DEFS.forEach(d=>{ const [v,need]=d.p(s); if(v>=need&&!nu[d.id]){ nu[d.id]=now; fresh.push(d); } });
+    lsSet("ach",JSON.stringify(nu)); lsSet("achst",JSON.stringify(s));
+    const prevPeak=J("pnlpeak",null); lsSet("pnlpeak",JSON.stringify(s.peak));
+    if(have!==null){ let q=fresh.slice(); const rec=prevPeak!==null&&s.peak>prevPeak+.5&&s.n>=5;
+      if(rec) q.unshift({t:"Новый рекорд PnL!",d:"Накопленная прибыль обновила максимум",ic:"🏆",rec:1});
+      q.slice(0,3).forEach((d,i)=>setTimeout(()=>toastAch(d,d.t,d.d,d.ic),i*4600)); }
+    paintAch();
+  }
+  function achHtml(){ const have=J("ach",{}), st=J("achst",null), n=DEFS.filter(d=>have[d.id]).length;
+    return `<div class="cap">Достижения · ${n}/${DEFS.length}</div><div class="ach">${DEFS.map(d=>{ const on=!!have[d.id]; let pr=""; if(!on&&st){ const [v,need]=d.p(st); pr=`<div class="pr"><i style="width:${clamp(v/need,0,1)*100}%"></i></div>`; }
+      return `<div class="bd ${on?"on":""}"><div class="ic">${d.ic}</div><div class="tt">${esc(d.t)}</div><div class="dd">${esc(d.d)}</div>${pr}</div>`; }).join("")}</div>
+      <div style="margin-top:12px"><button class="chip" id="starsb">⭐ Premium-сигналы (демо)</button></div><div class="note">Считаются по вашим поставленным и рассчитанным ставкам.</div>`; }
+  function paintAch(){ const el=$("#achcard"); if(el){ el.innerHTML=achHtml(); const b=$("#starsb",el); if(b) b.onclick=starsSheet; } }
+  const _look=lookCard; lookCard=function(){ setTimeout(()=>{ paintAch(); achRefresh(true); },0); return `<div class="card" id="achcard">${achHtml()}</div>`+_look(); };
+  const _cw=checkWins; checkWins=function(rows){ try{ _cw(rows); }catch(e){} setTimeout(()=>achRefresh(false),400); };
+  /* ставка «зашла» → сразу открытка-предложение */
+
+  /* ───────── 7. Жесты на карточках и голосовой поиск ───────── */
+  const HIDS=new Set(J("hid",[]).filter(x=>typeof x==="number"));
+  const saveHid=()=>lsSet("hid",JSON.stringify([...HIDS].slice(-300)));
+  let undoT=0; function undo(txt,fn){ let u=$("#undo"); if(!u){ u=document.createElement("div"); u.id="undo"; u.setAttribute("role","status"); document.body.appendChild(u); }
+    u.innerHTML=`<span></span><button type="button">Отменить</button>`; $("span",u).textContent=txt; $("button",u).onclick=()=>{ fn(); u.classList.remove("on"); haptic(); }; u.classList.add("on"); clearTimeout(undoT); undoT=setTimeout(()=>u.classList.remove("on"),4500); }
+  let sw=null, swiped=0;
+  document.addEventListener("pointerdown",e=>{ const row=e.target.closest&&e.target.closest("#list .row"); if(!row||e.button>0) return; sw={row,x:e.clientX,y:e.clientY,mode:0,id:e.pointerId,dx:0}; },{passive:true});
+  document.addEventListener("pointermove",e=>{ if(!sw||e.pointerId!==sw.id) return; const dx=e.clientX-sw.x, dy=e.clientY-sw.y;
+    if(!sw.mode){ if(Math.abs(dx)>12&&Math.abs(dx)>Math.abs(dy)*1.5){ sw.mode=1; sw.row.classList.add("sw"); sw.row.classList.remove("swb"); const h=document.createElement("div"); h.className="swh"; sw.hint=h; sw.row.appendChild(h); try{ sw.row.setPointerCapture(e.pointerId); }catch(_){} } else if(Math.abs(dy)>14){ sw=null; return; } else return; }
+    sw.dx=dx; const r=Math.sign(dx)*Math.pow(Math.abs(dx),.88); sw.row.style.transform=`translateX(${r.toFixed(1)}px) rotate(${(dx/90).toFixed(2)}deg)`;
+    const h=sw.hint, left=dx<0, k=clamp(Math.abs(dx)/96,0,1); h.textContent=left?"★":"🙈"; h.style.cssText=`${left?"right":"left"}:16px;opacity:${k};transform:scale(${.6+.5*k})`;
+    if(k>=1&&!sw.armed){ sw.armed=1; haptic("light"); } else if(k<1&&sw.armed){ sw.armed=0; } },{passive:true});
+  function endSw(e){ if(!sw||(e&&e.pointerId!==sw.id)){ return; } const s=sw; sw=null; if(!s.mode) return; swiped=Date.now(); const row=s.row, dx=s.dx; if(s.hint) s.hint.remove();
+    row.classList.remove("sw"); row.classList.add("swb");
+    if(Math.abs(dx)>=96){ const id=+row.dataset.id, m=(state.cache.matches||[]).find(x=>x.event_id===id); row.style.transform=`translateX(${dx<0?-110:110}%)`; row.style.opacity="0";
+      if(dx<0&&m){ const both=isFav(m.home)&&isFav(m.away); [m.home,m.away].forEach(t=>{ if(both?isFav(t):!isFav(t)) toggleFav(t); }); haptic("ok"); try{ Snd.play("ok"); }catch(_){}
+        setTimeout(()=>{ row.classList.remove("swb"); row.style.transform=""; row.style.opacity=""; },260); toast(both?"Убрано из избранного":"★ Команды добавлены в избранное"); }
+      else if(dx>0&&m){ HIDS.add(id); saveHid(); haptic("ok"); try{ Snd.play("swipe"); }catch(_){} setTimeout(()=>{ renderList(false); },320); undo("Матч скрыт",()=>{ HIDS.delete(id); saveHid(); renderList(false); }); } }
+    else { row.style.transform=""; haptic("soft"); } }
+  document.addEventListener("pointerup",endSw,{passive:true}); document.addEventListener("pointercancel",endSw,{passive:true});
+  document.addEventListener("click",e=>{ if(Date.now()-swiped<380&&e.target.closest&&e.target.closest("#list .row")){ e.stopPropagation(); e.preventDefault(); } },true);
+
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition; let rec=null;
+  function voice(btn,inp){ if(rec){ try{ rec.stop(); }catch(e){} return; } rec=new SR(); rec.lang=state.lang==="en"?"en-US":"ru-RU"; rec.interimResults=true; rec.maxAlternatives=1; btn.classList.add("rec"); haptic("light");
+    rec.onresult=e=>{ const t=[...e.results].map(r=>r[0].transcript).join(" ").replace(/[.,!?]+$/,""); inp.value=t; state.q=t; renderList(false); if(e.results[e.results.length-1].isFinal){ haptic("ok"); } };
+    rec.onerror=ev=>{ if(ev.error==="not-allowed"||ev.error==="service-not-allowed") toast("Нет доступа к микрофону — разрешите его в настройках"); };
+    rec.onend=()=>{ btn.classList.remove("rec"); rec=null; }; try{ rec.start(); }catch(e){ btn.classList.remove("rec"); rec=null; } }
+  function decorate(){
+    const q=$("#q"); if(q&&!q.parentNode.classList.contains("qwrap")&&SR){ const w=document.createElement("div"); w.className="qwrap"; q.parentNode.insertBefore(w,q); w.appendChild(q);
+      const b=document.createElement("button"); b.type="button"; b.className="vbtn"; b.setAttribute("aria-label","Голосовой поиск"); b.innerHTML='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>'; b.onclick=()=>voice(b,q); w.appendChild(b); }
+    const tl=$(".tools"); if(tl&&!$("#th")){ const b=document.createElement("button"); b.className="chip"; b.id="th"; b.style.display="none"; b.textContent="🙈 Скрытые"; b.onclick=()=>{ state.showHid=!state.showHid; b.classList.toggle("on",state.showHid); haptic(); renderList(true); }; tl.insertBefore(b,$("#tr")&&$("#tr").nextSibling); }
+    fab.classList.toggle("on",!!state.detail&&!!state.cur&&state.tab==="matches"); if(state.detail||state.tab!=="matches"){ const u=$("#undo"); if(u) u.classList.remove("on"); } }
+
+  /* ───────── хуки на экран матча / список ───────── */
+  const _vm=viewMatch;
+  viewMatch=async function(id){ const r=await _vm.apply(this,arguments); try{ enhanceMatch(); }catch(e){ console.warn(e); } return r; };
+  function enhanceMatch(){ const m=state.cur, hero=$(".hero"); if(!m||!hero||state.detail==null||hero.dataset.v31) return; hero.dataset.v31="1"; applyTeam(m);
+    hero.insertAdjacentHTML("afterend",radarCard(m)+heatCard(m)); const r=$("#radarc .radar"); if(r) requestAnimationFrame(()=>requestAnimationFrame(()=>r.classList.add("in")));
+    const acts=$("#acts"); if(acts&&!$("#cardb")){ const d=acts.querySelector("div[style]")||acts; const b=document.createElement("button"); b.className="btn"; b.id="cardb"; b.style.cssText="margin:0 8px 8px 0;background:var(--card2);color:var(--text)"; b.textContent="🖼 Открытка для сторис"; b.onclick=()=>shareCard(state.cur); d.appendChild(b); }
+    decorate(); }
+  /* скрытые матчи в списке */
+  const _rl=renderList;
+  renderList=function(anim){
+    const all=state.cache.matches; let restore=null;
+    if(Array.isArray(all)&&HIDS.size){ const hid=all.filter(m=>HIDS.has(m.event_id)); const th=$("#th"); if(th){ th.style.display=hid.length||state.showHid?"":"none"; th.textContent="🙈 Скрытые"+(hid.length?" ("+hid.length+")":""); }
+      if(!state.showHid&&hid.length){ restore=all; state.cache.matches=all.filter(m=>!HIDS.has(m.event_id)); } }
+    else { const th=$("#th"); if(th&&!state.showHid) th.style.display="none"; }
+    try{ return _rl.call(this,anim); } finally{ if(restore) state.cache.matches=restore; }
+  };
+  new MutationObserver(()=>decorate()).observe(document.getElementById("app"),{childList:true,subtree:true});
+  addEventListener("popstate",()=>setTimeout(decorate,50));
+  document.body.insertAdjacentHTML("beforeend",'<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="lens" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency=".011 .016" numOctaves="2" seed="7" result="n"/><feGaussianBlur in="n" stdDeviation="1.4" result="nb"/><feDisplacementMap in="SourceGraphic" in2="nb" scale="16" xChannelSelector="R" yChannelSelector="G"/></filter></svg>');
+  FX.start(); decorate(); setTimeout(()=>achRefresh(false),1500);
+  window.V31={GL,teamColor,axes,achRefresh,DEFS,statsOf,cardCanvas,HIDS};
 })();
 </script>
 </body>
