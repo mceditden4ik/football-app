@@ -620,6 +620,52 @@ html[data-perf="low"] *{-webkit-backdrop-filter:none!important;backdrop-filter:n
 html[data-perf="low"] .nav{background:color-mix(in srgb,var(--bg2) 94%,transparent)!important}
 html[data-perf="low"] #sheet{background:color-mix(in srgb,var(--bg2) 96%,transparent)!important}
 html[data-perf="low"] .nav::after{display:none}
+
+/* ───────── v32: AI-копилот (стриминг, провайдеры, скелетон, свайпы) ───────── */
+@property --ai{syntax:"<color>";inherits:true;initial-value:#6096ff}
+:root{--ai:#6096ff;transition:--ai .7s ease}
+#conf{z-index:80!important}
+.cphd{display:flex;align-items:center;gap:9px;margin:0 2px 10px;font:600 12.5px var(--font,system-ui);color:var(--muted)}
+.cphd .pdot{position:relative;width:11px;height:11px;border-radius:50%;background:var(--ai);box-shadow:0 0 12px var(--ai);transition:background .6s,box-shadow .6s}
+.cphd .pdot::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1.5px solid var(--ai);opacity:0;animation:pring 2.4s ease-out infinite}
+.cphd.idle .pdot::after{animation:none}
+@keyframes pring{0%{transform:scale(.5);opacity:.7}100%{transform:scale(1.5);opacity:0}}
+.cphd b{color:var(--text);font-weight:700}.cphd .cch{margin-left:auto;font-size:11.5px;opacity:.85}
+.cp .brow{position:relative;display:flex;max-width:100%;align-self:flex-start;width:100%}
+.cp .brow.me{justify-content:flex-end}
+.cp .brow .hint{position:absolute;top:50%;transform:translateY(-50%);font:700 12px var(--font,system-ui);color:var(--ai);opacity:0;transition:opacity .15s;pointer-events:none;white-space:nowrap}
+.cp .brow .hint.l{right:6px}.cp .brow .hint.r{left:6px}
+.cp .brow[data-sw="copy"] .hint.l,.cp .brow[data-sw="regen"] .hint.r{opacity:1}
+.cp .bub.ai{touch-action:pan-y;position:relative;transition:transform .45s var(--spring),border-color .6s,box-shadow .6s;border-left:2.5px solid var(--ai);box-shadow:-8px 0 22px -14px var(--ai)}
+.cp .bub.ai.drag{transition:none}
+.cp .bub .ans{white-space:normal;word-break:break-word}
+.cp .bub .ans.typing::after{content:"▍";color:var(--ai);margin-left:1px;animation:caret .8s steps(2) infinite}
+@keyframes caret{50%{opacity:0}}
+.cp .bub .meta{margin-top:7px;font:600 11px var(--font,system-ui);color:var(--dim);display:flex;gap:6px;align-items:center}
+.cp .aisk{width:min(260px,70vw)}
+.cp .aisk i{display:block;height:11px;border-radius:6px;margin:9px 0;background:linear-gradient(90deg,rgba(255,255,255,.05),color-mix(in srgb,var(--ai) 38%,rgba(255,255,255,.2)),rgba(255,255,255,.05));background-size:240% 100%;animation:skp 1.25s ease-in-out infinite}
+.cp .aisk i:nth-child(1){width:94%}.cp .aisk i:nth-child(2){width:78%;animation-delay:.12s}.cp .aisk i:nth-child(3){width:52%;animation-delay:.24s}
+@keyframes skp{0%{background-position:120% 0;opacity:.55}50%{opacity:1}100%{background-position:-120% 0;opacity:.55}}
+.cp details.think{margin:0 0 8px;border:1px solid color-mix(in srgb,var(--ai) 35%,var(--line));border-radius:12px;background:color-mix(in srgb,var(--ai) 8%,transparent);overflow:hidden}
+.cp details.think summary{cursor:pointer;padding:8px 12px;font:700 12.5px var(--font,system-ui);color:var(--ai);list-style:none;display:flex;align-items:center;gap:8px;min-height:36px}
+.cp details.think summary::-webkit-details-marker{display:none}
+.cp details.think summary::after{content:"›";margin-left:auto;font-size:18px;transition:transform .3s var(--spring)}
+.cp details.think[open] summary::after{transform:rotate(90deg)}
+.cp details.think .tbody{padding:0 12px 10px;font-size:12.5px;line-height:1.45;color:var(--muted);white-space:pre-wrap;max-height:170px;overflow:auto}
+.cp .reco{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,#f59e0b 14%,transparent);border:1px solid color-mix(in srgb,#f59e0b 45%,transparent);font:600 13px var(--font,system-ui);animation:bubin .4s var(--spring) both}
+.cp .reco i{width:14px;height:14px;border-radius:50%;border:2px solid #f59e0b;border-top-color:transparent;animation:spn .8s linear infinite;flex:none}
+@keyframes spn{to{transform:rotate(360deg)}}
+.cp .reco button,.cp .retry{margin-left:auto;min-height:36px;padding:0 12px;border-radius:18px;border:1px solid var(--line);background:var(--card2);color:var(--text);font:700 12.5px var(--font,system-ui)}
+.cp .note{font-size:12px;color:var(--dim);margin-top:6px}
+.cpq button{transition:border-color .5s,box-shadow .5s,transform .2s}
+.cpq button:hover,.cpq button:focus-visible{border-color:var(--ai);box-shadow:0 0 0 3px color-mix(in srgb,var(--ai) 22%,transparent)}
+.cpf{display:flex;gap:8px;margin-top:10px}
+.cpf input{flex:1;min-height:46px;border-radius:23px;border:1px solid var(--line);background:var(--card2);color:var(--text);padding:0 16px;font:500 15px var(--font,system-ui);outline:none;transition:border-color .4s,box-shadow .4s}
+.cpf input:focus{border-color:var(--ai);box-shadow:0 0 0 3px color-mix(in srgb,var(--ai) 22%,transparent)}
+.cpf button{width:46px;height:46px;border-radius:50%;border:0;background:linear-gradient(135deg,var(--ai),color-mix(in srgb,var(--ai) 55%,#7c3aed));color:#fff;font-size:18px;box-shadow:0 8px 22px -8px var(--ai);transition:background .6s,box-shadow .6s,transform .2s,opacity .2s}
+.cpf button:active{transform:scale(.9)}.cpf button:disabled{opacity:.45}
+#fab{box-shadow:0 10px 30px -8px var(--ai),0 0 0 1px rgba(255,255,255,.2) inset;transition:box-shadow .6s}
+html[data-fxl="off"] .cp .aisk i,html[data-fxl="off"] .cphd .pdot::after{animation:none}
 </style>
 </head>
 <body>
@@ -2095,7 +2141,7 @@ void main(){
   addEventListener("popstate",()=>setTimeout(decorate,50));
   document.body.insertAdjacentHTML("beforeend",'<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="lens" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency=".011 .016" numOctaves="2" seed="7" result="n"/><feGaussianBlur in="n" stdDeviation="1.4" result="nb"/><feDisplacementMap in="SourceGraphic" in2="nb" scale="16" xChannelSelector="R" yChannelSelector="G"/></filter></svg>');
   FX.start(); decorate(); setTimeout(()=>achRefresh(false),1500);
-  window.V31={GL,teamColor,axes,achRefresh,DEFS,statsOf,cardCanvas,HIDS};
+  window.V31={GL,teamColor,axes,achRefresh,DEFS,statsOf,cardCanvas,HIDS,INS,headline};
 })();
 
 /* v31b: авто-снижение нагрузки по реальной частоте кадров во время прокрутки */
@@ -2109,6 +2155,129 @@ void main(){
       busy=false; if(ds.length<25) return; ds.sort((a,b)=>a-b); const med=ds[ds.length>>1];
       if(med>26){ if(++bad>=2&&lvl<3){ bad=0; lvl++; try{ localStorage.setItem("perf",String(lvl)); }catch(e){} apply(); } } else if(bad>0) bad--; })(performance.now()); },{passive:true,capture:true});
 }catch(e){ console.warn("perf",e); } })();
+
+/* ═════════ v32: AI-копилот со стримингом (ключи только на сервере; здесь их нет) ═════════ */
+(function(){ try{
+  const root=document.documentElement;
+  const PROV={groq:{n:"Groq",c:"#34d399",d:"🟢"},sambanova:{n:"SambaNova",c:"#fbbf24",d:"🟡"},cloudflare:{n:"Cloudflare",c:"#fb923c",d:"🟠"},openrouter:{n:"OpenRouter",c:"#f87171",d:"🔴"},none:{n:"ИИ недоступен",c:"#94a3b8",d:"⚫"}};
+  const PRESET={"Форма":"Проанализируй форму обеих команд: что говорят их последние матчи?","Голы":"Сколько голов ждать в этом матче и почему? Опирайся на xG и форму.",
+    "Очные":"Что показывают очные встречи этих команд?","Где перевес?":"Есть ли в этом матче ставка с перевесом по расчётам бота? Объясни риски.","Риски":"Какие главные риски и неопределённости у этого прогноза?"};
+  const aiUrl=()=>{ let u=""; try{ u=lsGet("aiurl")||""; }catch(e){} if(!u&&typeof SNAP!=="undefined"&&SNAP&&SNAP.ai_endpoint) u=SNAP.ai_endpoint.url||""; return /^(https:\/\/[^\s"'<>]{4,190}|http:\/\/(127\.0\.0\.1|localhost)(:\d{2,5})?)$/.test(u)?u.replace(/\/+$/,""):""; };
+  const RMo=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const fmt=t=>esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").split(/\n{2,}/).map(p=>"<p>"+p.replace(/\n/g,"<br>").replace(/(^|<br>)\s*[-•]\s+/g,"$1• ")+"</p>").join("");
+  function setAcc(id){ const p=PROV[id]||PROV.none; root.style.setProperty("--ai",p.c); const d=document.getElementById("pdot"), n=document.getElementById("pname"), h=document.getElementById("cphd");
+    if(d&&n){ n.textContent=p.n; h.classList.toggle("idle",id==="none"); h.setAttribute("aria-label","Отвечает: "+p.n); } return p; }
+  function copyText(t){ try{ if(navigator.clipboard&&navigator.clipboard.writeText) return navigator.clipboard.writeText(t).then(()=>true,()=>fb(t)); }catch(e){} return Promise.resolve(fb(t)); }
+  function fb(t){ try{ const a=document.createElement("textarea"); a.value=t; a.style.cssText="position:fixed;opacity:0;top:0"; document.body.appendChild(a); a.select(); const ok=document.execCommand("copy"); a.remove(); return ok; }catch(e){ return false; } }
+
+  function openCopilot32(){
+    const m=state.cur; if(!m) return; haptic("light"); try{ Snd.play("open"); }catch(e){}
+    const url=aiUrl(), hasAI=!!url;
+    Sheet.open("✨ AI-копилот",`<div class="cphd idle" id="cphd" role="status" aria-live="polite"><span class="pdot" id="pdot"></span><span>Отвечает: <b id="pname">${hasAI?"…":PROV.none.n}</b></span><span class="cch" id="cch"></span></div>
+      <div class="cp" id="cp"></div><div class="cpq" id="cpq">${Object.keys(PRESET).map(k=>`<button type="button" data-q="${esc(k)}">${esc(k)}</button>`).join("")}</div>
+      <form class="cpf" id="cpf" autocomplete="off"><input id="cpi" maxlength="500" enterkeyhint="send" placeholder="${hasAI?"Спросите про матч…":"Свободные вопросы — когда подключён ИИ-сервер"}" ${hasAI?"":"disabled"} aria-label="Вопрос копилоту"><button id="cps" type="submit" aria-label="Отправить" ${hasAI?"":"disabled"}>➤</button></form>
+      <div class="cpn">${hasAI?"ИИ отвечает по данным бота (xG, форма, очные). Это оценка, а не гарантия. Свайп по ответу: ← копировать, → заново.":"ИИ-сервер не подключён (запустите run_ai.py) — работаю на данных бота без внешнего ИИ."}</div>`,B=>{
+      const cp=B.querySelector("#cp"), inp=B.querySelector("#cpi"), snd=B.querySelector("#cps"); let busy=false, hist=[], alive=true;
+      setAcc(hasAI?(lsGet("aiprov")||"groq"):"none"); if(hasAI) B.querySelector("#cphd").classList.remove("idle");
+      const scroll=()=>{ cp.scrollTop=cp.scrollHeight; };
+      function row(cls,html){ const r=document.createElement("div"); r.className="brow "+(cls==="me"?"me":"ai"); const b=document.createElement("div"); b.className="bub "+cls; b.innerHTML=html;
+        if(cls==="ai") r.innerHTML='<span class="hint l">📋 Копировать</span><span class="hint r">🔄 Заново</span>'; r.appendChild(b); cp.appendChild(r); scroll(); return {r,b}; }
+      /* локальный ответ без ИИ — те же расчёты, что были в v31 */
+      function local(key){ try{ return V31.INS[key]?V31.INS[key](m):"<p>Для свободных вопросов нужен подключённый ИИ-сервер.</p>"; }catch(e){ return "<p>Не получилось собрать ответ.</p>"; } }
+
+      /* печатная машинка: слово за словом, ускоряется, если поток обгоняет */
+      function typer(ans,onDrain){ let q="", shown="", timer=0, ended=false; const W=/^\s*\S+\s?/;
+        function tick(){ timer=0; if(!q){ if(ended){ ans.classList.remove("typing"); onDrain&&onDrain(); } return; }
+          let n=q.length>500?4:q.length>220?2:1; while(n--&&q){ const mt=W.exec(q); const w=mt?mt[0]:q; shown+=w; q=q.slice(w.length); }
+          ans.innerHTML=fmt(shown); scroll(); timer=setTimeout(tick,RMo?0:(q.length>220?16:34)); }
+        return {push(t){ q+=t; ans.classList.add("typing"); if(!timer) timer=setTimeout(tick,0); }, end(){ ended=true; if(!timer) tick(); }, text:()=>shown+q, stop(){ clearTimeout(timer); timer=0; q=""; }}; }
+
+      async function ask(question,preset,regenOf){
+        if(busy||!alive) return; busy=true; snd.disabled=true; inp.disabled=true;
+        if(!regenOf){ row("me",esc(question)); }
+        const {r,b}=regenOf||row("ai",""); b.classList.remove("drag"); b.style.transform=""; b.dataset.q=question; b.dataset.preset=preset||"";
+        let attempt=0, done=false, provider=null, gotText=false;
+        const MAXA=5, DELAY=[1200,2500,5000,8000,12000];
+        while(!done&&alive){
+          b.innerHTML='<div class="aisk" aria-label="ИИ думает"><i></i><i></i><i></i></div>'; r.dataset.sw=""; haptic("light");
+          let think=null, tbody=null, ans=null, tw=null, meta=null, cached=false, finished=false, stubbed=false, gotAny=false;
+          try{
+            const ctl=new AbortController(); const to=setTimeout(()=>ctl.abort(),45000);
+            const resp=await fetch(url+"/api/ai/chat",{method:"POST",signal:ctl.signal,headers:{"Content-Type":"application/json","X-Telegram-Init-Data":(tg&&tg.initData)||""},
+              body:JSON.stringify({event_id:m.event_id,q:question,history:preset?[]:hist.slice(-6),nocache:!!regenOf})});
+            clearTimeout(to);
+            if(!resp.ok){ const er=new Error("http"); er.code=resp.status; try{ er.retry=(await resp.json()).retry_after; }catch(x){} throw er; }
+            const rd=resp.body.getReader(), dec=new TextDecoder(); let buf="";
+            const mk=()=>{ if(!ans){ b.innerHTML='<div class="answ"></div>'; ans=document.createElement("div"); ans.className="ans typing"; b.appendChild(ans); tw=typer(ans,()=>{ if(finished) fin(); }); } };
+            const ev=o=>{
+              if(o.t==="meta"){ provider=o.id; cached=!!o.cached; lsSet("aiprov",o.id); const p=setAcc(o.id); B.querySelector("#cphd").classList.remove("idle"); B.querySelector("#cch").textContent=cached?"⚡ из кэша":""; haptic("soft"); try{ Snd.play("tap"); }catch(x){} meta=p; }
+              else if(o.t==="think"){ if(!think){ mk(); think=document.createElement("details"); think.className="think"; think.innerHTML='<summary>🧠 Размышления</summary><div class="tbody"></div>'; b.insertBefore(think,ans); tbody=think.querySelector(".tbody"); } tbody.textContent+=o.x; }
+              else if(o.t==="delta"){ mk(); gotAny=true; gotText=true; tw.push(o.x); }
+              else if(o.t==="note"){ const n=document.createElement("div"); n.className="note"; n.textContent=o.x; b.appendChild(n); }
+              else if(o.t==="stub"){ stubbed=true; }
+              else if(o.t==="done"){ finished=true; }
+              else if(o.t==="cut"){ throw Object.assign(new Error("cut"),{code:"cut"}); }
+            };
+            const fin=()=>{ /* вызывается, когда текст допечатан */
+              const txt=tw?tw.text():""; const mt=document.createElement("div"); mt.className="meta"; const p=meta||PROV.none;
+              mt.innerHTML=`<span>${p.d} ${esc(p.n)}</span>${cached?"<span>· ⚡ кэш</span>":""}`; b.appendChild(mt); r.dataset.done="1";
+              hist.push({role:"user",content:question},{role:"assistant",content:txt.slice(0,600)}); hist=hist.slice(-6);
+              const words=txt.split(/\s+/).length; if(!RMo&&(words>=90||think||(!preset&&question.split(/\s+/).length>=8))){ try{ confetti(70); Snd.play("ok"); }catch(x){} haptic("ok"); } else haptic("soft"); };
+            for(;;){ const {value,done:dn}=await rd.read(); if(dn) break; buf+=dec.decode(value,{stream:true}); let i;
+              while((i=buf.indexOf("\n\n"))>=0){ const blk=buf.slice(0,i); buf=buf.slice(i+2); if(blk.startsWith("data: ")){ let o=null; try{ o=JSON.parse(blk.slice(6)); }catch(x){} if(o) ev(o); } } }
+            if(stubbed){ throw Object.assign(new Error("stub"),{code:"stub"}); }
+            if(!finished) throw Object.assign(new Error("cut"),{code:"cut"});    // соединение закрылось до «done» — обрыв
+            if(tw) tw.end(); else { finished=true; throw Object.assign(new Error("empty"),{code:"stub"}); }
+            done=true;
+          }catch(e){
+            if(tw) tw.stop();
+            const code=e&&e.code;
+            if(code==="stub"||code===401||code===403||code===404||code===500||code===413){ done=true; fail(code); break; }
+            if(code===429){ done=true; const s=e.retry||30; b.innerHTML=`<p>Слишком много запросов: лимит 10 в минуту. Попробуйте через ${s} с.</p>`; setAcc("none"); haptic("warn"); break; }
+            if(code==="http"||code===400){ done=true; fail(code); break; }
+            /* сеть: обрыв, таймаут, нет интернета → плавное восстановление */
+            attempt++; setAcc("none"); haptic("warn");
+            if(attempt>MAXA||!alive){ done=true; fail("net"); break; }
+            b.innerHTML=`<div class="reco" role="status"><i></i><span>Связь прервана, пытаемся восстановить… (${attempt}/${MAXA})</span><button type="button" data-now>Сейчас</button></div>`;
+            await new Promise(res=>{ let t=setTimeout(fin2,DELAY[attempt-1]); function fin2(){ removeEventListener("online",fin2); b.querySelector("[data-now]")&&(b.querySelector("[data-now]").onclick=null); clearTimeout(t); res(); }
+              addEventListener("online",fin2,{once:true}); const nb=b.querySelector("[data-now]"); if(nb) nb.onclick=fin2; });
+            if(navigator.onLine===false){ await new Promise(res=>{ const h=()=>{ removeEventListener("online",h); res(); }; addEventListener("online",h); setTimeout(h,15000); }); }
+          }
+        }
+        function fail(code){ /* ИИ не ответил: показываем заглушку и расчёт по данным бота */
+          setAcc("none"); const stub=code==="stub"?"Все ИИ-сервисы сейчас перегружены — бесплатные лимиты восстановятся в течение минуты.":code===401||code===403?"Нет доступа к ИИ-серверу (проверьте, что вы владелец бота).":code==="net"?"Не удалось восстановить связь с ИИ-сервером.":"ИИ сейчас недоступен.";
+          const key=preset; b.innerHTML=`<p>${esc(stub)}</p>${key?`<p><b>А пока — расчёт по данным бота:</b></p>`+local(key):""}<button type="button" class="retry" data-retry>🔄 Повторить</button>`; r.dataset.done="1"; haptic("err"); try{ Snd.play("err"); }catch(x){}
+          const rb=b.querySelector("[data-retry]"); if(rb) rb.onclick=()=>{ busy=false; ask(question,preset,{r,b}); }; }
+        busy=false; snd.disabled=false; inp.disabled=!hasAI; if(hasAI) try{ inp.focus({preventScroll:true}); }catch(x){}
+      }
+
+      /* приветствие */
+      const greet=row("ai",""); greet.b.innerHTML='<div class="aisk"><i></i><i></i><i></i></div>';
+      setTimeout(()=>{ greet.b.innerHTML=V31.headline(m); greet.r.dataset.done="1"; haptic("soft"); },600);
+
+      B.querySelector("#cpq").onclick=e=>{ const k=e.target.closest("[data-q]"); if(!k||busy) return; haptic("light"); const key=k.dataset.q;
+        if(!hasAI){ row("me",esc(key)); const t=row("ai",'<span class="dots"><i></i><i></i><i></i></span>'); setTimeout(()=>{ t.b.innerHTML=local(key); t.r.dataset.done="1"; haptic("soft"); scroll(); },480+Math.random()*300); return; }
+        ask(PRESET[key],key); };
+      B.querySelector("#cpf").onsubmit=e=>{ e.preventDefault(); const v=inp.value.trim(); if(!v||busy||!hasAI) return; inp.value=""; haptic("light"); try{ Snd.play("press"); }catch(x){} ask(v,null); };
+
+      /* свайпы по ответу ИИ: ← копировать, → сгенерировать заново */
+      let sw=null;
+      cp.addEventListener("pointerdown",e=>{ const bb=e.target.closest(".bub.ai"); if(!bb||e.target.closest("details,button,a")) return; const rw=bb.parentElement; if(!rw.dataset.done) return; sw={bb,rw,x:e.clientX,y:e.clientY,dx:0,on:false,id:e.pointerId}; },{passive:true});
+      cp.addEventListener("pointermove",e=>{ if(!sw||e.pointerId!==sw.id) return; const dx=e.clientX-sw.x, dy=e.clientY-sw.y;
+        if(!sw.on){ if(Math.abs(dy)>12&&Math.abs(dy)>Math.abs(dx)){ sw=null; return; } if(Math.abs(dx)>10&&Math.abs(dx)>Math.abs(dy)){ sw.on=true; sw.bb.classList.add("drag"); try{ sw.bb.setPointerCapture(e.pointerId); }catch(x){} } else return; }
+        sw.dx=Math.max(-120,Math.min(120,dx*.7)); sw.bb.style.transform=`translateX(${sw.dx}px)`; const armed=Math.abs(sw.dx)>=70; const kind=sw.dx<0?"copy":"regen";
+        if(armed&&sw.rw.dataset.sw!==kind){ haptic("medium"); } sw.rw.dataset.sw=armed?kind:""; },{passive:true});
+      const endSw=()=>{ if(!sw) return; const s=sw; sw=null; s.bb.classList.remove("drag"); s.bb.style.transform=""; const kind=s.rw.dataset.sw; s.rw.dataset.sw=""; if(!s.on||!kind) return;
+        try{ Snd.play("swipe"); }catch(x){}
+        if(kind==="copy"){ const t=(s.bb.querySelector(".ans")||s.bb).innerText.trim(); copyText(t).then(ok=>{ toast(ok?"Скопировано":"Не удалось скопировать"); haptic(ok?"ok":"err"); }); }
+        else if(!busy&&s.bb.dataset.q){ s.rw.dataset.done=""; ask(s.bb.dataset.q,s.bb.dataset.preset||null,{r:s.rw,b:s.bb}); } };
+      cp.addEventListener("pointerup",endSw,{passive:true}); cp.addEventListener("pointercancel",endSw,{passive:true});
+      new MutationObserver(()=>{ if(!document.getElementById("cp")){ alive=false; root.style.removeProperty("--ai"); } }).observe(document.getElementById("sheet"),{childList:true,subtree:true});
+    });
+  }
+  const fabEl=document.getElementById("fab"); if(fabEl) fabEl.onclick=openCopilot32;
+  window.V32={aiUrl,PROV,openCopilot32,fmt};
+}catch(e){ console.warn("v32",e); } })();
 </script>
 </body>
 </html>
