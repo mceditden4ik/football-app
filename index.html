@@ -609,6 +609,17 @@ html[data-gl="on"] body{background:var(--bg)!important}
 .demo{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.08em;padding:3px 8px;border-radius:8px;background:rgba(245,179,1,.18);color:#f5b301}
 .shimg{width:100%;max-height:56vh;object-fit:contain;border-radius:18px;box-shadow:var(--sh2)}
 @media (prefers-reduced-motion:reduce){#fab::after,.ach .bd.on .ic,#achT.on .ic{animation:none}}
+
+/* v31b: производительность — убираем дорогие размытия поверх анимированного фона */
+.nav{-webkit-backdrop-filter:blur(12px) saturate(160%);backdrop-filter:blur(12px) saturate(160%)}
+.nav .pill{-webkit-backdrop-filter:none;backdrop-filter:none}
+#sheet{-webkit-backdrop-filter:blur(16px) saturate(150%);backdrop-filter:blur(16px) saturate(150%)}
+#sheetbg{-webkit-backdrop-filter:none;backdrop-filter:none}
+html[data-gl="on"] .card,html[data-gl="on"] .tile,html[data-gl="on"] .row{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html[data-perf="low"] *{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html[data-perf="low"] .nav{background:color-mix(in srgb,var(--bg2) 94%,transparent)!important}
+html[data-perf="low"] #sheet{background:color-mix(in srgb,var(--bg2) 96%,transparent)!important}
+html[data-perf="low"] .nav::after{display:none}
 </style>
 </head>
 <body>
@@ -1841,13 +1852,13 @@ void main(){
         const loc=gl.getAttribLocation(prog,"p"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
         ["R","T","A","M","S","L","P"].forEach(k=>U[k]=gl.getUniformLocation(prog,k)); ok=true;
       }catch(e){ ok=false; console.warn("WebGL недоступен, используется обычный фон",e); } return ok; }
-    function size(){ const lv=root.dataset.fxl, dpr=Math.min(devicePixelRatio||1,2), sc=lv==="lite"?.38:.62;
+    function size(){ const lv=root.dataset.fxl, dpr=Math.min(devicePixelRatio||1,1.5), sc=lv==="lite"?.3:.45;
       W=Math.max(2,Math.round(innerWidth*dpr*sc)); H=Math.max(2,Math.round(innerHeight*dpr*sc)); if(cv.width!==W||cv.height!==H){ cv.width=W; cv.height=H; } if(gl) gl.viewport(0,0,W,H); }
     function readColors(){ const a=hex2rgb(getComputedStyle(root).getPropertyValue("--blue")); if(a) tacc=[a[0]/255,a[1]/255,a[2]/255]; tlt=lightTheme()?1:0; }
     function frame(now){
       raf=0; if(document.hidden||root.dataset.gl!=="on") return;
       raf=requestAnimationFrame(frame);
-      const lite=root.dataset.fxl==="lite"; if(lite&&now-lastF<33) return; lastF=now;
+      if(now-lastF<(root.dataset.fxl==="lite"?42:33)) return; if(now-(window.__scrT||0)<140) return; lastF=now;
       if(now-accT>400){ accT=now; readColors(); }
       for(let i=0;i<3;i++){ acc[i]+=(tacc[i]-acc[i])*.06; } lt+=(tlt-lt)*.08; mx+=(tx-mx)*.06; my+=(ty-my)*.06; tsy=scrollY/Math.max(1,innerHeight); sy+=(tsy-sy)*.08;
       const T=(now-t0)/1000; const pa=new Float32Array(18);
@@ -1856,7 +1867,7 @@ void main(){
       gl.uniform2f(U.R,W,H); gl.uniform1f(U.T,T); gl.uniform3f(U.A,acc[0],acc[1],acc[2]); gl.uniform2f(U.M,mx,my); gl.uniform1f(U.S,sy); gl.uniform1f(U.L,lt); gl.uniform3fv(U.P,pa);
       gl.drawArrays(gl.TRIANGLES,0,3);
       /* блик на liquid-glass следует за прокруткой и наклоном */
-      const gp=-60+((scrollY*.12+mx*55)%160); if(Math.abs(gp-glareP)>1.2){ glareP=gp; root.style.setProperty("--glare",gp.toFixed(0)+"%"); }
+      const gp=-60+((scrollY*.12+mx*55)%160); if(root.dataset.perf!=="low"&&Math.abs(gp-glareP)>4&&now-(window.__glT||0)>120){ window.__glT=now; glareP=gp; const v=gp.toFixed(0)+"%"; (window.__gE||(window.__gE=[document.querySelector(".nav"),document.getElementById("sheet")])).forEach(e=>e&&e.style.setProperty("--glare",v)); }
     }
     function drop(x,y){ const T=(performance.now()-t0)/1000; if(T-lastRip<.07) return; lastRip=T; rip.push({x:x/innerWidth,y:1-y/innerHeight,t:T}); }
     document.addEventListener("pointerdown",e=>{ if(root.dataset.gl==="on") drop(e.clientX,e.clientY); },{passive:true});
@@ -1870,7 +1881,7 @@ void main(){
   })();
   /* «Жидкость» — новый пункт «Живого фона» и режим по умолчанию (один раз переводим, потом выбор пользователя) */
   BGS.unshift(["fluid","Жидкость"]);
-  if(!lsGet("v31mig")){ lsSet("v31mig","1"); if(GL.supported()) lsSet("bg","fluid"); }
+  if(!lsGet("v31mig")){ lsSet("v31mig","1"); if(GL.supported()) lsSet("bg","fluid"); } if(!lsGet("v31b")){ lsSet("v31b","1"); lsSet("fxl","lite"); }
   const _fxStart=FX.start;
   FX.start=function(){
     const bg=lsGet("bg"), lv=lsGet("fxl")||"max";
@@ -2086,6 +2097,18 @@ void main(){
   FX.start(); decorate(); setTimeout(()=>achRefresh(false),1500);
   window.V31={GL,teamColor,axes,achRefresh,DEFS,statsOf,cardCanvas,HIDS};
 })();
+
+/* v31b: авто-снижение нагрузки по реальной частоте кадров во время прокрутки */
+(function(){ try{
+  const root=document.documentElement; let lvl=0; try{ lvl=+(localStorage.getItem("perf")||0); }catch(e){}
+  const apply=()=>{ if(lvl>=1) root.dataset.perf="low"; if(lvl>=2){ try{ localStorage.setItem("fxl","lite"); }catch(e){} root.dataset.fxl="lite"; } if(lvl>=3&&window.V31&&V31.GL){ try{ V31.GL.off(); }catch(e){} root.dataset.fx="off"; } };
+  apply();
+  let st=0,last=0,ds=[],busy=false,bad=0,quiet=0;
+  addEventListener("scroll",()=>{ window.__scrT=performance.now(); if(busy) return; busy=true; ds=[]; last=0; (function t(now){ if(last) ds.push(now-last); last=now;
+      if(performance.now()-window.__scrT<250&&ds.length<90) return requestAnimationFrame(t);
+      busy=false; if(ds.length<25) return; ds.sort((a,b)=>a-b); const med=ds[ds.length>>1];
+      if(med>26){ if(++bad>=2&&lvl<3){ bad=0; lvl++; try{ localStorage.setItem("perf",String(lvl)); }catch(e){} apply(); } } else if(bad>0) bad--; })(performance.now()); },{passive:true,capture:true});
+}catch(e){ console.warn("perf",e); } })();
 </script>
 </body>
 </html>
