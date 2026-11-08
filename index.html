@@ -666,6 +666,59 @@ html[data-perf="low"] .nav::after{display:none}
 .cpf button:active{transform:scale(.9)}.cpf button:disabled{opacity:.45}
 #fab{box-shadow:0 10px 30px -8px var(--ai),0 0 0 1px rgba(255,255,255,.2) inset;transition:box-shadow .6s}
 html[data-fxl="off"] .cp .aisk i,html[data-fxl="off"] .cphd .pdot::after{animation:none}
+
+/* ───────── v33: производительность (убрано всё, что перерисовывалось каждый кадр) ───────── */
+html,body{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button,.row,.chip,.card,.tile,.go,[data-id],.nav button{touch-action:manipulation}
+.nav,#mini{view-transition-name:none}
+/* рамки «преломления»: статичный угол вместо бесконечной анимации маски на КАЖДОЙ карточке */
+html[data-fxl="max"] .card:not(.empty)::before,html[data-fxl="max"] .tile::before{animation:none!important;--ang:205deg}
+html[data-fxl="max"] .tile::before{--ang:150deg}
+/* пульс «идёт матч»: только opacity у отдельного слоя (композитор), без перерисовки box-shadow */
+.row.is-live,.row.is-ht{animation:none!important}
+.row.is-live{box-shadow:inset 0 0 0 1px rgba(52,211,153,.5)}
+.row.is-ht{box-shadow:inset 0 0 0 1px rgba(251,191,36,.45)}
+.row.is-live::before,.row.is-ht::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;will-change:opacity;animation:lpo 2.4s ease-in-out infinite}
+.row.is-live::before{box-shadow:0 0 18px 1px rgba(52,211,153,.35),inset 0 0 0 1px rgba(52,211,153,.8)}
+.row.is-ht::before{box-shadow:0 0 16px 1px rgba(251,191,36,.3),inset 0 0 0 1px rgba(251,191,36,.7)}
+@keyframes lpo{50%{opacity:1}}
+html[data-fxl="off"] .row.is-live::before,html[data-fxl="off"] .row.is-ht::before,html[data-sheet] .row.is-live::before,html[data-sheet] .row.is-ht::before{animation:none}
+/* ленивый рендер: строки вне экрана не раскладываются и не рисуются, пока до них не доскроллят */
+.row:not(.is-live):not(.is-ht){content-visibility:auto;contain-intrinsic-size:auto 128px}
+/* под анимированным фоном — никакого backdrop-filter у карточек; у навбара/шапки — только для статичного фона и «Шёлка» */
+html[data-fx="on"] .card,html[data-fx="on"] .tile,html[data-fx="on"] .row,html[data-gl="on"] .card,html[data-gl="on"] .tile,html[data-gl="on"] .row{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html[data-gl="on"] .nav,html[data-gl="on"] #mini,html[data-fx="on"]:not([data-silk="on"]) .nav,html[data-fx="on"]:not([data-silk="on"]) #mini{-webkit-backdrop-filter:none;backdrop-filter:none}
+html[data-gl="on"] .nav,html[data-fx="on"]:not([data-silk="on"]) .nav{background:color-mix(in srgb,var(--bg2) 90%,transparent)}
+html[data-gl="on"] #mini,html[data-fx="on"]:not([data-silk="on"]) #mini{background:color-mix(in srgb,var(--bg2) 92%,transparent)}
+html[data-silk="on"] .nav{-webkit-backdrop-filter:blur(10px) saturate(150%);backdrop-filter:blur(10px) saturate(150%)}
+html[data-silk="on"] #mini{-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+/* will-change — только там, где реально анимируется */
+.nav{transform:translateZ(0)}
+#sheet{will-change:auto}html[data-sheet] #sheet{will-change:transform}
+.nav,#sheet{--glare:24%}
+.nav::after,#sheet::after{mix-blend-mode:normal!important}
+/* тени полегче: меньше радиус размытия на многократно повторяющихся элементах */
+html[data-fx="on"] .card,html[data-fx="on"] .tile,html[data-fx="on"] .row{box-shadow:0 4px 12px -9px rgba(0,0,0,.55),inset 0 1px 0 color-mix(in srgb,var(--text) 6%,transparent)}
+/* «Шёлк»: живой фон на одних transform/opacity — GPU-композитор, без JS и без перерисовки */
+#silk{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;display:none;contain:strict}
+html[data-silk="on"] #silk{display:block}
+html[data-silk="on"] #fx,html[data-silk="on"] #gl{display:none!important}
+#silk .par{position:absolute;inset:0;transition:transform .5s ease-out}
+#silk .b{position:absolute;left:50%;top:50%;width:84vmax;height:84vmax;margin:-42vmax 0 0 -42vmax;border-radius:50%;opacity:.55;will-change:transform;
+  background:radial-gradient(closest-side,var(--c) 0%,transparent 100%)}
+#silk .b1{--c:color-mix(in srgb,var(--blue) 64%,transparent);animation:sk1 36s ease-in-out infinite alternate}
+#silk .b2{--c:color-mix(in srgb,var(--violet,#8b5cf6) 58%,transparent);animation:sk2 44s ease-in-out infinite alternate}
+#silk .b3{--c:rgba(34,211,238,.38);width:62vmax;height:62vmax;margin:-31vmax 0 0 -31vmax;opacity:.45;animation:sk3 52s ease-in-out infinite alternate}
+#silk .b4{--c:color-mix(in srgb,var(--blue) 45%,#f472b6);width:56vmax;height:56vmax;margin:-28vmax 0 0 -28vmax;opacity:.28;animation:sk4 60s ease-in-out infinite alternate}
+@keyframes sk1{from{transform:translate3d(-30vw,-28vh,0) scale(1)}to{transform:translate3d(24vw,16vh,0) scale(1.2)}}
+@keyframes sk2{from{transform:translate3d(30vw,26vh,0) scale(1.15)}to{transform:translate3d(-22vw,-18vh,0) scale(.95)}}
+@keyframes sk3{from{transform:translate3d(-26vw,30vh,0) scale(.9)}to{transform:translate3d(28vw,-24vh,0) scale(1.25)}}
+@keyframes sk4{from{transform:translate3d(22vw,-34vh,0) scale(1.1)}to{transform:translate3d(-24vw,22vh,0) scale(.9)}}
+html[data-theme=light] #silk .b{opacity:.34}html[data-theme=light] #silk .b3,html[data-theme=light] #silk .b4{opacity:.22}
+html[data-sheet] #silk .b,html[data-vt] #silk .b{animation-play-state:paused}
+#silk .rp{position:absolute;left:0;top:0;width:52vmax;height:52vmax;margin:-26vmax 0 0 -26vmax;border-radius:50%;opacity:0;will-change:transform,opacity;background:radial-gradient(closest-side,color-mix(in srgb,var(--blue) 70%,#fff 12%) 0,transparent 100%)}
+html[data-fxl="off"] #silk{display:none}
+@media (prefers-reduced-motion:reduce){#silk .b{animation:none}}
 </style>
 </head>
 <body>
@@ -1660,23 +1713,26 @@ Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensu
       if(n-lt>500){ if(y<=0&&lastY>120){ lt=n; haptic("rigid"); } else if(mx>400&&y>=mx-2&&lastY<mx-120){ lt=n; haptic("rigid"); } }
       lastY=y; },{passive:true}); })();
   /* ── View Transitions ── */
-  function vt(kind,fn){
-    if(fxOff()||!document.startViewTransition){ fn(); return; }
-    try{ root.dataset.vt=kind; const t=document.startViewTransition(()=>{ fn(); }); t.finished.finally(()=>{ delete root.dataset.vt; }); }
-    catch(e){ delete root.dataset.vt; fn(); }
+  function vt(kind,fn){          /* v33: без View Transitions — они снимают скриншот всей страницы и дважды вызывали fn при быстрых тапах */
+    fn(); if(fxOff()) return;
+    const a=document.getElementById("app"); if(!a||!a.animate) return;
+    try{ a.getAnimations().forEach(x=>x.cancel()); const d=kind==="bwd"?-1:kind==="fwd"?1:0;
+      a.animate([{opacity:.0,transform:"translate3d("+d*22+"px,0,0)"},{opacity:1,transform:"none"}],{duration:280,easing:"cubic-bezier(.22,1,.36,1)"}); }catch(e){}
   }
   const _open=openMatch, _close=closeMatch;
-  openMatch=function(id){ Snd.play("swipe"); vt("fwd",()=>_open(id)); };
-  closeMatch=function(){ vt("bwd",()=>_close()); };
+  let navT=0; const navBusy=()=>performance.now()-navT<450, navMark=()=>{ navT=performance.now(); }; window.__navBusy=navBusy;
+  openMatch=function(id){ if(navBusy()||state.detail===id) return; navMark(); Snd.play("swipe"); vt("fwd",()=>_open(id)); };     /* защита от двойного открытия и двойной записи в history */
+  closeMatch=function(){ if(navBusy()||!state.detail) return; navMark(); vt("bwd",()=>_close()); };
   const nav=document.getElementById("nav"), navH=nav.onclick;
-  nav.onclick=function(e){ const b=e.target.closest("[data-t]"); if(!b) return; const to=b.dataset.t, k=(TABS.indexOf(to)>TABS.indexOf(state.tab))?"fwd":(TABS.indexOf(to)<TABS.indexOf(state.tab))?"bwd":"tab"; vt(state.detail?"bwd":k,()=>navH.call(nav,e)); };
+  nav.onclick=function(e){ const b=e.target.closest("[data-t]"); if(!b||navBusy()) return; navMark(); const to=b.dataset.t, k=(TABS.indexOf(to)>TABS.indexOf(state.tab))?"fwd":(TABS.indexOf(to)<TABS.indexOf(state.tab))?"bwd":"tab"; vt(state.detail?"bwd":k,()=>navH.call(nav,e)); };
   window.addEventListener("popstate",()=>{ /* системная «назад» уже обрабатывается приложением; звук только */ Snd.play("swipe"); });
   /* ── параллакс (наклон телефона / указатель) ── */
   (function(){
     let tx=0,ty=0,cx=0,cy=0,raf=0;
-    const go=()=>{ if(!raf) raf=requestAnimationFrame(step); };
+    let le=0; const go=()=>{ const n=performance.now(); if(raf||n-le<33||root.dataset.fxl!=="max"||root.dataset.sheet||n-(window.__scrT||0)<200) return; le=n; raf=requestAnimationFrame(step); };
     function step(){ raf=0; cx+=(tx-cx)*.08; cy+=(ty-cy)*.08;
-      root.style.setProperty("--gx",cx.toFixed(3)); root.style.setProperty("--gy",cy.toFixed(3));
+      const hh=document.querySelector(".hero"), rr=document.querySelector(".ring");
+      if(hh) hh.style.translate=(-cx*6).toFixed(1)+"px "+(-cy*5).toFixed(1)+"px"; if(rr) rr.style.translate=(cx*5).toFixed(1)+"px "+(cy*4).toFixed(1)+"px"; if(window.__parX) window.__parX(cx,cy);
       if(Math.abs(tx-cx)>.004||Math.abs(ty-cy)>.004) raf=requestAnimationFrame(step); }
     addEventListener("deviceorientation",e=>{ if(fxOff()||e.gamma==null) return; tx=clamp(e.gamma/22,-1,1); ty=clamp((e.beta-50)/22,-1,1); go(); },{passive:true});
     addEventListener("pointermove",e=>{ if(fxOff()||e.pointerType!=="mouse") return; tx=(e.clientX/innerWidth-.5)*2; ty=(e.clientY/innerHeight-.5)*2; go(); },{passive:true});
@@ -1701,10 +1757,10 @@ Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensu
       anim.onfinish=()=>{ sh.style.transform=`translateY(${to}px)`; anim.cancel(); anim=null; if(to>=sh.offsetHeight-1&&!openF) sh.style.visibility="hidden"; }; return anim; }
     function open(title,html,after){
       T.textContent=title; B.innerHTML=html; [...B.children].forEach((c,i)=>c.style.setProperty("--k",i));
-      sh.style.visibility="visible"; sh.style.transform="translateY(105%)"; bg.classList.add("on"); openF=true; document.body.style.overflow="hidden";
+      sh.style.visibility="visible"; sh.style.transform="translateY(105%)"; bg.classList.add("on"); openF=true; document.documentElement.dataset.sheet="1"; document.body.style.overflow="hidden";
       const h=sh.offsetHeight; slide(h,0,fxOff()?1:700,fxOff()?"linear":SPRING); Snd.play("open"); haptic("soft"); after&&after(B);
     }
-    function close(vel){ if(!openF) return; openF=false; bg.classList.remove("on"); document.body.style.overflow=""; const h=sh.offsetHeight, c=cur()||0; slide(c,h+30,fxOff()?1:Math.max(180,320-(vel||0)*120),"cubic-bezier(.3,0,.8,.4)"); Snd.play("close"); }
+    function close(vel){ if(!openF) return; openF=false; delete document.documentElement.dataset.sheet; bg.classList.remove("on"); document.body.style.overflow=""; const h=sh.offsetHeight, c=cur()||0; slide(c,h+30,fxOff()?1:Math.max(180,320-(vel||0)*120),"cubic-bezier(.3,0,.8,.4)"); Snd.play("close"); }
     bg.addEventListener("click",()=>close());
     /* перетаскивание с инерцией */
     let dragging=false,sy=0,base=0,lastY=0,lastT=0,vel=0;
@@ -1759,7 +1815,7 @@ Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensu
     document.addEventListener("pointerdown",e=>{
       const t=e.target.closest(".row,.chip,.actions button,.iconbtn,.nav button,.go"); if(!t||Sheet.isOpen()&&!t.closest("#sheet")) return;
       el=t; p0=[e.clientX,e.clientY]; fired=false; clearTimeout(tm);
-      tm=setTimeout(()=>{ if(!el) return; t.classList.add("lp"); haptic("medium"); if(t.classList.contains("row")&&t.dataset.id){ fired=true; quickLook(+t.dataset.id); } },430);
+      tm=setTimeout(()=>{ if(!el||(navigator.scheduling&&navigator.scheduling.isInputPending&&navigator.scheduling.isInputPending())) return; t.classList.add("lp"); haptic("medium"); if(t.classList.contains("row")&&t.dataset.id){ fired=true; setTimeout(()=>{ fired=false; },1500); quickLook(+t.dataset.id); } },480);
     },{passive:true});
     document.addEventListener("pointermove",e=>{ if(tm&&p0&&Math.hypot(e.clientX-p0[0],e.clientY-p0[1])>10){ clearTimeout(tm); tm=0; } },{passive:true});
     ["pointerup","pointercancel","pointerleave"].forEach(n=>document.addEventListener(n,clr,{passive:true}));
@@ -1858,7 +1914,7 @@ Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensu
   /* ───────── 1. WebGL «жидкий» фон ───────── */
   const GL=(()=>{
     const cv=document.createElement("canvas"); cv.id="gl"; cv.setAttribute("aria-hidden","true"); document.body.insertBefore(cv,document.getElementById("fx"));
-    let gl=null, prog=null, U={}, raf=0, t0=performance.now(), W=0, H=0, ok=null, lastF=0;
+    let gl=null, prog=null, U={}, raf=0, tmr=0, PA=new Float32Array(18), t0=performance.now(), W=0, H=0, ok=null, lastF=0;
     const rip=[]; let tx=0,ty=0,mx=0,my=0,sy=0,tsy=0, acc=[.38,.59,1], tacc=[.38,.59,1], lt=0,tlt=0, lastRip=0, accT=0, glareP=-60;
     const VS="attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
     const FS=`#ifdef GL_FRAGMENT_PRECISION_HIGH
@@ -1903,36 +1959,50 @@ void main(){
     function readColors(){ const a=hex2rgb(getComputedStyle(root).getPropertyValue("--blue")); if(a) tacc=[a[0]/255,a[1]/255,a[2]/255]; tlt=lightTheme()?1:0; }
     function frame(now){
       raf=0; if(document.hidden||root.dataset.gl!=="on") return;
-      raf=requestAnimationFrame(frame);
-      if(now-lastF<(root.dataset.fxl==="lite"?42:33)) return; if(now-(window.__scrT||0)<140) return; lastF=now;
+      const gap=root.dataset.fxl==="lite"?50:42;               /* 20 / 24 к/с — для фона достаточно */
+      const sleep=root.dataset.sheet||now-(window.__scrT||0)<160||(window.__navBusy&&window.__navBusy());   /* шторка, прокрутка, переход: кадр не рисуем */
+      tmr=setTimeout(()=>{ tmr=0; if(root.dataset.gl==="on"&&!raf&&!document.hidden) raf=requestAnimationFrame(frame); },sleep?90:Math.max(4,gap-(performance.now()-now)));
+      if(sleep||now-lastF<gap-4) return; lastF=now;
       if(now-accT>400){ accT=now; readColors(); }
       for(let i=0;i<3;i++){ acc[i]+=(tacc[i]-acc[i])*.06; } lt+=(tlt-lt)*.08; mx+=(tx-mx)*.06; my+=(ty-my)*.06; tsy=scrollY/Math.max(1,innerHeight); sy+=(tsy-sy)*.08;
-      const T=(now-t0)/1000; const pa=new Float32Array(18);
+      const T=(now-t0)/1000; const pa=PA; pa.fill(0);
       for(let i=rip.length-1;i>=0;i--){ if(T-rip[i].t>2.4) rip.splice(i,1); }
       rip.slice(-6).forEach((r,i)=>{ pa[i*3]=r.x; pa[i*3+1]=r.y; pa[i*3+2]=r.t+.0001; });
       gl.uniform2f(U.R,W,H); gl.uniform1f(U.T,T); gl.uniform3f(U.A,acc[0],acc[1],acc[2]); gl.uniform2f(U.M,mx,my); gl.uniform1f(U.S,sy); gl.uniform1f(U.L,lt); gl.uniform3fv(U.P,pa);
       gl.drawArrays(gl.TRIANGLES,0,3);
-      /* блик на liquid-glass следует за прокруткой и наклоном */
-      const gp=-60+((scrollY*.12+mx*55)%160); if(root.dataset.perf!=="low"&&Math.abs(gp-glareP)>4&&now-(window.__glT||0)>120){ window.__glT=now; glareP=gp; const v=gp.toFixed(0)+"%"; (window.__gE||(window.__gE=[document.querySelector(".nav"),document.getElementById("sheet")])).forEach(e=>e&&e.style.setProperty("--glare",v)); }
     }
     function drop(x,y){ const T=(performance.now()-t0)/1000; if(T-lastRip<.07) return; lastRip=T; rip.push({x:x/innerWidth,y:1-y/innerHeight,t:T}); }
     document.addEventListener("pointerdown",e=>{ if(root.dataset.gl==="on") drop(e.clientX,e.clientY); },{passive:true});
     document.addEventListener("pointermove",e=>{ if(root.dataset.gl!=="on") return; if(e.buttons||e.pressure>0) drop(e.clientX,e.clientY); if(e.pointerType==="mouse"){ tx=(e.clientX/innerWidth-.5)*2; ty=-(e.clientY/innerHeight-.5)*2; } },{passive:true});
     addEventListener("deviceorientation",e=>{ if(e.gamma==null) return; tx=clamp(e.gamma/25,-1,1); ty=-clamp((e.beta-50)/25,-1,1); },{passive:true});
-    document.addEventListener("visibilitychange",()=>{ if(!document.hidden&&root.dataset.gl==="on"&&!raf) raf=requestAnimationFrame(frame); });
+    document.addEventListener("visibilitychange",()=>{ if(!document.hidden&&root.dataset.gl==="on"&&!raf&&!tmr) raf=requestAnimationFrame(frame); });
     addEventListener("resize",()=>{ if(root.dataset.gl==="on") size(); });
     return {
-      on(){ if(!init()) return false; root.dataset.gl="on"; size(); readColors(); acc=tacc.slice(); lt=tlt; if(RMX){ frame(performance.now()); cancelAnimationFrame(raf); raf=0; return true; } if(!raf) raf=requestAnimationFrame(frame); return true; },
-      off(){ root.dataset.gl="off"; if(raf){ cancelAnimationFrame(raf); raf=0; } }, supported:()=>init() };
+      on(){ if(!init()) return false; root.dataset.gl="on"; size(); readColors(); acc=tacc.slice(); lt=tlt; if(RMX){ frame(performance.now()); cancelAnimationFrame(raf); raf=0; return true; } if(!raf&&!tmr) raf=requestAnimationFrame(frame); return true; },
+      off(){ root.dataset.gl="off"; if(raf){ cancelAnimationFrame(raf); raf=0; } if(tmr){ clearTimeout(tmr); tmr=0; } }, supported:()=>init() };
   })();
   /* «Жидкость» — новый пункт «Живого фона» и режим по умолчанию (один раз переводим, потом выбор пользователя) */
-  BGS.unshift(["fluid","Жидкость"]);
-  if(!lsGet("v31mig")){ lsSet("v31mig","1"); if(GL.supported()) lsSet("bg","fluid"); } if(!lsGet("v31b")){ lsSet("v31b","1"); lsSet("fxl","lite"); }
+  /* ───────── «Шёлк»: лёгкий живой фон — только transform/opacity, считает композитор (ноль JS в кадре) ───────── */
+  const SILK=(()=>{ let el=null, par=null, rps=[], ri=0, on=false, lastD=0;
+    function ripple(x,y){ if(!on||root.dataset.sheet) return; const n=performance.now(); if(n-lastD<120||n-(window.__scrT||0)<160) return; lastD=n;
+      const r=rps[ri=(ri+1)%rps.length]; if(r._a) r._a.cancel();
+      r._a=r.animate([{transform:"translate3d("+x+"px,"+y+"px,0) scale(.15)",opacity:.5},{transform:"translate3d("+x+"px,"+y+"px,0) scale(1.15)",opacity:0}],{duration:1100,easing:"cubic-bezier(.2,.7,.2,1)"}); }
+    function build(){ if(el) return; el=document.createElement("div"); el.id="silk"; el.setAttribute("aria-hidden","true");
+      el.innerHTML='<div class="par"><i class="b b1"></i><i class="b b2"></i><i class="b b3"></i><i class="b b4"></i></div>'+'<i class="rp"></i><i class="rp"></i><i class="rp"></i><i class="rp"></i>';
+      document.body.insertBefore(el,document.getElementById("fx")); par=el.querySelector(".par"); rps=[...el.querySelectorAll(".rp")];
+      document.addEventListener("pointerdown",e=>ripple(e.clientX,e.clientY),{passive:true});
+      window.__parX=(cx,cy)=>{ if(on&&par) par.style.transform="translate3d("+(cx*-16).toFixed(1)+"px,"+(cy*-16).toFixed(1)+"px,0)"; }; }
+    return { on(){ build(); on=true; }, off(){ on=false; if(par) par.style.transform=""; rps.forEach(r=>{ if(r._a){ r._a.cancel(); r._a=null; } }); } }; })();
+  BGS.unshift(["fluid","Жидкость · GPU"]); BGS.unshift(["silk","Шёлк · лёгкий"]);
+  if(!lsGet("v31mig")){ lsSet("v31mig","1"); lsSet("bg","silk"); } if(!lsGet("v33mig")){ lsSet("v33mig","1"); const b0=lsGet("bg"); if(!b0||b0==="fluid") lsSet("bg","silk"); } if(!lsGet("v31b")){ lsSet("v31b","1"); lsSet("fxl","lite"); }
   const _fxStart=FX.start;
   FX.start=function(){
-    const bg=lsGet("bg"), lv=lsGet("fxl")||"max";
-    if(bg==="fluid"&&lv!=="off"&&GL.supported()){ lsSet("bg","off"); try{ _fxStart(); }finally{ lsSet("bg","fluid"); } root.dataset.fx="on"; root.dataset.fxl=lv; GL.on(); }
-    else { GL.off(); if(bg==="fluid"){ lsSet("bg","off"); try{ _fxStart(); }finally{ lsSet("bg","fluid"); } } else _fxStart(); }
+    const bg=lsGet("bg"), lv=lsGet("fxl")||"max", virt=bg==="fluid"||bg==="silk";
+    const host=()=>{ lsSet("bg","off"); try{ _fxStart(); }finally{ lsSet("bg",bg); } };
+    if(bg==="silk"&&lv!=="off"){ GL.off(); host(); root.dataset.fx="on"; root.dataset.fxl=lv; root.dataset.silk="on"; SILK.on(); return; }
+    SILK.off(); root.dataset.silk="off";
+    if(bg==="fluid"&&lv!=="off"&&GL.supported()){ host(); root.dataset.fx="on"; root.dataset.fxl=lv; GL.on(); }
+    else { GL.off(); if(virt) host(); else _fxStart(); }
   };
 
   /* ───────── 4. Динамическая тема по цветам команд ───────── */
@@ -2125,7 +2195,7 @@ void main(){
   const _vm=viewMatch;
   viewMatch=async function(id){ const r=await _vm.apply(this,arguments); try{ enhanceMatch(); }catch(e){ console.warn(e); } return r; };
   function enhanceMatch(){ const m=state.cur, hero=$(".hero"); if(!m||!hero||state.detail==null||hero.dataset.v31) return; hero.dataset.v31="1"; applyTeam(m);
-    hero.insertAdjacentHTML("afterend",radarCard(m)+heatCard(m)); const r=$("#radarc .radar"); if(r) requestAnimationFrame(()=>requestAnimationFrame(()=>r.classList.add("in")));
+    hero.insertAdjacentHTML("afterend",radarCard(m)+heatCard(m)); const r=$("#radarc .radar"); if(r){ const o=new IntersectionObserver(es=>{ if(es.some(x=>x.isIntersecting)){ r.classList.add("in"); o.disconnect(); } },{threshold:.2}); o.observe(r); }   /* ленивая отрисовка радара */
     const acts=$("#acts"); if(acts&&!$("#cardb")){ const d=acts.querySelector("div[style]")||acts; const b=document.createElement("button"); b.className="btn"; b.id="cardb"; b.style.cssText="margin:0 8px 8px 0;background:var(--card2);color:var(--text)"; b.textContent="🖼 Открытка для сторис"; b.onclick=()=>shareCard(state.cur); d.appendChild(b); }
     decorate(); }
   /* скрытые матчи в списке */
@@ -2147,13 +2217,15 @@ void main(){
 /* v31b: авто-снижение нагрузки по реальной частоте кадров во время прокрутки */
 (function(){ try{
   const root=document.documentElement; let lvl=0; try{ lvl=+(localStorage.getItem("perf")||0); }catch(e){}
-  const apply=()=>{ if(lvl>=1) root.dataset.perf="low"; if(lvl>=2){ try{ localStorage.setItem("fxl","lite"); }catch(e){} root.dataset.fxl="lite"; } if(lvl>=3&&window.V31&&V31.GL){ try{ V31.GL.off(); }catch(e){} root.dataset.fx="off"; } };
-  apply();
+  const apply=(step)=>{ if(lvl>=1) root.dataset.perf="low"; if(!step) return;
+    if(lvl===2){ try{ if(lsGet("bg")==="fluid"){ lsSet("bg","silk"); FX.start(); } else { lsSet("fxl","lite"); FX.start(); } }catch(e){} }
+    if(lvl>=3){ try{ lsSet("bg","off"); FX.start(); }catch(e){} } };
+  apply(false);
   let st=0,last=0,ds=[],busy=false,bad=0,quiet=0;
   addEventListener("scroll",()=>{ window.__scrT=performance.now(); if(busy) return; busy=true; ds=[]; last=0; (function t(now){ if(last) ds.push(now-last); last=now;
       if(performance.now()-window.__scrT<250&&ds.length<90) return requestAnimationFrame(t);
       busy=false; if(ds.length<25) return; ds.sort((a,b)=>a-b); const med=ds[ds.length>>1];
-      if(med>26){ if(++bad>=2&&lvl<3){ bad=0; lvl++; try{ localStorage.setItem("perf",String(lvl)); }catch(e){} apply(); } } else if(bad>0) bad--; })(performance.now()); },{passive:true,capture:true});
+      if(med>26){ if(++bad>=2&&lvl<3){ bad=0; lvl++; try{ localStorage.setItem("perf",String(lvl)); }catch(e){} apply(true); } } else if(bad>0) bad--; })(performance.now()); },{passive:true,capture:true});
 }catch(e){ console.warn("perf",e); } })();
 
 /* ═════════ v32: AI-копилот со стримингом (ключи только на сервере; здесь их нет) ═════════ */
@@ -2278,6 +2350,18 @@ void main(){
   const fabEl=document.getElementById("fab"); if(fabEl) fabEl.onclick=openCopilot32;
   window.V32={aiUrl,PROV,openCopilot32,fmt};
 }catch(e){ console.warn("v32",e); } })();
+
+/* ═════════ v33: защита от двойных срабатываний ═════════ */
+(function(){ try{
+  /* Любое реальное нажатие по одной и той же кнопке/карточке повторно в течение 380 мс — игнорируем.
+     Причина дублей: при «подвисшем» главном потоке пользователь тапает снова, и очередь доставляет оба клика. */
+  const SEL="[data-id],[data-t],[data-l],[data-d],[data-s],[data-fav],[data-q],[data-act],[data-th],[data-bg],[data-ac],[data-fl],[data-sn],[data-hp],.go,.chip,.btn,.iconbtn,.vbtn,button";
+  let lk="", lt=-1e9;
+  document.addEventListener("click",e=>{ if(!e.isTrusted) return; const t=e.target&&e.target.closest&&e.target.closest(SEL); if(!t) return; const d=t.dataset||{};
+    const k=t.tagName+"|"+t.id+"|"+(d.id||d.t||d.l||d.d||d.s||d.fav||d.q||d.act||d.th||d.bg||d.ac||d.fl||d.sn||d.hp||t.className);
+    if(k===lk&&e.timeStamp-lt<380){ e.stopImmediatePropagation(); e.preventDefault(); return; } lk=k; lt=e.timeStamp; },true);
+  window.V33={sel:SEL};
+}catch(e){ console.warn("v33",e); } })();
 </script>
 </body>
 </html>
