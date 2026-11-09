@@ -642,6 +642,11 @@ html[data-perf="low"] .nav::after{display:none}
 .cp .bub .ans.typing::after{content:"▍";color:var(--ai);margin-left:1px;animation:caret .8s steps(2) infinite}
 @keyframes caret{50%{opacity:0}}
 .cp .bub .meta{margin-top:7px;font:600 11px var(--font,system-ui);color:var(--dim);display:flex;gap:6px;align-items:center}
+.cp .errs{list-style:none;margin:8px 0;padding:0;display:grid;gap:6px}
+.cp .errs li{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border-radius:12px;background:rgba(255,90,90,.09);border:1px solid rgba(255,90,90,.22);font-size:12.5px;line-height:1.35}
+.cp .errs li[data-k="rate"],.cp .errs li[data-k="timeout"],.cp .errs li[data-k="server"]{background:rgba(255,190,60,.10);border-color:rgba(255,190,60,.28)}
+.cp .errs li i{font-style:normal;opacity:.7;font-size:11px;padding:0 6px;border-radius:8px;background:rgba(127,127,127,.18)}
+.cp .errh{font-size:11.5px;opacity:.7;margin:2px 0 8px}.cp .errh code{font-size:11px}
 .cp .aisk{width:min(260px,70vw)}
 .cp .aisk i{display:block;height:11px;border-radius:6px;margin:9px 0;background:linear-gradient(90deg,rgba(255,255,255,.05),color-mix(in srgb,var(--ai) 38%,rgba(255,255,255,.2)),rgba(255,255,255,.05));background-size:240% 100%;animation:skp 1.25s ease-in-out infinite}
 .cp .aisk i:nth-child(1){width:94%}.cp .aisk i:nth-child(2){width:78%;animation-delay:.12s}.cp .aisk i:nth-child(3){width:52%;animation-delay:.24s}
@@ -2231,7 +2236,7 @@ void main(){
 /* ═════════ v32: AI-копилот со стримингом (ключи только на сервере; здесь их нет) ═════════ */
 (function(){ try{
   const root=document.documentElement;
-  const PROV={groq:{n:"Groq",c:"#34d399",d:"🟢"},sambanova:{n:"SambaNova",c:"#fbbf24",d:"🟡"},cloudflare:{n:"Cloudflare",c:"#fb923c",d:"🟠"},openrouter:{n:"OpenRouter",c:"#f87171",d:"🔴"},none:{n:"ИИ недоступен",c:"#94a3b8",d:"⚫"}};
+  const PROV={groq:{n:"Groq",c:"#34d399",d:"🟢"},sambanova:{n:"SambaNova",c:"#fbbf24",d:"🟡"},cloudflare:{n:"Cloudflare",c:"#fb923c",d:"🟠"},openrouter:{n:"OpenRouter",c:"#f87171",d:"🔴"},huggingface:{n:"Hugging Face",c:"#a78bfa",d:"🟣"},pollinations:{n:"Pollinations",c:"#60a5fa",d:"🔵"},none:{n:"ИИ недоступен",c:"#94a3b8",d:"⚫"}};
   const PRESET={"Форма":"Проанализируй форму обеих команд: что говорят их последние матчи?","Голы":"Сколько голов ждать в этом матче и почему? Опирайся на xG и форму.",
     "Очные":"Что показывают очные встречи этих команд?","Где перевес?":"Есть ли в этом матче ставка с перевесом по расчётам бота? Объясни риски.","Риски":"Какие главные риски и неопределённости у этого прогноза?"};
   const aiUrl=()=>{ let u=""; try{ u=lsGet("aiurl")||""; }catch(e){} if(!u&&typeof SNAP!=="undefined"&&SNAP&&SNAP.ai_endpoint) u=SNAP.ai_endpoint.url||""; return /^(https:\/\/[^\s"'<>]{4,190}|http:\/\/(127\.0\.0\.1|localhost)(:\d{2,5})?)$/.test(u)?u.replace(/\/+$/,""):""; };
@@ -2272,7 +2277,7 @@ void main(){
         const MAXA=5, DELAY=[1200,2500,5000,8000,12000];
         while(!done&&alive){
           b.innerHTML='<div class="aisk" aria-label="ИИ думает"><i></i><i></i><i></i></div>'; r.dataset.sw=""; haptic("light");
-          let think=null, tbody=null, ans=null, tw=null, meta=null, cached=false, finished=false, stubbed=false, gotAny=false;
+          let think=null, tbody=null, ans=null, tw=null, meta=null, cached=false, finished=false, stubbed=false, gotAny=false, errs=null;
           try{
             const ctl=new AbortController(); const to=setTimeout(()=>ctl.abort(),45000);
             const resp=await fetch(url+"/api/ai/chat",{method:"POST",signal:ctl.signal,headers:{"Content-Type":"application/json","X-Telegram-Init-Data":(tg&&tg.initData)||""},
@@ -2286,7 +2291,7 @@ void main(){
               else if(o.t==="think"){ if(!think){ mk(); think=document.createElement("details"); think.className="think"; think.innerHTML='<summary>🧠 Размышления</summary><div class="tbody"></div>'; b.insertBefore(think,ans); tbody=think.querySelector(".tbody"); } tbody.textContent+=o.x; }
               else if(o.t==="delta"){ mk(); gotAny=true; gotText=true; tw.push(o.x); }
               else if(o.t==="note"){ const n=document.createElement("div"); n.className="note"; n.textContent=o.x; b.appendChild(n); }
-              else if(o.t==="stub"){ stubbed=true; }
+              else if(o.t==="stub"){ stubbed=true; errs=Array.isArray(o.errors)?o.errors.slice(0,6):null; }
               else if(o.t==="done"){ finished=true; }
               else if(o.t==="cut"){ throw Object.assign(new Error("cut"),{code:"cut"}); }
             };
@@ -2297,14 +2302,14 @@ void main(){
               const words=txt.split(/\s+/).length; if(!RMo&&(words>=90||think||(!preset&&question.split(/\s+/).length>=8))){ try{ confetti(70); Snd.play("ok"); }catch(x){} haptic("ok"); } else haptic("soft"); };
             for(;;){ const {value,done:dn}=await rd.read(); if(dn) break; buf+=dec.decode(value,{stream:true}); let i;
               while((i=buf.indexOf("\n\n"))>=0){ const blk=buf.slice(0,i); buf=buf.slice(i+2); if(blk.startsWith("data: ")){ let o=null; try{ o=JSON.parse(blk.slice(6)); }catch(x){} if(o) ev(o); } } }
-            if(stubbed){ throw Object.assign(new Error("stub"),{code:"stub"}); }
+            if(stubbed){ throw Object.assign(new Error("stub"),{code:"stub",errs}); }
             if(!finished) throw Object.assign(new Error("cut"),{code:"cut"});    // соединение закрылось до «done» — обрыв
             if(tw) tw.end(); else { finished=true; throw Object.assign(new Error("empty"),{code:"stub"}); }
             done=true;
           }catch(e){
             if(tw) tw.stop();
             const code=e&&e.code;
-            if(code==="stub"||code===401||code===403||code===404||code===500||code===413){ done=true; fail(code); break; }
+            if(code==="stub"||code===401||code===403||code===404||code===500||code===413){ done=true; fail(code,e&&e.errs); break; }
             if(code===429){ done=true; const s=e.retry||30; b.innerHTML=`<p>Слишком много запросов: лимит 10 в минуту. Попробуйте через ${s} с.</p>`; setAcc("none"); haptic("warn"); break; }
             if(code==="http"||code===400){ done=true; fail(code); break; }
             /* сеть: обрыв, таймаут, нет интернета → плавное восстановление */
@@ -2316,9 +2321,11 @@ void main(){
             if(navigator.onLine===false){ await new Promise(res=>{ const h=()=>{ removeEventListener("online",h); res(); }; addEventListener("online",h); setTimeout(h,15000); }); }
           }
         }
-        function fail(code){ /* ИИ не ответил: показываем заглушку и расчёт по данным бота */
-          setAcc("none"); const stub=code==="stub"?"Все ИИ-сервисы сейчас перегружены — бесплатные лимиты восстановятся в течение минуты.":code===401||code===403?"Нет доступа к ИИ-серверу (проверьте, что вы владелец бота).":code==="net"?"Не удалось восстановить связь с ИИ-сервером.":"ИИ сейчас недоступен.";
-          const key=preset; b.innerHTML=`<p>${esc(stub)}</p>${key?`<p><b>А пока — расчёт по данным бота:</b></p>`+local(key):""}<button type="button" class="retry" data-retry>🔄 Повторить</button>`; r.dataset.done="1"; haptic("err"); try{ Snd.play("err"); }catch(x){}
+        function fail(code,errs){ /* ИИ не ответил: причина по каждому провайдеру + расчёт по данным бота */
+          setAcc("none");
+          const stub=code==="stub"?"Не удалось получить ответ ни от одного ИИ-сервиса.":code===401||code===403?"Нет доступа к ИИ-серверу (проверьте, что вы владелец бота).":code===404?"Матч не найден на ИИ-сервере — обновите приложение.":code==="net"?"Нет связи с ИИ-сервером. Проверьте, что на ПК запущен run_ai.bat (туннель и сервер), и что есть интернет.":"ИИ сейчас недоступен.";
+          const list=(code==="stub"&&Array.isArray(errs)&&errs.length)?'<ul class="errs">'+errs.map(x=>`<li data-k="${esc(String(x.kind||""))}"><span>${esc(String(x.dot||"⚫"))}</span><div><b>${esc(String(x.name||x.id||"ИИ"))}</b>${x.code?` <i>${esc(String(x.code))}</i>`:""}<br>${esc(String(x.msg||"ошибка"))}</div></li>`).join("")+'</ul><p class="errh">Подробности и советы — в окне ai_server на ПК или: <code>python ai_selftest.py</code></p>':"";
+          const key=preset; b.innerHTML=`<p>${esc(stub)}</p>${list}${key?`<p><b>А пока — расчёт по данным бота:</b></p>`+local(key):""}<button type="button" class="retry" data-retry>🔄 Повторить</button>`; r.dataset.done="1"; haptic("err"); try{ Snd.play("err"); }catch(x){}
           const rb=b.querySelector("[data-retry]"); if(rb) rb.onclick=()=>{ busy=false; ask(question,preset,{r,b}); }; }
         busy=false; snd.disabled=false; inp.disabled=!hasAI; if(hasAI) try{ inp.focus({preventScroll:true}); }catch(x){}
       }
