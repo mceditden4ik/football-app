@@ -725,6 +725,85 @@ html[data-sheet] #silk .b,html[data-vt] #silk .b{animation-play-state:paused}
 html[data-fxl="off"] #silk{display:none}
 @media (prefers-reduced-motion:reduce){#silk .b{animation:none}}
 </style>
+<style id="v34css">
+/* ═════════ v34: Ставка Дня, фильтры, морфинг, пустые состояния (только transform/opacity в анимациях) ═════════ */
+body{font-size:clamp(14px,3.7vw,16.5px)}
+h1{font-size:clamp(24px,7.2vw,32px)}
+.nav button{min-height:48px}
+.nav button svg{flex:none}
+:where(a,button,[role=button],input,select,summary):focus-visible{outline:2.5px solid var(--blue);outline-offset:3px;border-radius:12px}
+.iconbtn,.star,.vbtn{min-width:44px;min-height:44px}
+.sort button,.sort>*{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+
+/* — Ставка Дня — */
+#botd34{margin:0 0 14px}
+.botd{--c1:#6096ff;--c2:#a78bfa;position:relative;display:block;width:100%;text-align:left;padding:18px;border-radius:26px;border:1px solid color-mix(in srgb,var(--c1) 42%,var(--line));color:var(--text);overflow:hidden;isolation:isolate;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--c1) 30%,var(--card)),color-mix(in srgb,var(--c2) 24%,var(--card2)));box-shadow:0 14px 38px -18px color-mix(in srgb,var(--c1) 70%,#000),inset 0 1px 0 rgba(255,255,255,.12);
+  contain:layout paint;animation:bdin .7s var(--spring,cubic-bezier(.2,.8,.2,1)) both}
+@keyframes bdin{from{opacity:0;transform:translateY(14px) scale(.97)}}
+.botd::before{content:"";position:absolute;inset:-40% -20% auto auto;width:70%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--c1) 55%,transparent),transparent 65%);opacity:.55;z-index:-1;transform:translateZ(0)}
+.botd::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.16),transparent);transform:translateX(0) skewX(-18deg);animation:bdshine 6.5s ease-in-out 1.2s infinite;pointer-events:none}
+@keyframes bdshine{0%,70%{transform:translateX(0) skewX(-18deg)}100%{transform:translateX(420%) skewX(-18deg)}}
+html[data-perf=low] .botd::after,html[data-sheet] .botd::after{animation:none;opacity:0}
+.botd:active{transform:scale(.985)}
+.bd-top{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.bd-tag{font:800 11px/1 var(--font,system-ui);letter-spacing:.09em;padding:7px 10px;border-radius:99px;background:rgba(255,255,255,.14);backdrop-filter:blur(6px)}
+.bd-eta{margin-left:auto;font:600 12px var(--font,system-ui);color:var(--muted)}
+.bd-pick{font:800 clamp(20px,6vw,26px)/1.15 var(--font,system-ui);letter-spacing:-.02em;margin-bottom:5px}
+.bd-match{font-size:clamp(12.5px,3.5vw,14px);color:var(--muted);margin-bottom:14px}
+.bd-grid{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:8px}
+.bd-t{padding:10px 11px;border-radius:16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1)}
+.bd-t i{display:block;font:600 10.5px var(--font,system-ui);font-style:normal;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.bd-t b{font:800 clamp(18px,5.4vw,22px)/1.1 var(--font,system-ui);font-variant-numeric:tabular-nums}
+.bd-t.ev b{color:var(--green)}
+.glow{animation:numglow .9s ease-out}
+@keyframes numglow{0%{text-shadow:0 0 0 transparent}30%{text-shadow:0 0 14px currentColor}100%{text-shadow:0 0 0 transparent}}
+.bd-foot{margin-top:13px;display:flex;align-items:center;gap:8px;font:700 13px var(--font,system-ui);color:var(--text)}
+.bd-foot span{margin-left:auto;opacity:.7}
+.bd-warn{margin-top:10px;font-size:12px;color:var(--amber)}
+.botd.sk34{min-height:168px;background:var(--card);animation:none}
+.botd.sk34::after{display:block;opacity:.5;animation:bdshine 1.6s linear infinite}
+.botd.none34{background:var(--card);border-style:dashed;min-height:0;padding:16px;cursor:default}
+.botd.none34::after,.botd.none34::before{display:none}
+.botd.none34 .bd-pick{font-size:16px}
+.bd-sheet .tiles2{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.bd-sheet .tiles2 .bd-t{background:var(--card2);border-color:var(--line)}
+.bd-sheet .why{margin:10px 0;padding:0;list-style:none;display:grid;gap:7px}
+.bd-sheet .why li{padding:10px 12px;border-radius:14px;background:var(--card2);font-size:13.5px;line-height:1.4}
+.bd-sheet .why li.w{color:var(--amber)}
+.bd-sheet .acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.bd-sheet .acts .btn{margin:0}.bd-sheet .acts .sec{background:var(--card2);color:var(--text)}
+.bd-sheet .acts .full{grid-column:1/-1}
+.bd-sheet .ai34 .card{margin:0 0 8px}
+
+/* — морфинг карточки матча в экран (один композитный слой) — */
+#morph34{position:fixed;left:0;top:0;width:100vw;height:100vh;z-index:80;pointer-events:none;transform-origin:0 0;background:linear-gradient(160deg,color-mix(in srgb,var(--mc,#6096ff) 26%,var(--bg)),var(--bg));border-radius:22px}
+
+/* — фильтры — */
+#fl34{position:relative}
+#fl34 em{font-style:normal;margin-left:6px;min-width:20px;height:20px;border-radius:10px;padding:0 6px;display:inline-grid;place-items:center;background:var(--blue);color:#fff;font-size:11px;font-weight:800}
+.fl .cap{margin:16px 0 8px}.fl .cap:first-child{margin-top:4px}
+.fl .wrap{display:flex;flex-wrap:wrap;gap:8px}
+.fl .wrap .chip{margin:0}
+.fl .seg{display:flex}
+.fl .pre{display:flex;align-items:center;gap:8px;padding:6px 6px 6px 14px;border-radius:16px;background:var(--card2);margin-bottom:8px}
+.fl .pre b{flex:1;font-size:14px}.fl .pre button{min-height:44px;min-width:44px;border-radius:12px;color:var(--muted)}
+.fl .pre button.use{color:var(--blue);font-weight:700;padding:0 12px}
+.fl .save{display:flex;gap:8px;margin-top:8px}.fl .save input{flex:1;min-height:44px}
+.fl .row2{display:grid;grid-template-columns:1fr 1.4fr;gap:8px;margin-top:16px}.fl .row2 .btn{margin:0}.fl .row2 .sec{background:var(--card2);color:var(--text)}
+
+/* — пустые состояния — */
+.empty34{display:grid;place-items:center;text-align:center;gap:6px;padding:34px 12px 26px;color:var(--muted)}
+.empty34 .tr{font-size:58px;line-height:1;animation:trf 3.4s ease-in-out infinite;filter:drop-shadow(0 12px 14px rgba(0,0,0,.35))}
+.empty34 .sh{width:46px;height:8px;border-radius:50%;background:rgba(0,0,0,.35);filter:blur(3px);animation:trs 3.4s ease-in-out infinite}
+.empty34 b{color:var(--text);font-size:16px;margin-top:6px}
+@keyframes trf{50%{transform:translateY(-10px) rotate(3deg)}}@keyframes trs{50%{transform:scale(.7);opacity:.5}}
+html[data-perf=low] .empty34 .tr,html[data-perf=low] .empty34 .sh{animation:none}
+@media (prefers-reduced-motion:reduce){.botd::after,.empty34 .tr,.empty34 .sh{animation:none}.botd{animation:none}}
+.empty.empty34w::before,.empty.empty34w::after{display:none!important;content:none!important}.empty.empty34w{padding:0;background:none;border:0}
+#achT{width:max-content;max-width:calc(100vw - 32px)}
+#offcache{font-size:11.5px;color:var(--amber)}
+</style>
 </head>
 <body>
 <div id="ptr"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.5-5.8M20 4v4h-4"/></svg></div>
@@ -804,7 +883,7 @@ function toggleFav(n){ const i=state.favs.indexOf(n); if(i>=0) state.favs.splice
 /* ─────────── сеть ─────────── */
 /* ─── режим «без туннеля»: страница лежит на GitHub Pages рядом с зашифрованным снимком (publish_snapshot.py) ─── */
 const STATIC = !!document.querySelector('meta[name="fb-static"]');
-let SNAP=null, SNAP_AT=0, SNAP_P=null, _keyCache=null;
+let SNAP=null, SNAP_AT=0, SNAP_P=null, _keyCache=null, SNAP_STALE=false;
 const lsGet=k=>{ try{ return localStorage.getItem(k); }catch(e){ return null; } };
 const lsSet=(k,v)=>{ try{ localStorage.setItem(k,v); }catch(e){} };
 const lsDel=k=>{ try{ localStorage.removeItem(k); }catch(e){} };
@@ -854,8 +933,9 @@ function ensureSnap(maxAge=45000){
       try{
         const r=await fetch("snapshot.enc.json?t="+Date.now(),{cache:"no-store"});
         if(!r.ok){ const e=new Error("http "+r.status); e.code=r.status===404?"nosnap":r.status; throw e; }
-        env=await r.json();
-      }catch(e){ if(SNAP) return SNAP; throw e; }
+        env=await r.json(); SNAP_STALE=false;
+        try{ localStorage.setItem("snapenv",JSON.stringify(env)); }catch(e){}            /* v34: копия для работы без сети */
+      }catch(e){ if(SNAP) return SNAP; let c=null; try{ c=JSON.parse(lsGet("snapenv")||"null"); }catch(_){} if(!c||!c.ct) throw e; env=c; SNAP_STALE=true; }
       if(SNAP && SNAP._t===env.t){ SNAP_AT=Date.now(); return SNAP; }
       let pass=lsGet("fbkey"), msg="", prompted=false;
       for(;;){
@@ -872,7 +952,7 @@ function ensureSnap(maxAge=45000){
 function snapNote(){
   if(!STATIC||!SNAP) return "";
   const t=new Date(SNAP.generated_at), age=(Date.now()-t.getTime())/1000, old=age>6*3600;
-  return `<div class="snapnote${old?" warn":""}">данные на ${fmtTime(t)} · ${ago(SNAP.generated_at)}${old?" · ноутбук давно не публиковал, цифры могли устареть":""}</div>`;
+  return `<div class="snapnote${old||SNAP_STALE?" warn":""}">${SNAP_STALE?"офлайн-копия · ":""}данные на ${fmtTime(t)} · ${ago(SNAP.generated_at)}${old?" · ноутбук давно не публиковал, цифры могли устареть":""}</div>`;
 }
 async function staticApi(path){
   const S=await ensureSnap(); const u=new URL(path,"http://x"), p=u.pathname, q=u.searchParams;
@@ -2369,6 +2449,218 @@ void main(){
     if(k===lk&&e.timeStamp-lt<380){ e.stopImmediatePropagation(); e.preventDefault(); return; } lk=k; lt=e.timeStamp; },true);
   window.V33={sel:SEL};
 }catch(e){ console.warn("v33",e); } })();
+
+/* ═════════ v34: Ставка Дня, фильтры + fuzzy-поиск, морфинг, тактильность, пустые состояния ═════════
+   Только чтение: данные берутся из уже существующих api() (снимок/сервер). Ничего не пишется в БД. */
+(function(){ try{
+  const $=(s,r)=>(r||document).querySelector(s), $$=(s,r)=>[...(r||document).querySelectorAll(s)];
+  const J=(k,d)=>{ try{ const v=JSON.parse(lsGet(k)||"null"); return v==null?d:v; }catch(e){ return d; } };
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const DOC=document.documentElement, V=()=>window.V31||{};
+  const TC=n=>{ try{ return V().teamColor(n); }catch(e){ return "#6096ff"; } };
+  const uid=()=>{ try{ return Telegram.WebApp.initDataUnsafe.user||{}; }catch(e){ return {}; } };
+
+  /* ── тактильный отклик: разные типы для разных действий (раньше было только «ok» и «выбор») ── */
+  const HP=window.Telegram&&Telegram.WebApp&&Telegram.WebApp.HapticFeedback; let hpT=0;
+  haptic=function(kind){ try{ if(!HP) return; const n=performance.now(); if(n-hpT<35) return; hpT=n;
+    switch(kind){ case "ok": HP.notificationOccurred("success"); break; case "warn": HP.notificationOccurred("warning"); break; case "err": HP.notificationOccurred("error"); break;
+      case "light": HP.impactOccurred("light"); break; case "soft": HP.impactOccurred("soft"); break; case "medium": HP.impactOccurred("medium"); break; case "heavy": HP.impactOccurred("heavy"); break;
+      default: HP.selectionChanged(); } }catch(e){} };
+
+  /* ── «перетекающие» числа с мягким свечением (только когда значение реально изменилось) ── */
+  function roll(el,to,fmt,ms){
+    const had=el.dataset.v!=null, from=had?+el.dataset.v:0; el.dataset.v=String(to);
+    if(RM||(had&&Math.abs(to-from)<1e-9)){ el.textContent=fmt(to); return; }
+    const t0=performance.now(), d=ms||700; el.classList.remove("glow"); void el.offsetWidth; el.classList.add("glow");
+    (function f(){ if(!el.isConnected) return; const k=Math.min(1,(performance.now()-t0)/d), e=1-Math.pow(1-k,3); el.textContent=fmt(from+(to-from)*e); if(k<1) requestAnimationFrame(f); else el.textContent=fmt(to); })();
+  }
+  const rolled=new Set();
+  function rollAll(root){ $$("[data-roll]",root).forEach(el=>{ const to=parseFloat(el.dataset.roll), dec=+el.dataset.dec||0, suf=el.dataset.suf||"", sg=el.dataset.sign==="1";
+    const pre=el.dataset.pre||"", fmt=v=>pre+(sg&&v>=0?"+":"")+v.toFixed(dec)+suf, key=(el.dataset.rk||"")+"|"+to;
+    if(el.dataset.rk&&rolled.has(key)){ el.textContent=fmt(to); el.dataset.v=String(to); return; } if(el.dataset.rk) rolled.add(key); roll(el,to,fmt); }); }
+
+  /* ══════════ 1. СТАВКА ДНЯ ══════════
+     Источник — ТОЛЬКО ставки, которые бот уже отметил как рекомендованные (с перевесом) и которые ещё не сыграны. Новых расчётов нет:
+     фронтенд лишь выбирает из них одну по прозрачному правилу и «замораживает» выбор на сутки (чтобы не менялась при каждом заходе). */
+  const dayKey=()=>{ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); };
+  const bkey=b=>b.event_id+"|"+b.market+"|"+b.selection;
+  const kick=b=>{ const t=Date.parse(b.kickoff_at||""); if(!isNaN(t)) return t; const d=Date.parse((b.match_date||"")+"T12:00:00Z"); return isNaN(d)?0:d; };
+  function candidates(rows){ const now=Date.now(); return (rows||[]).filter(b=>b&&b.recommended&&b.result==null&&b.ev>0&&b.taken_odds>1&&b.model_prob>0&&kick(b)>now+5*60000&&kick(b)<now+72*36e5); }
+  function score(b){ const ev=b.ev>.15?.15-(b.ev-.15)*.5:b.ev;          /* EV выше 15% почти всегда ошибка в кэфе/данных (так же считает карточка «Проверить кэф») — штраф */
+    const od=b.taken_odds, h=(kick(b)-Date.now())/36e5;
+    let s=ev*100+b.model_prob*30+(od<=3.2?4:0)-(od>4.5?(od-4.5)*3:0)-Math.max(0,h-36)*.1;
+    try{ if(segWarn(b)) s-=8; }catch(e){} return s; }
+  function choose(rows){
+    const c=candidates(rows); if(!c.length) return null; const st=J("botd34",null);
+    if(st&&st.d===dayKey()){ const f=c.find(b=>bkey(b)===st.k); if(f) return {b:f,n:c.length}; }
+    let best=null,bs=-1e9; for(const b of c){ const s=score(b); if(s>bs||(s===bs&&best&&b.event_id<best.event_id)){ bs=s; best=b; } }
+    lsSet("botd34",JSON.stringify({d:dayKey(),k:bkey(best)}));
+    const h=J("botdh34",[]).filter(x=>x.k!==bkey(best)); h.push({d:dayKey(),k:bkey(best),l:best.label_ru||best.label,o:best.taken_odds,ev:best.ev,m:(best.home_ru||best.home_team)+" — "+(best.away_ru||best.away_team)});
+    lsSet("botdh34",JSON.stringify(h.slice(-60))); return {b:best,n:c.length};
+  }
+  let PICK=null, PICK_AT=0, PICK_T="";
+  const stamp=()=>{ try{ return (SNAP&&SNAP._t)||""; }catch(e){ return ""; } };
+  const fresh=()=>PICK!==null&&Date.now()-PICK_AT<60000&&PICK_T===stamp();
+  async function loadPick(){ if(fresh()) return PICK;
+    try{ const r=await api("/api/bets?status=open&limit=500"); PICK=choose(Array.isArray(r)?r:[])||false; PICK_AT=Date.now(); PICK_T=stamp(); }catch(e){ if(PICK===null) PICK=false; PICK_AT=Date.now()-50000; }
+    return PICK; }
+  const when34=b=>{ const ms=kick(b), t=etaText(ms); return t?`<span data-eta="${ms}">${esc(t)}</span>`:esc(fmtDay(new Date(ms))+(b.kickoff_at?" · "+fmtTime(new Date(ms)):"")); };
+  const names=b=>nm(b.home_team,b.home_ru)+" — "+nm(b.away_team,b.away_ru);
+  function paintBotd(h,p){
+    if(!p){ const sg="none"; if(h.dataset.sig===sg) return; h.dataset.sig=sg;
+      h.innerHTML=`<div class="botd none34"><div class="bd-top"><span class="bd-tag">🔥 СТАВКА ДНЯ</span></div><div class="bd-pick">Сегодня достойной ставки нет</div><div class="bd-match">Бот предлагает только ставки с перевесом по своей модели. Нет перевеса — нет и ставки: это нормально, а не сбой.</div></div>`; return; }
+    const b=p.b, sig=bkey(b)+"|"+b.ev+"|"+b.taken_odds+"|"+state.lang; if(h.dataset.sig===sig&&$(".botd",h)) return; h.dataset.sig=sig;
+    const lab=lbl(b), warn=(()=>{ try{ return segWarn(b)?`<div class="bd-warn">⚠ Слабый сегмент по вашей истории — смотрите детали</div>`:""; }catch(e){ return ""; } })();
+    h.innerHTML=`<button type="button" class="botd" id="botdb" aria-label="Ставка дня: ${esc(lab)}. Открыть анализ">
+      <div class="bd-top"><span class="bd-tag">🔥 СТАВКА ДНЯ</span><span class="bd-eta">${when34(b)}</span></div>
+      <div class="bd-pick">${esc(lab)}</div><div class="bd-match">${esc(names(b))} · ${esc(LEAGUES[b.league]||b.league)}</div>
+      <div class="bd-grid"><div class="bd-t"><i>Кэф</i><b class="num" data-roll="${b.taken_odds}" data-dec="2" data-pre="@ " data-rk="o">@ ${b.taken_odds.toFixed(2)}</b></div>
+        <div class="bd-t ev"><i>Перевес</i><b class="num" data-roll="${(b.ev*100).toFixed(2)}" data-dec="1" data-suf="%" data-sign="1" data-rk="ev">+${(b.ev*100).toFixed(1)}%</b></div>
+        <div class="bd-t"><i>Модель</i><b class="num" data-roll="${(b.model_prob*100).toFixed(1)}" data-dec="0" data-suf="%" data-rk="p">${(b.model_prob*100).toFixed(0)}%</b></div></div>${warn}
+      <div class="bd-foot">Подробный анализ<span>›</span></div></button>`;
+    const el=$(".botd",h); el.style.setProperty("--c1",TC(b.home_team)); el.style.setProperty("--c2",TC(b.away_team)); rollAll(h);
+    el.onclick=()=>openBotd(p);
+  }
+  function botdMount(){
+    if(state.tab!=="matches"||state.detail) return; const t=$("#today"); if(!t) return;
+    let h=$("#botd34"); if(!h){ h=document.createElement("div"); h.id="botd34"; t.parentNode.insertBefore(h,t); }
+    if(fresh()){ paintBotd(h,PICK); return; }
+    if(!h.firstChild) h.innerHTML='<div class="botd sk34" aria-busy="true" aria-label="Загрузка ставки дня"></div>';
+    loadPick().then(p=>{ const hh=$("#botd34"); if(hh&&state.tab==="matches"&&!state.detail) paintBotd(hh,p); });
+  }
+  const _rt=renderToday; renderToday=function(){ const r=_rt.apply(this,arguments); try{ botdMount(); }catch(e){ console.warn("botd",e); } return r; };
+
+  function shareText(b){ return `🔥 Ставка Дня · ${names(b)}\n${lbl(b)} @ ${b.taken_odds.toFixed(2)}\nМодель: ${(b.model_prob*100).toFixed(0)}% · перевес ${sgn(b.ev)}\n⚠️ Это оценка модели, а не гарантия результата`; }
+  function shareBotd(b){ const t=shareText(b), bot=state.me&&state.me.bot, link=bot?"https://t.me/"+bot:""; haptic("ok");
+    if(bot){ openTg("https://t.me/share/url?url="+encodeURIComponent(link)+"&text="+encodeURIComponent(t)); return; }
+    if(navigator.share){ navigator.share({text:t}).catch(()=>{}); return; }
+    try{ navigator.clipboard.writeText(t); toast("Текст скопирован"); }catch(e){ toast("Не удалось поделиться"); } }
+  function botdCanvas(b){
+    const W=1080,H=1920,c=document.createElement("canvas"); c.width=W; c.height=H; const g=c.getContext("2d"), c1=TC(b.home_team), c2=TC(b.away_team), F='"Manrope","Inter",system-ui,sans-serif';
+    g.fillStyle="#070a14"; g.fillRect(0,0,W,H);
+    const blob=(x,y,r,col,al)=>{ const gr=g.createRadialGradient(x,y,0,x,y,r); gr.addColorStop(0,col+Math.round(al*255).toString(16).padStart(2,"0")); gr.addColorStop(1,col+"00"); g.fillStyle=gr; g.fillRect(0,0,W,H); };
+    blob(200,420,820,c1,.7); blob(900,1300,900,c2,.62); blob(540,1780,700,"#7c3aed",.4);
+    const ctr=(t,y,font,col)=>{ g.font=font; g.fillStyle=col; g.textAlign="center"; let s=t; while(g.measureText(s).width>W-200&&s.length>6) s=s.slice(0,-2); g.fillText(s===t?s:s+"…",W/2,y); };
+    g.fillStyle="rgba(255,255,255,.08)"; g.strokeStyle="rgba(255,255,255,.25)"; g.lineWidth=2; g.beginPath(); g.roundRect?g.roundRect(90,150,W-180,1620,64):g.rect(90,150,W-180,1620); g.fill(); g.stroke();
+    ctr("🔥 СТАВКА ДНЯ",300,`800 56px ${F}`,"#fff"); ctr((LEAGUES[b.league]||b.league).toUpperCase(),380,`700 38px ${F}`,"rgba(255,255,255,.6)");
+    ctr(names(b),620,`800 64px ${F}`,"#fff"); ctr(lbl(b),800,`800 84px ${F}`,"#fff");
+    ctr("@ "+b.taken_odds.toFixed(2),1010,`800 170px ${F}`,"#fbbf24");
+    ctr("перевес "+sgn(b.ev),1190,`800 76px ${F}`,"#34d399"); ctr("модель даёт "+(b.model_prob*100).toFixed(0)+"%",1300,`600 52px ${F}`,"rgba(255,255,255,.75)");
+    const w=new Date(kick(b)); ctr(w.toLocaleDateString("ru-RU",{weekday:"long",day:"numeric",month:"long"})+(b.kickoff_at?" · "+fmtTime(w):""),1450,`600 44px ${F}`,"rgba(255,255,255,.6)");
+    const bot=state.me&&state.me.bot; ctr(bot?"@"+bot:"Football value bot",1690,`700 42px ${F}`,"rgba(255,255,255,.8)"); ctr("модель, не гарантия результата",1745,`500 30px ${F}`,"rgba(255,255,255,.4)");
+    return c; }
+  async function openBotd(p){
+    const b=p.b, imp=1/b.taken_odds, pr=b.model_prob; haptic("medium");
+    const why=[`Отобрана из <b>${p.n}</b> ${p.n%10===1&&p.n%100!==11?"открытой ставки":"открытых ставок"} бота с перевесом: учтены перевес (EV), вероятность модели, кэф и время до матча.`,
+      `Модель даёт <b>${pc(pr,1)}</b>, а кэф <b>${b.taken_odds.toFixed(2)}</b> подразумевает <b>${pc(imp,1)}</b> — разница ${((pr-imp)*100).toFixed(1)} п.п. «Честный» кэф по модели — ${(1/pr).toFixed(2)}.`];
+    if(b.placed) why.push("Вы уже поставили на этот исход.");
+    let sw=""; try{ sw=segWarn(b); }catch(e){}
+    const html=`<div class="bd-sheet"><div class="bd-pick" style="font:800 clamp(20px,6vw,26px) var(--font,system-ui)">${esc(lbl(b))}</div><div class="muted" style="margin-top:4px">${esc(names(b))} · ${esc(LEAGUES[b.league]||b.league)} · ${when34(b)}</div>
+      <div class="tiles2"><div class="bd-t"><i>Кэф</i><b class="num">@ ${b.taken_odds.toFixed(2)}</b></div><div class="bd-t ev"><i>Перевес</i><b class="num">${sgn(b.ev)}</b></div><div class="bd-t"><i>Модель</i><b class="num">${pc(pr)}</b></div></div>
+      <ul class="why">${why.map(x=>`<li>${x}</li>`).join("")}${b.ev>.15?`<li class="w">EV выше 15% почти всегда значит ошибку в кэфе или нехватку данных, а не реальный перевес — относитесь осторожно.</li>`:""}</ul>${sw}
+      <div class="cap" style="margin-top:14px">Анализ по данным бота</div><div class="ai34" id="bdai"><div class="skel"></div></div>
+      <div id="bdcard"></div>
+      <div class="acts"><button class="btn" id="bd-share">📤 Поделиться</button><button class="btn sec" id="bd-img">🖼 Открытка</button><button class="btn sec" id="bd-open">Открыть матч</button><button class="btn sec" id="bd-ai">✨ Спросить ИИ</button></div>
+      <div class="note">Это оценка модели, а не гарантия результата. Решение о ставке всегда за вами.</div></div>`;
+    Sheet.open("🔥 Ставка Дня",html,B=>{
+      $("#bd-share",B).onclick=()=>shareBotd(b);
+      $("#bd-open",B).onclick=()=>goMatch(b,false); $("#bd-ai",B).onclick=()=>goMatch(b,true);
+      $("#bd-img",B).onclick=async()=>{ haptic("light"); let cv; try{ cv=botdCanvas(b); }catch(e){ toast("Не удалось создать картинку"); return; }
+        const blob=await new Promise(r=>cv.toBlob(r,"image/png")); if(!blob){ toast("Не удалось создать картинку"); return; }
+        const url=URL.createObjectURL(blob), file=new File([blob],"stavka-dnya.png",{type:"image/png"}), can=navigator.canShare&&navigator.canShare({files:[file]}), box=$("#bdcard",B);
+        box.innerHTML=`<img class="shimg" src="${url}" alt="Открытка Ставки Дня" style="width:100%;border-radius:18px;margin-top:12px"><div style="display:flex;gap:8px;margin-top:10px">${can?'<button class="btn" id="bd-sn" style="flex:1;margin:0">↗ Отправить</button>':""}<a class="btn sec" href="${url}" download="stavka-dnya.png" style="flex:1;margin:0;text-align:center;text-decoration:none;background:var(--card2);color:var(--text)">⬇ Сохранить</a></div>`;
+        const sn=$("#bd-sn",box); if(sn) sn.onclick=()=>navigator.share({files:[file],title:"Ставка Дня"}).catch(()=>{}); box.scrollIntoView({block:"nearest",behavior:RM?"auto":"smooth"}); };
+      api("/api/match/"+b.event_id).then(m=>{ const el=$("#bdai"); if(!el) return; let h=""; try{ h=(V().INS["Где перевес?"](m)||"")+(V().INS["Риски"](m)||""); }catch(e){}
+        el.innerHTML=h||'<p class="muted">Подробного разбора по этому матчу пока нет.</p>'; }).catch(()=>{ const el=$("#bdai"); if(el) el.innerHTML='<p class="muted">Не удалось загрузить разбор. Проверьте интернет.</p>'; });
+    }); }
+  function goMatch(b,ai){ Sheet.close(); setTimeout(()=>{ if(state.tab!=="matches") return; openMatch(b.event_id);
+      if(ai){ let n=0; const t=setInterval(()=>{ const f=$("#fab"); if(state.cur&&state.cur.event_id===b.event_id&&f&&f.classList.contains("on")){ clearInterval(t); f.click(); } else if(++n>40) clearInterval(t); },150); } },300); }
+
+  /* ══════════ 2. МОРФИНГ: карточка «расширяется» в экран матча (один слой, только transform/opacity) ══════════ */
+  function morph(r,col){
+    if(RM||DOC.dataset.perf==="low"||!r||r.width<10||r.height<10) return; let o=$("#morph34"); if(o) o.remove();
+    o=document.createElement("div"); o.id="morph34"; o.style.setProperty("--mc",col||"#6096ff"); document.body.appendChild(o);
+    const vw=innerWidth, vh=innerHeight;
+    const a=o.animate([{transform:`translate(${r.left}px,${r.top}px) scale(${r.width/vw},${r.height/vh})`,opacity:.92},{transform:"translate(0px,0px) scale(1,1)",opacity:1}],{duration:280,easing:"cubic-bezier(.2,.85,.25,1)",fill:"forwards"});
+    a.onfinish=()=>{ const f=o.animate([{opacity:1},{opacity:0}],{duration:220,easing:"ease-out",fill:"forwards"}); f.onfinish=()=>o.remove(); };
+    setTimeout(()=>{ if(o.isConnected) o.remove(); },1100);
+  }
+  const _om=openMatch;
+  openMatch=function(id){
+    if(state.detail===id) return _om.apply(this,arguments);
+    const row=$('#list .row[data-id="'+id+'"]')||$('#today [data-id="'+id+'"]'), r=row&&row.getBoundingClientRect(), mm=(state.cache.matches||[]).find(x=>x.event_id===id), before=state.detail;
+    const out=_om.apply(this,arguments); if(r&&state.detail===id&&before!==id) morph(r,mm?TC(mm.home):null); return out; };
+
+  /* ══════════ 3. FUZZY-ПОИСК (прощает опечатки; рус./англ. названия + лига) ══════════ */
+  const norm=s=>String(s||"").toLowerCase().replace(/ё/g,"е").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-zа-я0-9]+/g," ").trim();
+  function lev(a,b,mx){ const n=a.length,m=b.length; if(Math.abs(n-m)>mx) return mx+1; let p2=null,p1=Array.from({length:m+1},(_,j)=>j);
+    for(let i=1;i<=n;i++){ const c=[i]; let lo=i; for(let j=1;j<=m;j++){ let v=Math.min(p1[j]+1,c[j-1]+1,p1[j-1]+(a[i-1]===b[j-1]?0:1));
+        if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1]) v=Math.min(v,p2[j-2]+1); c[j]=v; if(v<lo) lo=v; } if(lo>mx) return mx+1; p2=p1; p1=c; } return p1[m]; }
+  const HAY=new WeakMap();
+  const hay=m=>{ let h=HAY.get(m); if(!h){ h=norm([m.home,m.away,m.home_ru,m.away_ru,LEAGUES[m.league],m.league].join(" ")).split(" ").filter(Boolean); HAY.set(m,h); } return h; };
+  function tokScore(t,words){ const mx=t.length<=3?0:t.length<=6?1:2; let best=99;
+    for(const w of words){ if(w.startsWith(t)) return 0; if(w.includes(t)) best=Math.min(best,.5); else if(mx){ const d=Math.min(lev(t,w.slice(0,t.length+(mx>1?1:0)),mx),lev(t,w,mx)); if(d<=mx) best=Math.min(best,d); } } return best<99?best:-1; }
+  function fuzzy(list,q){ const toks=q.split(" ").filter(Boolean); if(!toks.length) return list; const out=[];
+    for(const m of list){ const w=hay(m); let s=0,ok=true; for(const t of toks){ const x=tokScore(t,w); if(x<0){ ok=false; break; } s+=x; } if(ok) out.push([s,m]); }
+    out.sort((a,b)=>a[0]-b[0]); return out.map(x=>x[1]); }
+
+  /* ══════════ 4. ФИЛЬТРЫ в шторке + шаблоны ══════════ */
+  const FS=()=>{ if(!state.f34) state.f34={leagues:J("f34l",[]).filter(x=>LEAGUES[x]),conf:+lsGet("f34c")||0}; return state.f34; };
+  const activeN=()=>{ const f=FS(); return (f.leagues.length?1:0)+(f.conf?1:0)+(state.recOnly?1:0)+(state.favOnly?1:0); };
+  const _rl2=renderList;
+  renderList=function(anim){
+    const all=state.cache.matches; if(!Array.isArray(all)) return _rl2.call(this,anim);
+    const f=FS(), q=norm(state.q); let list=all;
+    if(f.leagues.length) list=list.filter(m=>f.leagues.includes(m.league));
+    if(f.conf) list=list.filter(m=>m.p&&Math.max(...m.p)>=f.conf);
+    if(q) list=fuzzy(list,q);
+    const sq=state.q; state.q=""; state.cache.matches=list;
+    try{ _rl2.call(this,anim); } finally{ state.cache.matches=all; state.q=sq; }
+    const e=$("#list .empty"); if(e&&!e.dataset.v34){ const ttl=(e.firstChild&&e.firstChild.nodeType===3?e.firstChild.textContent:"Здесь пока пусто"), sub=(q||activeN())?"Попробуйте изменить запрос или сбросить фильтры.":((e.querySelector(".sub")||{}).textContent||"");
+      e.dataset.v34="1"; e.classList.add("empty34w"); e.innerHTML=emptyHtml(ttl,sub,activeN()||q?'<button class="chip" id="fl-reset">Сбросить фильтры</button>':""); const rb=$("#fl-reset",e); if(rb) rb.onclick=()=>{ state.q=""; const qi=$("#q"); if(qi) qi.value=""; applyFilters({leagues:[],conf:0,days:state.days,rec:false,fav:false,done:state.showDone}); }; }
+  };
+  function emptyHtml(t,s,extra){ return `<div class="empty34" role="status"><div class="tr" aria-hidden="true">🏆</div><div class="sh" aria-hidden="true"></div><b>${esc(t)}</b><span>${esc(s||"")}</span>${extra||""}</div>`; }
+  function applyFilters(d){
+    const f=FS(); f.leagues=d.leagues.slice(); f.conf=d.conf; lsSet("f34l",JSON.stringify(f.leagues)); lsSet("f34c",String(f.conf));
+    state.recOnly=!!d.rec; state.favOnly=!!d.fav; state.showDone=!!d.done; const dc=d.days!==state.days; state.days=d.days; badge();
+    if(dc){ viewMatches(); return; }
+    [["tf",state.favOnly],["tr",state.recOnly],["td",state.showDone]].forEach(([i,on])=>{ const el=document.getElementById(i); if(el) el.classList.toggle("on",on); }); renderList(true); }
+  function badge(){ const b=$("#fl34"); if(!b) return; const n=activeN(); b.innerHTML="⚙ Фильтры"+(n?`<em>${n}</em>`:""); b.classList.toggle("on",n>0); b.setAttribute("aria-label","Фильтры"+(n?`, активно: ${n}`:"")); }
+  const PRE="flt34";
+  function openFilters(){
+    haptic("soft"); const f=FS(), d={leagues:f.leagues.slice(),conf:f.conf,days:state.days,rec:state.recOnly,fav:state.favOnly,done:state.showDone};
+    const cnt={}; (state.cache.matches||[]).forEach(m=>{ cnt[m.league]=(cnt[m.league]||0)+1; }); const hasData=(state.cache.matches||[]).length>0;
+    const lgs=Object.keys(LEAGUES).filter(k=>!hasData||cnt[k]||d.leagues.includes(k));
+    const pres=()=>J(PRE,[]);
+    const body=()=>`<div class="fl"><div class="cap">Лиги</div><div class="wrap" id="fl-lg">${lgs.map(k=>`<button type="button" class="chip ${d.leagues.includes(k)?"on":""}" id="fl-l-${k}" data-k="${k}" aria-pressed="${d.leagues.includes(k)}">${esc(LEAGUES[k])}${cnt[k]?` · ${cnt[k]}`:""}</button>`).join("")}</div>
+      <div class="cap">Период</div><div class="seg" id="fl-dy">${[[1,"Сегодня"],[2,"2 дня"],[4,"4 дня"],[7,"Неделя"]].map(([n,t])=>`<button type="button" id="fl-d-${n}" data-k="${n}" class="${d.days===n?"on":""}">${t}</button>`).join("")}</div>
+      <div class="cap">Уверенность модели</div><div class="seg" id="fl-cf">${[[0,"Любая"],[.45,"от 45%"],[.55,"от 55%"],[.65,"от 65%"]].map(([n,t])=>`<button type="button" id="fl-c-${Math.round(n*100)}" data-k="${n}" class="${d.conf===n?"on":""}">${t}</button>`).join("")}</div>
+      <div class="cap">Показывать</div><div class="wrap" id="fl-tg"><button type="button" class="chip ${d.rec?"on":""}" id="fl-t-rec" data-k="rec" aria-pressed="${d.rec}">С перевесом</button><button type="button" class="chip ${d.fav?"on":""}" id="fl-t-fav" data-k="fav" aria-pressed="${d.fav}">★ Мои команды</button><button type="button" class="chip ${d.done?"on":""}" id="fl-t-done" data-k="done" aria-pressed="${d.done}">🏁 Завершённые</button></div>
+      <div class="cap">Шаблоны</div><div id="fl-pl">${pres().length?pres().map((x,i)=>`<div class="pre"><b>${esc(x.n)}</b><button type="button" class="use" id="fl-pu-${i}" data-i="${i}">Применить</button><button type="button" id="fl-pd-${i}" data-i="${i}" aria-label="Удалить шаблон ${esc(x.n)}">✕</button></div>`).join(""):'<div class="muted" style="font-size:13px">Сохраните текущий набор фильтров, чтобы включать его одним касанием.</div>'}</div>
+      <div class="save"><input class="search" id="fl-name" maxlength="24" placeholder="Название шаблона" autocomplete="off"><button type="button" class="chip" id="fl-save">Сохранить</button></div>
+      <div class="row2"><button type="button" class="btn sec" id="fl-clr">Сбросить</button><button type="button" class="btn" id="fl-ok">Применить</button></div></div>`;
+    Sheet.open("⚙ Фильтры",body(),B=>{
+      const on=(el,v)=>{ el.classList.toggle("on",v); if(el.hasAttribute("aria-pressed")) el.setAttribute("aria-pressed",String(v)); };
+      $("#fl-lg",B).onclick=e=>{ const b=e.target.closest("[data-k]"); if(!b) return; const k=b.dataset.k, i=d.leagues.indexOf(k); if(i>=0) d.leagues.splice(i,1); else d.leagues.push(k); on(b,i<0); haptic(); };
+      $("#fl-dy",B).onclick=e=>{ const b=e.target.closest("[data-k]"); if(!b) return; d.days=+b.dataset.k; $$("#fl-dy button",B).forEach(x=>on(x,x===b)); haptic(); };
+      $("#fl-cf",B).onclick=e=>{ const b=e.target.closest("[data-k]"); if(!b) return; d.conf=+b.dataset.k; $$("#fl-cf button",B).forEach(x=>on(x,x===b)); haptic(); };
+      $("#fl-tg",B).onclick=e=>{ const b=e.target.closest("[data-k]"); if(!b) return; d[b.dataset.k]=!d[b.dataset.k]; on(b,d[b.dataset.k]); haptic(); };
+      const redraw=()=>{ const s=B.scrollTop; B.innerHTML=body(); B.scrollTop=s; bind(); };
+      function bind(){ const pl=$("#fl-pl",B);
+        pl.onclick=e=>{ const u=e.target.closest(".use"), x=e.target.closest("[id^=fl-pd-]"); if(u){ const p=pres()[+u.dataset.i]; if(!p) return; applyFilters({leagues:(p.leagues||[]).filter(k=>LEAGUES[k]),conf:p.conf||0,days:p.days||4,rec:!!p.rec,fav:!!p.fav,done:!!p.done}); Sheet.close(); toast("Шаблон «"+p.n+"» применён"); haptic("ok"); }
+          else if(x){ const a=pres(); a.splice(+x.dataset.i,1); lsSet(PRE,JSON.stringify(a)); haptic("warn"); redraw(); } };
+        $("#fl-save",B).onclick=()=>{ const n=($("#fl-name",B).value||"").trim().slice(0,24)||("Набор "+(pres().length+1)); const a=pres().filter(x=>x.n!==n); a.push({n,leagues:d.leagues.slice(),conf:d.conf,days:d.days,rec:d.rec,fav:d.fav,done:d.done}); lsSet(PRE,JSON.stringify(a.slice(-8))); haptic("ok"); toast("Шаблон сохранён"); redraw(); };
+        $("#fl-clr",B).onclick=()=>{ d.leagues=[]; d.conf=0; d.rec=false; d.fav=false; d.done=false; d.days=4; haptic("light"); redraw(); };
+        $("#fl-ok",B).onclick=()=>{ applyFilters(d); Sheet.close(); haptic("ok"); }; }
+      bind();
+    }); }
+  const _vmt=viewMatches;
+  viewMatches=function(){ const p=_vmt.apply(this,arguments); try{ const tl=$(".tools"); if(tl&&!$("#fl34")){ const b=document.createElement("button"); b.type="button"; b.className="chip"; b.id="fl34"; b.onclick=openFilters; tl.insertBefore(b,tl.firstChild); badge(); } }catch(e){ console.warn(e); } return p; };
+
+  /* ══════════ автообновление счётчика фильтров при смене экрана ══════════ */
+  new MutationObserver(()=>{ if($("#fl34")&&!$("#fl34").dataset.b){ $("#fl34").dataset.b="1"; badge(); } }).observe(document.getElementById("app"),{childList:true,subtree:true});
+  window.V34={choose,candidates,score,fuzzy,norm,lev,roll,morph,FS,applyFilters,openFilters,openBotd,botdKey:bkey};
+}catch(e){ console.warn("v34",e); } })();
 </script>
 </body>
 </html>
