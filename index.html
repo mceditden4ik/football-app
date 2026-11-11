@@ -803,6 +803,97 @@ html[data-perf=low] .empty34 .tr,html[data-perf=low] .empty34 .sh{animation:none
 .empty.empty34w::before,.empty.empty34w::after{display:none!important;content:none!important}.empty.empty34w{padding:0;background:none;border:0}
 #achT{width:max-content;max-width:calc(100vw - 32px)}
 #offcache{font-size:11.5px;color:var(--amber)}
+/* ═════════ v35: оформление, live, сводка дня, push-экран ═════════ */
+/* — «Отключить анимации»: глобально гасим CSS-анимации и переходы (WAAPI и JS-эффекты выключаются в коде) — */
+html[data-anim="off"] *,html[data-anim="off"] *::before,html[data-anim="off"] *::after{animation-duration:.001ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.001ms!important;transition-delay:0s!important;scroll-behavior:auto!important}
+html[data-anim="off"] #silk,html[data-anim="off"] #gl{display:none!important}
+/* — белый/тёмный текст на акценте — */
+html[data-accl="dk"] .btn,html[data-accl="dk"] #undo button,html[data-accl="dk"] #fl34 em{color:#fff}
+/* — иконки навигации: строгие (линейные) и округлые (залитые) — */
+.nav button{font-size:11px}
+html[data-icons="line"] .nav button svg{stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter}
+html[data-icons="fill"] .nav button svg{stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:color-mix(in srgb,currentColor 16%,transparent)}
+html[data-icons="fill"] .nav button.on svg{fill:color-mix(in srgb,var(--blue) 38%,transparent)}
+html[data-icons="fill"] .nav button{border-radius:20px}
+/* — тост «рекорд PnL»: строгое банковское уведомление — */
+#achT{padding:10px 16px 10px 10px;border-radius:14px;gap:11px;background:color-mix(in srgb,var(--card) 94%,transparent);border:1px solid var(--line);box-shadow:0 14px 34px -16px rgba(0,0,0,.65),inset 0 1px 0 color-mix(in srgb,var(--text) 6%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+#achT .ic{font-size:0;width:36px;height:36px;border-radius:10px;background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--blue);border:1px solid color-mix(in srgb,var(--blue) 28%,transparent)}
+#achT .ic svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#achT.on .ic{animation:none}#achT b{font:600 14px var(--font-d,system-ui);letter-spacing:.005em}#achT span{font-size:12px;color:var(--muted)}
+/* — вкладка «Оформление» — */
+.lk h1{margin-bottom:10px}.lk .card{margin-bottom:12px}.lk .sub{margin-top:12px;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}.lk .sub:first-of-type{margin-top:8px}
+.lk .seg{margin-top:8px}.lk .note{margin-top:10px}
+.acc35{display:grid;grid-template-columns:repeat(5,1fr);gap:10px 6px;margin-top:12px}
+.acc35 button{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:10.5px;color:var(--muted);padding:2px 0;text-align:center;line-height:1.15}
+.acc35 i{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 2px var(--bg),0 6px 16px -6px var(--c);background:var(--c);transition:transform .3s var(--spring)}
+.acc35 i svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:0;transform:scale(.4);transition:.25s var(--spring);filter:drop-shadow(0 1px 1px rgba(0,0,0,.4))}
+.acc35 button.on{color:var(--text)}.acc35 button.on i{transform:scale(1.12);box-shadow:inset 0 0 0 2px var(--bg),0 0 0 2px var(--c),0 8px 20px -6px var(--c)}.acc35 button.on i svg{opacity:1;transform:none}
+.bg35{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.bg35 button{position:relative;aspect-ratio:1.25;border-radius:14px;overflow:hidden;border:2px solid transparent;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:flex-end;padding:6px 8px;text-align:left;text-shadow:0 1px 6px rgba(0,0,0,.6);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);transition:transform .25s var(--spring),border-color .2s}
+.bg35 button.on{border-color:var(--text);transform:scale(1.03)}.bg35 button.on::after{content:"✓";position:absolute;top:5px;right:7px;font-size:12px;width:18px;height:18px;border-radius:9px;display:grid;place-items:center;background:var(--text);color:var(--bg);text-shadow:none}
+.pv-silk{background:radial-gradient(circle at 20% 20%,#6096ff,transparent 55%),radial-gradient(circle at 85% 70%,#a78bfa,transparent 55%),#0b1226}
+.pv-particles{background:radial-gradient(circle at 50% 110%,var(--blue),transparent 60%),#070b18;background-image:radial-gradient(circle,#fff 1px,transparent 1.5px),radial-gradient(circle at 50% 110%,var(--blue),transparent 60%);background-size:22px 26px,100% 100%}
+.pv-nebula{background:radial-gradient(circle at 30% 70%,#c026d3,transparent 55%),radial-gradient(circle at 70% 25%,#3b82f6,transparent 55%),#070816}
+.pv-aurora{background:radial-gradient(circle at 25% 30%,#2dd4bf,transparent 55%),radial-gradient(circle at 75% 35%,#7c5cf0,transparent 55%),#070b15}
+.pv-grid{background:linear-gradient(#0b0620 45%,#ff2fa0 46%,#1b0b3c 47%)}.pv-pitch{background:radial-gradient(circle at 20% 0,#fff6,transparent 45%),radial-gradient(circle at 85% 0,#fff5,transparent 45%),#0a3b2a}
+.pv-fluid{background:radial-gradient(circle at 20% 30%,var(--blue),transparent 55%),radial-gradient(circle at 80% 70%,#c026d3,transparent 55%),#0a0f1f}
+.pv-sNavy{background:linear-gradient(160deg,#060d24,#0a1a4a 60%,#1b3d9a)}.pv-sEmerald{background:linear-gradient(160deg,#03120e,#06281f 60%,#0d6b4f)}
+.pv-sGraphite{background:linear-gradient(160deg,#0d0f13,#1b1f27 60%,#2c313c)}.pv-sPastel{background:linear-gradient(135deg,#f9c6e0,#c7d2fe 55%,#b9f3e4);color:#2a2f45;text-shadow:none}
+.pv-sMidnight{background:radial-gradient(circle at 50% 0,var(--blue),transparent 70%),#02030a}.pv-off{background:var(--card2);color:var(--muted);text-shadow:none}
+.row35{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:12px 0;border-top:1px solid var(--line)}.row35:first-of-type{border-top:0}
+.row35 .t{display:block;font-weight:600;font-size:14.5px}.row35 .d{display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.3}
+.sw35{flex:none;position:relative;width:50px;height:30px;border-radius:15px;background:var(--track,#2a3550);transition:background .25s;border:1px solid var(--line)}
+.sw35::after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.35);transition:transform .3s var(--spring)}
+.sw35[aria-checked="true"]{background:var(--blue);border-color:transparent}.sw35[aria-checked="true"]::after{transform:translateX(20px)}
+.ico35{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.ico35 button{border:2px solid var(--line);border-radius:16px;padding:12px 8px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--muted);transition:border-color .2s,transform .25s var(--spring)}
+.ico35 button.on{border-color:var(--blue);color:var(--text);transform:scale(1.02)}.ico35 .pr{display:flex;gap:14px;color:var(--text)}
+.ico35 .pr svg{width:24px;height:24px;stroke:currentColor;fill:none}
+.ico35 .l svg{stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter}.ico35 .f svg{stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:color-mix(in srgb,currentColor 18%,transparent)}
+.qh35{display:flex;gap:8px;align-items:center;margin-top:8px}.qh35 input{flex:1;min-height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card2);color:var(--text);padding:0 10px;font:inherit}
+.reset35{margin:6px 0 18px;width:100%;padding:12px;border-radius:14px;border:1px solid var(--line);color:var(--muted);font-weight:600}
+/* — значок ИИ и Live — */
+.ai35{position:relative;height:36px;padding:0 13px 0 10px;border-radius:18px;display:inline-flex;align-items:center;gap:6px;font:700 13px var(--font-d,system-ui);color:var(--text);border:1.5px solid transparent;background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(120deg,var(--blue),var(--violet),var(--blue)) border-box;box-shadow:0 8px 22px -10px var(--blue);overflow:hidden;-webkit-text-fill-color:currentColor}
+.ai35 svg{width:16px;height:16px;fill:var(--blue);filter:drop-shadow(0 0 5px var(--blue))}
+.ai35::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.28) 50%,transparent 70%);transform:translateX(-120%);animation:ai35s 4.2s ease-in-out infinite;pointer-events:none}
+@keyframes ai35s{0%,55%{transform:translateX(-120%)}85%,100%{transform:translateX(120%)}}
+html[data-sheet] .ai35::after{animation:none}
+#live35{margin:2px 0 12px}#live35:empty{display:none}
+#live35 .lvh{display:flex;align-items:center;gap:8px;margin:2px 4px 8px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lvs{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 8px;margin:0 -2px;scrollbar-width:none}.lvs::-webkit-scrollbar{display:none}
+.lv35c{flex:0 0 min(100%,360px);scroll-snap-align:start;text-align:left;border-radius:22px;padding:14px 16px 12px;position:relative;overflow:hidden;color:var(--text);
+  background:linear-gradient(160deg,color-mix(in srgb,var(--green) 12%,var(--card)),var(--card));border:1px solid color-mix(in srgb,var(--green) 30%,var(--line));box-shadow:var(--sh1),0 0 0 1px color-mix(in srgb,var(--green) 10%,transparent);transition:transform .35s var(--spring)}
+.lv35c:active{transform:scale(.975)}.lv-top{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}.lv-top .lv-lg{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lv-tag{display:inline-flex;align-items:center;gap:6px;font-weight:800;letter-spacing:.08em;color:var(--green)}.lv-tag i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:blink 1.2s infinite}
+.lv-t{font:800 15px/1 var(--font-d,system-ui);color:var(--text);font-variant-numeric:tabular-nums}
+.lv-teams{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin:12px 0 10px;font:700 16px/1.2 var(--font-d,system-ui)}.lv-teams span:last-child{text-align:right}
+.lv-sc{font-size:13px;color:var(--muted);font-weight:700;padding:3px 9px;border-radius:10px;background:var(--card2)}
+.lv-bar{display:flex;height:8px;border-radius:5px;overflow:hidden;gap:2px;background:var(--track)}.lv-bar i{display:block;flex-basis:0;min-width:3px;transition:flex-grow .9s var(--ease,ease)}
+.lv-bar .h{background:var(--blue)}.lv-bar .d{background:#8b97b5}.lv-bar .a{background:var(--violet)}
+.lv35c.chg .lv-bar{box-shadow:0 0 14px -2px var(--blue)}
+.lv-pl{display:flex;justify-content:space-between;margin-top:7px;font-size:12px;color:var(--muted)}.lv-pl .h b{color:var(--blue)}
+.lv-prog{height:3px;border-radius:2px;background:var(--track);margin-top:10px;overflow:hidden}.lv-prog i{display:block;height:100%;width:100%;transform-origin:0 50%;background:linear-gradient(90deg,var(--green),var(--blue));transition:transform 1s linear}
+.lv-note{font-size:11px;color:var(--dim);margin:0 4px 4px}
+/* — сводка дня — */
+.dg .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.dg .kpis div{border-radius:14px;padding:10px;background:var(--card2);text-align:center}.dg .kpis b{display:block;font:800 22px var(--font-d,system-ui)}.dg .kpis span{font-size:11px;color:var(--muted)}
+.dg h4{margin:14px 0 8px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.dg-lg{display:grid;grid-template-columns:10px 1fr auto;gap:4px 10px;align-items:center;padding:8px 0;border-top:1px solid var(--line);font-size:13px}.dg-lg:first-of-type{border-top:0}.dg-lg .dot{width:9px;height:9px;border-radius:50%}
+.dg-lg .bar{grid-column:2/4;height:5px;border-radius:3px;background:var(--track);overflow:hidden}.dg-lg .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--violet));border-radius:3px}
+.dg-lg em{grid-column:2/4;font-style:normal;font-size:11.5px;color:var(--muted)}
+.dg-top{display:flex;gap:10px;align-items:center;width:100%;text-align:left;padding:10px 12px;border-radius:14px;background:var(--card2);margin-bottom:8px}.dg-top b{display:block;font-size:14px}.dg-top span{font-size:11.5px;color:var(--muted)}.dg-top .pp{margin-left:auto;font:800 15px var(--font-d,system-ui);color:var(--blue)}
+.dg-ai{border-radius:16px;padding:12px 14px;background:linear-gradient(160deg,color-mix(in srgb,var(--blue) 10%,var(--card2)),var(--card2));border:1px solid color-mix(in srgb,var(--blue) 24%,var(--line));font-size:13.5px;line-height:1.5}
+.dg-ai p{margin:0 0 8px}.dg-ai p:last-child{margin:0}.dg-ai b{color:var(--text)}.dg-ai .typing::after{content:"▍";animation:blink 1s infinite;margin-left:2px;color:var(--blue)}
+.dg-ai .mt{font-size:11px;color:var(--muted);margin-top:8px}
+.dg .btn{width:100%}
+/* — автодополнение команд в чате ИИ — */
+.cpac{display:grid;gap:6px;margin:6px 0}.cpac[hidden],.cppick[hidden]{display:none}
+.cpac button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:9px 12px;border-radius:12px;background:var(--card2);border:1px solid var(--line)}.cpac b{font-size:13.5px}.cpac span{font-size:11.5px;color:var(--muted)}
+.cppick{display:flex;align-items:center;gap:8px;margin:6px 0;padding:6px 8px 6px 12px;border-radius:12px;background:color-mix(in srgb,var(--blue) 14%,transparent);font-size:13px;font-weight:600}.cppick button{margin-left:auto;width:28px;height:28px;border-radius:50%;color:var(--muted)}
+.ans b{font-weight:800}.ans p{margin:0 0 9px}.ans p:last-child{margin-bottom:0}
+/* — плавное растворение скелетонов (Fade + Blur) — */
+.skg35{position:fixed;z-index:6;margin:0!important;pointer-events:none;will-change:opacity,filter}
+.ch-tip small{margin-left:4px;font-size:11px}
+@media (prefers-reduced-motion:reduce){.ai35::after,.lv-tag i{animation:none}}
 </style>
 </head>
 <body>
@@ -815,6 +906,7 @@ html[data-perf=low] .empty34 .tr,html[data-perf=low] .empty34 .sh{animation:none
   <button data-t="matches"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7l4 3-1.5 5h-5L8 10z"/></svg>Матчи</button>
   <button data-t="bets"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Ставки</button>
   <button data-t="stats"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 15l4-4 3 3 5-6"/></svg>Статистика</button>
+  <button data-t="look"><svg viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg>Оформление</button>
 </nav>
 <script>
 "use strict";
@@ -848,7 +940,7 @@ function countUp(root){
   (root||document).querySelectorAll("[data-count]").forEach(el=>{
     const to=parseFloat(el.dataset.count), d=+el.dataset.dec||0, suf=el.dataset.suf||"", sign=el.dataset.sign==="1";
     const fmt=v=>(sign&&v>=0?"+":"")+v.toFixed(d)+suf;
-    if(RM||!isFinite(to)){ el.textContent=fmt(to); return; }
+    if(RM||document.documentElement.dataset.anim==="off"||!isFinite(to)){ el.textContent=fmt(to); return; }
     const t0=performance.now(), dur=800; el.textContent=fmt(0);
     (function f(t){const k=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-k,3); el.textContent=fmt(to*e); if(k<1) requestAnimationFrame(f); else el.textContent=fmt(to);})(t0);
   });
@@ -1369,15 +1461,16 @@ function pfmt(p){return p==null?"":(p<0.0001?"<0.0001":"="+p.toFixed(4));}
    «уменьшить анимацию» — фон рисуется один раз без движения. Всё хранится локально. */
 const FX = (()=>{
   const cv = document.getElementById("fx"), cx = cv.getContext("2d", {alpha:false});
-  const ACC = {tg:(tg&&tg.themeParams&&tg.themeParams.button_color)||"#3390ec", blue:"#6096ff", teal:"#2dd4bf", violet:"#a78bfa", pink:"#f472b6", orange:"#fb923c"};
+  const ACC = {tg:(tg&&tg.themeParams&&tg.themeParams.button_color)||"#3390ec", blue:"#6096ff", teal:"#2dd4bf", violet:"#a78bfa", pink:"#f472b6", orange:"#fb923c", deep:"#4a6cf7", neon:"#2ee59d", cyan:"#22d3ee", gold:"#fbbf24", crimson:"#ef4444", cyber:"#ff3d9a"};
   const reduce = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+  const noAnim=()=>reduce||lsGet("anim35")==="off";          /* v35: системная настройка ИЛИ «Отключить анимации» в приложении */
   let mode="aurora", level="max", raf=0, t0=performance.now(), last=0, W=0, H=0, stars=[], tilt={x:0,y:0}, ptr=null;
   const get=(k,d)=>lsGet(k)||d;
   const hex=(h,a)=>{ const n=parseInt(h.slice(1),16); return `rgba(${n>>16&255},${n>>8&255},${n&255},${a})`; };
   const isLight=()=>document.documentElement.dataset.theme==="light";
   const accent=()=>ACC[get("acc","blue")]||ACC.blue;
   function size(){
-    const sc = level==="max" ? (mode==="grid"||mode==="nebula"?.6:.4) : .28;
+    const sc = STATIC[mode] ? .3 : level==="max" ? (mode==="grid"||mode==="nebula"?.6:.4) : .28;
     W = Math.max(60,Math.round(innerWidth*sc)); H = Math.max(80,Math.round(innerHeight*sc));
     cv.width=W; cv.height=H; cv.style.imageRendering="auto";
     stars = Array.from({length: level==="max"?90:40}, ()=>({x:Math.random(),y:Math.random(),z:.2+Math.random()*.8,p:Math.random()*6.28}));
@@ -1436,7 +1529,32 @@ const FX = (()=>{
     }
     cx.globalCompositeOperation="source-over"; cx.fillStyle="rgba(4,12,10,.28)"; cx.fillRect(0,0,W,H);
   }
-  const DRAW={aurora,nebula,grid,pitch};
+  /* ── v35: частицы — лёгкие светящиеся точки, плывущие вверх (те же 90 «звёзд», один проход по канвасу малого размера) ── */
+  function particles(t){
+    const L=isLight(), a=accent();
+    const g=cx.createLinearGradient(0,0,0,H); g.addColorStop(0,L?"#f2f5fc":"#060913"); g.addColorStop(1,L?"#e3e9f6":"#0b1226"); cx.fillStyle=g; cx.fillRect(0,0,W,H);
+    const gl=cx.createRadialGradient(W*.5,H*1.02,0,W*.5,H*1.02,Math.max(W,H)*.8); gl.addColorStop(0,hex(a,L?.22:.30)); gl.addColorStop(1,hex(a,0)); cx.fillStyle=gl; cx.fillRect(0,0,W,H);
+    cx.globalCompositeOperation=L?"source-over":"lighter";
+    for(const s of stars){
+      const y=(((s.y-t*.000022*s.z)%1)+1)%1*H, x=(s.x+Math.sin(t*.00035*s.z+s.p)*.03)*W + tilt.x*W*.04*s.z, r=.7+s.z*1.9, tw=.5+.5*Math.sin(t*.0016*s.z+s.p);
+      cx.globalAlpha=(L?.35:.18)*tw*s.z; cx.fillStyle=hex(a,1); cx.beginPath(); cx.arc(x,y,r*2.6,0,6.283); cx.fill();
+      cx.globalAlpha=(L?.7:.85)*tw*s.z; cx.fillStyle=s.z>.62?hex(a,1):(L?"#6b7a99":"#fff"); cx.beginPath(); cx.arc(x,y,r*.7,0,6.283); cx.fill();
+    }
+    cx.globalAlpha=1; cx.globalCompositeOperation="source-over";
+  }
+  /* ── v35: статичные цветные фоны — рисуются ОДИН раз (без цикла анимации, 0 нагрузки на батарею) ── */
+  const STATIC={
+    sNavy:{d:{b:["#060d24","#0a1a4a"],g:[[.2,.08,.9,"#2f6bff",.40],[.92,.9,.75,"#1d3fae",.32]]},l:{b:["#eef3ff","#dbe7ff"],g:[[.15,.05,.9,"#7aa2ff",.5],[.9,.92,.7,"#a9c0ff",.45]]}},
+    sEmerald:{d:{b:["#03120e","#06281f"],g:[[.85,.08,.85,"#10b981",.34],[.1,.92,.7,"#047857",.32]]},l:{b:["#ecfbf4","#d6f5e6"],g:[[.85,.05,.9,"#6ee7b7",.55],[.1,.95,.7,"#a7f3d0",.55]]}},
+    sGraphite:{d:{b:["#0d0f13","#1b1f27"],g:[[.5,0,.95,"#ffffff",.07],[.5,1,.85,"#8b97b5",.12]]},l:{b:["#eceef2","#dcdfe6"],g:[[.5,0,.95,"#ffffff",.9],[.5,1,.7,"#b8c0d0",.35]]}},
+    sPastel:{d:{b:["#1a1530","#16243a"],g:[[.1,.08,.85,"#f9a8d4",.24],[.92,.3,.85,"#a5b4fc",.24],[.5,1,.95,"#99f6e4",.20]]},l:{b:["#fdf2f8","#eef2ff"],g:[[.1,.08,.85,"#fbcfe8",.9],[.92,.3,.85,"#c7d2fe",.9],[.5,1,.95,"#bbf7d0",.75]]}},
+    sMidnight:{d:{b:["#02030a","#070a18"],g:[[.5,0,.8,"@a",.26],[.5,1,.7,"@a",.12]]},l:{b:["#f5f6fb","#e9ecf5"],g:[[.5,0,.8,"@a",.2],[.5,1,.7,"@a",.1]]}}};
+  function paintStatic(key){
+    const P=STATIC[key][isLight()?"l":"d"], g=cx.createLinearGradient(0,0,0,H); g.addColorStop(0,P.b[0]); g.addColorStop(1,P.b[1]); cx.globalCompositeOperation="source-over"; cx.fillStyle=g; cx.fillRect(0,0,W,H);
+    for(const [x,y,r,c,al] of P.g){ const col=c==="@a"?accent():c, R=Math.max(W,H)*r, gg=cx.createRadialGradient(W*x,H*y,0,W*x,H*y,R); gg.addColorStop(0,hex(col,al)); gg.addColorStop(1,hex(col,0)); cx.fillStyle=gg; cx.fillRect(0,0,W,H); }
+  }
+  const once=()=>{ if(STATIC[mode]) paintStatic(mode); else (DRAW[mode]||aurora)(0); };
+  const DRAW={aurora,nebula,grid,pitch,particles};
   function frame(now){
     raf=requestAnimationFrame(frame);
     const fps=level==="max"?33:50; if(now-last<fps) return; last=now;
@@ -1447,16 +1565,16 @@ const FX = (()=>{
   function start(){
     stop();
     const root=document.documentElement;
-    mode=get("bg","aurora"); level=get("fxl", reduce?"off":"max");
+    mode=get("bg","aurora"); level=get("fxl", reduce?"off":"max");  /* системное «меньше движения» по-прежнему выключает эффекты */
     const on = mode!=="off" && level!=="off";
     root.dataset.fx = on?"on":"off"; root.dataset.fxl = level;
     if(!on){ stop(); return; }
     size();
-    if(reduce){ (DRAW[mode]||aurora)(0); return; }                 // без движения: один кадр
+    if(noAnim()||STATIC[mode]){ once(); return; }                 // без движения (или статичный фон): один кадр
     if(!document.hidden) raf=requestAnimationFrame(frame);
   }
-  document.addEventListener("visibilitychange",()=>{ if(document.hidden) stop(); else if(document.documentElement.dataset.fx==="on"&&!reduce&&!raf) raf=requestAnimationFrame(frame); });
-  let rz; addEventListener("resize",()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(document.documentElement.dataset.fx==="on"){ size(); } },200); });
+  document.addEventListener("visibilitychange",()=>{ if(document.hidden) stop(); else if(document.documentElement.dataset.fx==="on"&&!noAnim()&&!STATIC[mode]&&!raf) raf=requestAnimationFrame(frame); });
+  let rz; addEventListener("resize",()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(document.documentElement.dataset.fx==="on"){ size(); if(!raf) once(); } },200); });
   addEventListener("deviceorientation",e=>{ if(e.gamma==null) return; tilt.x=Math.max(-1,Math.min(1,e.gamma/30)); tilt.y=Math.max(-1,Math.min(1,(e.beta-45)/30)); },{passive:true});
   /* акцентный цвет */
   function applyAccent(){
@@ -1471,10 +1589,10 @@ const FX = (()=>{
       sp.className="rip"; sp.style.cssText=`width:${d}px;height:${d}px;left:${e.clientX-b.left-d/2}px;top:${e.clientY-b.top-d/2}px`; bt.appendChild(sp); setTimeout(()=>sp.remove(),650); }
   },{passive:true});
   applyAccent(); start();
-  return {start, applyAccent, recolor(){ if(document.documentElement.dataset.fx==="on") size(); }};
+  return {start, applyAccent, STATIC:Object.keys(STATIC), recolor(){ if(document.documentElement.dataset.fx==="on") size(); }};
 })();
-const BGS=[["aurora","Аврора"],["nebula","Космос"],["grid","Неон"],["pitch","Стадион"],["off","Без фона"]];
-const ACCS=[["tg",(tg&&tg.themeParams&&tg.themeParams.button_color)||"#3390ec"],["blue","#6096ff"],["teal","#2dd4bf"],["violet","#a78bfa"],["pink","#f472b6"],["orange","#fb923c"]];
+const BGS=[["aurora","Аврора"],["nebula","Глубокий космос"],["particles","Частицы"],["grid","Неон"],["pitch","Стадион"],["sNavy","Глубокий синий"],["sEmerald","Изумрудный"],["sGraphite","Графит"],["sPastel","Пастель"],["sMidnight","Полночь"],["off","Без фона"]];
+const ACCS=[["tg",(tg&&tg.themeParams&&tg.themeParams.button_color)||"#3390ec","Telegram"],["blue","#6096ff","Лазурь"],["deep","#4a6cf7","Глубокий синий"],["neon","#2ee59d","Неон-зелёный"],["cyan","#22d3ee","Циан"],["violet","#a78bfa","Фиолет"],["cyber","#ff3d9a","Киберпанк"],["orange","#fb923c","Янтарь"],["gold","#fbbf24","Золото"],["crimson","#ef4444","Алый"]];
 function lookCard(){
   const bg=lsGet("bg")||"aurora", ac=lsGet("acc")||"blue", fl=lsGet("fxl")||"max";
   return `<div class="card"><div class="cap">Оформление</div>
@@ -1517,7 +1635,7 @@ function segWarn(b){
   return `<div class="segwarn">⚠ Слабый сегмент: ${bad.map(r=>esc(r.key.replace(/^рынок: /,"рынок «")+(r.key.startsWith("рынок")?"»":""))+` (CLV ${(r.mean*100).toFixed(1)}%, n=${r.n})`).join("; ")}. Это совет, решение за вами.</div>`;
 }
 /* плавающая пилюля вкладки + свайп между вкладками */
-const TABS=["matches","bets","stats"];
+const TABS=["matches","bets","stats","look"];
 function movePill(){
   const nav=document.getElementById("nav"); if(!nav) return;
   let pill=nav.querySelector(".pill"); if(!pill){ pill=document.createElement("i"); pill.className="pill"; nav.prepend(pill); nav.classList.add("has-pill"); }
@@ -1638,7 +1756,7 @@ function bindChart(eq){
     cx = cx==null ? tx : cx+(tx-cx)*.22; const f=frac(cx), i0=Math.floor(f), i1=Math.min(n-1,i0+1), yv=ys[i0]+(ys[i1]-ys[i0])*(f-i0), px=X(f), r=svg.getBoundingClientRect(), i=Math.round(f);
     cl.setAttribute("x1",px); cl.setAttribute("x2",px); cc.setAttribute("cx",px); cc.setAttribute("cy",Y(yv));
     const target=Math.max(60,Math.min(r.width-60,px/W*r.width)); tip_x += (target-tip_x)*.28; tip.style.left=tip_x+"px";
-    tip.innerHTML=`${esc(eq[i][0])} · <span class="${ys[i]>=0?"g":"r"}">${mon(ys[i])}</span>`;
+    const dv=i>0?ys[i]-ys[i-1]:null; tip.innerHTML=`${esc(eq[i][0])} · <span class="${ys[i]>=0?"g":"r"}">${mon(ys[i])}</span>${dv!=null&&Math.abs(dv)>=.5?` <small class="${dv>=0?"g":"r"}">${dv>=0?"+":"−"}${Math.abs(Math.round(dv)).toLocaleString("ru-RU")}</small>`:""}`;
     if(i!==last){ last=i; haptic(); }
     if(active||Math.abs(cx-tx)>.3||Math.abs(tip_x-target)>.5) raf=requestAnimationFrame(loop); }
   const move=e=>{ const r=svg.getBoundingClientRect(); tx=(e.clientX-r.left)/r.width*W; if(cx==null){ cx=tx; tip_x=Math.max(60,Math.min(r.width-60,tx/W*r.width)); } active=true;
@@ -1697,7 +1815,7 @@ async function refresh(){
 function render(){
   document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on", b.dataset.t===state.tab)); movePill();
   if(state.detail) return viewMatch(state.detail);
-  return ({matches:viewMatches,bets:viewBets,stats:viewStats})[state.tab]();
+  return ({matches:viewMatches,bets:viewBets,stats:viewStats,look:()=>window.viewLook35?window.viewLook35():viewMatches()})[state.tab]();
 }
 document.getElementById("nav").onclick = e=>{const b=e.target.closest("[data-t]"); if(!b) return; haptic(); if(state.detail&&history.state&&history.state.m){ state.detail=null; syncBack(); history.back(); }
   const to=b.dataset.t; state.dir = TABS.indexOf(to)>TABS.indexOf(state.tab)?"fwd":TABS.indexOf(to)<TABS.indexOf(state.tab)?"bwd":null; state.tab=to; state.detail=null; syncBack(); render(); window.scrollTo(0,0);};
@@ -1736,7 +1854,7 @@ Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensu
   /* 3D-наклон главной карточки матча: палец/курсор + гироскоп уже используется фоном */
   let hero=null;
   document.addEventListener("pointermove",e=>{
-    if(RM||root.dataset.fxl==="off") return;
+    if(RM||root.dataset.fxl==="off"||root.dataset.anim==="off") return;
     const h=e.target.closest&&e.target.closest(".hero"); if(!h){ if(hero){ hero.classList.remove("tilting"); hero.style.transform=""; hero=null; } return; }
     if(e.pointerType==="touch" && !(e.buttons||e.pressure>0)) return;
     hero=h; const b=h.getBoundingClientRect(), x=(e.clientX-b.left)/b.width-.5, y=(e.clientY-b.top)/b.height-.5;
@@ -1754,7 +1872,7 @@ Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensu
 (function(){
   "use strict";
   const root=document.documentElement, clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-  const fxOff=()=>RM||root.dataset.fxl==="off";
+  const fxOff=()=>RM||root.dataset.fxl==="off"||root.dataset.anim==="off";
   /* ── пружина → CSS linear() ── */
   (function(){
     try{
@@ -2199,9 +2317,6 @@ void main(){
     Sheet.open("Открытка для сторис",`<img class="shimg" src="${url}" alt="Открытка"><div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">${canShare?'<button class="btn" id="shn" style="flex:1">↗ Поделиться</button>':""}<a class="btn" id="shd" href="${url}" download="prognoz.png" style="flex:1;text-align:center;text-decoration:none;background:var(--card2);color:var(--text)">⬇ Сохранить</a></div>
       <div class="note">Сохраните картинку и добавьте в сторис Telegram: прямой публикации из мини-приложения Telegram без загрузки картинки на сервер не разрешает.</div>`,B=>{ const s=B.querySelector("#shn"); if(s) s.onclick=()=>navigator.share({files:[file],title:"Прогноз"}).catch(()=>{}); });
   }
-  function starsSheet(){ haptic(); Sheet.open("⭐ Premium-сигналы",`<span class="demo">ДЕМО-МАКЕТ</span><div class="stars"><div class="pl"><span>Неделя<br><span class="dim" style="font-size:12px">ранние сигналы и push</span></span><span>— ⭐</span></div><div class="pl"><span>Месяц<br><span class="dim" style="font-size:12px">+ расширенная аналитика</span></span><span>— ⭐</span></div><div class="pl"><span>Сезон<br><span class="dim" style="font-size:12px">всё включено</span></span><span>— ⭐</span></div></div>
-    <button class="btn" disabled style="width:100%;margin-top:12px;opacity:.5">Оплата Stars не подключена</button><div class="note">Это интерфейсная заглушка: цены и оплата не настроены, ничего не списывается.</div>`); }
-
   /* ───────── 2. Достижения ───────── */
   const DEFS=[
     {id:"first",ic:"🥇",t:"Первая победа",d:"Выиграна первая ставка",p:s=>[s.wins,1]},
@@ -2220,8 +2335,9 @@ void main(){
     return {n:R.length,wins,best,cur,pnl,peak,maxWinOdds:maxO}; }
   let achBusy=0;
   function toastAch(def,title,sub,ic){ let t=$("#achT"); if(!t){ t=document.createElement("div"); t.id="achT"; t.setAttribute("role","status"); document.body.appendChild(t); }
-    t.innerHTML=`<div class="ic">${ic||def.ic}</div><div><b>${esc(title||def.t)}</b><span>${esc(sub||def.d)}</span></div>`; t.classList.remove("on"); void t.offsetWidth; t.classList.add("on");
-    try{ Snd.play("ok"); }catch(e){} haptic("ok"); confetti(def?90:150); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("on"),4200); }
+    const IC={rec:'<svg viewBox="0 0 24 24"><path d="M3 17l5-5 4 4 8-9"/><path d="M15 7h5v5"/></svg>',ok:'<svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></svg>'};
+    t.innerHTML=`<div class="ic">${def&&def.rec?IC.rec:IC.ok}</div><div><b>${esc(title||def.t)}</b><span>${esc(sub||def.d)}</span></div>`; t.classList.remove("on"); void t.offsetWidth; t.classList.add("on");
+    haptic("soft"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("on"),4200); }              /* v35: без конфетти/кубка — сдержанное уведомление */
   async function achRefresh(force){
     if(Date.now()-achBusy<25000&&!force) return; achBusy=Date.now();
     let rows; try{ rows=await api("/api/bets?status=settled&limit=500"); }catch(e){ return; } if(!Array.isArray(rows)) return;
@@ -2230,16 +2346,16 @@ void main(){
     lsSet("ach",JSON.stringify(nu)); lsSet("achst",JSON.stringify(s));
     const prevPeak=J("pnlpeak",null); lsSet("pnlpeak",JSON.stringify(s.peak));
     if(have!==null){ let q=fresh.slice(); const rec=prevPeak!==null&&s.peak>prevPeak+.5&&s.n>=5;
-      if(rec) q.unshift({t:"Новый рекорд PnL!",d:"Накопленная прибыль обновила максимум",ic:"🏆",rec:1});
+      if(rec) q.unshift({t:"Новый максимум PnL",d:"Накопленный результат обновил исторический максимум",rec:1});
       q.slice(0,3).forEach((d,i)=>setTimeout(()=>toastAch(d,d.t,d.d,d.ic),i*4600)); }
     paintAch();
   }
   function achHtml(){ const have=J("ach",{}), st=J("achst",null), n=DEFS.filter(d=>have[d.id]).length;
     return `<div class="cap">Достижения · ${n}/${DEFS.length}</div><div class="ach">${DEFS.map(d=>{ const on=!!have[d.id]; let pr=""; if(!on&&st){ const [v,need]=d.p(st); pr=`<div class="pr"><i style="width:${clamp(v/need,0,1)*100}%"></i></div>`; }
       return `<div class="bd ${on?"on":""}"><div class="ic">${d.ic}</div><div class="tt">${esc(d.t)}</div><div class="dd">${esc(d.d)}</div>${pr}</div>`; }).join("")}</div>
-      <div style="margin-top:12px"><button class="chip" id="starsb">⭐ Premium-сигналы (демо)</button></div><div class="note">Считаются по вашим поставленным и рассчитанным ставкам.</div>`; }
-  function paintAch(){ const el=$("#achcard"); if(el){ el.innerHTML=achHtml(); const b=$("#starsb",el); if(b) b.onclick=starsSheet; } }
-  const _look=lookCard; lookCard=function(){ setTimeout(()=>{ paintAch(); achRefresh(true); },0); return `<div class="card" id="achcard">${achHtml()}</div>`+_look(); };
+      <div class="note">Считаются по вашим поставленным и рассчитанным ставкам.</div>`; }
+  function paintAch(){ const el=$("#achcard"); if(el){ el.innerHTML=achHtml(); } }
+  lookCard=function(){ setTimeout(()=>{ paintAch(); achRefresh(true); },0); return `<div class="card" id="achcard">${achHtml()}</div>`; };      /* v35: настройки оформления переехали на вкладку «Оформление» */
   const _cw=checkWins; checkWins=function(rows){ try{ _cw(rows); }catch(e){} setTimeout(()=>achRefresh(false),400); };
   /* ставка «зашла» → сразу открытка-предложение */
 
@@ -2274,7 +2390,7 @@ void main(){
     const q=$("#q"); if(q&&!q.parentNode.classList.contains("qwrap")&&SR){ const w=document.createElement("div"); w.className="qwrap"; q.parentNode.insertBefore(w,q); w.appendChild(q);
       const b=document.createElement("button"); b.type="button"; b.className="vbtn"; b.setAttribute("aria-label","Голосовой поиск"); b.innerHTML='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>'; b.onclick=()=>voice(b,q); w.appendChild(b); }
     const tl=$(".tools"); if(tl&&!$("#th")){ const b=document.createElement("button"); b.className="chip"; b.id="th"; b.style.display="none"; b.textContent="🙈 Скрытые"; b.onclick=()=>{ state.showHid=!state.showHid; b.classList.toggle("on",state.showHid); haptic(); renderList(true); }; tl.insertBefore(b,$("#tr")&&$("#tr").nextSibling); }
-    fab.classList.toggle("on",!!state.detail&&!!state.cur&&state.tab==="matches"); if(state.detail||state.tab!=="matches"){ const u=$("#undo"); if(u) u.classList.remove("on"); } }
+    fab.classList.toggle("on",state.tab==="matches"&&(!state.detail||!!state.cur));        /* v35: и на главном экране (глобальный чат), и в карточке матча */ if(state.detail||state.tab!=="matches"){ const u=$("#undo"); if(u) u.classList.remove("on"); } }
 
   /* ───────── хуки на экран матча / список ───────── */
   const _vm=viewMatch;
@@ -2319,28 +2435,32 @@ void main(){
   const PROV={groq:{n:"Groq",c:"#34d399",d:"🟢"},sambanova:{n:"SambaNova",c:"#fbbf24",d:"🟡"},cloudflare:{n:"Cloudflare",c:"#fb923c",d:"🟠"},openrouter:{n:"OpenRouter",c:"#f87171",d:"🔴"},huggingface:{n:"Hugging Face",c:"#a78bfa",d:"🟣"},pollinations:{n:"Pollinations",c:"#60a5fa",d:"🔵"},none:{n:"ИИ недоступен",c:"#94a3b8",d:"⚫"}};
   const PRESET={"Форма":"Проанализируй форму обеих команд: что говорят их последние матчи?","Голы":"Сколько голов ждать в этом матче и почему? Опирайся на xG и форму.",
     "Очные":"Что показывают очные встречи этих команд?","Где перевес?":"Есть ли в этом матче ставка с перевесом по расчётам бота? Объясни риски.","Риски":"Какие главные риски и неопределённости у этого прогноза?"};
+  /* v35: вопросы «про любой матч» с главного экрана */
+  const GPRESET={"Что сегодня?":"Какие матчи ближайших дней самые интересные и почему? Дай развёрнутый разбор.","Где перевес?":"В каких ближайших матчах бот нашёл ставки с перевесом? Объясни обоснование и риски по каждой.","Много голов":"В каких ближайших матчах ждать много голов по xG и форме? Обоснуй."};
   const aiUrl=()=>{ let u=""; try{ u=lsGet("aiurl")||""; }catch(e){} if(!u&&typeof SNAP!=="undefined"&&SNAP&&SNAP.ai_endpoint) u=SNAP.ai_endpoint.url||""; return /^(https:\/\/[^\s"'<>]{4,190}|http:\/\/(127\.0\.0\.1|localhost)(:\d{2,5})?)$/.test(u)?u.replace(/\/+$/,""):""; };
   const RMo=matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const fmt=t=>esc(t).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").split(/\n{2,}/).map(p=>"<p>"+p.replace(/\n/g,"<br>").replace(/(^|<br>)\s*[-•]\s+/g,"$1• ")+"</p>").join("");
+  const fmt=t=>esc(t).replace(/\n(?=\*\*[^*\n]{2,40}:\*\*)/g,"\n\n").replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").split(/\n{2,}/).map(p=>"<p>"+p.replace(/\n/g,"<br>").replace(/(^|<br>)\s*[-•]\s+/g,"$1• ")+"</p>").join("");
   function setAcc(id){ const p=PROV[id]||PROV.none; root.style.setProperty("--ai",p.c); const d=document.getElementById("pdot"), n=document.getElementById("pname"), h=document.getElementById("cphd");
     if(d&&n){ n.textContent=p.n; h.classList.toggle("idle",id==="none"); h.setAttribute("aria-label","Отвечает: "+p.n); } return p; }
   function copyText(t){ try{ if(navigator.clipboard&&navigator.clipboard.writeText) return navigator.clipboard.writeText(t).then(()=>true,()=>fb(t)); }catch(e){} return Promise.resolve(fb(t)); }
   function fb(t){ try{ const a=document.createElement("textarea"); a.value=t; a.style.cssText="position:fixed;opacity:0;top:0"; document.body.appendChild(a); a.select(); const ok=document.execCommand("copy"); a.remove(); return ok; }catch(e){ return false; } }
 
   function openCopilot32(){
-    const m=state.cur; if(!m) return; haptic("light"); try{ Snd.play("open"); }catch(e){}
+    const G=!(state.detail&&state.cur), m=G?null:state.cur; haptic("light"); try{ Snd.play("open"); }catch(e){}      /* G — «глобальный» режим: матч не открыт, спрашивать можно про любой */
+    const PR=G?GPRESET:PRESET;
     const url=aiUrl(), hasAI=!!url;
     Sheet.open("✨ AI-копилот",`<div class="cphd idle" id="cphd" role="status" aria-live="polite"><span class="pdot" id="pdot"></span><span>Отвечает: <b id="pname">${hasAI?"…":PROV.none.n}</b></span><span class="cch" id="cch"></span></div>
-      <div class="cp" id="cp"></div><div class="cpq" id="cpq">${Object.keys(PRESET).map(k=>`<button type="button" data-q="${esc(k)}">${esc(k)}</button>`).join("")}</div>
-      <form class="cpf" id="cpf" autocomplete="off"><input id="cpi" maxlength="500" enterkeyhint="send" placeholder="${hasAI?"Спросите про матч…":"Свободные вопросы — когда подключён ИИ-сервер"}" ${hasAI?"":"disabled"} aria-label="Вопрос копилоту"><button id="cps" type="submit" aria-label="Отправить" ${hasAI?"":"disabled"}>➤</button></form>
-      <div class="cpn">${hasAI?"ИИ отвечает по данным бота (xG, форма, очные). Это оценка, а не гарантия. Свайп по ответу: ← копировать, → заново.":"ИИ-сервер не подключён (запустите run_ai.py) — работаю на данных бота без внешнего ИИ."}</div>`,B=>{
-      const cp=B.querySelector("#cp"), inp=B.querySelector("#cpi"), snd=B.querySelector("#cps"); let busy=false, hist=[], alive=true;
+      <div class="cp" id="cp"></div><div class="cpq" id="cpq">${Object.keys(PR).map(k=>`<button type="button" data-q="${esc(k)}">${esc(k)}</button>`).join("")}</div>
+      <div class="cppick" id="cppick" hidden></div><div class="cpac" id="cpac" hidden role="listbox" aria-label="Подсказки команд"></div>
+      <form class="cpf" id="cpf" autocomplete="off"><input id="cpi" maxlength="500" enterkeyhint="send" placeholder="${hasAI?(G?"Спросите про любой матч: Реал — Барселона…":"Спросите про матч…"):"Свободные вопросы — когда подключён ИИ-сервер"}" ${hasAI?"":"disabled"} aria-label="Вопрос копилоту"><button id="cps" type="submit" aria-label="Отправить" ${hasAI?"":"disabled"}>➤</button></form>
+      <div class="cpn">${hasAI?"ИИ отвечает по данным бота (xG, форма, очные) и находит любой матч из базы по названию команд. Это оценка, а не гарантия. Свайп по ответу: ← копировать, → заново.":"ИИ-сервер не подключён (запустите run_ai.py) — работаю на данных бота без внешнего ИИ."}</div>`,B=>{
+      const cp=B.querySelector("#cp"), inp=B.querySelector("#cpi"), snd=B.querySelector("#cps"); let busy=false, hist=[], alive=true, pick=null, ctxm=null;
       setAcc(hasAI?(lsGet("aiprov")||"groq"):"none"); if(hasAI) B.querySelector("#cphd").classList.remove("idle");
       const scroll=()=>{ cp.scrollTop=cp.scrollHeight; };
       function row(cls,html){ const r=document.createElement("div"); r.className="brow "+(cls==="me"?"me":"ai"); const b=document.createElement("div"); b.className="bub "+cls; b.innerHTML=html;
         if(cls==="ai") r.innerHTML='<span class="hint l">📋 Копировать</span><span class="hint r">🔄 Заново</span>'; r.appendChild(b); cp.appendChild(r); scroll(); return {r,b}; }
       /* локальный ответ без ИИ — те же расчёты, что были в v31 */
-      function local(key){ try{ return V31.INS[key]?V31.INS[key](m):"<p>Для свободных вопросов нужен подключённый ИИ-сервер.</p>"; }catch(e){ return "<p>Не получилось собрать ответ.</p>"; } }
+      function local(key){ try{ if(!m) return "<p>Для вопросов про любые матчи нужен подключённый ИИ-сервер.</p>"; return V31.INS[key]?V31.INS[key](m):"<p>Для свободных вопросов нужен подключённый ИИ-сервер.</p>"; }catch(e){ return "<p>Не получилось собрать ответ.</p>"; } }
 
       /* печатная машинка: слово за словом, ускоряется, если поток обгоняет */
       function typer(ans,onDrain){ let q="", shown="", timer=0, ended=false; const W=/^\s*\S+\s?/;
@@ -2361,7 +2481,7 @@ void main(){
           try{
             const ctl=new AbortController(); const to=setTimeout(()=>ctl.abort(),45000);
             const resp=await fetch(url+"/api/ai/chat",{method:"POST",signal:ctl.signal,headers:{"Content-Type":"application/json","X-Telegram-Init-Data":(tg&&tg.initData)||""},
-              body:JSON.stringify({event_id:m.event_id,q:question,history:preset?[]:hist.slice(-6),nocache:!!regenOf})});
+              body:JSON.stringify({event_id:m?m.event_id:0,hints:pick?[pick.id]:[],q:question,history:preset?[]:hist.slice(-6),nocache:!!regenOf})});
             clearTimeout(to);
             if(!resp.ok){ const er=new Error("http"); er.code=resp.status; try{ er.retry=(await resp.json()).retry_after; }catch(x){} throw er; }
             const rd=resp.body.getReader(), dec=new TextDecoder(); let buf="";
@@ -2370,6 +2490,7 @@ void main(){
               if(o.t==="meta"){ provider=o.id; cached=!!o.cached; lsSet("aiprov",o.id); const p=setAcc(o.id); B.querySelector("#cphd").classList.remove("idle"); B.querySelector("#cch").textContent=cached?"⚡ из кэша":""; haptic("soft"); try{ Snd.play("tap"); }catch(x){} meta=p; }
               else if(o.t==="think"){ if(!think){ mk(); think=document.createElement("details"); think.className="think"; think.innerHTML='<summary>🧠 Размышления</summary><div class="tbody"></div>'; b.insertBefore(think,ans); tbody=think.querySelector(".tbody"); } tbody.textContent+=o.x; }
               else if(o.t==="delta"){ mk(); gotAny=true; gotText=true; tw.push(o.x); }
+              else if(o.t==="ctx"){ ctxm=Array.isArray(o.matches)?o.matches.slice(0,2):null; }
               else if(o.t==="note"){ const n=document.createElement("div"); n.className="note"; n.textContent=o.x; b.appendChild(n); }
               else if(o.t==="stub"){ stubbed=true; errs=Array.isArray(o.errors)?o.errors.slice(0,6):null; }
               else if(o.t==="done"){ finished=true; }
@@ -2377,7 +2498,7 @@ void main(){
             };
             const fin=()=>{ /* вызывается, когда текст допечатан */
               const txt=tw?tw.text():""; const mt=document.createElement("div"); mt.className="meta"; const p=meta||PROV.none;
-              mt.innerHTML=`<span>${p.d} ${esc(p.n)}</span>${cached?"<span>· ⚡ кэш</span>":""}`; b.appendChild(mt); r.dataset.done="1";
+              mt.innerHTML=`<span>${p.d} ${esc(p.n)}</span>${cached?"<span>· ⚡ кэш</span>":""}${ctxm&&ctxm.length?`<span>· 🎯 ${esc(ctxm.map(x=>String(x.name||"")).join(" · "))}</span>`:""}`; b.appendChild(mt); r.dataset.done="1";
               hist.push({role:"user",content:question},{role:"assistant",content:txt.slice(0,600)}); hist=hist.slice(-6);
               const words=txt.split(/\s+/).length; if(!RMo&&(words>=90||think||(!preset&&question.split(/\s+/).length>=8))){ try{ confetti(70); Snd.play("ok"); }catch(x){} haptic("ok"); } else haptic("soft"); };
             for(;;){ const {value,done:dn}=await rd.read(); if(dn) break; buf+=dec.decode(value,{stream:true}); let i;
@@ -2412,12 +2533,27 @@ void main(){
 
       /* приветствие */
       const greet=row("ai",""); greet.b.innerHTML='<div class="aisk"><i></i><i></i><i></i></div>';
-      setTimeout(()=>{ greet.b.innerHTML=V31.headline(m); greet.r.dataset.done="1"; haptic("soft"); },600);
+      setTimeout(()=>{ greet.b.innerHTML=G?'<p><b>Спросите про любой матч из базы.</b></p><p>Назовите команды — я найду матч, подтяну xG, форму и очные встречи и дам развёрнутый разбор. Например: «Стоит ли брать ТБ в матче Реал — Барселона?»</p>':V31.headline(m); greet.r.dataset.done="1"; haptic("soft"); },600);
+
+      /* v35: автодополнение команд — подсказывает матчи из базы по мере набора */
+      const acEl=B.querySelector("#cpac"), pkEl=B.querySelector("#cppick");
+      const pool=()=>{ try{ return ((typeof SNAP!=="undefined"&&SNAP&&SNAP.matches)||state.cache.matches||[]).filter(x=>x&&!x.score&&x.event_id!=null); }catch(e){ return []; } };
+      const nz=t=>String(t||"").toLowerCase().replace(/ё/g,"е");
+      const nmx=x=>(nmH(x)+" — "+nmA(x));
+      function suggest(){ const v=inp.value; const frag=nz(v.split(/[—–\-:,]|\s+(?:и|vs|v)\s+/i).pop()||"").trim(); if(frag.length<2||!hasAI){ acEl.hidden=true; return; }
+        const rows=pool().filter(x=>nz(x.home_ru+" "+x.away_ru+" "+x.home+" "+x.away).split(/\s+/).some(w=>w.startsWith(frag))||nz(x.home_ru+" "+x.away_ru+" "+x.home+" "+x.away).includes(frag))
+          .sort((a,b)=>String(a.kickoff_at||a.date).localeCompare(String(b.kickoff_at||b.date))).slice(0,4);
+        if(!rows.length){ acEl.hidden=true; return; }
+        acEl.innerHTML=rows.map(x=>`<button type="button" role="option" data-e="${x.event_id}"><b>${esc(nmx(x))}</b><span>${esc(LEAGUES[x.league]||x.league||"")} · ${esc(x.kickoff_at?fmtDay(new Date(x.kickoff_at))+" "+fmtTime(new Date(x.kickoff_at)):x.date||"")}</span></button>`).join(""); acEl.hidden=false; }
+      function setPick(x){ pick=x?{id:x.event_id,name:nmx(x)}:null; if(!pick){ pkEl.hidden=true; return; } pkEl.innerHTML=`<span>🎯 ${esc(pick.name)}</span><button type="button" aria-label="Убрать матч">✕</button>`; pkEl.hidden=false; pkEl.querySelector("button").onclick=()=>{ pick=null; pkEl.hidden=true; haptic("light"); }; }
+      inp.addEventListener("input",suggest);
+      acEl.onclick=e=>{ const b=e.target.closest("[data-e]"); if(!b) return; const x=pool().find(y=>String(y.event_id)===b.dataset.e); if(!x) return; haptic("light"); setPick(x);
+        const cut=inp.value.search(/[^—–\-:,\s]+$/); inp.value=(cut>0?inp.value.slice(0,cut):"")+nmx(x)+" — "; acEl.hidden=true; try{ inp.focus({preventScroll:true}); }catch(z){} };
 
       B.querySelector("#cpq").onclick=e=>{ const k=e.target.closest("[data-q]"); if(!k||busy) return; haptic("light"); const key=k.dataset.q;
         if(!hasAI){ row("me",esc(key)); const t=row("ai",'<span class="dots"><i></i><i></i><i></i></span>'); setTimeout(()=>{ t.b.innerHTML=local(key); t.r.dataset.done="1"; haptic("soft"); scroll(); },480+Math.random()*300); return; }
-        ask(PRESET[key],key); };
-      B.querySelector("#cpf").onsubmit=e=>{ e.preventDefault(); const v=inp.value.trim(); if(!v||busy||!hasAI) return; inp.value=""; haptic("light"); try{ Snd.play("press"); }catch(x){} ask(v,null); };
+        ask(PR[key],key); };
+      B.querySelector("#cpf").onsubmit=e=>{ e.preventDefault(); const v=inp.value.trim(); if(!v||busy||!hasAI) return; inp.value=""; haptic("light"); try{ Snd.play("press"); }catch(x){} ask(v,null); acEl.hidden=true; };
 
       /* свайпы по ответу ИИ: ← копировать, → сгенерировать заново */
       let sw=null;
@@ -2470,7 +2606,7 @@ void main(){
   /* ── «перетекающие» числа с мягким свечением (только когда значение реально изменилось) ── */
   function roll(el,to,fmt,ms){
     const had=el.dataset.v!=null, from=had?+el.dataset.v:0; el.dataset.v=String(to);
-    if(RM||(had&&Math.abs(to-from)<1e-9)){ el.textContent=fmt(to); return; }
+    if(RM||DOC.dataset.anim==="off"||(had&&Math.abs(to-from)<1e-9)){ el.textContent=fmt(to); return; }
     const t0=performance.now(), d=ms||700; el.classList.remove("glow"); void el.offsetWidth; el.classList.add("glow");
     (function f(){ if(!el.isConnected) return; const k=Math.min(1,(performance.now()-t0)/d), e=1-Math.pow(1-k,3); el.textContent=fmt(from+(to-from)*e); if(k<1) requestAnimationFrame(f); else el.textContent=fmt(to); })();
   }
@@ -2578,7 +2714,7 @@ void main(){
 
   /* ══════════ 2. МОРФИНГ: карточка «расширяется» в экран матча (один слой, только transform/opacity) ══════════ */
   function morph(r,col){
-    if(RM||DOC.dataset.perf==="low"||!r||r.width<10||r.height<10) return; let o=$("#morph34"); if(o) o.remove();
+    if(RM||DOC.dataset.anim==="off"||DOC.dataset.perf==="low"||!r||r.width<10||r.height<10) return; let o=$("#morph34"); if(o) o.remove();
     o=document.createElement("div"); o.id="morph34"; o.style.setProperty("--mc",col||"#6096ff"); document.body.appendChild(o);
     const vw=innerWidth, vh=innerHeight;
     const a=o.animate([{transform:`translate(${r.left}px,${r.top}px) scale(${r.width/vw},${r.height/vh})`,opacity:.92},{transform:"translate(0px,0px) scale(1,1)",opacity:1}],{duration:280,easing:"cubic-bezier(.2,.85,.25,1)",fill:"forwards"});
@@ -2661,6 +2797,184 @@ void main(){
   new MutationObserver(()=>{ if($("#fl34")&&!$("#fl34").dataset.b){ $("#fl34").dataset.b="1"; badge(); } }).observe(document.getElementById("app"),{childList:true,subtree:true});
   window.V34={choose,candidates,score,fuzzy,norm,lev,roll,morph,FS,applyFilters,openFilters,openBotd,botdKey:bkey};
 }catch(e){ console.warn("v34",e); } })();
+
+/* ═════════ v35: «Оформление» (конструктор), Live-плашка, Сводка дня ИИ, push-настройки, скелетон → контент ═════════ */
+(function(){ try{
+  const root=document.documentElement;
+  const $=(s,r)=>(r||document).querySelector(s), $$=(s,r)=>[...(r||document).querySelectorAll(s)];
+  const J=(k,d)=>{ try{ const v=JSON.parse(lsGet(k)||"null"); return v==null?d:v; }catch(e){ return d; } };
+  const NOA=()=>lsGet("anim35")==="off";
+  const accHex=()=>{ const r=ACCS.find(x=>x[0]===(lsGet("acc")||"blue")); return r?r[1]:"#6096ff"; };
+  const lum=h=>{ const n=parseInt(String(h).slice(1),16), f=c=>{ c/=255; return c<=.03928?c/12.92:Math.pow((c+.055)/1.055,2.4); }; return .2126*f(n>>16&255)+.7152*f(n>>8&255)+.0722*f(n&255); };
+  function applyPrefs(){ root.dataset.anim=NOA()?"off":"on"; root.dataset.icons=lsGet("icons35")==="fill"?"fill":"line"; root.dataset.accl=lum(accHex())<.30?"dk":"lt"; }
+  applyPrefs();
+
+  /* ── «Отключить анимации»: WAAPI-анимации выполняются мгновенно, конфетти не запускается; CSS гасится правилом html[data-anim=off] ── */
+  const _an=Element.prototype.animate;
+  Element.prototype.animate=function(kf,o){ if(NOA()){ o=typeof o==="number"?.01:Object.assign({},o,{duration:.01,delay:0,endDelay:0,iterations:1}); } return _an.call(this,kf,o); };
+  try{ const _cf=confetti; confetti=function(){ if(NOA()) return; return _cf.apply(this,arguments); }; }catch(e){}
+
+  /* ── вибрация: Выкл / Лёгкая / Средняя / Сильная (в v34 переключатель «Выкл» и звуки интерфейса пропали — возвращено) ── */
+  const HP=tg&&tg.HapticFeedback; let hpT=0;
+  const hapLevel=()=>{ const v=lsGet("hap"); return v==="off"?"off":v==="light"?"light":(v==="heavy"||v==="strong")?"heavy":"medium"; };
+  const HM={
+    light:{tap:["s"],soft:["i","light"],light:["i","light"],medium:["i","light"],rigid:["i","medium"],heavy:["i","medium"],ok:["n","success"],warn:["n","warning"],err:["n","error"]},
+    medium:{tap:["s"],soft:["i","soft"],light:["i","light"],medium:["i","medium"],rigid:["i","rigid"],heavy:["i","heavy"],ok:["n","success"],warn:["n","warning"],err:["n","error"]},
+    heavy:{tap:["i","light"],soft:["i","medium"],light:["i","medium"],medium:["i","heavy"],rigid:["i","heavy"],heavy:["i","heavy"],ok:["n","success"],warn:["n","warning"],err:["n","error"]}};
+  const VIB={light:6,medium:10,heavy:18};
+  haptic=function(kind){ kind=kind||"tap"; const L=hapLevel();
+    try{ if(L!=="off"){ const n=performance.now(); if(n-hpT>=35){ hpT=n;
+      if(HP){ const m=HM[L][kind]||HM[L].tap; m[0]==="s"?HP.selectionChanged():m[0]==="i"?HP.impactOccurred(m[1]):HP.notificationOccurred(m[1]); }
+      else if(navigator.vibrate) navigator.vibrate(kind==="ok"?[VIB[L],40,VIB[L]]:VIB[L]); } } }catch(e){}
+    try{ Snd.play(kind==="ok"?"ok":kind==="err"||kind==="warn"?"err":kind==="medium"?"press":kind==="rigid"?"edge":"tap"); }catch(e){} };
+
+  /* ── скелетон → контент: заготовки не исчезают рывком, а растворяются (Fade + Blur), поверх уже готового контента ── */
+  const RM35=!!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches);
+  function ghostCapture(host){ try{ if(NOA()||RM35||!host) return null; const sk=$$(".skel",host); if(!sk.length) return null;
+      return sk.map(el=>{ const r=el.getBoundingClientRect(); return (r.bottom<0||r.top>innerHeight)?null:{r,n:el.cloneNode(false)}; }).filter(Boolean); }catch(e){ return null; } }
+  function ghostRelease(gs,newEl){ try{ if(!gs||!gs.length) return;
+      gs.forEach(({r,n})=>{ n.className="skel skg35"; n.removeAttribute("id"); n.style.cssText=`left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px`; document.body.appendChild(n);
+        const a=n.animate([{opacity:1,filter:"blur(0px)",transform:"scale(1)"},{opacity:0,filter:"blur(10px)",transform:"scale(.985)"}],{duration:320,easing:"cubic-bezier(.22,.8,.3,1)",fill:"forwards"}); a.onfinish=()=>n.remove(); setTimeout(()=>n.remove(),900); });
+      if(newEl&&root.dataset.fxl==="max"&&root.dataset.perf!=="low") newEl.animate([{opacity:.0,filter:"blur(6px)"},{opacity:1,filter:"blur(0px)"}],{duration:340,easing:"ease-out"}); }catch(e){} }
+  const _mount=mount;
+  mount=function(){ const gs=ghostCapture($app.firstElementChild); const v=_mount.apply(this,arguments); ghostRelease(gs,v); return v; };
+  const _rl=renderList;
+  renderList=function(){ const l=document.getElementById("list"), gs=ghostCapture(l); const r=_rl.apply(this,arguments); ghostRelease(gs,l); try{ paintLive(); }catch(e){} return r; };
+
+  /* ═════════ вкладка «Оформление» ═════════ */
+  const GL_OK=()=>{ try{ return !!(window.V31&&V31.GL&&V31.GL.supported()); }catch(e){ return false; } };
+  const ANIM_BG=[["silk","Шёлк"],["particles","Частицы"],["nebula","Глубокий космос"],["aurora","Аврора"],["grid","Неон"],["pitch","Стадион"]];
+  const STAT_BG=[["sNavy","Глубокий синий"],["sEmerald","Изумрудный"],["sGraphite","Графит"],["sPastel","Пастель"],["sMidnight","Полночь"],["off","Без фона"]];
+  const HAP=[["off","Выкл"],["light","Лёгкая"],["medium","Средняя"],["heavy","Сильная"]];
+  const PUSH=[["t15","За 15 минут до матча","Напомним перед стартом матчей ваших команд и Ставки Дня"],["drop","Резкое падение коэффициента","Если кэф по вашей ставке упал на 8% и больше"],["botd","Новая «Ставка Дня»","Когда бот выберет лучшую ставку дня"],["start","Матч начался","Для матчей, по которым у вас есть ставка"],["res","Результат ставки","Когда ставка рассчитана"]];
+  const PUSH_DEF={t15:true,drop:true,botd:true,start:false,res:true,qh:false,from:"23:00",to:"08:00"};
+  const pushGet=()=>Object.assign({},PUSH_DEF,J("push35",{}));
+  const pushSet=o=>lsSet("push35",JSON.stringify(o));
+  const bgTile=([k,t])=>`<button type="button" class="pv-${k}${(lsGet("bg")||"silk")===k?" on":""}" data-bg="${k}">${esc(t)}</button>`;
+  const sw=(id,on,label)=>`<button type="button" class="sw35" id="${id}" role="switch" aria-checked="${on?"true":"false"}" aria-label="${esc(label)}"></button>`;
+  const NAVI={line:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7l4 3-1.5 5h-5L8 10z"/></svg><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 15l4-4 3 3 5-6"/></svg>'};
+  function lookHtml(){
+    const th=lsGet("theme")||"auto", ac=lsGet("acc")||"blue", bg=lsGet("bg")||"silk", fl=lsGet("fxl")||"max", hp=hapLevel(), ic=lsGet("icons35")==="fill"?"fill":"line", sn=lsGet("snd")||"on", pu=pushGet();
+    return `<div class="lk"><h1>Оформление<span class="grow"></span></h1>
+     <div class="card"><div class="cap">Тема и акцент</div>
+       <div class="seg" id="l-th">${[["auto","Авто"],["light","Светлая"],["dark","Тёмная"]].map(([k,t])=>`<button data-th="${k}" class="${th===k?"on":""}">${t}</button>`).join("")}</div>
+       <div class="sub">Акцентный цвет</div>
+       <div class="acc35" id="l-ac">${ACCS.map(([k,c,n])=>`<button type="button" data-ac="${k}" class="${ac===k?"on":""}" style="--c:${c}" aria-label="${esc(n)}"><i><svg viewBox="0 0 24 24"><path d="M5 12.5l4.2 4.2L19 7"/></svg></i>${esc(n)}</button>`).join("")}</div></div>
+     <div class="card"><div class="cap">Фон</div>
+       <div class="sub">Анимированные</div><div class="bg35" id="l-bga">${ANIM_BG.map(bgTile).join("")}${GL_OK()?bgTile(["fluid","Жидкость · GPU"]):""}</div>
+       <div class="sub">Статичные</div><div class="bg35" id="l-bgs">${STAT_BG.map(bgTile).join("")}</div>
+       <div class="row35" style="margin-top:12px"><span><span class="t">Отключить анимации</span><span class="d">Экономит батарею: фон замирает, интерфейс без движения</span></span>${sw("l-noa",NOA(),"Отключить анимации")}</div>
+       <div class="sub">Качество эффектов</div><div class="seg" id="l-fx">${[["max","Макс"],["lite","Лёгкий"],["off","Выкл"]].map(([k,t])=>`<button data-fl="${k}" class="${fl===k?"on":""}">${t}</button>`).join("")}</div>
+       <div class="note">Анимированные фоны рисуются в малом разрешении и останавливаются, когда приложение свёрнуто. Статичные рисуются один раз и не расходуют батарею.</div></div>
+     <div class="card"><div class="cap">Отклик</div>
+       <div class="sub">Вибрация</div><div class="seg" id="l-hp">${HAP.map(([k,t])=>`<button data-hp="${k}" class="${hp===k?"on":""}">${t}</button>`).join("")}</div>
+       <div class="sub">Звуки интерфейса</div><div class="seg" id="l-sn">${[["on","Вкл"],["off","Выкл"]].map(([k,t])=>`<button data-sn="${k}" class="${sn===k?"on":""}">${t}</button>`).join("")}</div></div>
+     <div class="card"><div class="cap">Иконки навигации</div>
+       <div class="ico35" id="l-ic"><button type="button" data-ic="line" class="${ic==="line"?"on":""}"><span class="pr l">${NAVI.line}</span>Строгие · линейные</button><button type="button" data-ic="fill" class="${ic==="fill"?"on":""}"><span class="pr f">${NAVI.line}</span>Округлые · залитые</button></div></div>
+     <div class="card"><div class="cap">Уведомления</div>
+       ${PUSH.map(([k,t,d])=>`<div class="row35"><span><span class="t">${esc(t)}</span><span class="d">${esc(d)}</span></span>${sw("p-"+k,!!pu[k],t)}</div>`).join("")}
+       <div class="row35"><span><span class="t">Тихие часы</span><span class="d">Не беспокоить в это время</span></span>${sw("p-qh",!!pu.qh,"Тихие часы")}</div>
+       <div class="qh35" id="p-qt" ${pu.qh?"":"hidden"}><input type="time" id="p-from" value="${esc(pu.from)}" aria-label="С"><span>—</span><input type="time" id="p-to" value="${esc(pu.to)}" aria-label="До"></div>
+       <div class="note">Выбор сохраняется в приложении на этом телефоне. Сама рассылка уведомлений включается на стороне бота отдельно — приложение лишь запоминает, о чём вы хотите знать.</div></div>
+     <button type="button" class="reset35" id="l-rs">Сбросить оформление</button></div>`; }
+  function bindLookTab(){
+    const grp=(id,attr,fn)=>{ const el=document.getElementById(id); if(!el) return; el.onclick=e=>{ const b=e.target.closest("["+attr+"]"); if(!b) return; fn(b.getAttribute(attr),b,el); }; };
+    const mark=(el,b)=>[...el.querySelectorAll("button")].forEach(x=>x.classList.toggle("on",x===b));
+    grp("l-th","data-th",(v,b,el)=>{ lsSet("theme",v); applyTheme(); mark(el,b); FX.start(); haptic("light"); });
+    grp("l-ac","data-ac",(v,b,el)=>{ lsSet("acc",v); FX.applyAccent(); FX.start(); applyPrefs(); mark(el,b); haptic("light"); });
+    const setBg=(v,b)=>{ lsSet("bg",v); FX.start(); $$("#l-bga button,#l-bgs button").forEach(x=>x.classList.toggle("on",x===b)); haptic("light"); };
+    grp("l-bga","data-bg",setBg); grp("l-bgs","data-bg",setBg);
+    grp("l-fx","data-fl",(v,b,el)=>{ lsSet("fxl",v); FX.start(); mark(el,b); haptic("light"); });
+    grp("l-hp","data-hp",(v,b,el)=>{ lsSet("hap",v); mark(el,b); if(v==="off"){ toast("Вибрация выключена"); } else { haptic("medium"); toast("Вибрация: "+HAP.find(x=>x[0]===v)[1].toLowerCase()); } });
+    grp("l-sn","data-sn",(v,b,el)=>{ lsSet("snd",v); mark(el,b); try{ Snd.play("ok"); }catch(e){} haptic("light"); });
+    grp("l-ic","data-ic",(v,b,el)=>{ lsSet("icons35",v); applyPrefs(); mark(el,b); haptic("light"); });
+    const tog=(id,fn)=>{ const el=document.getElementById(id); if(!el) return; el.onclick=()=>{ const on=el.getAttribute("aria-checked")!=="true"; el.setAttribute("aria-checked",on?"true":"false"); haptic("light"); fn(on); }; };
+    tog("l-noa",on=>{ lsSet("anim35",on?"off":""); applyPrefs(); FX.start(); toast(on?"Анимации отключены":"Анимации включены"); });
+    PUSH.forEach(([k])=>tog("p-"+k,on=>{ const o=pushGet(); o[k]=on; pushSet(o); }));
+    tog("p-qh",on=>{ const o=pushGet(); o.qh=on; pushSet(o); const q=document.getElementById("p-qt"); if(q) q.hidden=!on; });
+    ["from","to"].forEach(k=>{ const el=document.getElementById("p-"+k); if(el) el.onchange=()=>{ if(!/^\d\d:\d\d$/.test(el.value)) return; const o=pushGet(); o[k]=el.value; pushSet(o); haptic("light"); }; });
+    const rs=document.getElementById("l-rs"); if(rs) rs.onclick=()=>{ lsSet("bg","silk"); lsSet("acc","blue"); lsSet("fxl","lite"); lsSet("anim35",""); lsSet("hap","medium"); lsSet("icons35","line"); lsSet("snd","on"); lsSet("theme","auto");
+      applyTheme(); applyPrefs(); FX.applyAccent(); FX.start(); haptic("ok"); toast("Оформление сброшено"); viewLook35(); };
+  }
+  window.viewLook35=function(){ mount(lookHtml()); bindLookTab(); };
+
+  /* ═════════ Live-плашка (матчи, которые идут сейчас) ═════════ */
+  const pad=n=>String(n).padStart(2,"0");
+  function clock(ko){ const t=(Date.now()-ko)/60000; if(t<0) return "—"; if(t<47){ const m=Math.min(t,45); return "≈ "+pad(Math.floor(m))+":"+pad(Math.floor((m%1)*60))+(t>45?"+":""); }
+    if(t<62) return "перерыв"; const m=Math.min(45+(t-62),90); return "≈ "+pad(Math.floor(m))+":"+pad(Math.floor((m%1)*60))+(t>108?"+":""); }
+  const prog=ko=>{ const t=(Date.now()-ko)/60000; const e=t<47?Math.min(t,45):t<62?45:Math.min(45+(t-62),90); return Math.max(0,Math.min(1,e/90)); };
+  const PREV=new Map();
+  function liveRows(){ const rows=((typeof SNAP!=="undefined"&&SNAP&&SNAP.matches)||state.cache.matches||[]);
+    return rows.filter(m=>{ if(!m||m.score||m.done) return false; const w=when(m); if(!w.hasTime) return false; const c=phaseOf(w.d.getTime()).code; return c==="1h"||c==="2h"||c==="ht"; }).slice(0,6); }
+  function liveCard(m){ const ko=when(m).d.getTime(), p=(m.p&&m.p.length===3)?m.p:[.34,.33,.33];
+    return `<button type="button" class="lv35c" data-id="${m.event_id}" data-ko="${ko}" aria-label="Матч идёт: ${esc(nmH(m))} — ${esc(nmA(m))}"><div class="lv-top"><span class="lv-tag"><i></i>LIVE</span><span class="lv-lg">${esc(LEAGUES[m.league]||m.league||"")}</span><span class="lv-t num" data-lt="${ko}">${clock(ko)}</span></div>
+      <div class="lv-teams"><span>${esc(nmH(m))}</span><b class="lv-sc num">vs</b><span>${esc(nmA(m))}</span></div>
+      <div class="lv-bar" role="img" aria-label="Вероятности П1 ${pc(p[0])}, ничья ${pc(p[1])}, П2 ${pc(p[2])}"><i class="h" style="flex-grow:${p[0]}"></i><i class="d" style="flex-grow:${p[1]}"></i><i class="a" style="flex-grow:${p[2]}"></i></div>
+      <div class="lv-pl num"><span class="h">П1 <b>${pc(p[0])}</b></span><span>Х ${pc(p[1])}</span><span>П2 ${pc(p[2])}</span></div><div class="lv-prog"><i style="transform:scaleX(${prog(ko).toFixed(3)})"></i></div></button>`; }
+  function paintLive(){ const host=$("#live35"); if(!host) return; if(state.tab!=="matches"||state.detail){ return; }
+    const rows=liveRows(); const sig=rows.map(m=>m.event_id).join(",");
+    if(!rows.length){ if(host.dataset.sig!==""){ host.dataset.sig=""; host.innerHTML=""; } return; }
+    if(host.dataset.sig===sig){ /* тот же набор: обновляем на месте — полосы плавно перетекают к новым значениям */
+      rows.forEach(m=>{ const c=host.querySelector(`.lv35c[data-id="${m.event_id}"]`); if(!c||!m.p) return; const old=PREV.get(m.event_id), bars=$$(".lv-bar i",c);
+        bars.forEach((b,i)=>{ b.style.flexGrow=m.p[i]; }); const pl=$$(".lv-pl span",c); if(pl.length===3){ pl[0].innerHTML="П1 <b>"+pc(m.p[0])+"</b>"; pl[1].textContent="Х "+pc(m.p[1]); pl[2].textContent="П2 "+pc(m.p[2]); }
+        if(old&&old.some((v,i)=>Math.abs(v-m.p[i])>.005)){ c.classList.add("chg"); setTimeout(()=>c.classList.remove("chg"),2200); haptic("soft"); } PREV.set(m.event_id,m.p.slice()); }); return; }
+    host.dataset.sig=sig; rows.forEach(m=>{ if(m.p) PREV.set(m.event_id,m.p.slice()); });
+    host.innerHTML=`<div class="lvh"><span class="lv-tag"><i></i>Сейчас идут · ${rows.length}</span></div><div class="lvs">${rows.map(liveCard).join("")}</div><div class="lv-note">Время — оценка от заявленного старта; вероятности — расчёт модели, обновляются вместе с данными бота.</div>`;
+    host.onclick=e=>{ const c=e.target.closest("[data-id]"); if(c){ haptic("light"); openMatch(+c.dataset.id); } }; }
+  setInterval(()=>{ if(document.hidden||state.tab!=="matches"||state.detail) return; const host=$("#live35"); if(!host||!host.firstChild) { if(host) paintLive(); return; }
+    $$("[data-lt]",host).forEach(el=>{ el.textContent=clock(+el.dataset.lt); }); $$(".lv35c",host).forEach(c=>{ const i=$(".lv-prog i",c); if(i) i.style.transform="scaleX("+prog(+c.dataset.ko).toFixed(3)+")"; });
+    if(Math.floor(Date.now()/1000)%30===0) paintLive(); },1000);
+
+  /* ═════════ значок ИИ и «Сводка дня» ═════════ */
+  const aiUrl=()=>{ try{ return V32.aiUrl(); }catch(e){ return ""; } };
+  function digestData(){ const now=Date.now(), rows=((typeof SNAP!=="undefined"&&SNAP&&SNAP.matches)||state.cache.matches||[]).filter(m=>m&&!m.score&&!m.done);
+    const win=rows.filter(m=>{ const w=when(m); const t=w.d.getTime(); return isFinite(t)&&t>now-3*36e5&&t<now+36*36e5; });
+    const det=(typeof SNAP!=="undefined"&&SNAP&&SNAP.match)||{}; const by={};
+    win.forEach(m=>{ (by[m.league]=by[m.league]||[]).push(m); });
+    const leagues=Object.keys(by).map(lg=>{ const arr=by[lg], fav=arr.filter(m=>m.p).map(m=>Math.max(...m.p)), xs=arr.map(m=>{ const a=det[m.event_id]&&det[m.event_id].analysis; return a&&a.xg&&a.xg[0]!=null&&a.xg[1]!=null?a.xg[0]+a.xg[1]:null; }).filter(x=>x!=null);
+      return {lg,n:arr.length,fav:fav.length?fav.reduce((a,b)=>a+b,0)/fav.length:null,val:arr.filter(m=>m.n_rec>0).length,xg:xs.length?xs.reduce((a,b)=>a+b,0)/xs.length:null}; }).sort((a,b)=>b.n-a.n).slice(0,6);
+    const top=win.filter(m=>m.p).sort((a,b)=>((b.n_rec>0?.12:0)+Math.max(...b.p))-((a.n_rec>0?.12:0)+Math.max(...a.p))).slice(0,3);
+    return {n:win.length,live:liveRows().length,val:win.filter(m=>m.n_rec>0).length,leagues,top}; }
+  function digestHtml(d){ const lgH=d.leagues.length?d.leagues.map(l=>`<div class="dg-lg"><span class="dot" style="background:${LCOL[l.lg]||"var(--muted)"}"></span><span><b>${esc(LEAGUES[l.lg]||l.lg)}</b> · ${l.n} матч.</span><span class="num">${l.fav!=null?pc(l.fav):""}</span>${l.fav!=null?`<div class="bar"><i style="width:${Math.round(l.fav*100)}%"></i></div>`:""}${(l.val||l.xg!=null)?`<em>${l.val?`С перевесом: ${l.val}`:""}${l.val&&l.xg!=null?" · ":""}${l.xg!=null?`≈ ${l.xg.toFixed(1)} гола по xG`:""}</em>`:""}</div>`).join(""):'<div class="sub" style="margin:6px 0">На ближайшие 36 часов матчей в базе нет.</div>';
+    const tpH=d.top.map(m=>{ const ko=when(m).d.getTime(); return `<button type="button" class="dg-top" data-id="${m.event_id}"><span><b>${esc(nmH(m))} — ${esc(nmA(m))}</b><span>${esc(LEAGUES[m.league]||m.league||"")} · ${esc(etaText(ko)||fmtTime(new Date(ko)))}${m.n_rec>0?" · есть перевес":""}</span></span><span class="pp num">${pc(Math.max(...m.p))}</span></button>`; }).join("");
+    return `<div class="dg"><div class="kpis"><div><b class="num">${d.n}</b><span>матчей · 36 ч</span></div><div><b class="num">${d.live}</b><span>идут сейчас</span></div><div><b class="num">${d.val}</b><span>с перевесом</span></div></div>
+      <h4>Тренды по лигам <span style="text-transform:none;letter-spacing:0;font-weight:400">· средняя вероятность фаворита</span></h4>${lgH}
+      ${tpH?`<h4>Топ-матчи</h4>${tpH}`:""}<h4>Комментарий ИИ</h4><div class="dg-ai" id="dgai"><div class="aisk"><i></i><i></i><i></i></div></div>
+      <button type="button" class="btn" id="dgask">💬 Спросить ИИ про любой матч</button></div>`; }
+  function mkTyper(el,done){ let q="",shown="",tm=0,ended=false; const W=/^\s*\S+\s?/;
+    function tick(){ tm=0; if(!q){ if(ended){ el.classList.remove("typing"); done&&done(); } return; } let n=q.length>400?4:q.length>160?2:1; while(n--&&q){ const mt=W.exec(q), w=mt?mt[0]:q; shown+=w; q=q.slice(w.length); }
+      el.innerHTML=V32.fmt(shown); tm=setTimeout(tick,NOA()?0:(q.length>160?16:30)); }
+    return {push(t){ q+=t; el.classList.add("typing"); if(!tm) tm=setTimeout(tick,0); }, end(){ ended=true; if(!tm) tick(); }, stop(){ clearTimeout(tm); tm=0; q=""; }, text:()=>shown+q}; }
+  async function digestAI(B,force){ const box=$("#dgai",B); if(!box) return; const url=aiUrl();
+    if(!url){ box.innerHTML='<p class="sub" style="margin:0">ИИ-сервер не подключён — показана сводка по данным бота. Запустите run_ai.bat, и здесь появится развёрнутый комментарий ИИ.</p>'; return; }
+    const day=new Date().toISOString().slice(0,10), c=J("dg35",null);
+    if(!force&&c&&c.d===day&&Date.now()-c.ts<30*60000){ box.innerHTML=V32.fmt(c.t)+`<div class="mt">${esc(c.p||"")} · сохранено ${esc(fmtTime(new Date(c.ts)))} · <a href="#" id="dgre">обновить</a></div>`; const r=$("#dgre",box); if(r) r.onclick=e=>{ e.preventDefault(); digestAI(B,true); }; return; }
+    box.innerHTML='<div class="aisk"><i></i><i></i><i></i></div>'; let tw=null, prov="", errs=null, finished=false, stub=false, alive=true;
+    const kill=new MutationObserver(()=>{ if(!document.getElementById("dgai")){ alive=false; if(tw) tw.stop(); kill.disconnect(); } }); kill.observe(document.getElementById("sheet"),{childList:true,subtree:true});
+    try{ const ctl=new AbortController(), to=setTimeout(()=>ctl.abort(),45000);
+      const resp=await fetch(url+"/api/ai/chat",{method:"POST",signal:ctl.signal,headers:{"Content-Type":"application/json","X-Telegram-Init-Data":(tg&&tg.initData)||""},body:JSON.stringify({mode:"digest",event_id:0,q:"",nocache:!!force})}); clearTimeout(to);
+      if(!resp.ok) throw Object.assign(new Error("http"),{code:resp.status});
+      const rd=resp.body.getReader(), dec=new TextDecoder(); let buf=""; haptic("soft");
+      for(;;){ const {value,done}=await rd.read(); if(done) break; buf+=dec.decode(value,{stream:true}); let i;
+        while((i=buf.indexOf("\n\n"))>=0){ const blk=buf.slice(0,i); buf=buf.slice(i+2); if(!blk.startsWith("data: ")) continue; let o=null; try{ o=JSON.parse(blk.slice(6)); }catch(x){} if(!o||!alive) continue;
+          if(o.t==="meta"){ try{ prov=(V32.PROV[o.id]||{}).d+" "+(V32.PROV[o.id]||{}).n; }catch(x){} }
+          else if(o.t==="delta"){ if(!tw){ box.innerHTML='<div class="ans"></div>'; tw=mkTyper(box.firstChild,()=>{ if(!alive) return; const t=tw.text(); box.insertAdjacentHTML("beforeend",`<div class="mt">${esc(prov)}</div>`); lsSet("dg35",JSON.stringify({d:day,t,ts:Date.now(),p:prov})); haptic("ok"); }); } tw.push(o.x); }
+          else if(o.t==="stub"){ stub=true; errs=o.errors; } else if(o.t==="done"){ finished=true; } } }
+      if(stub||!tw) throw Object.assign(new Error("stub"),{code:"stub",errs});
+      if(tw) tw.end();
+    }catch(e){ if(tw) tw.stop(); if(!alive) return; const er=e&&e.errs&&e.errs[0]; haptic("warn");
+      box.innerHTML=`<p class="sub" style="margin:0">ИИ-комментарий сейчас недоступен${er?`: ${esc(er.name)} — ${esc(er.msg)}`:e&&e.code===429?": слишком много запросов, подождите минуту":""}. Сводка выше — по данным бота.</p><button type="button" class="chip" id="dgre" style="margin-top:8px">🔄 Повторить</button>`; const r=$("#dgre",box); if(r) r.onclick=()=>digestAI(B,true); } }
+  function openDigest(){ haptic("light"); const d=digestData();
+    Sheet.open("✨ Сводка дня",digestHtml(d),B=>{ B.onclick=e=>{ const t=e.target.closest(".dg-top"); if(t){ haptic("light"); Sheet.close(); setTimeout(()=>openMatch(+t.dataset.id),260); } };
+      const a=$("#dgask",B); if(a) a.onclick=()=>{ haptic("medium"); Sheet.close(); setTimeout(()=>{ try{ V32.openCopilot32(); }catch(e){} },320); }; digestAI(B,false); }); }
+  /* кнопка ИИ в шапке главного экрана и контейнер Live */
+  const _vm=viewMatches;
+  viewMatches=function(){ const p=_vm.apply(this,arguments); try{ const h=$("#app h1"); if(h&&!$("#ai35")){ const b=document.createElement("button"); b.type="button"; b.id="ai35"; b.className="ai35"; b.setAttribute("aria-label","Сводка дня от ИИ");
+        b.innerHTML='<svg viewBox="0 0 24 24"><path d="M12 2l1.9 5.6L19.5 9l-5.6 1.9L12 16.5l-1.9-5.6L4.5 9l5.6-1.4zM19 15l.9 2.6 2.6.9-2.6.9L19 22l-.9-2.6-2.6-.9 2.6-.9z"/></svg>ИИ'; b.onclick=openDigest; const lg=$("#lg2"); h.insertBefore(b,lg||h.querySelector(".iconbtn")); }
+      if(!$("#live35")){ const l=document.createElement("div"); l.id="live35"; const t=$("#today"); if(t&&t.parentNode) t.parentNode.insertBefore(l,t); } paintLive(); }catch(e){ console.warn("v35 home",e); } return p; };
+  window.V35={openDigest,digestData,clock,prog,liveRows,paintLive,applyPrefs,hapLevel,pushGet,mkTyper,lookHtml};
+  FX.applyAccent(); if(NOA()) FX.start();
+}catch(e){ console.warn("v35",e); } })();
 </script>
 </body>
 </html>
