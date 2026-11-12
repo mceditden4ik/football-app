@@ -2477,11 +2477,11 @@ void main(){
         const MAXA=5, DELAY=[1200,2500,5000,8000,12000];
         while(!done&&alive){
           b.innerHTML='<div class="aisk" aria-label="ИИ думает"><i></i><i></i><i></i></div>'; r.dataset.sw=""; haptic("light");
-          let think=null, tbody=null, ans=null, tw=null, meta=null, cached=false, finished=false, stubbed=false, gotAny=false, errs=null;
+          let think=null, tbody=null, ans=null, tw=null, meta=null, cached=false, finished=false, stubbed=false, gotAny=false, errs=null; ctxm=null;
           try{
             const ctl=new AbortController(); const to=setTimeout(()=>ctl.abort(),45000);
             const resp=await fetch(url+"/api/ai/chat",{method:"POST",signal:ctl.signal,headers:{"Content-Type":"application/json","X-Telegram-Init-Data":(tg&&tg.initData)||""},
-              body:JSON.stringify({event_id:m?m.event_id:0,hints:pick?[pick.id]:[],q:question,history:preset?[]:hist.slice(-6),nocache:!!regenOf})});
+              body:JSON.stringify(Object.assign({event_id:m?m.event_id:0,hints:pick?[pick.id]:[],q:question,history:preset?[]:hist.slice(-6),nocache:!!regenOf},await AIW.chat(url,question,m,pick?pick.id:null)))});
             clearTimeout(to);
             if(!resp.ok){ const er=new Error("http"); er.code=resp.status; try{ er.retry=(await resp.json()).retry_after; }catch(x){} throw er; }
             const rd=resp.body.getReader(), dec=new TextDecoder(); let buf="";
@@ -2952,7 +2952,7 @@ void main(){
     box.innerHTML='<div class="aisk"><i></i><i></i><i></i></div>'; let tw=null, prov="", errs=null, finished=false, stub=false, alive=true;
     const kill=new MutationObserver(()=>{ if(!document.getElementById("dgai")){ alive=false; if(tw) tw.stop(); kill.disconnect(); } }); kill.observe(document.getElementById("sheet"),{childList:true,subtree:true});
     try{ const ctl=new AbortController(), to=setTimeout(()=>ctl.abort(),45000);
-      const resp=await fetch(url+"/api/ai/chat",{method:"POST",signal:ctl.signal,headers:{"Content-Type":"application/json","X-Telegram-Init-Data":(tg&&tg.initData)||""},body:JSON.stringify({mode:"digest",event_id:0,q:"",nocache:!!force})}); clearTimeout(to);
+      const resp=await fetch(url+"/api/ai/chat",{method:"POST",signal:ctl.signal,headers:{"Content-Type":"application/json","X-Telegram-Init-Data":(tg&&tg.initData)||""},body:JSON.stringify(Object.assign({mode:"digest",event_id:0,q:"",nocache:!!force},await AIW.digest(url)))}); clearTimeout(to);
       if(!resp.ok) throw Object.assign(new Error("http"),{code:resp.status});
       const rd=resp.body.getReader(), dec=new TextDecoder(); let buf=""; haptic("soft");
       for(;;){ const {value,done}=await rd.read(); if(done) break; buf+=dec.decode(value,{stream:true}); let i;
@@ -2975,6 +2975,56 @@ void main(){
   window.V35={openDigest,digestData,clock,prog,liveRows,paintLive,applyPrefs,hapLevel,pushGet,mkTyper,lookHtml};
   FX.applyAccent(); if(NOA()) FX.start();
 }catch(e){ console.warn("v35",e); } })();
+
+/* ═════════ v36: ИИ через Cloudflare Worker — приложение само присылает данные матчей из снимка (воркер базу не видит) ═════════ */
+/* ИИ-копилот: какие матчи из снимка имеются в виду в вопросе (порт ai_cascade.resolve_matches) */
+function aiWords(s){ return String(s==null?"":s).toLowerCase().replace(/ё/g,"е").match(/[a-zа-я0-9]+/g)||[]; }
+function aiStem(t){ return t.length<=4?t:t.slice(0,Math.max(4,t.length-2)); }
+const AI_GENERIC=new Set(["club","team","football","sporting","sport","united","city","fc","cf","afc","футбольный","клуб"]);
+function aiTeamHit(name,qw){
+  const toks=aiWords(name).filter(t=>!AI_GENERIC.has(t)&&t.length>=3); if(!toks.length) return 0;
+  const hit=t=>qw.some(w=>w.startsWith(aiStem(t))); const hits=toks.filter(hit).length;
+  if(hits===toks.length) return (toks.length>1||toks[0].length>=3)?3:1;
+  return (hits&&toks[0].length>=4&&hit(toks[0]))?1:0; }
+function aiResolve(question,matches,limit){
+  limit=limit||2; const qw=aiWords(question); if(!qw.length||!matches||!matches.length) return [];
+  const sc=[];
+  for(const m of matches){ const sh=Math.max(aiTeamHit(m.home_ru,qw),aiTeamHit(m.home,qw)), sa=Math.max(aiTeamHit(m.away_ru,qw),aiTeamHit(m.away,qw)), s=sh+sa;
+    if(s>=3||(sh>=1&&sa>=1)) sc.push({s:-s,d:(m.done?1:0),k:String(m.kickoff_at||m.date||""),m}); }
+  if(!sc.length) return [];
+  sc.sort((a,b)=>a.s-b.s||a.d-b.d||(a.k<b.k?-1:a.k>b.k?1:0));
+  const out=[], used=new Set();
+  for(const x of sc){ const teams=[x.m.home,x.m.away];
+    if(out.length&&-x.s<4&&teams.some(t=>used.has(t))) continue;
+    out.push(x.m.event_id); teams.forEach(t=>used.add(t)); if(out.length>=limit) break; }
+  return out; }
+
+window.AIW=(function(){
+  const rows=()=>{ try{ return ((typeof SNAP!=="undefined"&&SNAP&&SNAP.matches)||(state.cache&&state.cache.matches)||[]).filter(m=>m&&m.event_id!=null); }catch(e){ return []; } };
+  const det=id=>{ try{ return (typeof SNAP!=="undefined"&&SNAP&&SNAP.match&&SNAP.match[id])||null; }catch(e){ return null; } };
+  const nm=m=>(m.home_ru||m.home||"?")+" — "+(m.away_ru||m.away||"?");
+  function isWorker(url){ try{ if(lsGet("aiw")==="1") return true; }catch(e){} try{ if(SNAP&&SNAP.ai_endpoint&&SNAP.ai_endpoint.worker) return true; }catch(e){} return /^https:\/\/[^\/]+\.workers\.dev$/i.test(url||""); }
+  function slim(m){ let ko=NaN; try{ ko=when(m).d.getTime(); }catch(e){} return {event_id:m.event_id,home:m.home,away:m.away,home_ru:m.home_ru,away_ru:m.away_ru,league:m.league,done:!!(m.done||m.score),kickoff_at:m.kickoff_at||m.date,p:m.p,n_rec:m.n_rec,ko:isFinite(ko)?ko:undefined}; }
+  async function bets(){ try{ const r=await api("/api/bets?status=open&limit=100"); return (Array.isArray(r)?r:[]).filter(b=>b&&b.recommended&&b.result==null&&b.ev!=null).slice(0,8)
+      .map(b=>({recommended:true,result:null,ev:b.ev,home_ru:b.home_ru,away_ru:b.away_ru,home_team:b.home_team,away_team:b.away_team,label_ru:b.label_ru,label:b.label,taken_odds:b.taken_odds,placed_odds:b.placed_odds})); }catch(e){ return []; } }
+  /* чат: какие матчи имеются в виду (подсказка пользователя → названные в вопросе → открытая карточка) и их данные */
+  async function chat(url,question,m,pickId){ if(!isWorker(url)) return {};
+    const all=rows(), P=all.slice(0,120).map(slim); let ids=[]; if(pickId!=null) ids.push(pickId);
+    try{ aiResolve(question,P).forEach(id=>{ if(!ids.includes(id)) ids.push(id); }); }catch(e){}
+    if(!ids.length&&m&&m.event_id!=null) ids.push(m.event_id); ids=ids.slice(0,2);
+    const details={}, used=[];
+    ids.forEach(id=>{ const row=all.find(x=>x.event_id===id), d=det(id)||(m&&m.event_id===id?m:null)||(row?Object.assign({},slim(row),{analysis:{p:row.p}}):null); if(d){ details[id]=d; used.push({id,name:nm(d)}); } });
+    const ok=Object.keys(details).map(Number);
+    const out={ids:ok,details,used,now:Date.now()};
+    if(!ok.length){ out.pool=P; out.bets=await bets(); }
+    return out; }
+  /* «Сводка дня»: матчи окна + xG из подробностей + открытые ставки с перевесом */
+  async function digest(url){ if(!isWorker(url)) return {};
+    const now=Date.now(), P=rows().slice(0,120).map(slim), details={};
+    P.forEach(x=>{ if(!x.done&&isFinite(x.ko)&&x.ko>now-3*36e5&&x.ko<now+48*36e5){ const d=det(x.event_id), xg=d&&d.analysis&&d.analysis.xg; if(xg) details[x.event_id]={analysis:{xg}}; } });
+    return {pool:P,details,bets:await bets(),now}; }
+  return {isWorker,chat,digest};
+})();
 </script>
 </body>
 </html>
