@@ -894,6 +894,84 @@ html[data-sheet] .ai35::after{animation:none}
 .skg35{position:fixed;z-index:6;margin:0!important;pointer-events:none;will-change:opacity,filter}
 .ch-tip small{margin-left:4px;font-size:11px}
 @media (prefers-reduced-motion:reduce){.ai35::after,.lv-tag i{animation:none}}
+/* ═════════ v37: Экспрессы, H2H-таймлайн, 5 вкладок ═════════ */
+:root{--spring-real:cubic-bezier(.34,1.45,.5,1)}
+@supports (transition-timing-function:linear(0,1)){:root{--spring-real:linear(0,0.044,0.153,0.298,0.457,0.612,0.752,0.869,0.961,1.028,1.073,1.097,1.106,1.104,1.094,1.079,1.062,1.045,1.03,1.017,1.006,0.998,0.993,0.99,0.989,0.989,0.99,0.991,0.993,0.995,0.996,0.998,0.999,1)}}
+/* навигация на 5 вкладок: иконки и шрифт меньше на 2px, подпись не переносится */
+.nav button{padding:7px 1px;gap:2px;min-width:0;font-size:clamp(9px,2.55vw,10px)!important;letter-spacing:0!important;white-space:nowrap;overflow:hidden}
+.nav button svg{width:20px;height:20px;flex:none}
+@media(max-width:345px){.nav button{font-size:8px!important}.nav button svg{width:19px;height:19px}}
+.nav{padding:6px!important}
+/* стекло для новых элементов */
+.g37{position:relative;border-radius:26px;border:1px solid color-mix(in srgb,var(--c1,var(--blue)) 38%,var(--line));
+  background:linear-gradient(160deg,color-mix(in srgb,var(--c1,var(--blue)) 20%,var(--card)),color-mix(in srgb,var(--c2,var(--violet)) 12%,var(--card)) 70%);
+  box-shadow:0 18px 44px -22px var(--c1,var(--blue)),inset 0 1px 0 color-mix(in srgb,var(--text) 10%,transparent);-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%);overflow:hidden}
+html[data-perf=low] .g37,html[data-sheet] .g37{-webkit-backdrop-filter:none;backdrop-filter:none}
+.xc37{padding:16px;margin:0 0 14px;content-visibility:auto;contain-intrinsic-size:auto 330px}
+.xh{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.xtag{font:800 11px var(--font,system-ui);letter-spacing:.08em;color:var(--c1,var(--blue))}
+.xby{font:700 10.5px var(--font,system-ui);padding:3px 8px;border-radius:99px;background:color-mix(in srgb,var(--text) 9%,transparent);color:var(--muted)}
+.xlegs{margin-top:10px;display:flex;flex-direction:column;gap:7px}
+.xl{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:10px 11px;border-radius:16px;border:1px solid var(--line);background:color-mix(in srgb,var(--bg2) 55%,transparent);color:var(--text);
+  transition:transform .55s var(--spring-real),background .25s;transform:translateZ(0)}
+.xl:active{transform:scale(.97)}
+.xn{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font:800 12px var(--font,system-ui);background:color-mix(in srgb,var(--c1,var(--blue)) 30%,transparent)}
+.xm{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.xm b{font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.xm i{font-style:normal;font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.xo{flex:none;text-align:right;display:flex;flex-direction:column}.xo b{font-size:15px}.xo i{font-style:normal;font-size:11px;color:var(--muted)}
+.xtot{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:8px;margin-top:12px}
+.xtot>div{padding:10px;border-radius:16px;background:color-mix(in srgb,var(--text) 6%,transparent)}.xtot i{display:block;font-style:normal;font-size:10.5px;color:var(--muted)}.xtot b{font-size:20px}
+.xtot>div:first-child b{font-size:26px;color:var(--c1,var(--blue))}
+.xai{margin-top:12px;font-size:13.5px;line-height:1.5;color:var(--text)}
+.xai.mt{color:var(--muted);font-size:12px}
+.xwarn{margin-top:8px;font-size:11.5px;color:var(--amber)}
+.xcap{margin:18px 2px 10px;font:700 12px var(--font,system-ui);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.xprof37{display:flex;flex-direction:column;gap:10px}
+.xp37{--c1:var(--c);--c2:var(--c);display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:16px;min-height:76px;color:var(--text);border-radius:24px;
+  transition:transform .6s var(--spring-real),box-shadow .3s,border-color .3s;transform:translateZ(0);will-change:transform}
+.xp37:active{transform:scale(.965)}
+.xp37.on{border-color:var(--c);box-shadow:0 0 0 1.5px var(--c),0 18px 44px -20px var(--c)}
+.xp-ic{font-size:30px;line-height:1;flex:none}.xp-t{flex:1;display:flex;flex-direction:column;gap:3px}.xp-t b{font-size:17px}.xp-t i{font-style:normal;font-size:12.5px;color:var(--muted)}
+.xp-go{font-size:26px;color:var(--muted);flex:none}
+.xsk{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}.xsk i{display:block;height:56px;border-radius:16px;background:linear-gradient(90deg,var(--card) 25%,var(--card2) 50%,var(--card) 75%);background-size:200% 100%;animation:sh 1.3s infinite}
+.xsk i:nth-child(4){height:70px}
+.xskc{padding:16px;border-radius:26px;border:1px solid var(--line);background:var(--card);margin-bottom:14px}
+.xskc .xsk{margin:0}
+.xsk.out{animation:xout .22s var(--ease) forwards}
+@keyframes xout{to{opacity:0;filter:blur(8px);transform:scale(.98)}}
+.xin37{animation:xin .55s var(--ease) both}
+@keyframes xin{from{opacity:0;filter:blur(10px);transform:translateY(8px) scale(.985)}to{opacity:1;filter:none;transform:none}}
+.xc37 .xl{animation:xlin .6s var(--spring-real) both;animation-delay:calc(var(--k,0)*70ms)}
+@keyframes xlin{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+html[data-anim=off] .xin37,html[data-anim=off] .xc37 .xl,html[data-fxl=off] .xin37,html[data-fxl=off] .xc37 .xl{animation:none}
+.xempty{padding:18px;border-radius:22px;border:1px dashed var(--line);color:var(--muted);font-size:13.5px;line-height:1.5;margin-bottom:14px}
+/* H2H таймлайн */
+.h2x{padding:16px;margin-bottom:14px}
+.h2wl{display:flex;height:10px;border-radius:99px;overflow:hidden;background:var(--track);margin:10px 0 6px}
+.h2wl i{display:block;height:100%;transform-origin:left;animation:h2g .8s var(--spring-real) both}
+.h2wl .w{background:var(--green)}.h2wl .d{background:var(--dim)}.h2wl .l{background:var(--red)}
+@keyframes h2g{from{transform:scaleX(0)}to{transform:none}}
+.h2lg{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+.h2tl{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:3px;margin-top:14px}
+.h2g{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0 5px;border-radius:12px;color:var(--text);min-width:0;transition:transform .5s var(--spring-real),background .2s}
+.h2g:active{transform:scale(.92)}.h2g:hover{background:color-mix(in srgb,var(--text) 6%,transparent)}
+.h2g .dt{font-size:9px;color:var(--dim);white-space:nowrap}
+.h2g .bx{position:relative;width:100%;height:76px}
+.h2g .bx::before{content:"";position:absolute;left:12%;right:12%;top:50%;height:1px;background:var(--line)}
+.h2g .br{position:absolute;left:28%;right:28%;border-radius:4px;transform:scaleY(0);animation:h2b .7s var(--spring-real) both;animation-delay:calc(var(--k,0)*45ms)}
+.h2g .br.up{bottom:50%;transform-origin:bottom;background:var(--green)}.h2g .br.dn{top:50%;transform-origin:top;background:var(--red)}.h2g .br.eq{top:calc(50% - 2px);height:4px!important;background:var(--dim);transform-origin:center}
+@keyframes h2b{to{transform:none}}
+.h2g .sc{font:700 11.5px var(--font,system-ui);white-space:nowrap}
+.h2n{font-size:11px;color:var(--dim);margin-top:6px}
+.h2s{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.h2s>div{padding:9px;border-radius:14px;background:color-mix(in srgb,var(--text) 6%,transparent)}.h2s i{display:block;font-style:normal;font-size:10.5px;color:var(--muted)}.h2s b{font-size:17px}
+html[data-anim=off] .h2g .br,html[data-anim=off] .h2wl i{animation:none;transform:none}
+.h2m-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12.5px}
+.h2m-chip{padding:3px 10px;border-radius:99px;font:800 11px var(--font,system-ui)}.h2m-chip.W{background:rgba(52,211,153,.16);color:var(--green)}.h2m-chip.D{background:rgba(140,153,181,.18);color:var(--muted)}.h2m-chip.L{background:rgba(248,113,113,.16);color:var(--red)}
+.h2m-sc{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin:14px 0;text-align:center}.h2m-sc b{font-size:34px}.h2m-sc span{font-weight:700;font-size:14px}
+.h2m-row{margin:10px 0}.h2m-row .t{display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px}.h2m-row .t span{color:var(--muted)}
+.h2m-bar{display:flex;height:8px;border-radius:99px;overflow:hidden;background:var(--track);gap:2px}.h2m-bar i{display:block;height:100%;transform-origin:left;animation:h2g .7s var(--spring-real) both}.h2m-bar .a{background:var(--blue)}.h2m-bar .b{background:var(--violet);transform-origin:right}
+.h2m-nav{display:flex;justify-content:space-between;align-items:center;margin-top:14px}.h2m-nav button{width:48px;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--card2);color:var(--text);font-size:20px;transition:transform .5s var(--spring-real)}.h2m-nav button:active{transform:scale(.9)}.h2m-nav button[disabled]{opacity:.35}
+.h2m-body.sw{animation:xin .4s var(--ease) both}
 </style>
 </head>
 <body>
@@ -905,6 +983,7 @@ html[data-sheet] .ai35::after{animation:none}
 <nav class="nav" id="nav">
   <button data-t="matches"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7l4 3-1.5 5h-5L8 10z"/></svg>Матчи</button>
   <button data-t="bets"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Ставки</button>
+  <button data-t="express"><svg viewBox="0 0 24 24"><path d="M13 2L4.5 13.5H11L10 22l8.5-11.5H12z"/></svg>Экспрессы</button>
   <button data-t="stats"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 15l4-4 3 3 5-6"/></svg>Статистика</button>
   <button data-t="look"><svg viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg>Оформление</button>
 </nav>
@@ -1363,8 +1442,10 @@ function extraCards(m){
   }
   const hh=x.h2h;
   if(hh&&hh.games&&hh.games.length){
+    if(window.H2H37){ h += window.H2H37.html(m,hh); } else {
     h += `<div class="card"><div class="cap">Личные встречи · ${hh.games.length}</div><div class="sub" style="margin-top:4px">${esc(nmH(m))}: ${hh.w} · ничьих: ${hh.d} · ${esc(nmA(m))}: ${hh.l}</div><div style="margin-top:8px">` +
       hh.games.map(g=>`<div class="frow"><span class="dim num" style="font-size:12px">${esc(String(g.date).slice(0,10))}</span><span style="flex:1;font-size:13px;text-align:center">${esc(g.home)} — ${esc(g.away)}</span><b class="num">${g.hg}:${g.ag}</b></div>`).join("") + `</div></div>`;
+    }
   }
   const tb=x.table||[];
   if(tb.length){
@@ -1635,7 +1716,7 @@ function segWarn(b){
   return `<div class="segwarn">⚠ Слабый сегмент: ${bad.map(r=>esc(r.key.replace(/^рынок: /,"рынок «")+(r.key.startsWith("рынок")?"»":""))+` (CLV ${(r.mean*100).toFixed(1)}%, n=${r.n})`).join("; ")}. Это совет, решение за вами.</div>`;
 }
 /* плавающая пилюля вкладки + свайп между вкладками */
-const TABS=["matches","bets","stats","look"];
+const TABS=["matches","bets","express","stats","look"];
 function movePill(){
   const nav=document.getElementById("nav"); if(!nav) return;
   let pill=nav.querySelector(".pill"); if(!pill){ pill=document.createElement("i"); pill.className="pill"; nav.prepend(pill); nav.classList.add("has-pill"); }
@@ -1815,7 +1896,7 @@ async function refresh(){
 function render(){
   document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on", b.dataset.t===state.tab)); movePill();
   if(state.detail) return viewMatch(state.detail);
-  return ({matches:viewMatches,bets:viewBets,stats:viewStats,look:()=>window.viewLook35?window.viewLook35():viewMatches()})[state.tab]();
+  return ({matches:viewMatches,bets:viewBets,express:()=>window.viewExpress37?window.viewExpress37():viewMatches(),stats:viewStats,look:()=>window.viewLook35?window.viewLook35():viewMatches()})[state.tab]();
 }
 document.getElementById("nav").onclick = e=>{const b=e.target.closest("[data-t]"); if(!b) return; haptic(); if(state.detail&&history.state&&history.state.m){ state.detail=null; syncBack(); history.back(); }
   const to=b.dataset.t; state.dir = TABS.indexOf(to)>TABS.indexOf(state.tab)?"fwd":TABS.indexOf(to)<TABS.indexOf(state.tab)?"bwd":null; state.tab=to; state.detail=null; syncBack(); render(); window.scrollTo(0,0);};
@@ -1842,7 +1923,7 @@ Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensu
   let order=0, ot=0;
   function scan(){
     if(!io) return;
-    document.querySelectorAll("#app .card:not(.rvd), #app .row:not(.rvd), #app .bet:not(.rvd), #app .tile:not(.rvd)").forEach(el=>{
+    document.querySelectorAll("#app .card:not(.rvd), #app .xp37:not(.rvd), #app .row:not(.rvd), #app .bet:not(.rvd), #app .tile:not(.rvd)").forEach(el=>{
       el.classList.add("rvd"); const r=el.getBoundingClientRect(); const isCard=el.classList.contains("card");
       if(!isCard && r.top<innerHeight*.98) return;
       if(r.top<innerHeight*.9){ el.style.setProperty("--rd",Math.min(order++,6)*70+"ms"); el.classList.add("rv"); requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add("in"))); setTimeout(()=>el.classList.remove("rv","in"),1400); }
@@ -1916,7 +1997,16 @@ Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensu
       if(n-lt>500){ if(y<=0&&lastY>120){ lt=n; haptic("rigid"); } else if(mx>400&&y>=mx-2&&lastY<mx-120){ lt=n; haptic("rigid"); } }
       lastY=y; },{passive:true}); })();
   /* ── View Transitions ── */
-  function vt(kind,fn){          /* v33: без View Transitions — они снимают скриншот всей страницы и дважды вызывали fn при быстрых тапах */
+  let vtBusy=false;
+  function vt(kind,fn){
+    if(window.__vtTab){ window.__vtTab=false; const R=document.documentElement;
+      if(document.startViewTransition&&!vtBusy&&!fxOff()&&R.dataset.perf!=="low"&&!document.hidden&&lsGet("vtoff37")!=="1"){
+        /* самокалибровка: если во время перехода ≥3 кадров дольше 33 мс — устройство не тянет снимок страницы, VT выключаем насовсем (остаётся WAAPI-слайд) */
+        vtBusy=true; R.dataset.vt=kind||"tab"; let jank=0,lt=performance.now(),raf=0; const tick=n=>{ if(n-lt>33) jank++; lt=n; raf=requestAnimationFrame(tick); }; raf=requestAnimationFrame(tick);
+        const end=()=>{ if(!vtBusy) return; vtBusy=false; cancelAnimationFrame(raf); delete R.dataset.vt; if(jank>=3){ try{ lsSet("vtoff37","1"); }catch(e){} } }; let t=null;
+        try{ t=document.startViewTransition(()=>{ fn(); }); }catch(e){ end(); fn(); return; }
+        setTimeout(end,1200); t.finished.then(end,end); return; } }
+    /* v33: без View Transitions — они снимают скриншот всей страницы и дважды вызывали fn при быстрых тапах */
     fn(); if(fxOff()) return;
     const a=document.getElementById("app"); if(!a||!a.animate) return;
     try{ a.getAnimations().forEach(x=>x.cancel()); const d=kind==="bwd"?-1:kind==="fwd"?1:0;
@@ -1927,7 +2017,7 @@ Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensu
   openMatch=function(id){ if(navBusy()||state.detail===id) return; navMark(); Snd.play("swipe"); vt("fwd",()=>_open(id)); };     /* защита от двойного открытия и двойной записи в history */
   closeMatch=function(){ if(navBusy()||!state.detail) return; navMark(); vt("bwd",()=>_close()); };
   const nav=document.getElementById("nav"), navH=nav.onclick;
-  nav.onclick=function(e){ const b=e.target.closest("[data-t]"); if(!b||navBusy()) return; navMark(); const to=b.dataset.t, k=(TABS.indexOf(to)>TABS.indexOf(state.tab))?"fwd":(TABS.indexOf(to)<TABS.indexOf(state.tab))?"bwd":"tab"; vt(state.detail?"bwd":k,()=>navH.call(nav,e)); };
+  nav.onclick=function(e){ const b=e.target.closest("[data-t]"); if(!b||navBusy()) return; navMark(); window.__vtTab=true; const to=b.dataset.t, k=(TABS.indexOf(to)>TABS.indexOf(state.tab))?"fwd":(TABS.indexOf(to)<TABS.indexOf(state.tab))?"bwd":"tab"; vt(state.detail?"bwd":k,()=>navH.call(nav,e)); };
   window.addEventListener("popstate",()=>{ /* системная «назад» уже обрабатывается приложением; звук только */ Snd.play("swipe"); });
   /* ── параллакс (наклон телефона / указатель) ── */
   (function(){
@@ -2852,7 +2942,7 @@ void main(){
   const pushSet=o=>lsSet("push35",JSON.stringify(o));
   const bgTile=([k,t])=>`<button type="button" class="pv-${k}${(lsGet("bg")||"silk")===k?" on":""}" data-bg="${k}">${esc(t)}</button>`;
   const sw=(id,on,label)=>`<button type="button" class="sw35" id="${id}" role="switch" aria-checked="${on?"true":"false"}" aria-label="${esc(label)}"></button>`;
-  const NAVI={line:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7l4 3-1.5 5h-5L8 10z"/></svg><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 15l4-4 3 3 5-6"/></svg>'};
+  const NAVI={line:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7l4 3-1.5 5h-5L8 10z"/></svg><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16M8 15l4-4 3 3 5-6"/></svg><svg viewBox="0 0 24 24"><path d="M13 2L4.5 13.5H11L10 22l8.5-11.5H12z"/></svg>'};
   function lookHtml(){
     const th=lsGet("theme")||"auto", ac=lsGet("acc")||"blue", bg=lsGet("bg")||"silk", fl=lsGet("fxl")||"max", hp=hapLevel(), ic=lsGet("icons35")==="fill"?"fill":"line", sn=lsGet("snd")||"on", pu=pushGet();
     return `<div class="lk"><h1>Оформление<span class="grow"></span></h1>
@@ -3025,6 +3115,193 @@ window.AIW=(function(){
     return {pool:P,details,bets:await bets(),now}; }
   return {isWorker,chat,digest};
 })();
+
+/* ═════════ v37: вкладка «Экспрессы» + H2H-таймлайн ═════════ */
+/*EX37-CORE*/
+const EXC=(()=>{
+  const W={safe:.2,mid:.6,risky:1.1,day:.15};
+  const CFG={safe:{sizes:[2],top:8,a:1,b:0},mid:{sizes:[3,2],top:10,a:.55,b:.45},risky:{sizes:[4,3,2],top:12,a:.3,b:.7},day:{sizes:[2,3],top:8,a:.8,b:.2}};
+  const ls=(l,p)=>Math.log(l.p)+(W[p]||.5)*Math.log(l.od);
+  const MIN5=5*60000, H72=72*36e5;
+  function fromBet(b,now){
+    if(!b||!b.recommended||b.result!=null||!(b.taken_odds>1)||!(b.model_prob>0&&b.model_prob<1)) return null;
+    let ko=Date.parse(b.kickoff_at||""); if(isNaN(ko)){ ko=Date.parse((b.match_date||"")+"T12:00:00Z"); } if(isNaN(ko)||ko<now+MIN5||ko>now+H72) return null;
+    if(!(b.ev>0)) return null;
+    return {id:b.event_id+"|"+b.market+"|"+b.selection,eid:b.event_id,home:b.home_team,away:b.away_team,home_ru:b.home_ru,away_ru:b.away_ru,lg:b.league,
+      mk:b.label_ru||b.label||String(b.selection||""),od:+b.taken_odds,p:+b.model_prob,ev:+b.ev,ko,src:"bot",why:"перевес +"+(b.ev*100).toFixed(1)+"%"};
+  }
+  const med=a=>{ const s=a.slice().sort((x,y)=>x-y), n=s.length; return n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2; };
+  function fromMatch(m,det,now){
+    if(!m||m.score||m.done||!Array.isArray(m.p)||m.p.length!==3||m.ko==null) return null;
+    if(m.ko<now+MIN5||m.ko>now+H72) return null;
+    const rows=(det&&det.odds_1x2)||[]; if(!rows.length) return null;
+    let best=-1; m.p.forEach((x,i)=>{ if(best<0||x>m.p[best]) best=i; });
+    const sel=["P1","X","P2"][best], ods=rows.filter(o=>o&&o.selection===sel&&o.odds>1).map(o=>+o.odds); if(!ods.length) return null;
+    const od=med(ods), p=m.p[best]; if(!(p>0&&p<1)||od<1.05) return null;
+    return {id:m.event_id+"|1X2|"+sel,eid:m.event_id,home:m.home,away:m.away,home_ru:m.home_ru,away_ru:m.away_ru,lg:m.league,
+      mk:best===0?"Победа хозяев":best===2?"Победа гостей":"Ничья",od:Math.round(od*100)/100,p,ev:p*od-1,ko:m.ko,src:"1x2",why:"фаворит по модели"};
+  }
+  function dedupe(legs,prof){ const by=new Map(); legs.forEach(l=>{ const c=by.get(l.eid); if(!c||ls(l,prof)>ls(c,prof)+1e-12||(Math.abs(ls(l,prof)-ls(c,prof))<1e-12&&l.src==="bot")) by.set(l.eid,l); }); return [...by.values()]; }
+  function pool(legs,prof){
+    let a=dedupe(legs,prof); if(prof==="safe"||prof==="day"){ const hi=a.filter(l=>l.p>=.5); if(hi.length>=2) a=hi; }
+    return a.sort((x,y)=>ls(y,prof)-ls(x,prof)||(x.id<y.id?-1:1));
+  }
+  function stats(c){ let P=1,O=1; c.forEach(l=>{ P*=l.p; O*=l.od; }); return {P,O:Math.round(O*100)/100,ev:P*O-1}; }
+  function combos(a,k){ const out=[]; (function go(s,cur){ if(cur.length===k){ out.push(cur.slice()); return; } for(let i=s;i<a.length;i++){ cur.push(a[i]); go(i+1,cur); cur.pop(); } })(0,[]); return out; }
+  const util=(c,cf)=>{ const s=stats(c); return Math.pow(s.P,cf.a)*Math.pow(Math.max(1,s.O),cf.b); };
+  function cands(legs,prof){ return pool(legs,prof).slice(0,(CFG[prof]||CFG.safe).top); }
+  function pick(legs,prof){
+    const cf=CFG[prof]||CFG.safe, a=cands(legs,prof); let best=null,bu=-1,bsz=0;
+    const sizes=prof==="day"?cf.sizes:cf.sizes.filter(k=>a.length>=k).slice(0,1);
+    for(const k of sizes){ if(a.length<k) continue; for(const c of combos(a,k)){ const u=util(c,cf); if(u>bu+1e-12){ bu=u; best=c; bsz=k; } } }
+    if(!best) return null; const c=best.slice().sort((x,y)=>x.ko-y.ko||(x.id<y.id?-1:1)); return Object.assign({profile:prof,legs:c,size:c.length},stats(c));
+  }
+  function parseAI(text){
+    const m=/ВЫБОР\s*:\s*([\d\s,;и]+)/i.exec(String(text||"")); if(!m) return null;
+    const idx=(m[1].match(/\d+/g)||[]).map(Number); const rest=String(text).slice(m.index+m[0].length).replace(/[*#_`]/g,"").trim();
+    return {idx,text:rest};
+  }
+  function applyAI(idx,cs,size){
+    if(!Array.isArray(idx)||idx.length<2||idx.length>4||(size&&idx.length!==size)) return null;
+    if(new Set(idx).size!==idx.length||idx.some(i=>!Number.isInteger(i)||i<1||i>cs.length)) return null;
+    const c=idx.map(i=>cs[i-1]); if(new Set(c.map(l=>l.eid)).size!==c.length) return null;
+    c.sort((x,y)=>x.ko-y.ko||(x.id<y.id?-1:1)); return Object.assign({size:c.length,legs:c},stats(c));
+  }
+  return {fromBet,fromMatch,dedupe,pool,cands,pick,stats,parseAI,applyAI,CFG};
+})();
+/*EX37-CORE-END*/
+(function(){ try{
+  const $=(s,r)=>(r||document).querySelector(s), $$=(s,r)=>[...(r||document).querySelectorAll(s)];
+  const J=(k,d)=>{ try{ const v=JSON.parse(lsGet(k)||"null"); return v==null?d:v; }catch(e){ return d; } };
+  const RMq=()=>document.documentElement.dataset.anim==="off"||matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const dkey=()=>{ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); };
+  const pct=(x,d)=>(x*100).toFixed(d==null?0:d)+"%";
+  const lname=(l)=>nm(l.home,l.home_ru)+" — "+nm(l.away,l.away_ru);
+  const PROF={day:{t:"ЭКСПРЕСС ДНЯ",c1:"#f59e0b",c2:"#ef4444"},safe:{t:"БЕЗОПАСНЫЙ",c1:"#34d399",c2:"#22d3ee",ic:"🟢",n:"Безопасный",d:"Максимальная вероятность прохода"},
+    mid:{t:"СРЕДНИЙ",c1:"#fbbf24",c2:"#fb923c",ic:"🟡",n:"Средний",d:"Баланс риска и доходности"},risky:{t:"РИСКОВЫЙ",c1:"#f87171",c2:"#a78bfa",ic:"🔴",n:"Рисковый",d:"Высокий итоговый коэффициент"}};
+  /* ── данные: открытые ставки бота + фавориты 1X2 из снимка (только то, что уже посчитано ботом) ── */
+  let LEGS=null, LEGS_AT=0;
+  async function loadLegs(force){
+    if(!force&&LEGS&&Date.now()-LEGS_AT<60000) return LEGS; const now=Date.now(); let bets=[];
+    try{ const r=await api("/api/bets?status=open&limit=500"); bets=Array.isArray(r)?r:[]; }catch(e){}
+    const rows=((typeof SNAP!=="undefined"&&SNAP&&SNAP.matches)||(state.cache&&state.cache.matches)||[]), det=(typeof SNAP!=="undefined"&&SNAP&&SNAP.match)||{};
+    const legs=[]; bets.forEach(b=>{ const l=EXC.fromBet(b,now); if(l) legs.push(l); });
+    rows.forEach(m=>{ try{ const ko=when(m).d.getTime(); const l=EXC.fromMatch(Object.assign({},m,{ko}),det[m.event_id],now); if(l) legs.push(l); }catch(e){} });
+    LEGS=legs; LEGS_AT=now; return legs;
+  }
+  const etaT=ko=>{ try{ return etaText(ko)||(fmtDay(new Date(ko))+" · "+fmtTime(new Date(ko))); }catch(e){ return ""; } };
+  /* ── ИИ: выбирает из кандидатов; при недоступности — подбор по правилам ── */
+  async function aiExpress(cs,prof,n){
+    const url=(window.V32&&window.V32.aiUrl&&window.V32.aiUrl())||""; if(!url) return null;
+    const ctl=new AbortController(), to=setTimeout(()=>ctl.abort(),30000); let text="";
+    try{
+      const resp=await fetch(url+"/api/ai/chat",{method:"POST",signal:ctl.signal,headers:{"Content-Type":"application/json","X-Telegram-Init-Data":(tg&&tg.initData)||""},
+        body:JSON.stringify({mode:"express",event_id:0,q:"",profile:prof==="day"?"day":prof,n,now:Date.now(),legs:cs.map(l=>({m:lname(l),mk:l.mk,od:l.od,p:+(l.p*100).toFixed(1),why:l.why,t:etaT(l.ko)}))})});
+      if(!resp.ok) return null; const rd=resp.body.getReader(), dec=new TextDecoder(); let buf="", stub=false;
+      for(;;){ const {value,done}=await rd.read(); if(done) break; buf+=dec.decode(value,{stream:true}); let i;
+        while((i=buf.indexOf("\n\n"))>=0){ const blk=buf.slice(0,i); buf=buf.slice(i+2); if(!blk.startsWith("data: ")) continue; let o=null; try{ o=JSON.parse(blk.slice(6)); }catch(x){} if(!o) continue;
+          if(o.t==="delta") text+=o.x; else if(o.t==="stub") stub=true; } }
+      return stub?null:EXC.parseAI(text);
+    }catch(e){ return null; } finally{ clearTimeout(to); }
+  }
+  /* итог: правила → кандидат; ИИ (если ответил корректно) → итог и пояснение */
+  async function build(prof,force){
+    const legs=await loadLegs(force), base=EXC.pick(legs,prof); if(!base) return {none:true,n:EXC.pool(legs,prof).length};
+    const cs=EXC.cands(legs,prof), sig=prof+"|"+cs.map(l=>l.id+"@"+l.od).join(","); const C=J("ex37",{}), c=C[sig];
+    if(!force&&c&&Date.now()-c.ts<40*60000&&c.ids){ const m=new Map(cs.map(l=>[l.id,l])); const ls=c.ids.map(i=>m.get(i)); if(ls.every(Boolean)) return Object.assign({profile:prof,legs:ls,size:ls.length},EXC.stats(ls),{text:c.text,by:c.by}); }
+    const r=await aiExpress(cs,prof,base.size); let res=null;
+    if(r){ const a=EXC.applyAI(r.idx,cs,base.size); if(a) res=Object.assign({profile:prof},a,{text:r.text,by:"ai"}); }
+    if(!res) res=Object.assign({},base,{text:"",by:"rules"});
+    try{ C[sig]={ts:Date.now(),ids:res.legs.map(l=>l.id),text:res.text,by:res.by}; const ks=Object.keys(C); if(ks.length>12) ks.sort((x,y)=>C[x].ts-C[y].ts).slice(0,ks.length-12).forEach(k=>delete C[k]); lsSet("ex37",JSON.stringify(C)); }catch(e){}
+    return res;
+  }
+  /* ── отрисовка ── */
+  function cardHtml(res,prof){
+    const P=PROF[prof]||PROF.safe, o=EXC.stats(res.legs);
+    const legs=res.legs.map((l,i)=>`<button type="button" class="xl" data-eid="${esc(l.eid)}" style="--k:${i}"><span class="xn">${i+1}</span><span class="xm"><b>${esc(lname(l))}</b><i>${esc(l.mk)} · ${esc(LEAGUES[l.lg]||l.lg||"")} · ${esc(etaT(l.ko))}</i></span><span class="xo"><b class="num">@ ${l.od.toFixed(2)}</b><i>${pct(l.p)}</i></span></button>`).join("");
+    const warn=res.legs.some(l=>l.src==="bot"&&l.ev>.15)?`<div class="xwarn">⚠ В одной из ставок перевес выше 15% — чаще это ошибка кэфа, проверьте перед ставкой.</div>`:"";
+    const ai=res.by==="ai"&&res.text?`<div class="xai">${esc(res.text)}</div><div class="xai mt">Выбор и пояснение — ИИ, из кандидатов бота.</div>`:`<div class="xai mt">${res.by==="ai"?"":"ИИ недоступен или не подключён — подобрано по правилам профиля из данных бота."}</div>`;
+    return `<div class="g37 xc37" style="--c1:${P.c1};--c2:${P.c2}"><div class="xh"><span class="xtag">⚡ ${P.t}</span><span class="xby">${res.by==="ai"?"ИИ":"правила"}</span></div>
+      <div class="xlegs">${legs}</div><div class="xtot"><div><i>Общий кэф</i><b class="num">${o.O.toFixed(2)}</b></div><div><i>Проход*</i><b class="num">${pct(o.P,o.P<.1?1:0)}</b></div><div><i>Перевес*</i><b class="num">${o.ev>=0?"+":""}${(o.ev*100).toFixed(0)}%</b></div></div>
+      ${ai}${warn}<div class="note" style="margin-top:8px">* Произведение вероятностей модели при допущении, что события независимы. Это оценка, а не гарантия.</div></div>`;
+  }
+  const SK=`<div class="xskc"><div class="xsk"><i></i><i></i><i></i><i></i></div></div>`;
+  function swapIn(el,html){
+    if(!el) return; const sk=el.firstElementChild;
+    const put=()=>{ if(!el.isConnected) return; el.innerHTML=html; const c=el.firstElementChild; if(c&&!RMq()) c.classList.add("xin37"); };
+    if(sk&&sk.classList.contains("xskc")&&!RMq()){ sk.classList.add("out"); setTimeout(()=>requestAnimationFrame(put),200); } else put();
+  }
+  const emptyHtml=n=>`<div class="xempty"><b>Пока не из чего собрать экспресс.</b><br>Нужно минимум 2 предстоящих матча (ближайшие 72 часа), по которым у бота есть ставка с перевесом или известны кэфы 1X2.${n?` Сейчас подходит: ${n}.`:""} Бот сам ничего не выдумывает — экспресс строится только из его данных.</div>`;
+  const tok={};
+  async function paint(boxId,prof,force){
+    const box=document.getElementById(boxId); if(!box) return; const my=(tok[boxId]=(tok[boxId]||0)+1);
+    box.innerHTML=SK; let res; try{ res=await build(prof,force); }catch(e){ res={none:true,n:0}; }
+    if(tok[boxId]!==my||!document.getElementById(boxId)) return;
+    swapIn(box,res.none?emptyHtml(res.n):cardHtml(res,prof)); if(!res.none) haptic("soft");
+  }
+  /* Экспресс Дня: один раз в сутки; пока события не начались — держим тот же */
+  async function paintDay(force){
+    const box=document.getElementById("xday"); if(!box) return; const my=(tok.xday=(tok.xday||0)+1); box.innerHTML=SK;
+    let res=null; const st=J("exd37",null);
+    try{ const legs=await loadLegs(force);
+      if(!force&&st&&st.d===dkey()){ const m=new Map(legs.map(l=>[l.id,l])), ls=(st.ids||[]).map(i=>m.get(i)); if(ls.length>=2&&ls.every(Boolean)) res=Object.assign({profile:"day",legs:ls,size:ls.length},EXC.stats(ls),{text:st.text,by:st.by}); }
+      if(!res){ res=await build("day",force); if(!res.none){ lsSet("exd37",JSON.stringify({d:dkey(),ids:res.legs.map(l=>l.id),text:res.text||"",by:res.by})); } }
+    }catch(e){ res={none:true,n:0}; }
+    if(tok.xday!==my||!document.getElementById("xday")) return; swapIn(box,res.none?emptyHtml(res.n):cardHtml(res,"day"));
+  }
+  let XCLICK=null;
+  document.addEventListener("click",e=>{ if(XCLICK&&state.tab==="express"&&!state.detail&&e.target.closest&&e.target.closest("#app")) XCLICK(e); });
+  window.viewExpress37=function(){
+    mount(`<h1>Экспрессы<span class="grow"></span><button class="iconbtn" id="xrf" aria-label="Пересобрать"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.5-5.8M20 4v4h-4"/></svg></button></h1>
+      <div id="xday">${SK}</div><div class="xcap">Собрать свой экспресс</div>
+      <div class="xprof37" id="xprof">${["safe","mid","risky"].map(k=>`<button type="button" class="g37 xp37 xc-p" data-p="${k}" style="--c:${PROF[k].c1}"><span class="xp-ic">${PROF[k].ic}</span><span class="xp-t"><b>${PROF[k].n}</b><i>${PROF[k].d}</i></span><span class="xp-go">›</span></button>`).join("")}</div>
+      <div id="xres" style="margin-top:14px"></div>`);
+    XCLICK=e=>{ const p=e.target.closest(".xp37"); if(p){ haptic("medium"); $$(".xp37").forEach(x=>x.classList.toggle("on",x===p)); paint("xres",p.dataset.p,false); const r=$("#xres"); if(r) setTimeout(()=>r.scrollIntoView({behavior:RMq()?"auto":"smooth",block:"nearest"}),60); return; }
+      const l=e.target.closest(".xl"); if(l){ haptic("light"); openMatch(+l.dataset.eid||l.dataset.eid); } };
+    const rf=document.getElementById("xrf"); if(rf) rf.onclick=()=>{ haptic("light"); paintDay(true); const on=$(".xp37.on"); if(on) paint("xres",on.dataset.p,true); };
+    paintDay(false);
+  };
+  /* ── H2H-таймлайн (только данные из базы) ── */
+  const H2H={cur:null,games:[]};
+  const d2=s=>{ const x=String(s||"").slice(0,10).split("-"); return x.length===3?x[2]+"."+x[1]:""; };
+  function prep(m,hh){
+    const hn=m.home; return (hh.games||[]).slice().reverse().map(g=>{ const ho=g.home===hn;
+      const a=ho?g.hg:g.ag, b=ho?g.ag:g.hg, pick=(x,y)=>ho?x:y, o={date:g.date,home:g.home,away:g.away,hg:g.hg,ag:g.ag,a,b,r:a>b?"W":a===b?"D":"L"};
+      if(g.hc!=null&&g.ac!=null){ o.ca=pick(g.hc,g.ac); o.cb=pick(g.ac,g.hc); } if(g.hy!=null&&g.ay!=null){ o.ya=pick(g.hy,g.ay); o.yb=pick(g.ay,g.hy); } return o; });
+  }
+  H2H.html=function(m,hh){
+    const G=prep(m,hh); H2H.cur=m; H2H.games=G; if(!G.length) return "";
+    const w=G.filter(g=>g.r==="W").length, d=G.filter(g=>g.r==="D").length, l=G.length-w-d, n=G.length;
+    const avg=a=>a.reduce((x,y)=>x+y,0)/a.length, gl=G.map(g=>g.a+g.b), both=G.filter(g=>g.a>0&&g.b>0).length, o25=G.filter(g=>g.a+g.b>2.5).length;
+    const cs=G.filter(g=>g.ca!=null), ys=G.filter(g=>g.ya!=null);
+    const cols=G.map((g,i)=>{ const gd=g.a-g.b, h=Math.max(4,Math.min(1,Math.abs(gd)/4)*34); return `<button type="button" class="h2g" data-i="${i}" style="--k:${i}" aria-label="${esc(d2(g.date))}: ${g.a}:${g.b}"><span class="dt">${esc(d2(g.date))}</span><span class="bx"><i class="br ${gd>0?"up":gd<0?"dn":"eq"}" style="height:${h}px"></i></span><span class="sc num">${g.a}:${g.b}</span></button>`; }).join("");
+    const tile=(t,v)=>`<div><i>${t}</i><b class="num">${v}</b></div>`;
+    return `<div class="card h2x"><div class="cap">Личные встречи · ${n}</div>
+      <div class="h2wl" role="img" aria-label="${w} побед, ${d} ничьих, ${l} поражений"><i class="w" style="width:${w/n*100}%"></i><i class="d" style="width:${d/n*100}%"></i><i class="l" style="width:${l/n*100}%"></i></div>
+      <div class="h2lg"><span>${esc(nmH(m))}: <b>${w}</b></span><span>ничьих: <b>${d}</b></span><span>${esc(nmA(m))}: <b>${l}</b></span></div>
+      <div class="h2tl" id="h2tl">${cols}</div><div class="h2n">Слева — давно, справа — недавно. Столбик вверх — победа ${esc(nmH(m))}, вниз — поражение; высота — разница мячей. Нажмите на матч.</div>
+      <div class="h2s">${tile("Голов за игру",avg(gl).toFixed(1))}${tile("Обе забили",Math.round(both/n*100)+"%")}${tile("Тотал больше 2.5",Math.round(o25/n*100)+"%")}
+        ${cs.length>=3?tile("Угловых за игру",avg(cs.map(g=>g.ca+g.cb)).toFixed(1)):""}${ys.length>=3?tile("Жёлтых за игру",avg(ys.map(g=>g.ya+g.yb)).toFixed(1)):""}</div>
+      ${cs.length&&cs.length<n||ys.length&&ys.length<n?`<div class="h2n">Угловые и карточки — по ${Math.max(cs.length,ys.length)} из ${n} игр: в остальных в базе этих данных нет.</div>`:""}</div>`;
+  };
+  function miniHtml(i){
+    const g=H2H.games[i], m=H2H.cur, N=H2H.games.length, nmx=t=>t===m.home?nm(m.home,m.home_ru):t===m.away?nm(m.away,m.away_ru):t;
+    const row=(t,a,b)=>{ const s=a+b; return `<div class="h2m-row"><div class="t"><b class="num">${a}</b><span>${t}</span><b class="num">${b}</b></div><div class="h2m-bar"><i class="a" style="width:${s?a/s*100:50}%"></i><i class="b" style="width:${s?b/s*100:50}%"></i></div></div>`; };
+    const rl={W:"победа "+nmH(m),D:"ничья",L:"победа "+nmA(m)}[g.r];
+    return `<div class="h2m-top"><span>${esc(String(g.date).slice(0,10))}</span><span class="h2m-chip ${g.r}">${esc(rl)}</span></div>
+      <div class="h2m-sc"><span>${esc(nmx(g.home))}</span><b class="num">${g.hg} : ${g.ag}</b><span>${esc(nmx(g.away))}</span></div>
+      ${g.ca!=null?"":""}${g.ca!=null?row("угловые · "+esc(nmH(m))+" / "+esc(nmA(m)),g.ca,g.cb):""}${g.ya!=null?row("жёлтые · "+esc(nmH(m))+" / "+esc(nmA(m)),g.ya,g.yb):""}
+      ${g.ca==null&&g.ya==null?`<div class="note">В базе бота для этого матча нет данных по угловым и карточкам.</div>`:""}
+      <div class="h2m-nav"><button type="button" data-d="-1" aria-label="Более ранний" ${i<=0?"disabled":""}>‹</button><span class="muted">${i+1} из ${N}</span><button type="button" data-d="1" aria-label="Более поздний" ${i>=N-1?"disabled":""}>›</button></div>`;
+  }
+  function openMini(i){
+    haptic("light"); let cur=i;
+    Sheet.open("Очная встреча",`<div class="h2m-body">${miniHtml(cur)}</div>`,B=>{ B.onclick=e=>{ const b=e.target.closest("[data-d]"); if(!b||b.disabled) return; cur=Math.max(0,Math.min(H2H.games.length-1,cur+ +b.dataset.d)); haptic("select");
+      const bd=$(".h2m-body",B); bd.innerHTML=miniHtml(cur); if(!RMq()){ bd.classList.remove("sw"); void bd.offsetWidth; bd.classList.add("sw"); } }; });
+  }
+  document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest(".h2g"); if(b&&H2H.games.length){ openMini(+b.dataset.i); } });
+  window.H2H37=H2H; H2H.prep=prep; window.EX37={EXC,build,loadLegs,cardHtml};
+}catch(e){ console.warn("v37",e); } })();
 </script>
 </body>
 </html>
