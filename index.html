@@ -972,6 +972,220 @@ html[data-anim=off] .h2g .br,html[data-anim=off] .h2wl i{animation:none;transfor
 .h2m-bar{display:flex;height:8px;border-radius:99px;overflow:hidden;background:var(--track);gap:2px}.h2m-bar i{display:block;height:100%;transform-origin:left;animation:h2g .7s var(--spring-real) both}.h2m-bar .a{background:var(--blue)}.h2m-bar .b{background:var(--violet);transform-origin:right}
 .h2m-nav{display:flex;justify-content:space-between;align-items:center;margin-top:14px}.h2m-nav button{width:48px;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--card2);color:var(--text);font-size:20px;transition:transform .5s var(--spring-real)}.h2m-nav button:active{transform:scale(.9)}.h2m-nav button[disabled]{opacity:.35}
 .h2m-body.sw{animation:xin .4s var(--ease) both}
+/* ═════════ v38: статистика матча, форма 10 игр, модалка ═════════ */
+.st38{padding:16px}
+.st38h{display:flex;justify-content:space-between;gap:10px;margin:10px 0 2px;font-weight:700;font-size:13px}
+.st38h span:first-child{color:var(--blue)}.st38h span:last-child{color:var(--violet);text-align:right}
+.sb38 .sr{margin:11px 0}
+.sb38 .sv{display:grid;grid-template-columns:1fr auto 1fr;align-items:baseline;gap:8px;font-size:12.5px}
+.sb38 .sv span{color:var(--muted);text-align:center;font-size:12px}
+.sb38 .sv b{font-size:15px}.sb38 .sv .b{text-align:right}
+.sb38 .sbar{display:flex;gap:3px;height:7px;margin-top:5px}
+.sb38 .sbar i{display:block;height:100%;flex:var(--pa) 1 0;border-radius:99px;opacity:.42;transform-origin:left;
+  animation:sb38 .7s var(--spring-real) both;animation-delay:calc(var(--k,0)*45ms)}
+.sb38 .sbar .a{background:var(--blue)}
+.sb38 .sbar .b{background:var(--violet);flex-grow:calc(100 - var(--pa));transform-origin:right}
+.sb38 .sr.a .sbar .a,.sb38 .sr.b .sbar .b,.sb38 .sr:not(.a):not(.b) .sbar i{opacity:1}
+.sb38 .sr.a .sv .a,.sb38 .sr.b .sv .b{color:var(--text)}
+.sb38 .sv b{color:var(--muted);font-weight:700}
+@keyframes sb38{from{transform:scaleX(0)}to{transform:none}}
+/* форма команд */
+.fm38{padding:16px;margin-bottom:14px}
+.ft38{margin-top:14px;content-visibility:auto;contain-intrinsic-size:auto 168px}
+.fth{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.fth b{font-size:14px}.fth span{font-size:12px;color:var(--muted)}
+.fch{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 2px}
+.fch i{font-style:normal;font-size:11.5px;padding:4px 9px;border-radius:99px;background:color-mix(in srgb,var(--text) 7%,transparent);color:var(--muted)}
+.fch i b{color:var(--text);margin-left:3px}
+.ftl38{display:flex;gap:8px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;padding:8px 2px 10px;margin:0 -2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.ftl38::-webkit-scrollbar{display:none}
+.fc38{flex:none;width:86px;scroll-snap-align:end;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 6px 9px;border-radius:16px;
+  border:1px solid color-mix(in srgb,var(--k38) 38%,var(--line));background:color-mix(in srgb,var(--k38) 11%,var(--card2));position:relative;overflow:hidden;
+  transition:transform .5s var(--spring-real);animation:fc38 .55s var(--spring-real) both;animation-delay:calc(var(--k,0)*40ms)}
+.fc38::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--k38)}
+.fc38:active{transform:scale(.93)}
+.fc38.W{--k38:var(--green)}.fc38.D{--k38:var(--amber)}.fc38.L{--k38:var(--red)}
+.fc38 .dt{font-size:10.5px;color:var(--muted);display:flex;gap:5px;align-items:center}
+.fc38 .dt em{font-style:normal;font-size:9px;font-weight:800;padding:1px 5px;border-radius:6px;background:color-mix(in srgb,var(--text) 10%,transparent)}
+.fc38 .sc{font:800 19px var(--font,system-ui);letter-spacing:-.01em;margin:2px 0 1px}
+.fc38 .op{font-size:11px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.fc38 .rs{font-size:10px;font-weight:800;color:var(--k38);letter-spacing:.04em}
+.fc38.nos .rs::after{content:" ·";opacity:.5}
+@keyframes fc38{from{opacity:0;transform:translateY(10px) scale(.94)}to{opacity:1;transform:none}}
+/* модалка */
+#m38{position:fixed;inset:0;z-index:90;display:grid;align-items:end;justify-items:center;visibility:hidden;pointer-events:none}
+#m38.on{visibility:visible;pointer-events:auto}
+.m38bg{position:absolute;inset:0;background:rgba(2,4,10,.55);opacity:0;transition:opacity .3s}
+#m38.on .m38bg{opacity:1}
+.m38p{position:relative;width:100%;max-width:520px;max-height:88vh;max-height:88dvh;overflow-y:auto;overscroll-behavior:contain;outline:0;
+  padding:22px 18px calc(20px + env(safe-area-inset-bottom));border-radius:28px 28px 0 0;
+  background:color-mix(in srgb,var(--bg2) 62%,transparent);border:1px solid rgba(255,255,255,.12);border-bottom:0;
+  -webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:0 -20px 60px -20px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.14);
+  opacity:0;transform:translate3d(0,48px,0) scale(.97);transition:transform .55s var(--spring-real),opacity .25s}
+#m38.on .m38p{opacity:1;transform:none}
+@media (min-width:640px){#m38{align-items:center}.m38p{border-radius:28px;border-bottom:1px solid rgba(255,255,255,.12)}}
+html[data-fxl="off"] .m38p{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--card)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.m38p{background:var(--card)}}
+.m38x{position:absolute;top:10px;right:10px;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:var(--muted);
+  background:color-mix(in srgb,var(--text) 8%,transparent);border:1px solid rgba(255,255,255,.1);transition:transform .4s var(--spring-real),color .2s}
+.m38x:active{transform:scale(.88)}.m38x:hover{color:var(--text)}.m38x svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round}
+.m38x:focus-visible,.fc38:focus-visible,.m38nav button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.m38b.sw{animation:m38in .38s var(--ease) both}
+@keyframes m38in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.m38top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-right:52px;color:var(--muted);font-size:12.5px}
+.m38top .lg{font-weight:800}
+.m38sc{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;text-align:center;margin:16px 0 8px}
+.m38sc .t{font-weight:700;font-size:14px;overflow-wrap:anywhere}.m38sc b{font-size:38px;letter-spacing:-.02em}
+.m38chip{display:table;margin:0 auto 12px;padding:4px 12px;border-radius:99px;font:800 11.5px var(--font,system-ui)}
+.m38chip.W{background:rgba(52,211,153,.16);color:var(--green)}.m38chip.D{background:rgba(251,191,36,.16);color:var(--amber)}.m38chip.L{background:rgba(248,113,113,.16);color:var(--red)}
+.m38no{margin:14px 0 4px;padding:14px;border-radius:16px;text-align:center;font-size:13px;color:var(--muted);background:color-mix(in srgb,var(--text) 6%,transparent)}
+.m38nav{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+.m38nav button{width:52px;height:44px;border-radius:14px;border:1px solid var(--line);background:color-mix(in srgb,var(--card2) 80%,transparent);font-size:20px;transition:transform .5s var(--spring-real)}
+.m38nav button:active{transform:scale(.9)}.m38nav button[disabled]{opacity:.35}
+html[data-anim=off] .sb38 .sbar i,html[data-anim=off] .fc38,html[data-anim=off] .m38b.sw{animation:none}
+html[data-anim=off] .m38p,html[data-anim=off] .m38bg{transition:none}
+@media (prefers-reduced-motion:reduce){.sb38 .sbar i,.fc38,.m38b.sw{animation:none}.m38p,.m38bg{transition:none}}
+/* v39: универсальная модалка (DNA, радар) — та же «стеклянная» основа, что у модалки матча */
+#m39{position:fixed;inset:0;z-index:88;display:grid;align-items:end;justify-items:center;visibility:hidden;pointer-events:none}
+#m39.on{visibility:visible;pointer-events:auto}
+.m39bg{position:absolute;inset:0;background:rgba(2,4,10,.55);opacity:0;transition:opacity .3s}
+#m39.on .m39bg{opacity:1}
+.m39p{position:relative;width:100%;max-width:520px;max-height:88vh;max-height:88dvh;overflow-y:auto;overscroll-behavior:contain;outline:0;
+  padding:22px 18px calc(20px + env(safe-area-inset-bottom));border-radius:28px 28px 0 0;
+  background:color-mix(in srgb,var(--bg2) 62%,transparent);border:1px solid rgba(255,255,255,.12);border-bottom:0;
+  -webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);
+  box-shadow:0 -20px 60px -20px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.14);
+  opacity:0;transform:translate3d(0,48px,0) scale(.97);transition:transform .55s var(--spring-real),opacity .25s}
+#m39.on .m39p{opacity:1;transform:none}
+@media (min-width:640px){#m39{align-items:center}.m39p{border-radius:28px;border-bottom:1px solid rgba(255,255,255,.12)}}
+html[data-fxl="off"] .m39p{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--card)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.m39p{background:var(--card)}}
+.m39x{position:absolute;top:10px;right:10px;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:var(--muted);
+  background:color-mix(in srgb,var(--text) 8%,transparent);border:1px solid rgba(255,255,255,.1);transition:transform .4s var(--spring-real),color .2s}
+.m39x:active{transform:scale(.88)}.m39x:hover{color:var(--text)}.m39x svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round}
+.m39x:focus-visible,.fc38:focus-visible,.m39nav button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.m39b.sw{animation:m39in .38s var(--ease) both}
+@keyframes m39in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.m39top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-right:52px;color:var(--muted);font-size:12.5px}
+.m39top .lg{font-weight:800}
+.m39sc{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;text-align:center;margin:16px 0 8px}
+.m39sc .t{font-weight:700;font-size:14px;overflow-wrap:anywhere}.m39sc b{font-size:38px;letter-spacing:-.02em}
+.m39chip{display:table;margin:0 auto 12px;padding:4px 12px;border-radius:99px;font:800 11.5px var(--font,system-ui)}
+.m39chip.W{background:rgba(52,211,153,.16);color:var(--green)}.m39chip.D{background:rgba(251,191,36,.16);color:var(--amber)}.m39chip.L{background:rgba(248,113,113,.16);color:var(--red)}
+.m39no{margin:14px 0 4px;padding:14px;border-radius:16px;text-align:center;font-size:13px;color:var(--muted);background:color-mix(in srgb,var(--text) 6%,transparent)}
+.m39nav{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+.m39nav button{width:52px;height:44px;border-radius:14px;border:1px solid var(--line);background:color-mix(in srgb,var(--card2) 80%,transparent);font-size:20px;transition:transform .5s var(--spring-real)}
+.m39nav button:active{transform:scale(.9)}.m39nav button[disabled]{opacity:.35}
+html[data-anim=off] .sb38 .sbar i,html[data-anim=off] .fc38,html[data-anim=off] .m39b.sw{animation:none}
+html[data-anim=off] .m39p,html[data-anim=off] .m39bg{transition:none}
+@media (prefers-reduced-motion:reduce){.sb38 .sbar i,.fc38,.m39b.sw{animation:none}.m39p,.m39bg{transition:none}}
+
+#m39.vt .m39p{transition:none}
+.m39p{max-height:90vh;max-height:90dvh}
+/* ── табы ── */
+.js39 .rv39{opacity:0;transform:translate3d(0,16px,0) scale(.985)}
+.js39 .rv39.in{opacity:1;transform:none;transition:opacity .45s var(--ease),transform .7s var(--spring-real);transition-delay:var(--d,0ms)}
+.tabs39{margin-bottom:14px}
+.tb39{position:relative;display:flex;gap:2px;padding:4px;border-radius:18px;overflow-x:auto;scrollbar-width:none;margin-bottom:12px;
+  background:color-mix(in srgb,var(--card) 72%,transparent);border:1px solid var(--line);
+  -webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%)}
+html[data-fxl="off"] .tb39{-webkit-backdrop-filter:none;backdrop-filter:none}
+.tb39::-webkit-scrollbar{display:none}
+.tb39 button{position:relative;z-index:1;flex:1 0 auto;min-height:38px;padding:0 13px;border-radius:14px;font:700 12.5px var(--font,system-ui);color:var(--muted);white-space:nowrap;transition:color .25s}
+.tb39 button[aria-selected=true]{color:var(--text)}
+.tb39 button:active{transform:scale(.95)}
+.tb39 button:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+.ind39{position:absolute;z-index:0;top:4px;bottom:4px;left:0;width:0;border-radius:14px;pointer-events:none;
+  background:color-mix(in srgb,var(--blue) 20%,var(--card2));border:1px solid color-mix(in srgb,var(--blue) 40%,transparent);
+  box-shadow:0 6px 18px -8px color-mix(in srgb,var(--blue) 70%,transparent);
+  transition:transform .55s var(--spring-real),width .35s var(--ease)}
+.tpw39{touch-action:pan-y pinch-zoom}
+.tp39[hidden]{display:none}
+.tp39>.card{margin-bottom:0}
+.tp39>.card+.card{margin-top:12px}
+/* ── радар ── */
+.rd39{position:relative;padding:16px;overflow:hidden}
+.rdh{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.rdx{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:var(--muted);background:color-mix(in srgb,var(--text) 8%,transparent);border:1px solid var(--line);transition:transform .45s var(--spring-real)}
+.rdx:active{transform:scale(.88)}.rdx svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.rdl{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;font-weight:700;margin-top:6px}
+.rdl span{display:flex;align-items:center;gap:6px;min-width:0}.rdl span:last-child{text-align:right;flex-direction:row-reverse}
+.rdl i{flex:none;width:9px;height:9px;border-radius:50%}
+.rdw{position:relative;margin:2px auto 0;max-width:380px}
+.rdw .glow{position:absolute;inset:8% 6%;pointer-events:none;opacity:.8;filter:blur(22px);
+  background:radial-gradient(55% 60% at 32% 55%,color-mix(in srgb,var(--hc) 42%,transparent),transparent 72%),radial-gradient(55% 60% at 70% 55%,color-mix(in srgb,var(--ac) 42%,transparent),transparent 72%)}
+.rdw svg{position:relative;display:block;width:100%;height:auto;overflow:visible}
+.rdw .ring{fill:none;stroke:var(--line);stroke-width:1}
+.rdw .axl{stroke:var(--line);stroke-width:1}
+.rdw text{fill:var(--muted);font:700 11px var(--font,system-ui)}
+.rdw .pg{transform-origin:170px 160px;animation:rdp .95s var(--spring-real) both;animation-delay:.12s}
+.rdw .pg.b{animation-delay:.26s}
+.rdw .pg polygon{stroke-width:2.2;stroke-linejoin:round}
+.rdw .pg.a polygon{fill:color-mix(in srgb,var(--hc) 26%,transparent);stroke:var(--hc)}
+.rdw .pg.b polygon{fill:color-mix(in srgb,var(--ac) 26%,transparent);stroke:var(--ac)}
+.rdw .pg.a circle{fill:var(--hc)}.rdw .pg.b circle{fill:var(--ac)}
+@keyframes rdp{from{opacity:0;transform:scale(.15)}to{opacity:1;transform:none}}
+.rt39{margin-top:10px}
+.rt39 .r{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:baseline;padding:7px 0;border-top:1px solid var(--line);font-size:13px}
+.rt39 .r span{color:var(--muted);font-size:12px;text-align:center}
+.rt39 .r b{font-weight:700;color:var(--muted)}.rt39 .r b:last-child{text-align:right}
+.rt39 .r.a b:first-child{color:var(--hc)}.rt39 .r.b b:last-child{color:var(--ac)}
+/* ── Match DNA ── */
+.dn39{padding:16px}
+.dtm{margin-top:16px}
+.dth{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.dth b{font-size:14px}.dth span{font-size:11.5px;color:var(--muted)}
+.dlead{margin:6px 0 8px;font-size:13px;color:var(--muted);line-height:1.4}.dlead b{color:var(--text)}
+.sc39{display:block;width:100%;text-align:left;padding:12px 13px;margin-top:8px;border-radius:16px;
+  background:color-mix(in srgb,var(--card2) 78%,transparent);border:1px solid var(--line);transition:transform .5s var(--spring-real),border-color .25s}
+.sc39:active{transform:scale(.975)}.sc39:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.sc39 .t{display:flex;flex-direction:column;gap:1px}.sc39 .t b{font-size:13.5px}.sc39 .t span{font-size:11.5px;color:var(--muted)}
+.sc39 .big{display:flex;align-items:baseline;gap:5px;margin:8px 0 6px}.sc39 .big b{font-size:26px;letter-spacing:-.02em}.sc39 .big span{font-size:13px;color:var(--muted)}
+.wl39{display:flex;gap:3px;height:7px}
+.wl39 i{display:block;height:100%;border-radius:99px;min-width:0;transform-origin:left;animation:sb38 .8s var(--spring-real) both;animation-delay:.1s}
+.wl39 .w{background:var(--green)}.wl39 .d{background:var(--amber)}.wl39 .l{background:var(--red)}
+.sc39 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.sc39 .chips i,.m39b .chips i{font-style:normal;font-size:11px;padding:3px 9px;border-radius:99px;background:color-mix(in srgb,var(--text) 7%,transparent);color:var(--muted)}
+.sc39 .chips i b,.m39b .chips i b{color:var(--text);margin-left:3px}
+.dno{margin:10px 0 0;padding:12px;border-radius:14px;text-align:center;font-size:12.5px;color:var(--muted);background:color-mix(in srgb,var(--text) 6%,transparent)}
+.m39b .m39h{padding-right:52px}.m39b .m39h b{display:block;font-size:18px;letter-spacing:-.01em}.m39b .m39h span{font-size:12.5px;color:var(--muted)}
+.m39b .big{display:flex;align-items:baseline;gap:6px;margin:14px 0 8px}.m39b .big b{font-size:40px;letter-spacing:-.03em}.m39b .big span{color:var(--muted);font-size:14px}
+.m39b .chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}
+.gl39{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;width:100%;text-align:left;padding:11px 12px;margin-top:8px;border-radius:14px;
+  background:color-mix(in srgb,var(--card2) 70%,transparent);border:1px solid var(--line);font-size:13px;transition:transform .45s var(--spring-real)}
+.gl39:active{transform:scale(.97)}.gl39 .d{font-size:11.5px;color:var(--muted)}.gl39 .s{font-weight:800}
+.gl39.W .s{color:var(--green)}.gl39.D .s{color:var(--amber)}.gl39.L .s{color:var(--red)}
+.gl39 .m{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.m39b .cap{margin:16px 0 2px}
+/* ── новости ── */
+.nw39{padding:16px;border-color:color-mix(in srgb,var(--amber) 32%,var(--line));
+  background:linear-gradient(135deg,color-mix(in srgb,var(--amber) 9%,var(--card)),var(--card) 60%)}
+.nwh{display:flex;flex-direction:column;gap:8px}
+.nwb{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;font:800 11.5px/1.25 var(--font,system-ui);
+  color:var(--muted);background:color-mix(in srgb,var(--text) 8%,transparent);border:1px solid var(--line)}
+.nwb.w{color:var(--amber);background:color-mix(in srgb,var(--amber) 14%,transparent);border-color:color-mix(in srgb,var(--amber) 38%,transparent)}
+.nwg{margin-top:12px}.nwg>b{display:block;font-size:12.5px;margin-bottom:2px}
+.nwr{display:grid;grid-template-columns:auto 1fr;gap:9px;padding:9px 0;border-top:1px solid var(--line);align-items:start}
+.nwr:first-of-type{border-top:0}
+.nwp{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:99px;font:800 10.5px var(--font,system-ui);letter-spacing:.02em;margin-top:1px;background:color-mix(in srgb,var(--text) 8%,transparent);color:var(--muted)}
+.nwp svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.nwp.inj,.nwp.doubt{color:var(--amber);background:color-mix(in srgb,var(--amber) 15%,transparent)}
+.nwp.susp{color:var(--red);background:color-mix(in srgb,var(--red) 15%,transparent)}
+.nwp.ret{color:var(--green);background:color-mix(in srgb,var(--green) 15%,transparent)}
+.nwr a,.nwr .tx{color:var(--text);text-decoration:none;font-size:13px;line-height:1.38;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.nwr small{display:block;margin-top:2px;font-size:11px;color:var(--muted)}
+/* ── скелетоны (шиммер через transform — без перерисовки) ── */
+.sk39{position:relative;overflow:hidden;border-radius:14px;background:color-mix(in srgb,var(--text) 6%,transparent)}
+.sk39::after{content:"";position:absolute;inset:0;transform:translate3d(-100%,0,0);background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--text) 11%,transparent),transparent);animation:sk39 1.3s ease-in-out infinite}
+@keyframes sk39{to{transform:translate3d(100%,0,0)}}
+.sk39.l{height:12px;width:55%;margin:8px 0}.sk39.r{height:86px;margin-top:10px;border-radius:16px}
+html[data-anim=off] .sk39::after,html[data-anim=off] .rdw .pg,html[data-anim=off] .wl39 i{animation:none}
+@media (prefers-reduced-motion:reduce){.sk39::after,.rdw .pg,.wl39 i{animation:none}.js39 .rv39{opacity:1;transform:none}.ind39{transition:none}}
+/* View Transitions: карточка «перетекает» в модалку */
+::view-transition-group(m39){animation-duration:.55s;animation-timing-function:var(--spring-real)}
+::view-transition-old(m39),::view-transition-new(m39){height:100%;overflow:clip;animation-duration:.4s}
+html[data-vt39]::view-transition-old(root),html[data-vt39]::view-transition-new(root){animation-duration:.22s}
 </style>
 </head>
 <body>
@@ -1134,6 +1348,7 @@ async function staticApi(path){
     return S.matches.filter(m=>m.date>=d0 && m.date<=lim && (!lg||m.league===lg));
   }
   if(p.startsWith("/api/match/")){ const m=S.match[p.split("/").pop()]; if(!m) throw nope(404); return m; }
+  if(p.startsWith("/api/dna/")){ const m=S.match[p.split("/").pop()]; if(!m) throw nope(404); return m.dna||{empty:true}; }       /* v39 */
   if(p==="/api/bets"){
     const st=q.get("status")||"all", lim=Math.max(1,Math.min(+q.get("limit")||100,500));
     return S.bets.filter(b=>st==="open"?b.result==null:st==="settled"?b.result!=null:true).slice(0,lim);
@@ -1378,6 +1593,7 @@ async function viewMatch(id){
      ${ringSvg(p)}</div>
      <div class="actions"><button id="share"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>Копировать прогноз</button>
        <button id="gocalc"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M12 12h2M8 16h2M12 16h2"/></svg>Проверить кэф</button></div>`;
+    if(window.W39) h += W39.news(m);
     const od = (m.odds_1x2||[]);
     if(od.length){
       const by = {}; od.forEach(o=>{(by[o.source]=by[o.source]||{})[o.selection]=o;});
@@ -1408,6 +1624,7 @@ async function viewMatch(id){
   } else if (a) h += `<div class="card"><div class="cap">Ставки бота по матчу</div><div class="sub" style="margin-top:8px">Пока нет. Бот добавит ставку, когда найдёт перевес по актуальным кэфам.</div></div>`;
   h += `<div class="foot">Модель проверена walk-forward · точность ≠ прибыль · не гарантия выигрыша</div>`;
   const v = mount(h, "fwd");
+  if(window.W39) W39.mounted(m, v);
   // избранное
   v.querySelectorAll("[data-fav]").forEach(b=>b.onclick=()=>{ const on=toggleFav(b.dataset.fav); b.classList.toggle("on",on); b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop"); toast(on?"Добавлено в «Мои команды»":"Убрано из «Мои команды»"); });
   if(!a) return;
@@ -1431,10 +1648,12 @@ function betStatus(b){
 /* v25: форма, личные встречи, таблица, движение кэфов (рисуем только то, для чего есть данные) */
 function formDots(arr){ return (arr||[]).slice().reverse().map(x=>`<span class="fd ${x.r}" title="${esc(x.opp)} ${x.gf}:${x.ga}">${x.r==="W"?"В":x.r==="D"?"Н":"П"}</span>`).join(""); }
 function extraCards(m){
-  const x = m.extra; if(!x) return "";
-  let h = "";
+  const x = m.extra; if(!x) return window.W39?W39.tabs(m,{stats:window.W38?W38.stats(m):""}):(window.W38?W38.stats(m):"");
+  let h = "", pan = {};
   const fh=(x.form||{}).home||[], fa=(x.form||{}).away||[];
-  if(fh.length||fa.length){
+  if(window.W39){ pan.stats = W38.stats(m); pan.form = W38.form(m); }
+  else if(window.W38){ h += W38.stats(m) + W38.form(m); }
+  else if(fh.length||fa.length){
     h += `<div class="card"><div class="cap">Форма · последние матчи</div><div style="margin-top:8px">
       <div class="frow"><span>${esc(nmH(m))}</span><span>${fh.length?formDots(fh):'<span class="dim">нет данных</span>'}</span></div>
       <div class="frow"><span>${esc(nmA(m))}</span><span>${fa.length?formDots(fa):'<span class="dim">нет данных</span>'}</span></div></div>
@@ -1442,11 +1661,12 @@ function extraCards(m){
   }
   const hh=x.h2h;
   if(hh&&hh.games&&hh.games.length){
-    if(window.H2H37){ h += window.H2H37.html(m,hh); } else {
+    if(window.H2H37){ if(window.W39) pan.h2h = window.H2H37.html(m,hh); else h += window.H2H37.html(m,hh); } else {
     h += `<div class="card"><div class="cap">Личные встречи · ${hh.games.length}</div><div class="sub" style="margin-top:4px">${esc(nmH(m))}: ${hh.w} · ничьих: ${hh.d} · ${esc(nmA(m))}: ${hh.l}</div><div style="margin-top:8px">` +
       hh.games.map(g=>`<div class="frow"><span class="dim num" style="font-size:12px">${esc(String(g.date).slice(0,10))}</span><span style="flex:1;font-size:13px;text-align:center">${esc(g.home)} — ${esc(g.away)}</span><b class="num">${g.hg}:${g.ag}</b></div>`).join("") + `</div></div>`;
     }
   }
+  if(window.W39) h += W39.tabs(m,pan);
   const tb=x.table||[];
   if(tb.length){
     const idx = tb.reduce((a,r,i)=>{ if(r.team===m.home||r.team===m.away) a.push(i); return a; },[]);
@@ -2588,7 +2808,7 @@ void main(){
             };
             const fin=()=>{ /* вызывается, когда текст допечатан */
               const txt=tw?tw.text():""; const mt=document.createElement("div"); mt.className="meta"; const p=meta||PROV.none;
-              mt.innerHTML=`<span>${p.d} ${esc(p.n)}</span>${cached?"<span>· ⚡ кэш</span>":""}${ctxm&&ctxm.length?`<span>· 🎯 ${esc(ctxm.map(x=>String(x.name||"")).join(" · "))}</span>`:""}`; b.appendChild(mt); r.dataset.done="1";
+              mt.innerHTML=`<span>${p.d} ${esc(p.n)}</span>${(m&&m.news&&((m.news.home||[]).length||(m.news.away||[]).length))?"<span>· 📰 новости учтены</span>":""}${cached?"<span>· ⚡ кэш</span>":""}${ctxm&&ctxm.length?`<span>· 🎯 ${esc(ctxm.map(x=>String(x.name||"")).join(" · "))}</span>`:""}`; b.appendChild(mt); r.dataset.done="1";
               hist.push({role:"user",content:question},{role:"assistant",content:txt.slice(0,600)}); hist=hist.slice(-6);
               const words=txt.split(/\s+/).length; if(!RMo&&(words>=90||think||(!preset&&question.split(/\s+/).length>=8))){ try{ confetti(70); Snd.play("ok"); }catch(x){} haptic("ok"); } else haptic("soft"); };
             for(;;){ const {value,done:dn}=await rd.read(); if(dn) break; buf+=dec.decode(value,{stream:true}); let i;
@@ -3098,12 +3318,16 @@ window.AIW=(function(){
   async function bets(){ try{ const r=await api("/api/bets?status=open&limit=100"); return (Array.isArray(r)?r:[]).filter(b=>b&&b.recommended&&b.result==null&&b.ev!=null).slice(0,8)
       .map(b=>({recommended:true,result:null,ev:b.ev,home_ru:b.home_ru,away_ru:b.away_ru,home_team:b.home_team,away_team:b.away_team,label_ru:b.label_ru,label:b.label,taken_odds:b.taken_odds,placed_odds:b.placed_odds})); }catch(e){ return []; } }
   /* чат: какие матчи имеются в виду (подсказка пользователя → названные в вопросе → открытая карточка) и их данные */
+  /* v39: воркеру нужны только числа формы/H2H и новости — тяжёлую статистику и DNA не отправляем */
+  function lean(d){ if(!d||typeof d!=="object") return d; const o=Object.assign({},d); delete o.dna; delete o.stats;
+    if(o.extra){ const x=Object.assign({},o.extra); if(x.form){ const f={}; for(const k in x.form) f[k]=(x.form[k]||[]).map(e=>({r:e.r,gf:e.gf,ga:e.ga,opp:e.opp,home:e.home,date:e.date})); x.form=f; }
+      if(x.h2h&&x.h2h.games) x.h2h=Object.assign({},x.h2h,{games:x.h2h.games.map(g=>({date:g.date,home:g.home,away:g.away,hg:g.hg,ag:g.ag}))}); o.extra=x; } return o; }
   async function chat(url,question,m,pickId){ if(!isWorker(url)) return {};
     const all=rows(), P=all.slice(0,120).map(slim); let ids=[]; if(pickId!=null) ids.push(pickId);
     try{ aiResolve(question,P).forEach(id=>{ if(!ids.includes(id)) ids.push(id); }); }catch(e){}
     if(!ids.length&&m&&m.event_id!=null) ids.push(m.event_id); ids=ids.slice(0,2);
     const details={}, used=[];
-    ids.forEach(id=>{ const row=all.find(x=>x.event_id===id), d=det(id)||(m&&m.event_id===id?m:null)||(row?Object.assign({},slim(row),{analysis:{p:row.p}}):null); if(d){ details[id]=d; used.push({id,name:nm(d)}); } });
+    ids.forEach(id=>{ const row=all.find(x=>x.event_id===id), d=det(id)||(m&&m.event_id===id?m:null)||(row?Object.assign({},slim(row),{analysis:{p:row.p}}):null); if(d){ details[id]=lean(d); used.push({id,name:nm(d)}); } });
     const ok=Object.keys(details).map(Number);
     const out={ids:ok,details,used,now:Date.now()};
     if(!ok.length){ out.pool=P; out.bets=await bets(); }
@@ -3266,7 +3490,7 @@ const EXC=(()=>{
   const d2=s=>{ const x=String(s||"").slice(0,10).split("-"); return x.length===3?x[2]+"."+x[1]:""; };
   function prep(m,hh){
     const hn=m.home; return (hh.games||[]).slice().reverse().map(g=>{ const ho=g.home===hn;
-      const a=ho?g.hg:g.ag, b=ho?g.ag:g.hg, pick=(x,y)=>ho?x:y, o={date:g.date,home:g.home,away:g.away,hg:g.hg,ag:g.ag,a,b,r:a>b?"W":a===b?"D":"L"};
+      const a=ho?g.hg:g.ag, b=ho?g.ag:g.hg, pick=(x,y)=>ho?x:y, o={date:g.date,home:g.home,away:g.away,hg:g.hg,ag:g.ag,a,b,r:a>b?"W":a===b?"D":"L",raw:g};
       if(g.hc!=null&&g.ac!=null){ o.ca=pick(g.hc,g.ac); o.cb=pick(g.ac,g.hc); } if(g.hy!=null&&g.ay!=null){ o.ya=pick(g.hy,g.ay); o.yb=pick(g.ay,g.hy); } return o; });
   }
   H2H.html=function(m,hh){
@@ -3295,6 +3519,7 @@ const EXC=(()=>{
       <div class="h2m-nav"><button type="button" data-d="-1" aria-label="Более ранний" ${i<=0?"disabled":""}>‹</button><span class="muted">${i+1} из ${N}</span><button type="button" data-d="1" aria-label="Более поздний" ${i>=N-1?"disabled":""}>›</button></div>`;
   }
   function openMini(i){
+    if(window.M38){ M38.open(H2H.games.map(x=>({g:x.raw})),i,H2H.cur); return; }   /* v38: общая модалка с полной статистикой */
     haptic("light"); let cur=i;
     Sheet.open("Очная встреча",`<div class="h2m-body">${miniHtml(cur)}</div>`,B=>{ B.onclick=e=>{ const b=e.target.closest("[data-d]"); if(!b||b.disabled) return; cur=Math.max(0,Math.min(H2H.games.length-1,cur+ +b.dataset.d)); haptic("select");
       const bd=$(".h2m-body",B); bd.innerHTML=miniHtml(cur); if(!RMq()){ bd.classList.remove("sw"); void bd.offsetWidth; bd.classList.add("sw"); } }; });
@@ -3302,6 +3527,323 @@ const EXC=(()=>{
   document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest(".h2g"); if(b&&H2H.games.length){ openMini(+b.dataset.i); } });
   window.H2H37=H2H; H2H.prep=prep; window.EX37={EXC,build,loadLegs,cardHtml};
 }catch(e){ console.warn("v37",e); } })();
+/* ═════════ v38: статистика матча (полосы), «Форма команд · 10 игр», общая модалка для формы и H2H ═════════ */
+(function(){ try{
+  const $=(s,r)=>(r||document).querySelector(s);
+  const RMq=()=>document.documentElement.dataset.anim==="off"||matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const has=v=>v!=null&&v!==""&&!Number.isNaN(+v);
+  const d2=s=>{ const x=String(s||"").slice(0,10).split("-"); return x.length===3?x[2]+"."+x[1]:""; };
+  /* строки статистики: [название, ключ хозяев, ключ гостей, суффикс, знаков после запятой]. Строка рисуется, только если есть ОБА значения —
+     поэтому xG там, где его нет (не топ-лиги и редкие пропуски), скрывается сам: ни нулей, ни пустых полос. */
+  const ROWS=[["Владение мячом","hp","ap","%",0],["Удары","hs","as","",0],["Удары в створ","hsot","asot","",0],["xG","hxg","axg","",2],
+              ["Угловые","hc","ac","",0],["Фолы","hf","af","",0],["Жёлтые карточки","hy","ay","",0],["Красные карточки","hr","ar","",0]];
+  const fmt=(v,d,u)=>(d?(+v).toFixed(d):String(Math.round(+v)))+u;
+  function bars(g){
+    const rows=ROWS.filter(r=>g&&has(g[r[1]])&&has(g[r[2]]));
+    if(!rows.length) return "";
+    return `<div class="sb38">`+rows.map(([t,a,b,u,d],i)=>{ const x=+g[a], y=+g[b], s=x+y, pa=s>0?x/s*100:50, lead=x>y?"a":y>x?"b":"";
+      return `<div class="sr ${lead}" style="--k:${i};--pa:${pa.toFixed(1)}"><div class="sv"><b class="num a">${fmt(x,d,u)}</b><span>${t}</span><b class="num b">${fmt(y,d,u)}</b></div><div class="sbar"><i class="a"></i><i class="b"></i></div></div>`; }).join("")+`</div>`;
+  }
+  const hasStats=g=>ROWS.some(r=>g&&has(g[r[1]])&&has(g[r[2]]));
+  const gname=(g,side)=>side==="h"?nm(g.home,g.home_ru):nm(g.away,g.away_ru);
+
+  /* ── 1. Статистика текущего (сыгранного) матча ── */
+  function stats(m){
+    const g=m&&m.stats; if(!g) return ""; const b=bars(g); if(!b) return "";
+    return `<div class="card st38"><div class="cap">Статистика матча</div><div class="st38h"><span>${esc(nmH(m))}</span><span>${esc(nmA(m))}</span></div>${b}</div>`;
+  }
+
+  /* ── 2. Форма команд: 10 последних игр, от давних к недавним ── */
+  const W={cur:null,lists:{h:[],a:[]}};
+  const avg=a=>a.reduce((x,y)=>x+y,0)/a.length;
+  function teamBlock(m,side){
+    const arr=((m.extra||{}).form||{})[side==="h"?"home":"away"]||[], name=side==="h"?nmH(m):nmA(m), team=side==="h"?m.home:m.away;
+    const G=arr.slice().reverse(); W.lists[side]=G.map(e=>({g:e.g||null,team,e}));
+    if(!G.length) return `<div class="ft38"><div class="fth"><b>${esc(name)}</b></div><div class="note">В базе нет сыгранных матчей этой команды.</div></div>`;
+    const w=G.filter(e=>e.r==="W").length, d=G.filter(e=>e.r==="D").length, l=G.length-w-d;
+    const chips=[`<i>В-Н-П<b class="num">${w}-${d}-${l}</b></i>`,`<i>Голы<b class="num">${avg(G.map(e=>e.gf)).toFixed(1)} : ${avg(G.map(e=>e.ga)).toFixed(1)}</b></i>`];
+    const X=G.filter(e=>e.g&&has(e.g.hxg)&&has(e.g.axg)).map(e=>e.home?[e.g.hxg,e.g.axg]:[e.g.axg,e.g.hxg]);
+    if(X.length>=3) chips.push(`<i>xG${X.length<G.length?" ("+X.length+" из "+G.length+")":""}<b class="num">${avg(X.map(x=>x[0])).toFixed(2)} : ${avg(X.map(x=>x[1])).toFixed(2)}</b></i>`);
+    const cards=G.map((e,i)=>{ const hs=!!(e.g&&hasStats(e.g)), opp=nm(e.opp,e.opp_ru), rl={W:"ПОБЕДА",D:"НИЧЬЯ",L:"ПОРАЖЕНИЕ"}[e.r];
+      return `<button type="button" class="fc38 ${e.r}${hs?"":" nos"}" data-s="${side}" data-i="${i}" style="--k:${i}" aria-label="${esc(d2(e.date))}, ${esc(opp)}, ${e.gf}:${e.ga}, ${rl.toLowerCase()}"><span class="dt">${esc(d2(e.date))}<em>${e.home?"Д":"Г"}</em></span><b class="sc num">${e.gf}:${e.ga}</b><span class="op">${esc(opp)}</span><span class="rs">${e.r==="W"?"В":e.r==="D"?"Н":"П"}</span></button>`; }).join("");
+    return `<div class="ft38"><div class="fth"><b>${esc(name)}</b><span>${G.length} из 10 игр</span></div><div class="fch">${chips.join("")}</div><div class="ftl38" data-s="${side}">${cards}</div></div>`;
+  }
+  function form(m){
+    const f=(m.extra||{}).form; if(!f||!((f.home||[]).length||(f.away||[]).length)) return "";
+    W.cur=m;
+    return `<div class="card fm38"><div class="cap">Форма команд · последние 10 игр</div>${teamBlock(m,"h")}${teamBlock(m,"a")}
+      <div class="note">Слева — давно, справа — недавно. «Д» — дома, «Г» — в гостях. Нажмите на матч — откроется его статистика.</div></div>`;
+  }
+  /* свежие матчи справа: прокручиваем ленты в конец после вставки в DOM */
+  const mo=new MutationObserver(()=>{ document.querySelectorAll(".ftl38:not([data-sc])").forEach(t=>{ if(!t.offsetWidth) return; t.dataset.sc="1"; t.scrollLeft=t.scrollWidth; }); });
+  mo.observe(document.getElementById("app")||document.body,{childList:true,subtree:true});
+
+  /* ── 3. Общая модалка (форма и H2H) ── */
+  const M=(()=>{
+    let el,list=[],idx=0,ctx=null,isOpen=false,prev=null;
+    const X='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+    function build(){
+      el=document.createElement("div"); el.id="m38"; el.setAttribute("aria-hidden","true");
+      el.innerHTML=`<div class="m38bg"></div><div class="m38p" role="dialog" aria-modal="true" aria-labelledby="m38t" tabindex="-1"><button type="button" class="m38x" aria-label="Закрыть">${X}</button><div class="m38b"></div></div>`;
+      document.body.appendChild(el);
+      el.addEventListener("click",e=>{ if(e.target.closest(".m38x")||e.target.classList.contains("m38bg")){ close(); return; }
+        const n=e.target.closest("[data-d]"); if(n&&!n.disabled) go(+n.dataset.d); });
+      addEventListener("keydown",e=>{ if(!isOpen) return; if(e.key==="Escape") close(); else if(e.key==="ArrowLeft") go(-1); else if(e.key==="ArrowRight") go(1); });
+    }
+    function chip(it,g){
+      const t=it.team||(ctx&&ctx.home); if(!t||g.hg==null) return "";
+      const a=g.home===t?g.hg:g.ag, b=g.home===t?g.ag:g.hg, r=a>b?"W":a===b?"D":"L";
+      const who=it.team?(it.team===ctx.home?nmH(ctx):nmA(ctx)):nmH(ctx);
+      return `<div class="m38chip ${r}">${{W:"Победа",D:"Ничья",L:"Поражение"}[r]} · ${esc(who)}</div>`;
+    }
+    function html(){
+      const it=list[idx], g=it.g;
+      if(!g) return `<div class="m38no" id="m38t">Данные об этом матче недоступны.</div>`;
+      const dt=new Date(String(g.date).slice(0,10)+"T12:00:00"), ds=isNaN(dt)?esc(String(g.date||"")):dt.toLocaleDateString("ru-RU",{day:"numeric",month:"long",year:"numeric"});
+      const bd=bars(g);
+      return `<div class="m38top"><span class="lg" style="color:${(typeof LCOL!=="undefined"&&LCOL[g.lg])||"var(--muted)"}">${esc((typeof LEAGUES!=="undefined"&&LEAGUES[g.lg])||g.lg||"")}</span><span>${ds}</span></div>
+        <div class="m38sc" id="m38t"><span class="t">${esc(gname(g,"h"))}</span><b class="num">${g.hg} : ${g.ag}</b><span class="t">${esc(gname(g,"a"))}</span></div>${chip(it,g)}
+        ${bd||`<div class="m38no">Детальной статистики по этому матчу нет — в базе только счёт.</div>`}
+        ${list.length>1?`<div class="m38nav"><button type="button" data-d="-1" aria-label="Более ранний матч" ${idx<=0?"disabled":""}>‹</button><span class="muted">${idx+1} из ${list.length}</span><button type="button" data-d="1" aria-label="Более поздний матч" ${idx>=list.length-1?"disabled":""}>›</button></div>`:""}`;
+    }
+    function paint(anim){ const b=$(".m38b",el); b.innerHTML=html(); if(anim&&!RMq()){ b.classList.remove("sw"); void b.offsetWidth; b.classList.add("sw"); } }
+    function go(d){ const n=Math.max(0,Math.min(list.length-1,idx+d)); if(n===idx) return; idx=n; haptic("select"); paint(true); }
+    function open(items,i,context){
+      if(!items||!items.length) return; if(!el) build();
+      list=items; idx=Math.max(0,Math.min(items.length-1,i|0)); ctx=context; prev=document.activeElement;
+      paint(false); const p=$(".m38p",el); p.scrollTop=0;
+      el.setAttribute("aria-hidden","false"); el.classList.add("on"); isOpen=true;
+      document.documentElement.dataset.sheet="1"; document.body.style.overflow="hidden";   /* тот же флаг, что у шторки: тяжёлые фоновые эффекты на паузе */
+      haptic("light"); setTimeout(()=>{ try{ $(".m38x",el).focus({preventScroll:true}); }catch(e){} },60);
+    }
+    function close(){
+      if(!isOpen) return; isOpen=false; el.classList.remove("on"); el.setAttribute("aria-hidden","true");
+      if(!document.querySelector("#m39.on")){ delete document.documentElement.dataset.sheet; document.body.style.overflow=""; }
+      try{ prev&&prev.focus&&prev.focus({preventScroll:true}); }catch(e){}
+    }
+    return {open,close,isOpen:()=>isOpen};
+  })();
+
+  document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest(".fc38"); if(!b||!W.cur) return;
+    const L=W.lists[b.dataset.s]; if(L&&L.length) M.open(L,+b.dataset.i,W.cur); });
+
+  window.M38=M; window.W38={stats,form,bars,hasStats};
+}catch(e){ console.warn("v38",e); } })();
+/* ═════════ v39: табы со свайпом, радар, Match DNA, новости, скелетоны, пружинная анимация ═════════ */
+(function(){ try{
+  const $=(s,r)=>(r||document).querySelector(s), $$=(s,r)=>[...(r||document).querySelectorAll(s)];
+  const root=document.documentElement; root.classList.add("js39");
+  const RM=()=>matchMedia("(prefers-reduced-motion: reduce)").matches||root.dataset.anim==="off";
+  const FX=()=>!RM()&&root.dataset.fxl!=="off";
+  const has=v=>v!=null&&v!==""&&!Number.isNaN(+v);
+  const avg=a=>a.reduce((x,y)=>x+y,0)/a.length;
+  const lsg=k=>{ try{ return localStorage.getItem(k); }catch(e){ return null; } }, lss=(k,v)=>{ try{ localStorage.setItem(k,v); }catch(e){} };
+  const HC=m=>(typeof LCOL!=="undefined"&&LCOL[m.league])||"#6096ff", AC="#ec6fa0";
+  const spring=()=>{ const s=getComputedStyle(root).getPropertyValue("--spring-real").trim(); return s||"cubic-bezier(.34,1.45,.5,1)"; };
+  function anim(el,frames,opt){ if(!el||!el.animate||!FX()) return; try{ el.animate(frames,Object.assign({easing:spring()},opt)); }catch(e){ try{ el.animate(frames,Object.assign({},opt,{easing:"cubic-bezier(.2,.8,.2,1)"})); }catch(x){} } }
+  const nmx=(g,s)=>s==="h"?nm(g.home,g.home_ru):nm(g.away,g.away_ru);
+  const ru=n=>n===1?"матч":n>1&&n<5?"матча":"матчей";
+
+  /* ───────── 1. Радар ───────── */
+  const own=(e,k)=>{ const g=e.g; if(!g) return null; const v=g[(e.home?"h":"a")+k]; return has(v)?+v:null; };
+  const cards=e=>{ const y=own(e,"y"); if(y==null) return null; return y+2*(own(e,"r")||0); };
+  /* шкалы lo→hi — типичные значения топ-лиг за игру (lo при lo>hi — «меньше = лучше», ось перевёрнута) */
+  const AXES=[{k:"gf",t:"Голы",lo:.5,hi:2.5,d:1,get:e=>e.gf},{k:"xg",t:"xG",lo:.6,hi:2.4,d:2,get:e=>own(e,"xg")},
+    {k:"ga",t:"Защита",lo:2.2,hi:.4,d:1,inv:1,get:e=>e.ga},{k:"s",t:"Удары",lo:7,hi:17,d:1,get:e=>own(e,"s")},
+    {k:"p",t:"Владение",lo:35,hi:65,d:0,u:"%",get:e=>own(e,"p")},{k:"c",t:"Угловые",lo:3,hi:8,d:1,get:e=>own(e,"c")},
+    {k:"cd",t:"Дисциплина",lo:3.5,hi:.8,d:1,inv:1,get:cards}];
+  const clamp=x=>Math.max(0,Math.min(1,x));
+  function radarData(m){
+    const f=(m.extra||{}).form; if(!f) return null; const H=f.home||[], A=f.away||[];
+    if(H.length<5||A.length<5) return null;
+    const val=(G,ax)=>{ const v=G.map(ax.get).filter(x=>x!=null&&!Number.isNaN(x)); return v.length>=3?avg(v):null; };
+    const rows=AXES.map(ax=>({ax,h:val(H,ax),a:val(A,ax)})).filter(r=>r.h!=null&&r.a!=null);
+    const by=k=>rows.find(r=>r.ax.k===k);
+    /* 6 осей: Голы, xG (нет xG у обеих — «Защита»), Удары, Владение, Угловые, Дисциплина */
+    const pick=["gf",by("xg")?"xg":"ga","s","p","c","cd"].map(by).filter(Boolean);
+    if(pick.length<5) return null;
+    pick.forEach(r=>{ const n=v=>Math.round(clamp((v-r.ax.lo)/(r.ax.hi-r.ax.lo))*100); r.hn=n(r.h); r.an=n(r.a); });
+    return {axes:pick,extra:rows.filter(r=>!pick.includes(r))};
+  }
+  function radarSvg(D,m,label){
+    const cx=170, cy=160, R=105, N=D.axes.length;
+    const P=(i,fr)=>{ const a=-Math.PI/2+i*2*Math.PI/N; return [cx+Math.cos(a)*R*fr, cy+Math.sin(a)*R*fr]; };
+    const poly=fr=>Array.from({length:N},(_,i)=>P(i,fr).map(v=>v.toFixed(1)).join(",")).join(" ");
+    const shape=(key,cls)=>{ const pts=D.axes.map((r,i)=>P(i,Math.max(.05,r[key]/100)).map(v=>v.toFixed(1))); return `<g class="pg ${cls}"><polygon points="${pts.map(p=>p.join(",")).join(" ")}"/>${pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.2"/>`).join("")}</g>`; };
+    const lab=D.axes.map((r,i)=>{ const [x,y]=P(i,1.2), c=Math.cos(-Math.PI/2+i*2*Math.PI/N); return `<text x="${x.toFixed(1)}" y="${(y+4).toFixed(1)}" text-anchor="${c>.3?"start":c<-.3?"end":"middle"}">${r.ax.t}</text>`; }).join("");
+    return `<svg viewBox="-34 0 408 320" role="img" aria-label="${esc(label)}">${[.25,.5,.75,1].map(f=>`<polygon class="ring" points="${poly(f)}"/>`).join("")}${D.axes.map((r,i)=>{ const [x,y]=P(i,1); return `<line class="axl" x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}"/>`; }).join("")}${shape("hn","a")}${shape("an","b")}${lab}</svg>`;
+  }
+  const fv=(r,v)=>v.toFixed(r.ax.d)+(r.ax.u||"");
+  function radarTable(D,all){
+    return `<div class="rt39">${(all?D.axes.concat(D.extra):D.axes).map(r=>{ const hb=r.ax.inv?r.h<r.a:r.h>r.a, ab=r.ax.inv?r.a<r.h:r.a>r.h;
+      return `<div class="r ${hb?"a":ab?"b":""}"><b class="num">${fv(r,r.h)}</b><span>${r.ax.t}${r.ax.inv?" ↓":""}</span><b class="num">${fv(r,r.a)}</b></div>`; }).join("")}</div>`;
+  }
+  const RADAR_NOTE="Шкала 0–100 по типичным значениям топ-лиг: центр — слабо, край — сильно. Для «Защиты» и «Дисциплины» ось перевёрнута (меньше пропущено и карточек — дальше от центра). Данные: последние 10 игр каждой команды.";
+  function radar(m){
+    const D=radarData(m); if(!D) return "";
+    const lbl=`Радар формы: ${nmH(m)} и ${nmA(m)} по ${D.axes.length} осям`;
+    return `<div class="card rd39" style="--hc:${HC(m)};--ac:${AC}"><div class="rdh"><div class="cap">Радар формы · 10 игр</div>
+      <button type="button" class="rdx" aria-label="Увеличить радар"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg></button></div>
+      <div class="rdl"><span><i style="background:var(--hc)"></i>${esc(nmH(m))}</span><span><i style="background:var(--ac)"></i>${esc(nmA(m))}</span></div>
+      <div class="rdw"><div class="glow"></div>${radarSvg(D,m,lbl)}</div>${radarTable(D,false)}<div class="note">${RADAR_NOTE}</div></div>`;
+  }
+
+  /* ───────── 2. Match DNA ───────── */
+  const dnaSkeleton=()=>`<div class="card dn39" aria-busy="true" aria-label="Загрузка сценариев"><div class="cap">Match DNA</div><div class="sk39 l"></div><div class="sk39 r"></div><div class="sk39 r"></div><div class="sk39 l" style="width:40%"></div><div class="sk39 r"></div></div>`;
+  const pcs=(n,t)=>t?Math.round(100*n/t):0;
+  function lead(team,s){
+    if(!s) return "";
+    const tm=esc(team);
+    if(s.k==="sim") return `В <b>${s.w} из ${s.n}</b> ${ru(s.n)} с таким соперником ${tm} побеждала, ещё ${s.d} — ничья.`;
+    return `Похожих матчей: <b>${s.n}</b>. ${tm}: ${s.w} побед, ${s.d} ничьих, ${s.l} поражений.`;
+  }
+  function scRow(s,side,i){
+    return `<button type="button" class="sc39 rv39" style="--d:${Math.min(i,6)*60}ms" data-s="${side}" data-i="${i}" aria-label="${esc(s.title)}: ${s.w} побед из ${s.n}">
+      <div class="t"><b>${esc(s.title)}</b><span>${esc(s.sub)}</span></div>
+      <div class="big"><b class="num">${s.w}</b><span>побед из ${s.n} · ничьих ${s.d} · поражений ${s.l}</span></div>
+      <div class="wl39"><i class="w" style="flex:${s.w}"></i><i class="d" style="flex:${s.d}"></i><i class="l" style="flex:${s.l}"></i></div>
+      <div class="chips"><i>голы<b class="num">${s.gf.toFixed(1)} : ${s.ga.toFixed(1)}</b></i><i>обе забили<b class="num">${s.btts}%</b></i><i>ТБ 2.5<b class="num">${s.o25}%</b></i></div></button>`;
+  }
+  function dnaHtml(m,d){
+    const blk=(side,name)=>{ const t=d[side==="h"?"home":"away"]; if(!t.sc.length) return `<div class="dtm"><div class="dth"><b>${esc(name)}</b></div><div class="dno">Мало данных для анализа</div></div>`;
+      return `<div class="dtm"><div class="dth"><b>${esc(name)}</b><span>${t.n} ${ru(t.n)} в базе${d.elo&&d.elo[side==="h"?"home":"away"]?" · Elo "+d.elo[side==="h"?"home":"away"]:""}</span></div>
+        <div class="dlead">${lead(name,t.sc.find(s=>s.k==="sim")||t.sc[0])}</div>${t.sc.map((s,i)=>scRow(s,side,i)).join("")}</div>`; };
+    return `<div class="card dn39"><div class="cap">Match DNA · сценарии из истории</div><div class="sub">Как команды играли в похожих ситуациях. Нажмите на сценарий — откроются сами матчи.</div>
+      ${blk("h",nmH(m))}${blk("a",nmA(m))}
+      <div class="note">В базе нет минут голов, поэтому сценарии строятся по полю, силе соперника (Elo), ударам и удалениям. Только прошлые матчи — до даты этого матча.</div></div>`;
+  }
+
+  /* ───────── 3. Универсальная модалка с View Transitions ───────── */
+  const M39=(()=>{
+    let el,isOpen=false,prev=null;
+    const X='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+    const canVT=()=>!!document.startViewTransition&&FX()&&root.dataset.perf!=="low"&&!document.hidden&&lsg("vtoff37")!=="1"&&!root.dataset.vt;
+    function build(){
+      el=document.createElement("div"); el.id="m39"; el.setAttribute("aria-hidden","true");
+      el.innerHTML=`<div class="m39bg"></div><div class="m39p" role="dialog" aria-modal="true" aria-label="Подробности" tabindex="-1"><button type="button" class="m39x" aria-label="Закрыть">${X}</button><div class="m39b"></div></div>`;
+      document.body.appendChild(el);
+      el.addEventListener("click",e=>{ if(e.target.closest(".m39x")||e.target.classList.contains("m39bg")) close(); });
+      addEventListener("keydown",e=>{ if(isOpen&&e.key==="Escape"&&!(window.M38&&M38.isOpen())) close(); });
+    }
+    function open(html,src,after){
+      if(!el) build(); const p=$(".m39p",el);
+      const show=()=>{ $(".m39b",el).innerHTML=html; p.scrollTop=0; el.setAttribute("aria-hidden","false"); el.classList.add("on"); isOpen=true;
+        root.dataset.sheet="1"; document.body.style.overflow="hidden"; if(after) after($(".m39b",el)); try{ haptic("light"); }catch(e){} setTimeout(()=>{ try{ $(".m39x",el).focus({preventScroll:true}); }catch(e){} },80); };
+      prev=document.activeElement;
+      if(src&&canVT()){
+        /* карточка «перетекает» в модалку: общее имя у источника (до) и панели (после) */
+        el.classList.add("vt"); root.dataset.vt39="1"; src.style.viewTransitionName="m39";
+        const clear=()=>{ delete root.dataset.vt39; el.classList.remove("vt"); src.style.viewTransitionName=""; p.style.viewTransitionName=""; };
+        try{ const t=document.startViewTransition(()=>{ src.style.viewTransitionName=""; p.style.viewTransitionName="m39"; show(); }); t.finished.then(clear,clear); setTimeout(clear,1500); return; }catch(e){ clear(); }
+      }
+      show();
+    }
+    function close(){
+      if(!isOpen) return; isOpen=false; el.classList.remove("on"); el.setAttribute("aria-hidden","true");
+      if(!(window.M38&&M38.isOpen())){ delete root.dataset.sheet; document.body.style.overflow=""; }
+      try{ prev&&prev.focus&&prev.focus({preventScroll:true}); }catch(e){}
+    }
+    return {open,close,isOpen:()=>isOpen};
+  })();
+  const gameRow=(g,team,i)=>{ const home=g.home===team, gf=home?g.hg:g.ag, ga=home?g.ag:g.hg, r=gf>ga?"W":gf===ga?"D":"L";
+    return `<button type="button" class="gl39 ${r}" data-i="${i}"><span class="d">${esc(String(g.date).slice(5,10).split("-").reverse().join("."))}</span><span class="m">${esc(nmx(g,"h"))} — ${esc(nmx(g,"a"))}</span><span class="s num">${g.hg}:${g.ag}</span></button>`; };
+  function openScenario(m,d,side,idx,src){
+    const t=d[side==="h"?"home":"away"], s=t.sc[idx]; if(!s) return;
+    const items=s.ids.map(id=>({g:d.g[String(id)],team:t.team})).filter(x=>x.g);
+    const name=side==="h"?nmH(m):nmA(m);
+    const html=`<div class="m39h"><b>${esc(s.title)}</b><span>${esc(name)} · ${esc(s.sub)}</span></div>
+      <div class="big"><b class="num">${s.w}</b><span>побед из ${s.n}</span></div><div class="wl39"><i class="w" style="flex:${s.w}"></i><i class="d" style="flex:${s.d}"></i><i class="l" style="flex:${s.l}"></i></div>
+      <div class="chips"><i>ничьих<b class="num">${s.d}</b></i><i>поражений<b class="num">${s.l}</b></i><i>голы<b class="num">${s.gf.toFixed(1)} : ${s.ga.toFixed(1)}</b></i><i>обе забили<b class="num">${s.btts}%</b></i><i>ТБ 2.5<b class="num">${s.o25}%</b></i></div>
+      <div class="cap">Последние ${items.length} ${ru(items.length)} · нажмите для статистики</div>${items.map((x,i)=>gameRow(x.g,t.team,i)).join("")}`;
+    M39.open(html,src,body=>{ body.onclick=e=>{ const b=e.target.closest(".gl39"); if(b&&window.M38) M38.open(items,+b.dataset.i,m); }; });
+  }
+  function openRadar(m,src){
+    const D=radarData(m); if(!D) return;
+    M39.open(`<div class="m39h"><b>Радар формы</b><span>${esc(nmH(m))} — ${esc(nmA(m))}</span></div>
+      <div class="rd39" style="--hc:${HC(m)};--ac:${AC};padding:8px 0 0"><div class="rdl"><span><i style="background:var(--hc)"></i>${esc(nmH(m))}</span><span><i style="background:var(--ac)"></i>${esc(nmA(m))}</span></div>
+      <div class="rdw"><div class="glow"></div>${radarSvg(D,m,"Радар формы")}</div>${radarTable(D,true)}<div class="note">${RADAR_NOTE}</div></div>`,src);
+  }
+
+  /* ───────── 4. Новости ───────── */
+  const KP={inj:["Травма","M12 9v4m0 4h.01M10.3 3.9L2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"],susp:["Дисквалификация","M18 6L6 18M6 6l12 12"],
+    doubt:["Под вопросом","M9 9a3 3 0 1 1 4.5 2.6c-.9.5-1.5 1.1-1.5 2.4M12 18h.01"],ret:["Возвращение","M5 12l5 5 9-10"]};
+  const ago=iso=>{ const t=Date.parse(iso); if(isNaN(t)) return ""; const h=Math.round((Date.now()-t)/36e5); return h<1?"только что":h<24?h+" ч назад":Math.round(h/24)+" дн. назад"; };
+  function news(m){
+    const n=m&&m.news; if(!n||m.score) return "";
+    const side=(k,name)=>{ const a=(n[k]||[]).filter(x=>x&&x.t); if(!a.length) return ""; return `<div class="nwg"><b>${esc(name)}</b>${a.map(x=>{ const kp=KP[x.k], url=/^https:\/\//.test(x.u||"")?x.u:"";
+      const pill=kp?`<span class="nwp ${x.k}"><svg viewBox="0 0 24 24"><path d="${kp[1]}"/></svg>${kp[0]}</span>`:`<span class="nwp">СМИ</span>`;
+      const txt=url?`<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(x.t)}</a>`:`<span class="tx">${esc(x.t)}</span>`;
+      return `<div class="nwr">${pill}<div>${txt}<small>${esc(x.s||"СМИ")} · ${esc(ago(x.d))}</small></div></div>`; }).join("")}</div>`; };
+    const body=side("home",nmH(m))+side("away",nmA(m)); if(!body) return "";
+    const warn=["home","away"].some(k=>(n[k]||[]).some(x=>x&&(x.k==="inj"||x.k==="susp"||x.k==="doubt")));
+    return `<div class="card nw39 rv39"><div class="nwh"><div class="cap">Контекст · свежие новости</div>
+      <span class="nwb ${warn?"w":""}" role="status">${warn?"⚠️ ИИ учел свежие новости: возможны изменения в составе":"📰 ИИ учел свежие новости"}</span></div>${body}
+      <div class="note">Заголовки СМИ (Google News), не проверены ботом.${n.stale?" Данные обновлялись больше 6 часов назад.":""} Модель и вероятности выше от новостей не зависят — их читает только ИИ-копилот.</div></div>`;
+  }
+
+  /* ───────── 5. Табы со свайпом ───────── */
+  function tabs(m,pan){
+    const L=[]; if(pan.stats) L.push({id:"st",t:"Статистика",h:pan.stats}); if(pan.form) L.push({id:"fm",t:"Форма",h:pan.form});
+    const rd=radar(m); if(rd) L.push({id:"rd",t:"Радар",h:rd}); if(pan.h2h) L.push({id:"h2",t:"H2H",h:pan.h2h});
+    if(m.event_id!=null&&m.home&&m.away) L.push({id:"dn",t:"ДНК",h:dnaSkeleton()});
+    if(!L.length) return "";
+    const want=lsg("tab39"), cur=(L.find(x=>x.id===want)||L[0]).id;
+    return `<div class="tabs39 rv39" data-m="${m.event_id}"><div class="tb39" role="tablist" aria-label="Аналитика матча"><i class="ind39"></i>${L.map(x=>`<button type="button" role="tab" id="t39-${x.id}" data-id="${x.id}" aria-selected="${x.id===cur}" aria-controls="p39-${x.id}" tabindex="${x.id===cur?0:-1}">${x.t}</button>`).join("")}</div>
+      <div class="tpw39">${L.map(x=>`<section class="tp39" id="p39-${x.id}" role="tabpanel" aria-labelledby="t39-${x.id}" data-id="${x.id}"${x.id===cur?"":" hidden"}>${x.h}</section>`).join("")}</div></div>`;
+  }
+  const vis=w=>$$(".tb39 button:not([hidden])",w);
+  function moveInd(w,instant){ const b=$('.tb39 button[aria-selected="true"]',w), i=$(".ind39",w); if(!b||!i) return;
+    if(instant){ i.style.transition="none"; } i.style.width=b.offsetWidth+"px"; i.style.transform=`translate3d(${b.offsetLeft}px,0,0)`;
+    if(instant){ void i.offsetWidth; i.style.transition=""; } b.scrollIntoView&&$(".tb39",w).scrollWidth>$(".tb39",w).clientWidth&&b.scrollIntoView({inline:"center",block:"nearest",behavior:RM()?"auto":"smooth"}); }
+  function activate(w,id,dir){
+    const nxt=$(`.tp39[data-id="${id}"]`,w), cur=$(".tp39:not([hidden])",w); if(!nxt||nxt===cur) return;
+    vis(w).forEach(b=>{ const on=b.dataset.id===id; b.setAttribute("aria-selected",on); b.tabIndex=on?0:-1; });
+    if(cur) cur.hidden=true; nxt.hidden=false; moveInd(w); lss("tab39",id);
+    $$(".ftl38",nxt).forEach(t=>{ t.scrollLeft=t.scrollWidth; });
+    revealIn(nxt); anim(nxt,[{opacity:0,transform:`translate3d(${(dir||0)*28}px,0,0)`},{opacity:1,transform:"none"}],{duration:480});
+    try{ haptic("select"); }catch(e){}
+  }
+  let io=null;
+  function revealIn(scope){ const els=$$(".rv39:not(.in)",scope||document); if(!els.length) return;
+    if(!("IntersectionObserver" in window)||RM()){ els.forEach(e=>e.classList.add("in")); return; }
+    io=io||new IntersectionObserver(es=>es.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); } }),{rootMargin:"0px 0px -6% 0px",threshold:.05});
+    els.forEach(e=>io.observe(e)); }
+  function wire(w,m){
+    const bar=$(".tb39",w); if(!bar) return;
+    bar.onclick=e=>{ const b=e.target.closest("button"); if(!b) return; const L=vis(w), a=L.findIndex(x=>x.getAttribute("aria-selected")==="true"), n=L.indexOf(b); activate(w,b.dataset.id,n>a?1:-1); };
+    bar.onkeydown=e=>{ const L=vis(w), a=L.findIndex(x=>x.getAttribute("aria-selected")==="true"); let n=-1;
+      if(e.key==="ArrowRight") n=(a+1)%L.length; else if(e.key==="ArrowLeft") n=(a-1+L.length)%L.length; else if(e.key==="Home") n=0; else if(e.key==="End") n=L.length-1; if(n<0) return;
+      e.preventDefault(); activate(w,L[n].dataset.id,n>a?1:-1); L[n].focus(); };
+    /* свайп влево/вправо по контенту (ленту формы, которая сама листается по горизонтали, не перехватываем) */
+    const pw=$(".tpw39",w); let sx=0,sy=0,ok=false;
+    pw.addEventListener("touchstart",e=>{ const t=e.touches[0]; sx=t.clientX; sy=t.clientY; ok=e.touches.length===1&&!e.target.closest(".ftl38,[data-noswipe],input,select,textarea"); },{passive:true});
+    pw.addEventListener("touchend",e=>{ if(!ok) return; ok=false; const t=e.changedTouches[0], dx=t.clientX-sx, dy=t.clientY-sy;
+      if(Math.abs(dx)<56||Math.abs(dx)<Math.abs(dy)*1.4) return; const L=vis(w), a=L.findIndex(x=>x.getAttribute("aria-selected")==="true"), n=a+(dx<0?1:-1);
+      if(n>=0&&n<L.length) activate(w,L[n].dataset.id,dx<0?1:-1); },{passive:true});
+    moveInd(w,true); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>moveInd(w,true));
+    const rx=$(".rdx",w); if(rx) rx.onclick=()=>openRadar(m,$(".rd39",w));
+  }
+  function dropTab(w,id){ const b=$(`.tb39 button[data-id="${id}"]`,w), p=$(`.tp39[data-id="${id}"]`,w); const was=b&&b.getAttribute("aria-selected")==="true";
+    if(b) b.hidden=true; if(p) p.remove(); const L=vis(w); if(was&&L.length) activate(w,L[0].dataset.id,0); else moveInd(w,true); if(L.length<2){ const bar=$(".tb39",w); if(bar) bar.hidden=true; } }
+  async function loadDna(m,w){
+    const p=$('.tp39[data-id="dn"]',w); if(!p) return; const id=m.event_id;
+    const fail=()=>{ if(state.detail!==id) return; p.innerHTML=`<div class="card dn39"><div class="cap">Match DNA</div><div class="dno">Не удалось загрузить сценарии. <button type="button" class="dnr" style="color:var(--blue);font-weight:700">Повторить</button></div></div>`;
+      const r=$(".dnr",p); if(r) r.onclick=()=>{ p.innerHTML=dnaSkeleton(); loadDna(m,w); }; };
+    try{
+      const d=await api("/api/dna/"+id); if(state.detail!==id||!document.contains(w)) return;
+      if(!d||d.empty||!d.home||!d.away||(!d.home.sc.length&&!d.away.sc.length)){ dropTab(w,"dn"); return; }
+      p.innerHTML=dnaHtml(m,d); revealIn(p);
+      p.onclick=e=>{ const b=e.target.closest(".sc39"); if(b) openScenario(m,d,b.dataset.s,+b.dataset.i,b); };
+    }catch(e){ if(e&&e.code===404) dropTab(w,"dn"); else fail(); }
+  }
+  function mounted(m,view){
+    if(io){ io.disconnect(); io=null; }
+    const w=$(".tabs39",view); if(w){ wire(w,m); const run=()=>loadDna(m,w); ("requestIdleCallback" in window)?requestIdleCallback(run,{timeout:600}):setTimeout(run,80); }
+    $$(".ftl38",view).forEach(t=>{ if(t.offsetWidth) t.scrollLeft=t.scrollWidth; });
+    revealIn(view);
+  }
+  window.W39={tabs,news,radar,radarData,mounted,M39,dnaHtml,AXES};
+}catch(e){ console.warn("v39",e); } })();
 </script>
 </body>
 </html>
