@@ -1186,6 +1186,103 @@ html[data-anim=off] .sk39::after,html[data-anim=off] .rdw .pg,html[data-anim=off
 ::view-transition-group(m39){animation-duration:.55s;animation-timing-function:var(--spring-real)}
 ::view-transition-old(m39),::view-transition-new(m39){height:100%;overflow:clip;animation-duration:.4s}
 html[data-vt39]::view-transition-old(root),html[data-vt39]::view-transition-new(root){animation-duration:.22s}
+/*V40-CSS*/
+/* ═════ v40 · «Глубина и свет»: кинематографичная подача без отскоков. Только transform/opacity в анимациях. ═════ */
+:root{
+  --e-out:cubic-bezier(.16,1,.3,1);          /* мягкое «приземление», без перелёта */
+  --e-soft:cubic-bezier(.22,.8,.24,1);
+  --e-io:cubic-bezier(.65,0,.35,1);          /* вход-выход для уходящих слоёв */
+  --spring:var(--e-out);--spring-real:var(--e-out);--spring-d:.62s;
+  --sh1:0 1px 0 rgba(255,255,255,.07) inset,0 1px 1px rgba(0,0,0,.30),0 4px 10px -3px rgba(0,0,0,.28),0 16px 30px -12px rgba(0,0,0,.46),0 36px 64px -30px rgba(0,0,0,.62);
+  --sh2:0 1px 0 rgba(255,255,255,.10) inset,0 2px 2px rgba(0,0,0,.30),0 8px 16px -4px rgba(0,0,0,.34),0 26px 48px -16px rgba(0,0,0,.55),0 54px 90px -38px rgba(0,0,0,.7);
+}
+html[data-theme=light]{
+  --sh1:0 1px 0 #fff inset,0 1px 1px rgba(30,45,90,.10),0 4px 10px -3px rgba(30,45,90,.12),0 16px 30px -14px rgba(30,45,90,.28),0 34px 60px -32px rgba(30,45,90,.3);
+  --sh2:0 1px 0 #fff inset,0 2px 2px rgba(30,45,90,.10),0 8px 16px -4px rgba(30,45,90,.16),0 26px 48px -18px rgba(30,45,90,.34),0 52px 88px -40px rgba(30,45,90,.36);
+}
+body{letter-spacing:-.006em;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+html{scroll-behavior:auto;--stk40:calc(env(safe-area-inset-top,0px) + 46px)}
+
+/* ── типографика: цифры доминируют, подписи тише и разрежены ── */
+.cap{letter-spacing:.11em;font-size:11px;font-weight:700;opacity:.86}
+.tile .v,.hero .p,.bet .o,.kpi .tile .v,.num{font-variant-numeric:tabular-nums lining-nums;font-feature-settings:"tnum","lnum","cv11"}
+.tile .v,.hero .p{letter-spacing:-.04em;font-weight:800;line-height:1.02}
+.hero .p{text-shadow:0 0 28px color-mix(in srgb,var(--blue) 38%,transparent)}
+h1{letter-spacing:-.03em}
+.m38sc b,.m39sc b{letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+
+/* ── глубина: экран «выныривает» из глубины, старый уходит назад и темнеет ── */
+@keyframes d40in{from{opacity:0;transform:translate3d(0,18px,0) scale(.962)}to{opacity:1;transform:none}}
+@keyframes d40inb{from{opacity:0;transform:translate3d(0,-10px,0) scale(1.03)}to{opacity:1;transform:none}}
+@keyframes d40out{to{opacity:0;transform:translate3d(0,0,0) scale(.94)}}
+@keyframes d40outb{to{opacity:0;transform:translate3d(0,14px,0) scale(1.04)}}
+.view.fwd{animation:d40in .62s var(--e-out) both}
+.view.bwd{animation:d40inb .58s var(--e-out) both}
+html[data-vt=fwd]::view-transition-old(root){animation:d40out .42s var(--e-io) both;transform-origin:50% 40%}
+html[data-vt=fwd]::view-transition-new(root){animation:d40in .64s var(--e-out) both;transform-origin:50% 40%}
+html[data-vt=bwd]::view-transition-old(root){animation:d40outb .4s var(--e-io) both;transform-origin:50% 40%}
+html[data-vt=bwd]::view-transition-new(root){animation:d40inb .6s var(--e-out) both;transform-origin:50% 40%}
+html[data-vt=tab]::view-transition-new(root){animation-timing-function:var(--e-out)}
+::view-transition-group(m39){animation-duration:.62s;animation-timing-function:var(--e-out)}
+.nav .pill{transition:transform .6s var(--e-out),width .5s var(--e-out)}
+
+/* ── модалки: фон уходит в глубокий blur, панель всплывает из глубины ── */
+.m38bg,.m39bg{background:radial-gradient(120% 90% at 50% 100%,rgba(10,16,38,.46),rgba(3,5,12,.74));
+  -webkit-backdrop-filter:blur(22px) saturate(130%);backdrop-filter:blur(22px) saturate(130%);transition:opacity .55s var(--e-soft)}
+html[data-fxl="off"] .m38bg,html[data-fxl="off"] .m39bg,html[data-perf=low] .m38bg,html[data-perf=low] .m39bg{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(3,5,12,.82)}
+.m38p,.m39p{transform:translate3d(0,7vh,0) scale(.94);transform-origin:50% 100%;opacity:0;
+  transition:transform .64s var(--e-out),opacity .34s var(--e-soft);box-shadow:var(--sh2),0 -1px 0 rgba(255,255,255,.1) inset}
+#m38.on .m38p,#m39.on .m39p{transform:none;opacity:1}
+#m38:not(.on) .m38p,#m39:not(.on) .m39p{transition-duration:.36s,.26s;transition-timing-function:var(--e-io)}
+#m38,#m39{transition:visibility 0s linear .4s}#m38.on,#m39.on{transition-delay:0s}
+#m39.vt .m39p{transition:none}
+@media (min-width:640px){.m38p,.m39p{transform-origin:50% 60%}}
+
+/* ── тактильность: мгновенный отклик на касание ── */
+.prs40{transform:scale(.965)!important;filter:brightness(1.14);transition:transform .11s var(--e-out)!important}
+.row.prs40,.card.prs40,.tile.prs40{transform:scale(.987)!important}
+.nav button.prs40{transform:scale(.92)!important}
+
+/* ── табы: перетекающий индикатор, он же следует за пальцем ── */
+.ind39{transition:transform .6s var(--e-out),width .5s var(--e-out)}
+.ind39.drag40{transition:none}
+.tb39{position:sticky;top:var(--stk40);z-index:30;contain:layout paint;
+  box-shadow:var(--sh1);transition:transform .4s var(--e-out),box-shadow .4s}
+.tb39.stuck40{transform:translate3d(0,0,0) scale(.975);box-shadow:var(--sh2)}
+.tb39 button{min-height:44px;letter-spacing:.01em}
+.rdx{width:44px;height:44px}
+
+
+/* ── липкие заголовки дней: при залипании уменьшаются и становятся стеклянной «таблеткой» ── */
+.day.cap{position:sticky;top:var(--stk40);z-index:12;display:flex;align-items:center;gap:8px;width:fit-content;
+  padding:7px 14px 7px 12px;margin:14px 0 8px;border-radius:99px;transform-origin:0 50%;
+  border:1px solid transparent;background:transparent;transition:transform .45s var(--e-out),opacity .45s,box-shadow .45s,background-color .45s,border-color .45s}
+.day.cap.stuck40{transform:scale(.92);background:color-mix(in srgb,var(--card2) 70%,transparent);border-color:var(--line);box-shadow:var(--sh1);
+  -webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%)}
+html[data-fxl="off"] .day.cap.stuck40,html[data-perf=low] .day.cap.stuck40{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--card2)}
+
+/* ── живое стекло: блик, который «стекает» за пальцем / наклоном телефона ── */
+.spec40{position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none;z-index:3;contain:strict}
+.spec40 b{position:absolute;left:50%;top:50%;width:120%;aspect-ratio:1;margin:-60% 0 0 -60%;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,255,255,.15),rgba(255,255,255,.045) 45%,transparent 72%);opacity:.0;transform:translate3d(0,0,0);transition:opacity .6s var(--e-soft)}
+.spec40.on b{opacity:.85}
+.m38p>.spec40,.m39p>.spec40{height:110px;bottom:auto;-webkit-mask-image:linear-gradient(#000 20%,transparent);mask-image:linear-gradient(#000 20%,transparent)}
+html[data-theme=light] .spec40 b{background:radial-gradient(closest-side,rgba(255,255,255,.7),rgba(255,255,255,.2) 45%,transparent 72%)}
+html[data-fxl="off"] .spec40,html[data-perf=low] .spec40{display:none}
+.m38p,.m39p{position:relative}
+
+/* ── область нажатия ≥44px (визуально элемент не меняется) ── */
+.hit40{position:relative}
+.hit40::after{content:"";position:absolute;left:50%;top:50%;width:max(100%,44px);height:max(100%,44px);transform:translate(-50%,-50%)}
+
+/* ── уважение к настройкам доступности и режиму без анимаций ── */
+html[data-anim=off] .view.fwd,html[data-anim=off] .view.bwd{animation:none}
+html[data-anim=off] .m38p,html[data-anim=off] .m39p,html[data-anim=off] .m38bg,html[data-anim=off] .m39bg,html[data-anim=off] .ind39,html[data-anim=off] .day.cap,html[data-anim=off] .tb39{transition:none}
+html[data-anim=off] .prs40{transition:none!important}
+@media (prefers-reduced-motion:reduce){.view.fwd,.view.bwd{animation:none}.m38p,.m39p,.m38bg,.m39bg,.ind39,.day.cap,.tb39{transition:none}.prs40{transition:none!important}.spec40{display:none}}
+.tb39{background:color-mix(in srgb,var(--card2) 95%,transparent);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
+html[data-fxl="off"] .tb39,html[data-perf=low] .tb39{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--card)}
+/*/V40-CSS*/
 </style>
 </head>
 <body>
@@ -3844,6 +3941,113 @@ const EXC=(()=>{
   }
   window.W39={tabs,news,radar,radarData,mounted,M39,dnaHtml,AXES};
 }catch(e){ console.warn("v39",e); } })();
+/*V40-JS*/
+/* v40 · тактильность, инерция колеса, липкие заголовки, индикатор табов под пальцем, живой блик стекла. Данных и логики приложения не касается. */
+(function(){ try{
+  const D=document, R=D.documentElement, $=(s,r)=>(r||D).querySelector(s), $$=(s,r)=>Array.from((r||D).querySelectorAll(s));
+  const RM=()=>matchMedia("(prefers-reduced-motion:reduce)").matches||R.dataset.anim==="off";
+  const LOW=()=>R.dataset.perf==="low"||R.dataset.fxl==="off";
+  const TG=window.Telegram&&window.Telegram.WebApp, HF=TG&&TG.HapticFeedback;
+  const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+
+  /* ───── 1. Haptics + мгновенный отклик ───── */
+  /* Идём через родной движок приложения (haptic): он уважает настройку «Выкл/Лёгкая/Средняя/Сильная» и звуки интерфейса. */
+  const H40={t:0}, base=typeof window.haptic==="function"?window.haptic:null;
+  H40.light=()=>{ H40.t=performance.now(); try{ base&&base("light"); }catch(e){} };
+  if(base) window.haptic=function(k){ if(performance.now()-H40.t<320&&k!=="ok"&&k!=="err"&&k!=="warn") return; return base.apply(this,arguments); };  /* клик не дублирует импульс, отданный на касании */
+  const BUZZ="[role=tab],.nav button,.iconbtn,.m38x,.m39x,.m38nav button,.m39nav button,.seg button,.sort button,.rdx";      /* малые кнопки: импульс сразу на касании */
+  const PRESS=BUZZ+",button:not([disabled]),.chip,.row,.tile[data-id],.card[data-id],[data-id],.sc39,.fc38,a[href]";
+  let pressed=null, pt=0;
+  const release=()=>{ clearTimeout(pt); if(pressed){ pressed.classList.remove("prs40"); pressed=null; } };
+  D.addEventListener("pointerdown",e=>{
+    if(e.pointerType==="mouse"&&e.button!==0) return;
+    const t=e.target.closest&&e.target.closest(PRESS); if(!t||t.closest("input,select,textarea")) return;
+    release(); pressed=t;
+    if(t.matches(BUZZ)){ t.classList.add("prs40"); H40.light(); }
+    else pt=setTimeout(()=>{ if(pressed===t) t.classList.add("prs40"); },70);     /* карточки: сжатие только если палец не начал скролл */
+  },{passive:true});
+  ["pointerup","pointercancel","dragstart"].forEach(n=>D.addEventListener(n,()=>setTimeout(release,80),{passive:true}));
+  addEventListener("scroll",release,{passive:true,capture:true});
+
+  /* ───── 2. Инерция колеса мыши (touch и трекпад остаются нативными: у них уже есть физика) ───── */
+  const fine=matchMedia("(hover:hover) and (pointer:fine)").matches;
+  if(fine){
+    let el=null, cur=0, tgt=0, raf=0, last=0;
+    const scroller=n=>{ while(n&&n!==D.body&&n!==R){ const s=getComputedStyle(n);
+        if(/(auto|scroll)/.test(s.overflowY)&&n.scrollHeight>n.clientHeight+1) return n; n=n.parentElement; } return D.scrollingElement||R; };
+    const tick=t=>{ const dt=Math.min(48,t-last||16); last=t; const k=1-Math.exp(-dt/95);   /* τ≈95 мс: ощутимая масса без липкости */
+      cur+=(tgt-cur)*k; if(Math.abs(tgt-cur)<.4){ cur=tgt; } el.scrollTop=cur; if(cur!==tgt) raf=requestAnimationFrame(tick); else { raf=0; last=0; } };
+    addEventListener("wheel",e=>{
+      if(e.ctrlKey||e.defaultPrevented||RM()) return;
+      const mouse=e.deltaX===0&&Math.abs(e.deltaY)>=40&&Number.isInteger(e.deltaY);   /* трекпад даёт дробные/малые дельты */
+      if(!mouse){ if(raf){ cancelAnimationFrame(raf); raf=0; last=0; } return; }
+      if(e.target.closest&&e.target.closest(".ftl38,input,select,textarea,[data-noswipe],canvas")) return;
+      const s=scroller(e.target); if(s!==el||!raf){ el=s; cur=s.scrollTop; tgt=cur; }
+      const max=s.scrollHeight-s.clientHeight; if(max<=0) return;
+      const nt=clamp(tgt+e.deltaY,0,max);
+      if(nt===tgt&&((e.deltaY<0&&s.scrollTop<=0)||(e.deltaY>0&&s.scrollTop>=max))) return;   /* упёрлись — отдаём событие браузеру */
+      e.preventDefault(); tgt=nt; if(!raf){ last=0; raf=requestAnimationFrame(tick); }
+    },{passive:false});
+  }
+
+  /* ───── 3. Липкие заголовки: класс stuck40, когда прилипли ───── */
+  const probe=D.createElement("div"); probe.style.cssText="position:fixed;left:0;top:var(--stk40);width:1px;height:1px;pointer-events:none;visibility:hidden"; D.body.appendChild(probe);
+  const STK=Math.round(probe.getBoundingClientRect().top)||46; probe.remove();
+  const stickIO="IntersectionObserver" in window?new IntersectionObserver(es=>es.forEach(en=>{
+    en.target.classList.toggle("stuck40",en.intersectionRatio<1&&en.boundingClientRect.top<=STK+2);
+  }),{threshold:[1],rootMargin:`-${STK+1}px 0px 0px 0px`}):null;
+  let sq=0; const scan=()=>{ sq=0; if(!stickIO) return; $$(".day.cap:not([data-s40]),.tb39:not([data-s40])").forEach(n=>{ n.dataset.s40="1"; stickIO.observe(n); }); };
+  const mo=new MutationObserver(()=>{ if(!sq) sq=requestAnimationFrame(scan); });
+  mo.observe(D.getElementById("app")||D.body,{childList:true,subtree:true}); scan();
+
+  /* ───── 4. Табы: индикатор и панель следуют за пальцем ───── */
+  let g=null;   /* жест */
+  const bar=w=>$(".tb39",w), btns=w=>$$(".tb39 button:not([hidden])",w);
+  D.addEventListener("touchstart",e=>{
+    g=null; const pw=e.target.closest&&e.target.closest(".tpw39"); if(!pw||e.touches.length!==1||e.target.closest(".ftl38,[data-noswipe],input,select,textarea")) return;
+    const w=pw.closest(".tabs39"), L=btns(w), a=L.findIndex(b=>b.getAttribute("aria-selected")==="true"); if(a<0) return;
+    const t=e.touches[0]; g={w,pw,L,a,sx:t.clientX,sy:t.clientY,on:false,dead:false,panel:$(".tp39:not([hidden])",w),ind:$(".ind39",w)};
+  },{passive:true});
+  D.addEventListener("touchmove",e=>{
+    if(!g||g.dead) return; const t=e.touches[0], dx=t.clientX-g.sx, dy=t.clientY-g.sy;
+    if(!g.on){ if(Math.abs(dy)>14&&Math.abs(dy)>Math.abs(dx)){ g.dead=true; return; } if(Math.abs(dx)<12||Math.abs(dx)<Math.abs(dy)*1.3) return; g.on=true; if(g.ind) g.ind.classList.add("drag40"); if(g.panel) g.panel.classList.add("drag40"); }
+    const W=g.pw.clientWidth||320, n=g.a+(dx<0?1:-1), nb=g.L[n], b=g.L[g.a], p=clamp(Math.abs(dx)/(W*.62),0,1);
+    if(g.ind&&b){ if(nb){ const x=b.offsetLeft+(nb.offsetLeft-b.offsetLeft)*p, w=b.offsetWidth+(nb.offsetWidth-b.offsetWidth)*p; g.ind.style.width=w+"px"; g.ind.style.transform=`translate3d(${x}px,0,0)`; }
+      else { g.ind.style.transform=`translate3d(${b.offsetLeft+dx*.08}px,0,0)`; } }
+    if(g.panel){ const k=nb?.34:.1; g.panel.style.transform=`translate3d(${dx*k}px,0,0)`; g.panel.style.opacity=String(1-p*.35); }
+  },{passive:true});
+  const endG=()=>{ if(!g) return; const s=g; g=null; if(!s.on) return;
+    /* v39 уже обработал touchend (он зарегистрирован раньше): смотрим, сменилась ли вкладка */
+    const now=btns(s.w).findIndex(b=>b.getAttribute("aria-selected")==="true");
+    if(s.ind) s.ind.classList.remove("drag40");
+    if(s.panel){ const pn=s.panel; pn.classList.remove("drag40"); const tr=pn.style.transform, op=pn.style.opacity; pn.style.transform=""; pn.style.opacity="";
+      if(now===s.a&&!RM()&&pn.animate) pn.animate([{transform:tr||"none",opacity:op||1},{transform:"none",opacity:1}],{duration:420,easing:"cubic-bezier(.16,1,.3,1)"}); }
+    if(now===s.a&&s.ind){ const b=s.L[s.a]; if(b){ s.ind.style.width=b.offsetWidth+"px"; s.ind.style.transform=`translate3d(${b.offsetLeft}px,0,0)`; } }
+  };
+  D.addEventListener("touchend",endG,{passive:true}); D.addEventListener("touchcancel",endG,{passive:true});
+
+  /* ───── 5. Живое стекло: блик следует за пальцем/наклоном ───── */
+  const SPEC=".nav,.hero,.tb39,.m38p,.m39p";
+  const live=new Set(); let tx=0,ty=0,cx=0,cy=0,sraf=0,idle=0;
+  const spIO="IntersectionObserver" in window?new IntersectionObserver(es=>es.forEach(en=>{ const s=en.target.__spec; if(!s) return; if(en.isIntersecting&&live.size<10){ live.add(s); s.classList.add("on"); } else { live.delete(s); s.classList.remove("on"); } }),{threshold:0}):null;
+  const arm=()=>{ $$(SPEC).forEach(n=>{ if(n.__spec||!spIO) return; const s=D.createElement("i"); s.className="spec40"; s.setAttribute("aria-hidden","true"); s.innerHTML="<b></b>"; n.appendChild(s); n.__spec=s; spIO.observe(n); }); };
+  const loop=()=>{ sraf=0; if(LOW()||RM()) return; cx+=(tx-cx)*.12; cy+=(ty-cy)*.12;
+    live.forEach(s=>{ const r=s.parentNode; const w=r.offsetWidth, h=r.offsetHeight, b=s.firstChild; b.style.transform=`translate3d(${(cx*w*.42).toFixed(1)}px,${(cy*Math.min(h,260)*.42).toFixed(1)}px,0)`; });
+    if(Math.abs(tx-cx)>.002||Math.abs(ty-cy)>.002||performance.now()-idle<700) sraf=requestAnimationFrame(loop); };
+  const kick=()=>{ idle=performance.now(); if(!sraf) sraf=requestAnimationFrame(loop); };
+  addEventListener("pointermove",e=>{ if(e.pointerType==="mouse"&&!e.buttons&&!fine) return; tx=clamp(e.clientX/innerWidth*2-1,-1,1); ty=clamp(e.clientY/innerHeight*2-1,-1,1); kick(); },{passive:true});
+  addEventListener("deviceorientation",e=>{ if(e.gamma==null) return; tx=clamp(e.gamma/28,-1,1); ty=clamp((e.beta-48)/28,-1,1); kick(); },{passive:true});
+  let aq=0; const mo2=new MutationObserver(()=>{ if(!aq) aq=requestAnimationFrame(()=>{ aq=0; arm(); }); });
+  mo2.observe(D.body,{childList:true,subtree:true}); arm();
+
+  /* ───── 6. Область нажатия ≥44px у мелких кнопок ───── */
+  const fix44=()=>{ $$("button,[role=tab],.chip,.iconbtn,a[href]").forEach(n=>{ if(n.__h44) return; const r=n.getBoundingClientRect(); if(!r.width) return; n.__h44=1;
+      if(r.height<44||r.width<44) n.classList.add("hit40"); }); };
+  let fq=0; new MutationObserver(()=>{ if(!fq) fq=setTimeout(()=>{ fq=0; fix44(); },120); }).observe(D.getElementById("app")||D.body,{childList:true,subtree:true}); setTimeout(fix44,400);
+
+  window.W40={H40,arm,scan,fix44,STK};
+}catch(e){ console.warn("v40",e); } })();
+/*/V40-JS*/
 </script>
 </body>
 </html>
