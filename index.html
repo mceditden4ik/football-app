@@ -1245,7 +1245,7 @@ html[data-fxl="off"] .m38bg,html[data-fxl="off"] .m39bg,html[data-perf=low] .m38
 
 /* ── табы: перетекающий индикатор, он же следует за пальцем ── */
 .ind39{transition:transform .6s var(--e-out),width .5s var(--e-out)}
-.ind39.drag40{transition:none}
+
 .tb39{position:sticky;top:var(--stk40);z-index:30;contain:layout paint;
   box-shadow:var(--sh1);transition:transform .4s var(--e-out),box-shadow .4s}
 .tb39.stuck40{transform:translate3d(0,0,0) scale(.975);box-shadow:var(--sh2)}
@@ -1271,9 +1271,9 @@ html[data-theme=light] .spec40 b{background:radial-gradient(closest-side,rgba(25
 html[data-fxl="off"] .spec40,html[data-perf=low] .spec40{display:none}
 .m38p,.m39p{position:relative}
 
-/* ── область нажатия ≥44px (визуально элемент не меняется) ── */
-.hit40{position:relative}
-.hit40::after{content:"";position:absolute;left:50%;top:50%;width:max(100%,44px);height:max(100%,44px);transform:translate(-50%,-50%)}
+/* ── область нажатия ≥44px: невидимый дочерний элемент, псевдоэлементы кнопок (кружок тумблера и т.п.) не трогаем ── */
+:where(.hit40){position:relative}
+.hit40>.h44{position:absolute;left:50%;top:50%;width:max(100%,44px);height:max(100%,44px);transform:translate(-50%,-50%);pointer-events:auto;background:none;border:0;padding:0;margin:0}
 
 /* ── уважение к настройкам доступности и режиму без анимаций ── */
 html[data-anim=off] .view.fwd,html[data-anim=off] .view.bwd{animation:none}
@@ -1282,6 +1282,115 @@ html[data-anim=off] .prs40{transition:none!important}
 @media (prefers-reduced-motion:reduce){.view.fwd,.view.bwd{animation:none}.m38p,.m39p,.m38bg,.m39bg,.ind39,.day.cap,.tb39{transition:none}.prs40{transition:none!important}.spec40{display:none}}
 .tb39{background:color-mix(in srgb,var(--card2) 95%,transparent);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%)}
 html[data-fxl="off"] .tb39,html[data-perf=low] .tb39{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--card)}
+
+/* ═════ v40.1 · полноэкранная аналитика, тумблеры, тост ═════ */
+/* ── тумблеры: фиксированная геометрия, кружок двигается только transform ── */
+.sw35{width:50px;height:30px;border-radius:15px;overflow:hidden;flex:none;position:relative;box-sizing:border-box}
+.sw35::after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-sizing:border-box;
+  box-shadow:0 2px 6px rgba(0,0,0,.35);transition:transform .38s var(--e-out)}
+.sw35[aria-checked="true"]::after{transform:translateX(20px)}
+html[data-anim=off] .sw35::after{transition:none}
+
+/* ── тост: выше нижнего меню, не ловит касания, плавно гаснет ── */
+#toast{bottom:calc(112px + env(safe-area-inset-bottom,0px));z-index:95;pointer-events:none;max-width:88vw}
+
+/* ═════ v40.2 · карточка матча → полноэкранный экран с верхними вкладками ═════ */
+#mv40{position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;visibility:hidden;pointer-events:none;contain:layout paint;
+  background:radial-gradient(120% 46% at 50% -10%,color-mix(in srgb,var(--blue) 15%,transparent),transparent 62%),var(--bg)}
+#mv40.on{visibility:visible;pointer-events:auto}
+html.mv40on .nav,html.mv40on #fab,html.mv40on #mini{visibility:hidden}
+
+/* шапка: «Назад» + название + панель вкладок, одно стеклянное целое */
+.mhd40{flex:none;position:relative;z-index:3;padding-top:env(safe-area-inset-top,0px);
+  background:color-mix(in srgb,var(--bg) 80%,transparent);-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);
+  border-bottom:1px solid var(--line);box-shadow:0 12px 30px -16px rgba(0,0,0,.55)}
+html[data-fxl="off"] .mhd40,html[data-perf=low] .mhd40{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--bg)}
+.mh40{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:12px;padding:8px 14px 2px;max-width:760px;margin:0 auto}
+.mb40{justify-self:start;display:flex;align-items:center;gap:2px;height:44px;padding:0 16px 0 8px;border-radius:22px;font:700 15px var(--font,system-ui);letter-spacing:-.01em;
+  color:var(--text);background:color-mix(in srgb,var(--card2) 88%,transparent);border:1px solid var(--line);box-shadow:var(--sh1),inset 0 1px 0 rgba(255,255,255,.06);
+  transition:transform .3s var(--e-out)}
+.mb40:active{transform:scale(.95)}
+.mb40 svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.mb40:focus-visible,.mtb40 button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.mt40{min-width:0;text-align:left}
+.mt40 b{display:block;font:800 15.5px/1.2 var(--font-d,var(--font,system-ui));letter-spacing:-.025em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mt40 small{display:block;margin-top:2px;font:700 10.5px var(--font,system-ui);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.mtb40{position:relative;display:flex;gap:2px;margin:8px auto 10px;padding:3px;width:calc(100% - 24px);max-width:736px;box-sizing:border-box;border-radius:20px;
+  overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-ms-overflow-style:none;overscroll-behavior-x:contain;
+  background:color-mix(in srgb,var(--card2) 72%,transparent);border:1px solid var(--line);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),inset 0 10px 20px -14px rgba(0,0,0,.6)}
+.mtb40::-webkit-scrollbar{display:none}
+.mtb40 button{position:relative;z-index:1;flex:1 0 auto;min-width:62px;height:44px;padding:0 14px;border-radius:17px;white-space:nowrap;
+  font:700 14px var(--font,system-ui);letter-spacing:-.01em;color:var(--muted);transition:color .35s var(--e-soft),transform .3s var(--e-out)}
+.mtb40 button[hidden]{display:none}
+.mtb40 button:active{transform:scale(.95)}
+.mtb40 button[aria-selected="true"]{color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.28)}
+.mtb40 button.off{opacity:.38}
+.mi40{position:absolute;z-index:0;left:0;top:3px;bottom:3px;width:0;border-radius:17px;pointer-events:none;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--blue) 92%,#fff),color-mix(in srgb,var(--violet) 78%,var(--blue)));
+  box-shadow:0 10px 24px -8px color-mix(in srgb,var(--blue) 70%,transparent),inset 0 1px 0 rgba(255,255,255,.38),inset 0 -8px 14px -8px rgba(0,0,0,.28);
+  transition:transform .55s var(--e-out),width .55s var(--e-out)}
+.mi40::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.22),transparent 55%);pointer-events:none}
+
+/* контент */
+.mvs{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;container:app/inline-size;
+  padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
+.mvs>.view{max-width:760px;margin:0 auto;padding:0 var(--pad,16px);box-sizing:border-box}
+#mv40 .view[data-t40="ov"]>.tabs39{display:none}
+#mv40 .view:not([data-t40="ov"])>:not(.tabs39){display:none}
+#mv40 .view:not([data-t40="ov"])>.tabs39{margin:12px 0 0}
+#mv40 .tabs39>.tb39,#mv40 .tabs39>.ind39{display:none}
+#mv40 .rdx{display:none}
+#mv40 .rdw svg{max-width:min(100%,620px);margin:0 auto;display:block}
+
+/* ── View Transitions: карточка «раскрывается» в экран и сворачивается обратно ── */
+html[data-vt^="mc"]::view-transition{background:var(--bg)}
+html[data-vt^="mc"]::view-transition-group(mcard){animation-duration:.58s;animation-timing-function:var(--e-out);z-index:50}
+html[data-vt^="mc"]::view-transition-image-pair(mcard){overflow:clip;animation:mcr40 .58s var(--e-out) both}
+html[data-vt="mcc"]::view-transition-image-pair(mcard){animation-name:mcr40r}
+@keyframes mcr40{from{border-radius:22px}to{border-radius:0}}
+@keyframes mcr40r{from{border-radius:0}to{border-radius:22px}}
+html[data-vt^="mc"]::view-transition-old(mcard),html[data-vt^="mc"]::view-transition-new(mcard){width:100%;height:100%;object-fit:cover;mix-blend-mode:normal}
+html[data-vt^="mc"]::view-transition-old(mcard){object-position:center;animation:none}
+html[data-vt^="mc"]::view-transition-new(mcard){object-position:top center;animation:mcfi40 .34s .04s ease-out both}
+html[data-vt="mcc"]::view-transition-new(mcard){animation-delay:.2s}
+@keyframes mcfi40{from{opacity:0}to{opacity:1}}
+@keyframes mcbgo40{to{opacity:.0;transform:scale(.94)}}
+@keyframes mcbgi40{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+html[data-vt="mco"]::view-transition-old(root){animation:mcbgo40 .5s var(--e-io) both}
+html[data-vt="mco"]::view-transition-new(root){animation:none;opacity:0}
+html[data-vt="mcc"]::view-transition-old(root){animation:none;opacity:0}
+html[data-vt="mcc"]::view-transition-new(root){animation:mcbgi40 .62s var(--e-out) both}
+
+html[data-anim=off] #mv40 *,html[data-anim=off] .mi40{animation:none!important;transition:none!important}
+@media (prefers-reduced-motion:reduce){#mv40 .mi40,#mv40 .mtb40 button,.mb40{transition:none}}
+
+/* ═════ v40.3 · названия команд: без разреженного трекинга, одна строка, по центру ═════ */
+.hero .vs{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);justify-items:center}
+.hero .vs>div{min-width:0;width:100%;display:flex;flex-direction:column;align-items:center;text-align:center}
+.hero .vs>.at{width:auto;margin-top:15px}
+.hero .tn,.hero .tn.lg{display:flex;align-items:center;justify-content:center;gap:2px;max-width:100%;min-width:0;white-space:nowrap;overflow-wrap:normal;word-break:normal;
+  letter-spacing:-.02em;word-spacing:0;font-size:clamp(15px,calc(12px + .9vw),19px)}
+.hero .tnm{display:block;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:var(--fit,1em)}
+.hero .tn .star{flex:none}
+.hero .xg{text-align:center;white-space:nowrap}
+.hero .mono{margin:0 auto 10px}
+/* шапка экрана матча: по центру, свой размер под ширину, а если совсем не влезает — плавное затухание */
+.mh40{grid-template-columns:auto minmax(0,1fr)}
+.mt40{text-align:center}
+.mt40 b{letter-spacing:-.02em;word-spacing:0;font-size:var(--fit,15.5px);text-overflow:clip}
+.mt40 b.ovf40,.mt40 small.ovf40{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent);text-align:left}
+.mt40 small{text-overflow:clip}
+/* звезда «избранное» — бейджем на углу логотипа, не отнимает ширину у названия */
+.hero .vs>div{position:relative}
+.hero .tn .star{position:absolute;top:-6px;left:calc(50% + 14px);width:28px;height:28px;margin:0;display:grid;place-items:center;border-radius:50%;
+  background:color-mix(in srgb,var(--card2) 88%,transparent);border:1px solid var(--line);box-shadow:var(--sh1)}
+.hero .tn .star svg{width:16px;height:16px}
+.hero .tn .star{top:-10px!important;left:calc(50% + 26px)!important;width:26px!important;height:26px!important;min-width:0!important;min-height:0!important;padding:0!important}
+.hero .tn .star svg{width:15px!important;height:15px!important}
+.hero .tn{height:22px;line-height:22px}
+.hero .tnm{line-height:22px}
 /*/V40-CSS*/
 </style>
 </head>
@@ -1597,15 +1706,20 @@ async function loadToday(){
 }
 function renderToday(){
   const el = document.getElementById("today"); if(!el) return;
-  const d = state.today; if(!d){ el.innerHTML=""; return; }
-  const ex = d.exposure, warn = ex!=null && ex > d.exposure_warn;
+  const d = state.today;
+  /* нет данных (null / не объект / пустой ответ без счётчиков) — блок скрываем, а не рисуем «undefined» */
+  if(!d || typeof d!=="object" || (d.matches_n==null && d.hours==null && !(d.with_picks&&d.with_picks.length))){ el.innerHTML=""; return; }
+  /* v40.1: любое «пустое» значение (null/undefined/NaN/«undefined») → «—», а число матчей при отсутствии данных — 0 */
+  const cntv = v=>(v==null || v==="" || v==="undefined" || v==="null" || v==="NaN" || (typeof v==="number" && !isFinite(v))) ? "—" : esc(v);
+  const nMatches = (d.matches_n!=null && isFinite(+d.matches_n)) ? +d.matches_n : (Array.isArray(d.next) ? d.next.length : null);
+  const ex = d.exposure, warn = ex!=null && d.exposure_warn!=null && ex > d.exposure_warn;
   const wk = d.week||{};
   const picks = (d.with_picks||[]).slice(0,3).map(m=>`<div class="tp" data-id="${m.event_id}"><span class="tpm">${esc(nmH(m))} — ${esc(nmA(m))}</span><span class="b num">${esc(m.picks.length)} ${m.picks.length===1?"ставка":"ставок"}</span></div>`).join("");
-  el.innerHTML = `<div class="card today"><div class="cap">Сводка · ближайшие ${esc(d.hours)} ч</div>
+  el.innerHTML = `<div class="card today"><div class="cap">Сводка · ${d.hours==null?"ближайшие часы":"ближайшие "+esc(d.hours)+" ч"}</div>
     <div class="tiles" style="margin:10px 0 ${picks||ex!=null?"10px":"0"}">
-      <div class="tile"><div class="sub">матчей</div><div class="v num">${d.matches_n}</div></div>
+      <div class="tile"><div class="sub">матчей</div><div class="v num">${nMatches==null?"0":cntv(nMatches)}</div></div>
       <div class="tile"><div class="sub">с перевесом</div><div class="v num">${(d.with_picks||[]).length}</div></div>
-      <div class="tile"><div class="sub">в игре</div><div class="v num ${warn?"r":""}">${ex!=null?(ex*100).toFixed(1)+"%":"—"}</div></div></div>
+      <div class="tile"><div class="sub">в игре</div><div class="v num ${warn?"r":""}">${ex!=null&&isFinite(ex)?(ex*100).toFixed(1)+"%":"—"}</div></div></div>
     ${picks}
     ${warn?`<div class="sub" style="color:var(--amber)">В игре больше ${(d.exposure_warn*100).toFixed(0)}% банка — это лишь напоминание, решение за вами.</div>`:""}
     ${wk.settled_n?`<div class="sub" style="margin-top:6px">7 дней: рассчитано ${wk.settled_n}${wk.placed_n?` · ваши ставки: ${mon(wk.pnl_placed)}`:""}</div>`:""}</div>`;
@@ -1679,9 +1793,9 @@ async function viewMatch(id){
   let h = `<div style="height:12px"></div><div class="card hero"><span class="badge bg-m lg" style="color:${LCOL[m.league]||"var(--muted)"}">${esc(LEAGUES[m.league]||m.league)}</span>
    <div class="sub" style="margin-bottom:4px">${esc(w.d.toLocaleDateString("ru-RU",{weekday:"short",day:"numeric",month:"long"}))}${w.hasTime?" · "+fmtTime(w.d):""}</div>
    ${w.hasTime&&!m.score&&etaText(w.d.getTime())?`<div class="eta-big" data-eta="${w.d.getTime()}">${esc(etaText(w.d.getTime()))}</div>`:""}
-   <div class="vs" style="margin-top:12px"><div><div class="mono" style="color:${LCOL[m.league]||"#6096ff"}">${esc(mono(nmH(m)))}</div><div class="tn${nmH(m).length>9?" lg":""}">${esc(nmH(m))}${starBtn(m.home)}</div>${a?`<div class="xg">ожид. голы ${cnt(a.xg[0],2)}</div>`:""}</div>
+   <div class="vs" style="margin-top:12px"><div><div class="mono" style="color:${LCOL[m.league]||"#6096ff"}">${esc(mono(nmH(m)))}</div><div class="tn"><span class="tnm" title="${esc(nmH(m))}">${esc(nmH(m))}</span>${starBtn(m.home)}</div>${a?`<div class="xg">ожид. голы ${cnt(a.xg[0],2)}</div>`:""}</div>
    <div class="at">${m.score?m.score[0]+" : "+m.score[1]:"VS"}</div>
-   <div><div class="mono" style="color:#ec6fa0">${esc(mono(nmA(m)))}</div><div class="tn${nmA(m).length>9?" lg":""}">${esc(nmA(m))}${starBtn(m.away)}</div>${a?`<div class="xg">ожид. голы ${cnt(a.xg[1],2)}</div>`:""}</div></div></div>`;
+   <div><div class="mono" style="color:#ec6fa0">${esc(mono(nmA(m)))}</div><div class="tn"><span class="tnm" title="${esc(nmA(m))}">${esc(nmA(m))}</span>${starBtn(m.away)}</div>${a?`<div class="xg">ожид. голы ${cnt(a.xg[1],2)}</div>`:""}</div></div></div>`;
   if(!a){ h += `<div class="card empty">${m.score?"Матч сыгран.":"Прогноз недоступен: не хватает данных по командам."}</div>`; }
   else {
     const p=a.p, mx=Math.max(...p);
@@ -2167,6 +2281,7 @@ async function viewStats(){
   mount(`<h1>Статистика<span class="grow"></span><button class="iconbtn" id="rf" aria-label="Обновить"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.5-5.8M20 4v4h-4"/></svg></button></h1>${skel(3)}`);
   document.getElementById("rf").onclick = ()=>refresh();
   let s; try { s = await api("/api/stats"); } catch(e){ return errView(e, viewStats); }
+  if(!s || typeof s!=="object" || !s.report){ mount(`<h1>Статистика</h1><div class="card"><div class="note">Мало данных для анализа: статистика появится, когда в базе будут рассчитанные ставки.</div></div>`); return; }   /* v40.1: пустая база */
   const r=s.report, N=s.min_n_roi, nS=s.min_n_seg;
   const nClv=r.with_closing, clv=r.mean_log_clv, pos=r.positive;
   const roiP = r.placed_n? r.placed_pnl/(r.placed_stake||1):null, roiPaper = r.settled_n? r.settled_pnl/(r.settled_stake||1):null;
@@ -3911,12 +4026,7 @@ const EXC=(()=>{
     bar.onkeydown=e=>{ const L=vis(w), a=L.findIndex(x=>x.getAttribute("aria-selected")==="true"); let n=-1;
       if(e.key==="ArrowRight") n=(a+1)%L.length; else if(e.key==="ArrowLeft") n=(a-1+L.length)%L.length; else if(e.key==="Home") n=0; else if(e.key==="End") n=L.length-1; if(n<0) return;
       e.preventDefault(); activate(w,L[n].dataset.id,n>a?1:-1); L[n].focus(); };
-    /* свайп влево/вправо по контенту (ленту формы, которая сама листается по горизонтали, не перехватываем) */
-    const pw=$(".tpw39",w); let sx=0,sy=0,ok=false;
-    pw.addEventListener("touchstart",e=>{ const t=e.touches[0]; sx=t.clientX; sy=t.clientY; ok=e.touches.length===1&&!e.target.closest(".ftl38,[data-noswipe],input,select,textarea"); },{passive:true});
-    pw.addEventListener("touchend",e=>{ if(!ok) return; ok=false; const t=e.changedTouches[0], dx=t.clientX-sx, dy=t.clientY-sy;
-      if(Math.abs(dx)<56||Math.abs(dx)<Math.abs(dy)*1.4) return; const L=vis(w), a=L.findIndex(x=>x.getAttribute("aria-selected")==="true"), n=a+(dx<0?1:-1);
-      if(n>=0&&n<L.length) activate(w,L[n].dataset.id,dx<0?1:-1); },{passive:true});
+    /* свайпы между вкладками отключены: переключение только кликом */
     moveInd(w,true); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>moveInd(w,true));
     const rx=$(".rdx",w); if(rx) rx.onclick=()=>openRadar(m,$(".rd39",w));
   }
@@ -4000,32 +4110,6 @@ const EXC=(()=>{
   const mo=new MutationObserver(()=>{ if(!sq) sq=requestAnimationFrame(scan); });
   mo.observe(D.getElementById("app")||D.body,{childList:true,subtree:true}); scan();
 
-  /* ───── 4. Табы: индикатор и панель следуют за пальцем ───── */
-  let g=null;   /* жест */
-  const bar=w=>$(".tb39",w), btns=w=>$$(".tb39 button:not([hidden])",w);
-  D.addEventListener("touchstart",e=>{
-    g=null; const pw=e.target.closest&&e.target.closest(".tpw39"); if(!pw||e.touches.length!==1||e.target.closest(".ftl38,[data-noswipe],input,select,textarea")) return;
-    const w=pw.closest(".tabs39"), L=btns(w), a=L.findIndex(b=>b.getAttribute("aria-selected")==="true"); if(a<0) return;
-    const t=e.touches[0]; g={w,pw,L,a,sx:t.clientX,sy:t.clientY,on:false,dead:false,panel:$(".tp39:not([hidden])",w),ind:$(".ind39",w)};
-  },{passive:true});
-  D.addEventListener("touchmove",e=>{
-    if(!g||g.dead) return; const t=e.touches[0], dx=t.clientX-g.sx, dy=t.clientY-g.sy;
-    if(!g.on){ if(Math.abs(dy)>14&&Math.abs(dy)>Math.abs(dx)){ g.dead=true; return; } if(Math.abs(dx)<12||Math.abs(dx)<Math.abs(dy)*1.3) return; g.on=true; if(g.ind) g.ind.classList.add("drag40"); if(g.panel) g.panel.classList.add("drag40"); }
-    const W=g.pw.clientWidth||320, n=g.a+(dx<0?1:-1), nb=g.L[n], b=g.L[g.a], p=clamp(Math.abs(dx)/(W*.62),0,1);
-    if(g.ind&&b){ if(nb){ const x=b.offsetLeft+(nb.offsetLeft-b.offsetLeft)*p, w=b.offsetWidth+(nb.offsetWidth-b.offsetWidth)*p; g.ind.style.width=w+"px"; g.ind.style.transform=`translate3d(${x}px,0,0)`; }
-      else { g.ind.style.transform=`translate3d(${b.offsetLeft+dx*.08}px,0,0)`; } }
-    if(g.panel){ const k=nb?.34:.1; g.panel.style.transform=`translate3d(${dx*k}px,0,0)`; g.panel.style.opacity=String(1-p*.35); }
-  },{passive:true});
-  const endG=()=>{ if(!g) return; const s=g; g=null; if(!s.on) return;
-    /* v39 уже обработал touchend (он зарегистрирован раньше): смотрим, сменилась ли вкладка */
-    const now=btns(s.w).findIndex(b=>b.getAttribute("aria-selected")==="true");
-    if(s.ind) s.ind.classList.remove("drag40");
-    if(s.panel){ const pn=s.panel; pn.classList.remove("drag40"); const tr=pn.style.transform, op=pn.style.opacity; pn.style.transform=""; pn.style.opacity="";
-      if(now===s.a&&!RM()&&pn.animate) pn.animate([{transform:tr||"none",opacity:op||1},{transform:"none",opacity:1}],{duration:420,easing:"cubic-bezier(.16,1,.3,1)"}); }
-    if(now===s.a&&s.ind){ const b=s.L[s.a]; if(b){ s.ind.style.width=b.offsetWidth+"px"; s.ind.style.transform=`translate3d(${b.offsetLeft}px,0,0)`; } }
-  };
-  D.addEventListener("touchend",endG,{passive:true}); D.addEventListener("touchcancel",endG,{passive:true});
-
   /* ───── 5. Живое стекло: блик следует за пальцем/наклоном ───── */
   const SPEC=".nav,.hero,.tb39,.m38p,.m39p";
   const live=new Set(); let tx=0,ty=0,cx=0,cy=0,sraf=0,idle=0;
@@ -4040,13 +4124,192 @@ const EXC=(()=>{
   let aq=0; const mo2=new MutationObserver(()=>{ if(!aq) aq=requestAnimationFrame(()=>{ aq=0; arm(); }); });
   mo2.observe(D.body,{childList:true,subtree:true}); arm();
 
-  /* ───── 6. Область нажатия ≥44px у мелких кнопок ───── */
-  const fix44=()=>{ $$("button,[role=tab],.chip,.iconbtn,a[href]").forEach(n=>{ if(n.__h44) return; const r=n.getBoundingClientRect(); if(!r.width) return; n.__h44=1;
-      if(r.height<44||r.width<44) n.classList.add("hit40"); }); };
+  /* ───── 6. Область нажатия ≥44px у мелких кнопок (тумблеры, поля и нижнее меню не трогаем) ───── */
+  const NO44="input,select,textarea,.sw35,[role=switch],.nav button,.nav";
+  const fix44=()=>{ $$("button,[role=tab],.chip,.iconbtn").forEach(n=>{ if(n.__h44||n.matches(NO44)) return; const r=n.getBoundingClientRect(); if(!r.width) return; n.__h44=1;
+      if((r.height<44||r.width<44)&&!n.querySelector(":scope>.h44")){ const s=D.createElement("s"); s.className="h44"; s.setAttribute("aria-hidden","true"); n.appendChild(s); n.classList.add("hit40"); } }); };
   let fq=0; new MutationObserver(()=>{ if(!fq) fq=setTimeout(()=>{ fq=0; fix44(); },120); }).observe(D.getElementById("app")||D.body,{childList:true,subtree:true}); setTimeout(fix44,400);
 
-  window.W40={H40,arm,scan,fix44,STK};
+  window.W40={H40,arm,scan,fix44,STK,openFS,closeFS};
 }catch(e){ console.warn("v40",e); } })();
+
+/* v40.1 · полноэкранная аналитика (Форма/Радар/H2H/ДНК/Статистика), защита от undefined/NaN, тост. Данные и запросы не меняются. */
+(function(){ try{
+  const D=document, R=D.documentElement, $=(s,r)=>(r||D).querySelector(s), $$=(s,r)=>Array.from((r||D).querySelectorAll(s));
+  const RM=()=>matchMedia("(prefers-reduced-motion:reduce)").matches||R.dataset.anim==="off"||R.dataset.perf==="low";
+  const canVT=()=>typeof D.startViewTransition==="function"&&!RM();
+  const hap=k=>{ try{ window.haptic&&window.haptic(k); }catch(e){} };
+  const NS='viewBox="0 0 24 24" aria-hidden="true"';
+  const IC={st:'<path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/>',fm:'<path d="M3 17l5-6 4 3 5-8 4 5"/><path d="M3 21h18"/>',rd:'<path d="M12 3l8 5v8l-8 5-8-5V8z"/><path d="M12 8l4 2.5v3L12 16l-4-2.5v-3z"/>',
+    h2:'<path d="M7 7h12l-3-3M17 17H5l3 3"/>',dn:'<path d="M7 3c0 6 10 6 10 12s-10 6-10 6M17 3c0 6-10 6-10 12"/><path d="M8.5 7h7M8.5 17h7"/>'};
+  const CH=`<svg class="lch" ${NS}><path d="M9 5l7 7-7 7"/></svg>`;
+
+  /* ───── 1. Защита от «undefined»/«NaN» в тексте интерфейса (после любого рендера) ───── */
+  const BAD=/(^|[^A-Za-zА-Яа-яЁё0-9_])(undefined|NaN|null)(?![A-Za-zА-Яа-яЁё0-9_])/;
+  const scrub=root=>{ try{ const w=D.createTreeWalker(root,NodeFilter.SHOW_TEXT,null); let n; const hit=[];
+      while((n=w.nextNode())){ if(n.nodeValue.length<40&&BAD.test(n.nodeValue)) hit.push(n); }
+      hit.forEach(t=>{ const p=t.parentNode&&t.parentNode.nodeName; if(p==="SCRIPT"||p==="STYLE"||p==="TEXTAREA") return; t.nodeValue=t.nodeValue.replace(/(undefined|NaN|null)/g,"—"); }); }catch(e){} };
+  let sq=0; const app=D.getElementById("app")||D.body;
+  new MutationObserver(()=>{ if(!sq) sq=requestAnimationFrame(()=>{ sq=0; scrub(app); }); }).observe(app,{childList:true,subtree:true,characterData:true}); scrub(app);
+
+  /* ───── 2. Тост: ровно 2 секунды, тап по экрану убирает сразу ───── */
+  try{ const el=D.getElementById("toast"); const _t=window.toast;
+    window.toast=function(t){ if(!el) return _t&&_t.apply(this,arguments); el.textContent=t==null?"":String(t); el.classList.remove("on"); void el.offsetWidth; el.classList.add("on");
+      clearTimeout(window.toast.t); window.toast.t=setTimeout(()=>el.classList.remove("on"),2000); };
+    D.addEventListener("pointerdown",()=>{ if(el&&el.classList.contains("on")) setTimeout(()=>el.classList.remove("on"),350); },{passive:true,capture:true}); }catch(e){}
+
+  window.F40={scrub};
+}catch(e){ console.warn("v40.1",e); } })();
+
+/* v40.2 · полноэкранный экран матча: карточка морфится в экран (View Transitions + FLIP-запасной вариант), верхние вкладки, навигация только кликом.
+   Только фронтенд: данные, запросы и расчёты не менялись — прежний viewMatch рисует в оверлей вместо #app. */
+(function(){ try{
+  const D=document, R=D.documentElement, $=(s,r)=>(r||D).querySelector(s), $$=(s,r)=>Array.from((r||D).querySelectorAll(s));
+  const app=D.getElementById("app"); if(!app||typeof openMatch!=="function") return;
+  const RM=()=>matchMedia("(prefers-reduced-motion:reduce)").matches||R.dataset.anim==="off"||R.dataset.perf==="low";
+  const vtOff=()=>{ try{ return typeof lsGet==="function"&&lsGet("vtoff37")==="1"; }catch(e){ return false; } };
+  const canVT=()=>typeof D.startViewTransition==="function"&&!RM()&&!vtOff()&&!D.hidden;
+  const hap=k=>{ try{ if(typeof haptic==="function") haptic(k); }catch(e){} };
+  const EASE="cubic-bezier(.16,1,.3,1)";
+  const NS='viewBox="0 0 24 24" aria-hidden="true"';
+  const TABS=[["ov","Обзор"],["st","Статистика"],["fm","Форма"],["rd","Радар"],["h2","H2H"],["dn","ДНК"]];
+
+  /* ───── 1. Оверлей: шапка («Назад», название), панель вкладок, прокручиваемый контент ───── */
+  const ov=D.createElement("div"); ov.id="mv40"; ov.setAttribute("role","dialog"); ov.setAttribute("aria-modal","true"); ov.setAttribute("aria-hidden","true"); ov.setAttribute("aria-label","Матч");
+  ov.innerHTML=`<div class="mhd40"><div class="mh40"><button type="button" class="mb40" aria-label="Назад к списку матчей"><svg ${NS}><path d="M15 5l-7 7 7 7"/></svg><span>Назад</span></button>
+    <div class="mt40"><b>Матч</b><small></small></div></div>
+    <div class="mtb40" role="tablist" aria-label="Разделы матча"><i class="mi40"></i>${TABS.map(([i,t])=>`<button type="button" role="tab" data-t="${i}" id="mt-${i}" aria-selected="${i==="ov"}" tabindex="${i==="ov"?0:-1}"${i==="st"?" hidden":""}>${t}</button>`).join("")}</div></div>
+    <div class="mvs" role="tabpanel" aria-labelledby="mt-ov"></div>`;
+  D.body.appendChild(ov);
+  const bar=$(".mtb40",ov), ind=$(".mi40",ov), mvs=$(".mvs",ov), tT=$(".mt40 b",ov), tS=$(".mt40 small",ov);
+  let isOpen=false, cur="ov", listReady=false, pend=null, backLock=0, favSig="", lastRow=null, lastT=0, vtObj=null;
+
+  /* ───── 2. Вкладки ───── */
+  const tb=id=>$(`.mtb40 button[data-t="${id}"]`,ov);
+  const order=()=>$$(".mtb40 button:not([hidden])",ov).map(b=>b.dataset.t);
+  const view=()=>$(".view",mvs);
+  const widget=()=>{ const v=view(); return v&&$(".tabs39",v); };
+  const avail=id=>{ if(id==="ov") return !!view(); const w=widget(); if(!w) return false; const b=$(`.tb39 button[data-id="${id}"]`,w); return !!b&&!b.hidden; };
+  function moveInd(instant){ const b=tb(cur); if(!b||!b.offsetWidth) return;
+    if(instant){ ind.style.transition="none"; }
+    ind.style.width=b.offsetWidth+"px"; ind.style.transform=`translate3d(${b.offsetLeft}px,0,0)`;
+    if(instant){ void ind.offsetWidth; ind.style.transition=""; }
+    if(bar.scrollWidth>bar.clientWidth){ const x=Math.max(0,b.offsetLeft-(bar.clientWidth-b.offsetWidth)/2); try{ bar.scrollTo({left:x,behavior:instant||RM()?"auto":"smooth"}); }catch(e){ bar.scrollLeft=x; } } }
+  function paint(instant){ $$(".mtb40 button",ov).forEach(b=>{ const on=b.dataset.t===cur; b.setAttribute("aria-selected",on); b.tabIndex=on?0:-1; }); mvs.setAttribute("aria-labelledby","mt-"+cur); moveInd(instant); }
+  function sync(){ /* какие вкладки доступны (данные могли подгрузиться / ДНК может отсутствовать) */
+    const w=widget(), hasSt=!!(w&&$('.tb39 button[data-id="st"]',w));
+    TABS.forEach(([id])=>{ const b=tb(id); if(!b) return; const a=avail(id); if(id==="st") b.hidden=!hasSt; b.classList.toggle("off",!a); b.setAttribute("aria-disabled",a?"false":"true"); });
+    if(!avail(cur)){ cur="ov"; const v=view(); if(v) v.dataset.t40="ov"; }
+    paint(true); }
+  function go(id,o){ o=o||{}; const v=view(); if(!v||!avail(id)||(id===cur&&!o.force)) return false;
+    cur=id; v.dataset.t40=id;
+    if(id!=="ov"){ const w=widget(), b=w&&$(`.tb39 button[data-id="${id}"]`,w);        /* содержимое — штатные панели v39; их собственная полоса вкладок скрыта */
+      if(b&&b.getAttribute("aria-selected")!=="true"){ const bb=$(".tb39",w); if(bb&&bb.onclick) bb.onclick({target:b}); } }
+    mvs.scrollTop=0; paint(!!o.instant); if(!o.silent&&id==="ov") hap("select"); return true; }
+  bar.onclick=e=>{ const b=e.target.closest&&e.target.closest("button"); if(!b) return;
+    if(b.classList.contains("off")){ hap("rigid"); try{ if(typeof toast==="function") toast("Для этой вкладки пока нет данных"); }catch(x){} return; }
+    go(b.dataset.t); };
+  bar.onkeydown=e=>{ const L=order(), a=L.indexOf(cur); let n=-1;
+    if(e.key==="ArrowRight") n=(a+1)%L.length; else if(e.key==="ArrowLeft") n=(a-1+L.length)%L.length; else if(e.key==="Home") n=0; else if(e.key==="End") n=L.length-1; if(n<0) return;
+    e.preventDefault(); if(avail(L[n])){ go(L[n]); tb(L[n]).focus(); } };
+  /* никаких свайпов между вкладками; а ещё жест «потянуть вниз» с экрана матча не должен обновлять скрытый список */
+  ov.addEventListener("touchstart",e=>e.stopPropagation(),{passive:true});
+
+  const mo=new MutationObserver(()=>sync());
+  function onMounted(m,v){ try{ const t=(typeof nmH==="function")?`${nmH(m)} — ${nmA(m)}`:"Матч"; tT.textContent=t;
+      let sub=""; try{ sub=(typeof LEAGUES!=="undefined"&&LEAGUES[m.league])||m.league||""; }catch(e){} tS.textContent=sub; }catch(e){}
+    mo.disconnect(); const w=$(".tabs39",v); if(w) mo.observe(w,{attributes:true,subtree:true,attributeFilter:["hidden"]});
+    sync(); if(cur!=="ov") go(cur,{force:true,instant:true,silent:true}); }
+  try{ const W=window.W39; if(W&&W.mounted){ const _m=W.mounted; W.mounted=function(m,v){ const r=_m.apply(this,arguments); try{ if(v&&v.closest&&v.closest("#mv40")) onMounted(m,v); }catch(e){} return r; }; } }catch(e){}
+
+  /* ───── 3. mount(): пока открыт матч, прежний viewMatch рисует в оверлей, а список в #app остаётся нетронутым ───── */
+  const _mount=mount;
+  mount=function(html,kind){
+    if(state.detail==null) { listReady=true; return _mount.apply(this,arguments); }
+    if(!isOpen) showOv();                                          /* матч открыт «снаружи» (диплинк, render) — без анимации */
+    const up=ov.dataset.ph==="ready";
+    mvs.innerHTML=`<div class="view${up?" up40":""}" data-t40="${cur}">${typeof snapNote==="function"?snapNote():""}${html}</div>`; state.dir=null;
+    const v=mvs.firstElementChild; [...v.children].forEach((c,i)=>c.style.setProperty("--i",Math.min(i,10)));
+    try{ countUp(v); }catch(e){} sync(); return v; };
+
+  /* ───── 4. Открытие / закрытие ───── */
+  const findRow=id=>{ const ok=el=>el&&el.isConnected&&String(el.dataset.id)===String(id)&&app.contains(el);
+    if(ok(lastRow)&&performance.now()-lastT<3000) return lastRow;
+    return $$(`[data-id="${id}"]`,app).find(el=>{ const r=el.getBoundingClientRect(); return r.width>40&&r.height>24; })||null; };
+  D.addEventListener("pointerdown",e=>{ const r=e.target.closest&&e.target.closest("#app [data-id]"); if(r){ lastRow=r; lastT=performance.now(); } },{capture:true,passive:true});
+  const inView=r=>{ const b=r.getBoundingClientRect(); return b.width>40&&b.height>24&&b.bottom>0&&b.top<innerHeight&&b.right>0&&b.left<innerWidth; };
+  function showOv(){ isOpen=true; ov.classList.add("on"); ov.setAttribute("aria-hidden","false"); R.classList.add("mv40on"); try{ app.inert=true; }catch(e){} }
+  function hideOv(){ isOpen=false; ov.classList.remove("on"); ov.setAttribute("aria-hidden","true"); ov.removeAttribute("data-ph"); R.classList.remove("mv40on"); try{ app.inert=false; }catch(e){} }
+  function settle(){ if(pend){ const f=pend; pend=null; f(); } if(vtObj){ try{ vtObj.skipTransition(); }catch(e){} vtObj=null; } try{ ov.getAnimations().forEach(a=>a.cancel()); }catch(e){} }
+  function jank(t){ let n=0,lt=performance.now(),raf=0; const tick=x=>{ if(x-lt>33) n++; lt=x; raf=requestAnimationFrame(tick); }; raf=requestAnimationFrame(tick);
+    const end=()=>{ cancelAnimationFrame(raf); if(n>=4){ try{ if(typeof lsSet==="function") lsSet("vtoff37","1"); }catch(e){} } };
+    t.finished.then(end,end); setTimeout(end,1500); }
+  const flip=(row,rev,done)=>{ const W=innerWidth,H=innerHeight; let kf;
+    if(row&&inView(row)){ const b=row.getBoundingClientRect(); const from=`translate3d(${b.left}px,${b.top}px,0) scale(${b.width/W},${b.height/H})`;
+      kf=[{transformOrigin:"0 0",transform:from,opacity:.2},{transformOrigin:"0 0",transform:"none",opacity:1}]; }
+    else kf=[{transform:"translate3d(0,28px,0) scale(.97)",opacity:0},{transform:"none",opacity:1}];
+    if(rev) kf.reverse();
+    if(!ov.animate||RM()){ done(); return; }
+    const a=ov.animate(kf,{duration:rev?320:480,easing:rev?"cubic-bezier(.65,0,.35,1)":EASE,fill:"both"}); a.onfinish=()=>{ try{ a.cancel(); }catch(e){} done(); }; a.oncancel=()=>{}; };
+
+  openMatch=function(id){
+    if(state.detail===id&&isOpen) return;
+    settle(); const row=findRow(id);
+    state.detail=id; try{ history.pushState({m:id},""); }catch(e){} syncBack();
+    try{ if(typeof Snd!=="undefined") Snd.play("swipe"); }catch(e){}
+    cur="ov"; paint(true); tT.textContent="Матч"; tS.textContent=""; try{ favSig=JSON.stringify(state.favs||[]); }catch(e){ favSig=""; } hap("light");
+    ov.removeAttribute("data-ph"); mo.disconnect();
+    const ready=()=>{ ov.dataset.ph="ready"; try{ $(".mb40",ov).focus({preventScroll:true}); }catch(e){} };
+    const enter=()=>{ showOv(); mvs.scrollTop=0; viewMatch(id); };
+    if(canVT()&&row&&inView(row)){
+      row.style.viewTransitionName="mcard"; R.dataset.vt="mco";
+      const fin=()=>{ pend=null; ov.style.viewTransitionName=""; row.style.viewTransitionName=""; delete R.dataset.vt; ready(); };
+      pend=fin;
+      try{ vtObj=D.startViewTransition(()=>{ row.style.viewTransitionName=""; ov.style.viewTransitionName="mcard"; enter(); });
+        jank(vtObj); const t=vtObj; t.finished.then(()=>{ if(pend===fin) fin(); },()=>{ if(pend===fin) fin(); }); setTimeout(()=>{ if(pend===fin) fin(); },1800); }
+      catch(e){ fin(); enter(); ready(); }
+      return; }
+    enter(); flip(row,false,ready); setTimeout(ready,700); };
+
+  closeMatch=function(){
+    if(!isOpen){ if(state.detail){ state.detail=null; syncBack(); if(!listReady) render(); } return; }
+    const id=state.detail; state.detail=null; syncBack(); settle(); mo.disconnect();
+    const row=id!=null?findRow(id):null;
+    let sig=""; try{ sig=JSON.stringify(state.favs||[]); }catch(e){}
+    const after=()=>{ hideOv(); mvs.innerHTML=""; cur="ov"; paint(true); if(!listReady) render(); else if(sig!==favSig){ try{ renderList(); }catch(e){} } };
+    if(canVT()&&row&&inView(row)){
+      ov.style.viewTransitionName="mcard"; R.dataset.vt="mcc";
+      const fin=()=>{ pend=null; ov.style.viewTransitionName=""; if(row) row.style.viewTransitionName=""; delete R.dataset.vt; };
+      pend=()=>{ fin(); after(); };
+      try{ vtObj=D.startViewTransition(()=>{ ov.style.viewTransitionName=""; row.style.viewTransitionName="mcard"; after(); });
+        const t=vtObj; const f2=()=>{ if(pend){ pend=null; } fin(); }; t.finished.then(f2,f2); setTimeout(f2,1800); }
+      catch(e){ pend=null; fin(); after(); }
+      return; }
+    pend=after; flip(row,true,()=>{ if(pend===after){ pend=null; after(); } }); setTimeout(()=>{ if(pend===after){ pend=null; after(); } },700); };
+
+  const back=()=>{ if(!isOpen||performance.now()-backLock<650) return; backLock=performance.now(); hap("light");
+    if(history.state&&history.state.m){ try{ history.back(); return; }catch(e){} } closeMatch(); };
+  $(".mb40",ov).onclick=back;
+  D.addEventListener("keydown",e=>{ if(e.key!=="Escape"||!isOpen) return;
+    if((window.M38&&M38.isOpen&&M38.isOpen())||(window.W39&&W39.M39&&W39.M39.isOpen&&W39.M39.isOpen())) return; e.preventDefault(); back(); });
+
+  window.V402={go,back,isOpen:()=>isOpen,tab:()=>cur,sync};
+}catch(e){ console.warn("v40.2",e); } })();
+
+/* ───── v40.3: подгонка размера названий (шапка и карточка) ───── */
+(function(){ try{
+  const D=document, $$=(s,r)=>Array.from((r||D).querySelectorAll(s));
+  function fit(el,max,min){ if(!el||!el.clientWidth) return; el.style.setProperty("--fit",max+"px"); el.classList.remove("ovf40");
+    let s=max; while(el.scrollWidth>el.clientWidth+1&&s>min){ s-=.5; el.style.setProperty("--fit",s+"px"); }
+    if(el.scrollWidth>el.clientWidth+1) el.classList.add("ovf40"); }
+  let q=0; const run=()=>{ q=0; const ov=D.getElementById("mv40"); if(!ov||!ov.classList.contains("on")) return;
+    fit($(".mt40 b",ov),15.5,12); const sm=$(".mt40 small",ov); if(sm){ sm.classList.remove("ovf40"); if(sm.scrollWidth>sm.clientWidth+1) sm.classList.add("ovf40"); }
+    $$(".hero .tnm",ov).forEach(e=>fit(e,parseFloat(getComputedStyle(e.parentNode).fontSize)||17,11.5)); };
+  function $(s,r){ return (r||D).querySelector(s); }
+  const sched=()=>{ if(!q) q=requestAnimationFrame(run); };
+  new MutationObserver(sched).observe(D.getElementById("mv40"),{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:["class"]});
+  addEventListener("resize",sched); if(D.fonts&&D.fonts.ready) D.fonts.ready.then(sched);
+}catch(e){ console.warn("v40.3",e); } })();
 /*/V40-JS*/
 </script>
 </body>
