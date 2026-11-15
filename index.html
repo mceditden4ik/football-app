@@ -1599,6 +1599,15 @@ html,body{overscroll-behavior-x:none}
 
 .rv42{animation:rise .5s var(--ease) both;animation-delay:calc(var(--i,0)*70ms)}
 @media (prefers-reduced-motion:reduce){.row.pre42,.rv42{animation:none!important}#list,.tm42c{transition:none}}
+
+/* — 5. v42.1: плашка дня не дёргается. Без blur/scale на sticky-элементе (мерцание в Android WebView),
+   собственный композитный слой, непрозрачный фон, ширина не меняется при «прилипании» */
+.day.cap{transform:translateZ(0);backface-visibility:hidden;will-change:transform;contain:layout paint;
+  transition:background-color .2s,border-color .2s,box-shadow .2s;background:transparent}
+.day.cap.stuck40,html[data-fxl="off"] .day.cap.stuck40,html[data-perf=low] .day.cap.stuck40{
+  transform:translateZ(0);background:var(--card2);border-color:var(--line);box-shadow:0 6px 16px -8px rgba(0,0,0,.6);
+  -webkit-backdrop-filter:none;backdrop-filter:none}
+.day.cap .dn42{white-space:nowrap;font-variant-numeric:tabular-nums}
 /*/V40-CSS*/
 </style>
 </head>
