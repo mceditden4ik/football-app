@@ -1602,12 +1602,109 @@ html,body{overscroll-behavior-x:none}
 
 /* — 5. v42.1: плашка дня не дёргается. Без blur/scale на sticky-элементе (мерцание в Android WebView),
    собственный композитный слой, непрозрачный фон, ширина не меняется при «прилипании» */
-.day.cap{transform:translateZ(0);backface-visibility:hidden;will-change:transform;contain:layout paint;
+.day.cap{transform:translateZ(0);backface-visibility:hidden;contain:layout paint;
   transition:background-color .2s,border-color .2s,box-shadow .2s;background:transparent}
 .day.cap.stuck40,html[data-fxl="off"] .day.cap.stuck40,html[data-perf=low] .day.cap.stuck40{
   transform:translateZ(0);background:var(--card2);border-color:var(--line);box-shadow:0 6px 16px -8px rgba(0,0,0,.6);
   -webkit-backdrop-filter:none;backdrop-filter:none}
 .day.cap .dn42{white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* ═════════ v43: аналитический терминал ═════════ */
+/* — 1. Тепловая полоска слева у карточки матча: зелёная — Value/уверенность, красная — Ловушка, серая — обычный матч */
+.row.sg43{overflow:visible}
+.row.sg43::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:0 3px 3px 0;background:var(--sg,rgba(148,160,184,.38));pointer-events:none}
+.row.sg43v{--sg:linear-gradient(180deg,#4ade80,#10b981)}
+.row.sg43v::before{box-shadow:0 0 12px rgba(52,211,153,.6)}
+.row.sg43t{--sg:linear-gradient(180deg,#fb7185,#ef4444)}
+.row.sg43t::before{box-shadow:0 0 12px rgba(248,113,113,.6)}
+/* производительность: строки вне экрана не рисуются и не считаются (браузер запоминает реальную высоту) */
+#list .row{content-visibility:auto;contain-intrinsic-size:auto 128px}
+
+/* — 2. Быстрые фильтры */
+.qc43{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;margin:0 calc(-1*var(--pad)) 12px;padding:2px var(--pad) 6px;scrollbar-width:none;touch-action:pan-x;overscroll-behavior-x:contain}
+.qc43::-webkit-scrollbar{display:none}
+.qc43 button{flex:0 0 auto;display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 14px 0 12px;border-radius:99px;background:var(--card);border:1px solid var(--line);color:var(--muted);
+  font-weight:700;font-size:13px;white-space:nowrap;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:transform .16s var(--ease),background-color .22s,border-color .22s,color .22s,box-shadow .3s}
+.qc43 button i{width:8px;height:8px;border-radius:50%;background:var(--tc);box-shadow:0 0 0 3px color-mix(in srgb,var(--tc) 22%,transparent);flex:none}
+.qc43 button b{font-weight:800;font-variant-numeric:tabular-nums;color:var(--dim);font-size:12px}
+.qc43 button:active{transform:scale(.95)}
+.qc43 button.on{color:var(--text);border-color:var(--tc);background:color-mix(in srgb,var(--tc) 14%,var(--card));box-shadow:0 8px 20px -12px var(--tc)}
+.qc43 button.on b{color:var(--tc)}
+.qc43 button.z{opacity:.55}
+
+/* — 3. Инсайт и цветная форма в строке матча */
+.ins43{display:flex;align-items:center;gap:7px;margin-top:9px;padding:6px 10px;border-radius:10px;background:color-mix(in srgb,var(--blue) 9%,transparent);border:1px solid color-mix(in srgb,var(--blue) 18%,transparent);
+  color:var(--muted);font-size:12.5px;font-weight:600;line-height:1.3}
+.ins43::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px var(--blue)}
+.fm43{margin-left:auto;display:inline-flex;gap:3px;flex:none;align-items:center;padding-left:8px}
+.fm43 span{width:5px;height:15px;border-radius:3px;background:hsl(var(--h) 78% 52%)}
+.fm43 span.nx{height:10px;opacity:.5}
+.tm41>i{flex:0 1 auto}
+
+/* — 4. Карточка матча: бейджи, плашки, графики */
+.bd43{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.bd43 span{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:99px;font-size:12.5px;font-weight:700;border:1px solid var(--line);background:var(--card);color:var(--text);line-height:1.2}
+.bd43 span::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--tc,var(--blue));flex:none}
+.bd43 .dv{--tc:var(--amber);border-color:color-mix(in srgb,var(--amber) 40%,transparent)}
+.bd43 .sv{--tc:var(--red);border-color:color-mix(in srgb,var(--red) 40%,transparent)}
+.bd43 .tt{--tc:var(--green);border-color:color-mix(in srgb,var(--green) 40%,transparent)}
+.bd43 small{font-weight:600;color:var(--muted);font-size:11.5px}
+.wn43{display:flex;gap:10px;align-items:flex-start;padding:13px 14px;border-radius:16px;margin-bottom:12px;border:1px solid color-mix(in srgb,var(--amber) 42%,transparent);
+  background:linear-gradient(135deg,color-mix(in srgb,var(--amber) 14%,transparent),transparent 75%);font-size:13.5px;line-height:1.4;font-weight:600}
+.wn43 b{color:var(--amber);flex:none;font-size:18px;line-height:1}
+.xp43 .tm{display:grid;grid-template-columns:1fr;gap:8px;padding:12px 0;border-top:1px solid var(--line)}
+.xp43 .tm:first-of-type{border-top:0}
+.xp43 .nm{display:flex;justify-content:space-between;gap:10px;font-weight:700;font-size:14px}
+.xp43 .nm em{font-style:normal;font-variant-numeric:tabular-nums;font-weight:800}
+.xp43 .br{display:grid;grid-template-columns:52px 1fr 40px;align-items:center;gap:8px;font-size:11.5px;color:var(--muted);font-weight:600}
+.xp43 .br u{display:block;height:7px;border-radius:4px;background:var(--track);text-decoration:none;overflow:hidden}
+.xp43 .br u i{display:block;height:100%;border-radius:4px;transform-origin:0 50%;animation:grow43 .7s var(--ease) both}
+.xp43 .br span.n{text-align:right;color:var(--text);font-weight:800;font-variant-numeric:tabular-nums}
+.xp43 .pl{padding:9px 11px;border-radius:12px;font-size:12.5px;font-weight:600;line-height:1.35;background:var(--card2);border:1px solid var(--line);color:var(--muted)}
+.xp43 .pl.over{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 40%,transparent);background:color-mix(in srgb,var(--amber) 10%,transparent)}
+.xp43 .pl.under{color:var(--green);border-color:color-mix(in srgb,var(--green) 40%,transparent);background:color-mix(in srgb,var(--green) 10%,transparent)}
+@keyframes grow43{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.sb43 .tm{padding:12px 0;border-top:1px solid var(--line)}
+.sb43 .tm:first-of-type{border-top:0}
+.sb43 .hd{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:6px;font-weight:700;font-size:14px}
+.sb43 .hd em{font-style:normal;color:var(--muted);font-size:12px;font-weight:600}
+.sb43 svg{display:block;width:100%;height:46px}
+.sb43 .ix{font-variant-numeric:tabular-nums;font-weight:800}
+.mk43 .row2{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;margin:10px 0 4px;font-variant-numeric:tabular-nums;font-weight:800;font-size:15px}
+.mk43 .sp2{display:flex;height:8px;border-radius:5px;overflow:hidden;background:var(--track)}
+.mk43 .sp2 i{display:block;height:100%}
+.mk43 .lbl{font-size:11.5px;color:var(--muted);font-weight:600;margin-top:5px}
+.mk43 hr{border:0;border-top:1px solid var(--line);margin:14px 0}
+.kl43{margin-top:8px;padding:8px 10px;border-radius:10px;font-size:12.5px;font-weight:600;color:var(--muted);background:var(--card2);border:1px solid var(--line);line-height:1.35}
+.kl43 b{color:var(--green);font-variant-numeric:tabular-nums}
+.nd43{padding:12px 14px;border-radius:14px;border:1px dashed var(--line);color:var(--muted);font-size:13px;font-weight:600;margin-bottom:12px}
+
+/* — 5. Монте-Карло */
+.btn43{width:100%;height:46px;margin-top:12px;border-radius:14px;border:1px solid color-mix(in srgb,var(--blue) 55%,transparent);background:linear-gradient(135deg,color-mix(in srgb,var(--blue) 26%,var(--card)),color-mix(in srgb,var(--violet) 20%,var(--card)));
+  color:var(--text);font-weight:800;font-size:14px;letter-spacing:.01em;touch-action:manipulation;transition:transform .16s var(--ease),box-shadow .3s;box-shadow:0 10px 24px -14px var(--blue)}
+.btn43:active{transform:scale(.98)}
+.btn43[disabled]{opacity:.6}
+.sim43o{margin-top:14px}
+.sim43o:empty{display:none}
+.sim43d{display:grid;grid-template-columns:116px 1fr;gap:14px;align-items:center}
+.sim43d svg{width:116px;height:116px;display:block;transform:rotate(-90deg)}
+.sim43d circle{fill:none;stroke-width:13}
+.sim43d .lg{display:grid;gap:7px;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+.sim43d .lg div{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.sim43d .lg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px}
+.sim43d .lg small{color:var(--dim);font-weight:600;font-size:11px}
+.sim43c{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;margin-top:16px}
+.sim43c span{display:inline-flex;align-items:baseline;gap:6px;padding:7px 12px;border-radius:99px;font-weight:800;font-variant-numeric:tabular-nums;border:1px solid var(--line);background:var(--card2);
+  animation:pop43 .5s var(--ease) both;animation-delay:calc(var(--j,0)*45ms)}
+.sim43c span small{font-weight:700;color:var(--muted);font-size:.72em}
+.sim43c span.h{border-color:color-mix(in srgb,var(--blue) 45%,transparent)}
+.sim43c span.a{border-color:color-mix(in srgb,var(--violet) 45%,transparent)}
+.sim43c span.d{border-color:color-mix(in srgb,var(--amber) 40%,transparent)}
+@keyframes pop43{from{opacity:0;transform:scale(.86)}to{opacity:1;transform:none}}
+
+.rv43{animation:rise .5s var(--ease) both;animation-delay:calc(var(--i,0)*60ms)}
+@media (prefers-reduced-motion:reduce){.rv43,.sim43c span,.xp43 .br u i{animation:none!important}}
+@media (max-width:360px){.sim43d{grid-template-columns:96px 1fr}.sim43d svg{width:96px;height:96px}}
 /*/V40-CSS*/
 </style>
 </head>
@@ -1864,6 +1961,7 @@ async function viewMatches(force){
    <div class="chips" id="lg"></div><div class="seg" id="days"></div>
    <div class="tools"><button class="chip fav ${state.favOnly?"on":""}" id="tf">★ Мои команды</button><button class="chip rec ${state.recOnly?"on":""}" id="tr">С перевесом</button><button class="chip ${state.showDone?"on":""}" id="td" style="display:none">🏁 Завершённые</button><span class="sp"></span>
      <div class="sort" id="so"><button data-s="time" class="${state.sort==="time"?"on":""}">Время</button><button data-s="conf" class="${state.sort==="conf"?"on":""}">Уверенность</button></div></div>
+   <div class="qc43" id="qc43" hidden></div>
    <div id="list">${have?"":skel(4)}</div><div class="foot" id="upd"></div>`, have?"":"");
   const lg = document.getElementById("lg");
   lg.innerHTML = `<button class="chip ${state.league===""?"on":""}" data-l="">Все лиги</button>` + Object.keys(LEAGUES).map(k=>`<button class="chip ${state.league===k?"on":""}" data-l="${k}">${LEAGUES[k]}</button>`).join("");
@@ -1889,8 +1987,9 @@ async function viewMatches(force){
 }
 function renderList(anim){
   const el = document.getElementById("list"); if(!el) return;
+  if(window.V43) V43.mountChips();                    /* v43: быстрые фильтры */
   const q = state.q.trim().toLowerCase();
-  let items = (state.cache.matches||[]).filter(m=>(!q || (m.home+" "+m.away+" "+(m.home_ru||"")+" "+(m.away_ru||"")).toLowerCase().includes(q)) && (!state.favOnly || isFav(m.home)||isFav(m.away)) && (!state.recOnly || m.n_rec>0));
+  let items = (state.cache.matches||[]).filter(m=>(!q || (m.home+" "+m.away+" "+(m.home_ru||"")+" "+(m.away_ru||"")).toLowerCase().includes(q)) && (!state.favOnly || isFav(m.home)||isFav(m.away)) && (!state.recOnly || m.n_rec>0) && (!window.V43 || V43.pass(m)));
   const doneN = items.filter(m=>isDone(m)&&!(window.TM42&&TM42.isPast(m))).length;
   const tdb = document.getElementById("td"); if(tdb){ tdb.style.display = doneN||state.showDone ? "" : "none"; tdb.textContent = "🏁 Завершённые"+(doneN?" ("+doneN+")":""); }
   if(!state.showDone) items = items.filter(m=>!isDone(m)||(window.TM42&&TM42.isPast(m)));      /* v42: архивные дни показываются всегда */
@@ -1913,9 +2012,9 @@ function renderList(anim){
     if(m.grade&&(m.grade.w||m.grade.l||m.grade.p)){ if(m.grade.w) bd.push(`<span class="badge bg-g">бот: зашло ${m.grade.w}</span>`); if(m.grade.l) bd.push(`<span class="badge bg-r">не зашло ${m.grade.l}</span>`); if(m.grade.p&&!m.grade.w&&!m.grade.l) bd.push(`<span class="badge bg-m">возврат ${m.grade.p}</span>`); }
     if(m.quality!=null && m.quality<.35) bd.push('<span class="badge bg-r">мало данных</span>');
     const when_ = w.hasTime?(byConf?fmtDay(w.d)+" · ":"")+fmtTime(w.d):(byConf?fmtDay(w.d):"");
-    out += `<button class="row${started?" is-live":paused?" is-ht":""}${isDone(m)?" is-done":""}${window.TM42&&TM42.isPast(m)?" arc42":""}" data-id="${m.event_id}" data-d="${window.TM42?TM42.dayOf(m):""}" data-ko="${w.hasTime?w.d.getTime():""}"${m.score?' data-sc="1"':""}><div class="top"><span><span style="color:${LCOL[m.league]||"var(--muted)"}">●</span> ${esc(LEAGUES[m.league]||m.league)}</span>
+    out += `<button class="row${started?" is-live":paused?" is-ht":""}${isDone(m)?" is-done":""}${window.TM42&&TM42.isPast(m)?" arc42":""}${window.V43?V43.cls(m):""}"${window.V43?V43.why(m):""} data-id="${m.event_id}" data-d="${window.TM42?TM42.dayOf(m):""}" data-ko="${w.hasTime?w.d.getTime():""}"${m.score?' data-sc="1"':""}><div class="top"><span><span style="color:${LCOL[m.league]||"var(--muted)"}">●</span> ${esc(LEAGUES[m.league]||m.league)}</span>
       <span class="num">${started?'<span class="live"></span>':paused?'<span class="pause">⏸</span> ':""}${isDone(m)&&!m.score?`<span class="eta">завершён · итог ожидается</span> · `:m.score?`<span class="eta">завершён</span> · `:w.hasTime?`<span class="eta" data-eta="${w.d.getTime()}">${esc(etaText(w.d.getTime()))}</span> · `:""}${esc(when_)}</span></div>
-      <div class="teams"><span class="tm41">${cr(m.home,26,mono(nmH(m)))}<i>${isFav(m.home)?'<b class="fv">★</b>':""}${esc(nmH(m))}</i></span><span class="tm41">${cr(m.away,26,mono(nmA(m)))}<i>${isFav(m.away)?'<b class="fv">★</b>':""}${esc(nmA(m))}</i></span></div>${m.score?`<div class="score num">${m.score[0]} : ${m.score[1]}</div>`:pbar(m.p)}
+      <div class="teams"><span class="tm41">${cr(m.home,26,mono(nmH(m)))}<i>${isFav(m.home)?'<b class="fv">★</b>':""}${esc(nmH(m))}</i>${window.V43?V43.formH(m):""}</span><span class="tm41">${cr(m.away,26,mono(nmA(m)))}<i>${isFav(m.away)?'<b class="fv">★</b>':""}${esc(nmA(m))}</i>${window.V43?V43.formA(m):""}</span></div>${window.V43?V43.insight(m):""}${m.score?`<div class="score num">${m.score[0]} : ${m.score[1]}</div>`:pbar(m.p)}
       ${bd.length?`<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">${bd.join("")}</div>`:""}</button>`;
   }
   el.innerHTML = out;
@@ -2049,7 +2148,7 @@ async function viewMatch(id){
       return `<div><div class="t">${t}</div><div class="s"><span style="${sk?"":"color:var(--muted)"}">${sides[over?0:1]}</span><b class="num" style="color:${c}">${cntp(pr)}</b></div>
         <div class="meter"><i style="width:${pr*100}%;background:${c}"></i></div><div class="n" style="color:${sk?"var(--green)":"var(--dim)"}">${sk?"навык ✓":"≈ база"}${x.hist_n?` <span class="dim">· n=${x.hist_n}</span>`:""}</div></div>`;}).join("");
     if(cells) h += `<div class="card"><div class="cap">Рынки <span class="sub" style="text-transform:none;letter-spacing:0;font-weight:400">· серым — навыка нет, цифра ≈ базовой частоте</span></div><div class="mk">${cells}</div></div>`;
-    h += heatmap(a,m) + compare(a,m);
+    h += heatmap(a,m) + (window.V43?V43.sim(a,m):"") + compare(a,m);
     const c = a.components||{};
     if(c.poisson) h += `<div class="card"><div class="cap">Из чего сложен прогноз</div><table style="margin-top:6px"><tr><th>Модель</th><th>П1</th><th>Х</th><th>П2</th></tr>` +
       [["Пуассон (вес 0.5)",c.poisson],["Бустинг (0.3)",c.gbm],["Эло (0.2)",c.elo],["Ансамбль",a.p]].filter(r=>r[1]).map(([n,v],i,arr)=>`<tr style="${i==arr.length-1?"font-weight:800":""}"><td>${n}</td>${v.map(x=>`<td class="num">${pc(x,1)}</td>`).join("")}</tr>`).join("") + `</table></div>`;
@@ -2059,9 +2158,11 @@ async function viewMatch(id){
   if((m.bets||[]).length&&!m.score){
     h += `<div class="card"><div class="cap">Ставки бота по матчу</div><div style="margin-top:12px">` + m.bets.map(b=>betRow(b,true)).join("") + `</div></div>`;
   } else if (a) h += `<div class="card"><div class="cap">Ставки бота по матчу</div><div class="sub" style="margin-top:8px">Пока нет. Бот добавит ставку, когда найдёт перевес по актуальным кэфам.</div></div>`;
+  if(window.V43) h += V43.box(m);                       /* v43: блоки аналитики (подгружаются лениво, нет данных — блока нет) */
   h += `<div class="foot">Модель проверена walk-forward · точность ≠ прибыль · не гарантия выигрыша</div>`;
   const v = mount(h, "fwd");
   if(window.W39) W39.mounted(m, v);
+  if(window.V43) V43.mounted(m, v);
   // избранное
   v.querySelectorAll("[data-fav]").forEach(b=>b.onclick=()=>{ const on=toggleFav(b.dataset.fav); b.classList.toggle("on",on); b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop"); toast(on?"Добавлено в «Мои команды»":"Убрано из «Мои команды»"); });
   if(!a) return;
@@ -2148,7 +2249,7 @@ function betRow(b, inMatch){
   const odds = b.placed&&b.placed_odds?b.placed_odds:b.taken_odds, stake = b.placed&&b.placed_stake?b.placed_stake:b.stake;
   const meta = [`EV ${sgn(b.ev)}`, stake?`ставка ${mon(stake)}`:null, b.tier?esc(b.tier):null, b.clv_pct!=null?`CLV ${b.clv_pct>=0?"+":""}${b.clv_pct.toFixed(1)}%`:null, b.pnl!=null?`PnL ${mon(b.pnl)}`:null].filter(Boolean).join(" · ");
   return `<div class="bet ${b.recommended?"rec":"sk"}"><div class="h"><span>${esc(lbl(b))}</span><span class="num a o">@ ${Number(odds).toFixed(2)}</span></div>${inMatch?"":`<div class="mt">${esc(nm(b.home_team,b.home_ru))} — ${esc(nm(b.away_team,b.away_ru))}</div>`}
-   <div class="m">${meta}</div><div style="margin-top:6px">${betStatus(b)}</div>${b.result==null&&b.recommended?segWarn(b):""}</div>`;
+   <div class="m">${meta}</div>${inMatch&&window.V43?V43.kelly(b,odds):""}<div style="margin-top:6px">${betStatus(b)}</div>${b.result==null&&b.recommended?segWarn(b):""}</div>`;
 }
 
 /* ─────────── Ставки ─────────── */
@@ -4560,6 +4661,7 @@ const EXC=(()=>{
   /* ───── 2. Аналитика матча ───── */
   const CACHE={};
   const getAn=eid=>CACHE[eid]||(CACHE[eid]=api("/api/analytics/"+eid).catch(()=>({empty:true})));
+  window.getAn41=getAn;                                   /* v43: общий кэш аналитики для блоков терминала */
   const SHORT={"Чёткость прогноза":"Чёткость","Согласие с рынком":"Рынок","Объём данных":"Данные","Данные xG":"xG","Похожие матчи":"Клоны"};
   const tone=s=>s>=7.5?"var(--green)":s>=5.5?"var(--amber)":"var(--red)";
   const chips=d=>{ const c=[];
@@ -4831,6 +4933,136 @@ function keyStats(m){
 }
 window.R42={recap:m=>outcome(m)+grade(m)+keyStats(m),outcome,grade,keyStats};
 }catch(e){ console.warn("v42",e); } })();
+
+/* ═════════ v43: аналитический терминал ═════════
+   Данные приходят готовыми: m.m43 в строке списка и v43 в /api/analytics/<id> (в статическом режиме — из снимка). Интерфейс ничего не выдумывает:
+   нет поля → нет блока. Монте-Карло считается в браузере из матрицы счёта той же модели голов (генератор с зерном, без Math-случайности). */
+(function(){"use strict";
+const W=window, D=document;
+const E=s=>typeof esc==="function"?esc(s):String(s==null?"":s);
+const NH=m=>typeof nmH==="function"?nmH(m):m.home, NA=m=>typeof nmA==="function"?nmA(m):m.away;
+const hue=q=>Math.round(70+0.7*Math.max(-100,Math.min(100,+q||0)));          /* −100 → 0° красный · 0 → 70° жёлтый · +100 → 140° зелёный */
+const LABEL={W:"победа",D:"ничья",L:"поражение"};
+
+/* ───── 1. Список: полоска, форма, инсайт, быстрые фильтры ───── */
+const live=m=>!!(m&&m.m43&&!m.score);
+function cls(m){ if(!live(m)) return ""; const s=m.m43.sig; return " sg43"+(s==="value"?" sg43v":s==="trap"?" sg43t":""); }
+function dots(a){ if(!a||!a.length) return ""; return `<em class="fm43" role="img" aria-label="Форма: цвет — качество игры по xG">`+a.map(x=>`<span class="${x[2]?"":"nx"}" style="--h:${hue(x[0])}" title="${LABEL[x[1]]||""}"></span>`).join("")+`</em>`; }
+function formH(m){ return live(m)&&m.m43.fm?dots(m.m43.fm[0]):""; }
+function formA(m){ return live(m)&&m.m43.fm?dots(m.m43.fm[1]):""; }
+function insight(m){ return live(m)&&m.m43.ins?`<div class="ins43">${E(m.m43.ins)}</div>`:""; }
+function why(m){ return live(m)&&m.m43.sig&&m.m43.why?` title="${E(m.m43.why)}"`:""; }
+
+const QC=[["value","Только Value","var(--green)"],["trap","Только Ловушки","var(--red)"],["xg","Высокий xG","var(--amber)"]];
+const qs=()=>(state.qc||(state.qc={}));
+function pass(m){
+  const q=qs(); if(!q.value&&!q.trap&&!q.xg) return true;
+  if(!live(m)) return false;
+  const x=m.m43;
+  if((q.value||q.trap)&&!((q.value&&x.sig==="value")||(q.trap&&x.sig==="trap"))) return false;
+  if(q.xg&&!x.xg_hi) return false;
+  return true;
+}
+function chipsHtml(){
+  const L=(state.cache&&state.cache.matches||[]).filter(live);
+  if(!L.length) return "";                                                  /* старый снимок без m43 → панель скрыта */
+  const n={value:0,trap:0,xg:0}; L.forEach(m=>{ if(m.m43.sig==="value") n.value++; if(m.m43.sig==="trap") n.trap++; if(m.m43.xg_hi) n.xg++; });
+  const q=qs();
+  return QC.map(([k,t,c])=>`<button type="button" data-q="${k}" style="--tc:${c}" class="${q[k]?"on":""}${n[k]?"":" z"}" aria-pressed="${!!q[k]}"><i></i>${t}<b>${n[k]}</b></button>`).join("");
+}
+function mountChips(){
+  const el=D.getElementById("qc43"); if(!el) return;
+  const h=chipsHtml(); el.innerHTML=h; el.hidden=!h;
+  if(!el.dataset.w){ el.dataset.w="1";
+    el.onclick=e=>{ const b=e.target.closest("[data-q]"); if(!b) return; const q=qs(); q[b.dataset.q]=!q[b.dataset.q]; if(typeof haptic==="function") haptic();
+      mountChips(); if(typeof renderList==="function") renderList(true); }; }
+}
+
+/* ───── 2. Карточка матча ───── */
+const C=x=>x==null?"—":String(x);
+function badges(d,m){ const b=[];
+  if(d.derby&&d.derby.name) b.push(`<span class="dv">Дерби · ${E(d.derby.name)}</span>`);
+  const mo=d.motiv||{};
+  [["home",NH(m)],["away",NA(m)]].forEach(([k,n])=>{ const x=mo[k]; if(x) b.push(`<span class="${x.kind==="survive"?"sv":"tt"}">${E(n)} · ${x.kind==="survive"?"борьба за выживание":"гонка за титул"} <small>${E(x.text)}</small></span>`); });
+  return b.length?`<div class="bd43">${b.join("")}</div>`:""; }
+function warn00(d){ const z=d.p00; return z?`<div class="wn43"><b>!</b><div>${E(z.text)}</div></div>`:""; }
+function xptsCard(d,m){ const x=d.xpts||{}; const rows=[["home",NH(m),"var(--blue)"],["away",NA(m),"var(--violet)"]].filter(([k])=>x[k]);
+  if(!rows.length) return "";
+  const mx=Math.max(1,...rows.map(([k])=>Math.max(x[k].pts,x[k].xpts)));
+  return `<div class="card xp43 rv43" style="--i:0"><div class="cap">xPTS · очки против качества игры</div><div class="sub">сравнение набранных очков с очками, которые «заслуживали» созданные и пропущенные xG</div>`+
+    rows.map(([k,n,c])=>{ const r=x[k]; return `<div class="tm"><div class="nm"><span>${E(n)}</span><em>${r.diff>0?"+":""}${r.diff.toFixed(1)}</em></div>
+      <div class="br"><span>Очки</span><u><i style="width:${(100*r.pts/mx).toFixed(1)}%;background:${c}"></i></u><span class="n">${r.pts}</span></div>
+      <div class="br"><span>xPTS</span><u><i style="width:${(100*r.xpts/mx).toFixed(1)}%;background:var(--dim)"></i></u><span class="n">${r.xpts.toFixed(1)}</span></div>
+      <div class="pl ${r.level}">${E(r.text)}</div></div>`; }).join("")+`</div>`; }
+function spark(s,mean,color){
+  const n=s.length, mx=Math.max(...s,mean)*1.1||1, bw=100/n, ym=36-(mean/mx)*34;
+  return `<svg viewBox="0 0 100 38" preserveAspectRatio="none" aria-hidden="true">`+s.map((v,i)=>{ const h=Math.max(1.5,v/mx*34); return `<rect x="${(i*bw+bw*.14).toFixed(2)}" y="${(36-h).toFixed(2)}" width="${(bw*.72).toFixed(2)}" height="${h.toFixed(2)}" rx="1.2" fill="${color}" opacity="${(.45+.55*(i+1)/n).toFixed(2)}"/>`; }).join("")+
+    `<line x1="0" x2="100" y1="${ym.toFixed(2)}" y2="${ym.toFixed(2)}" stroke="var(--text)" stroke-opacity=".5" stroke-dasharray="3 3" stroke-width=".8" vector-effect="non-scaling-stroke"/></svg>`; }
+function stabCard(d,m){ const x=d.stab||{}; const rows=[["home",NH(m),"var(--blue)"],["away",NA(m),"var(--violet)"]].filter(([k])=>x[k]);
+  if(!rows.length) return "";
+  return `<div class="card sb43 rv43" style="--i:1"><div class="cap">Стабильность xG</div><div class="sub">xG за матч в последних играх (справа — свежие); пунктир — среднее. Индекс выше — атака ровнее</div>`+
+    rows.map(([k,n,c])=>{ const r=x[k]; return `<div class="tm"><div class="hd"><span>${E(n)}</span><em><span class="ix">${r.idx}</span>/100 · ${E(r.label)} · σ ${r.sd.toFixed(2)}</em></div>${spark(r.series,r.mean,c)}</div>`; }).join("")+`</div>`; }
+function mkCard(d,m){ const cd=d.corner_dom, ag=d.aggr; if(!cd&&!ag) return "";
+  let h=`<div class="card mk43 rv43" style="--i:2"><div class="cap">Специфические рынки</div>`;
+  if(cd) h+=`<div class="sub">Индекс доминирования по угловым</div><div class="row2"><span style="color:var(--blue)">${cd.home.toFixed(1)}</span><span class="sp2"><i style="width:${cd.idx}%;background:var(--blue)"></i><i style="width:${100-cd.idx}%;background:var(--violet)"></i></span><span style="color:var(--violet)">${cd.away.toFixed(1)}</span></div>
+    <div class="lbl">ожидаемые угловые: ${E(NH(m))} ${cd.idx}% · ${E(NA(m))} ${100-cd.idx}% · всего ≈ ${cd.total.toFixed(1)}</div>`;
+  if(cd&&ag) h+=`<hr>`;
+  if(ag){ h+=`<div class="sub">Индекс агрессии (карточки за матч; 100 — средний уровень лиги)</div><div class="row2"><span style="color:var(--blue)">${ag.home.idx}</span><span class="lbl" style="margin:0;text-align:center">ожидаемо карточек ≈ ${(ag.referee?ag.referee.exp_cards:ag.exp_cards).toFixed(1)}</span><span style="color:var(--violet)">${ag.away.idx}</span></div>
+    <div class="lbl">${E(NH(m))} · ${ag.home.cpg.toFixed(2)} за матч  |  ${E(NA(m))} · ${ag.away.cpg.toFixed(2)} за матч</div>${ag.referee?`<div class="lbl" style="color:var(--text)">${E(ag.referee.text)}</div>`:""}`; }
+  return h+`</div>`; }
+function noXg(d){ const a=d.xpts||{}, s=d.stab||{}; return (a.home||a.away||s.home||s.away)?"":`<div class="nd43">Продвинутая аналитика xG (xPTS, стабильность): мало данных для анализа — для этой лиги xG в базе нет.</div>`; }
+
+async function fill(m,box){
+  let d=null; try{ d=await (W.getAn41?W.getAn41(m.event_id):api("/api/analytics/"+m.event_id)); }catch(e){ d=null; }
+  if(!box.isConnected) return;
+  const v=d&&d.v43; if(!v){ box.remove(); return; }
+  const h=badges(v,m)+warn00(v)+xptsCard(v,m)+stabCard(v,m)+mkCard(v,m)+noXg(v);
+  if(!h){ box.remove(); return; }
+  box.innerHTML=h;
+}
+function box(m){ return `<div class="v43box" data-id="${m.event_id}"></div>`; }
+function mounted(m,v){ try{ const b=v.querySelector(".v43box"); if(b) fill(m,b);
+    const sb=v.querySelector("#sim43b"); if(sb) sb.onclick=()=>simulate(m,v); }catch(e){} }
+
+/* ───── 3. Калькулятор Келли (дробный ¼, потолок 5% банка) ───── */
+function kelly(b,odds){
+  const bank=state.me&&+state.me.bank, p=b&&+b.model_prob, o=+odds;
+  if(!(bank>0)||!(p>0&&p<1)||!(o>1)||b.result!=null||!b.recommended) return "";
+  const f=(p*o-1)/(o-1); if(!(f>0)) return "";
+  const k=Math.min(.25*f,.05), sum=Math.round(bank*k/10)*10||Math.round(bank*k);
+  return `<div class="kl43">Келли ¼: <b>${typeof mon==="function"?mon(sum):sum}</b> · ${(k*100).toFixed(1)}% банка · полный Келли ${(f*100).toFixed(1)}% <span style="color:var(--dim)">— ориентир по модели, не гарантия</span></div>`; }
+
+/* ───── 4. Симулятор Монте-Карло ───── */
+function rng(seed){ let a=seed>>>0; return function(){ a=(a+0x6D2B79F5)>>>0; let t=Math.imul(a^(a>>>15),1|a); t=(t+Math.imul(t^(t>>>7),61|t))^t; return((t^(t>>>14))>>>0)/4294967296; }; }
+const RUN={};
+function simCard(a,m){
+  const mx=a&&a.matrix&&a.matrix.m; if(!mx||!mx.length) return "";
+  return `<div class="card sim43"><div class="cap">Симулятор Монте-Карло</div><div class="sub">1000 розыгрышей из распределения голов модели (Пуассон + поправка Диксона–Коулза). Облако — самые частые счета.</div>
+    <button type="button" class="btn43" id="sim43b">Симулировать 1000 матчей</button><div class="sim43o" id="sim43o" aria-live="polite"></div></div>`; }
+function simulate(m,v){
+  const a=m.analysis, M=a&&a.matrix&&a.matrix.m, out=v.querySelector("#sim43o"), btn=v.querySelector("#sim43b"); if(!M||!out) return;
+  const K=M.length, cells=[]; let acc=0;
+  M.forEach((r,i)=>r.forEach((p,j)=>{ acc+=p; cells.push([acc,i,j]); }));
+  const rest=Math.max(0,+(a.matrix.rest||0)), total=acc+rest;
+  const run=(RUN[m.event_id]=(RUN[m.event_id]||0)+1), R=rng(((+m.event_id||1)*2654435761+run*40503)>>>0);
+  const N=1000, cnt={}; let H=0,X=0,A=0,tail=0;
+  for(let n=0;n<N;n++){ const u=R()*total; if(u>=acc){ tail++; continue; }
+    let lo=0,hi=cells.length-1; while(lo<hi){ const mid=(lo+hi)>>1; if(cells[mid][0]>u) hi=mid; else lo=mid+1; }
+    const c=cells[lo], key=c[1]+":"+c[2]; cnt[key]=(cnt[key]||0)+1; if(c[1]>c[2]) H++; else if(c[1]===c[2]) X++; else A++; }
+  const ok=H+X+A||1, top=Object.entries(cnt).sort((p,q)=>q[1]-p[1]).slice(0,9), mxc=top[0]?top[0][1]:1;
+  const seg=[[H,"var(--blue)","П1 (хозяева)"],[X,"var(--amber)","Ничья"],[A,"var(--violet)","П2 (гости)"]];
+  const R0=40, CIR=2*Math.PI*R0; let off=0;
+  const ring=seg.map(([n,c])=>{ const l=CIR*n/ok, s=`<circle cx="50" cy="50" r="${R0}" stroke="${c}" stroke-dasharray="${l.toFixed(2)} ${(CIR-l).toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}"/>`; off+=l; return s; }).join("");
+  const mp=a.p||[];
+  out.innerHTML=`<div class="sim43d"><svg viewBox="0 0 100 100" role="img" aria-label="Исходы симуляции"><circle cx="50" cy="50" r="${R0}" stroke="var(--track)"/>${ring}</svg>
+    <div class="lg">${seg.map(([n,c,t],i)=>`<div><span><i style="background:${c}"></i>${E(t)}</span><span>${(100*n/ok).toFixed(0)}% <small>модель ${mp[i]!=null?(100*mp[i]).toFixed(0)+"%":"—"}</small></span></div>`).join("")}</div></div>
+    <div class="sim43c" role="list">${top.map(([k,n],j)=>{ const [i,jj]=k.split(":").map(Number), cl=i>jj?"h":i===jj?"d":"a"; return `<span class="${cl}" role="listitem" style="--j:${j};font-size:${(13+9*n/mxc).toFixed(1)}px">${i}:${jj}<small>${(100*n/N).toFixed(0)}%</small></span>`; }).join("")}</div>
+    <div class="note" style="margin-top:12px">Прогон №${run}, ${N} розыгрышей${tail?`, из них ${tail} — счёт вне таблицы (${K}+ голов у одной из команд)`:""}. Разброс между запусками — шум выборки (±1–3 п.п.), а не новая информация.</div>`;
+  if(btn) btn.textContent="Симулировать ещё раз"; if(typeof haptic==="function") haptic("ok");
+}
+
+W.V43={cls,formH,formA,insight,why,pass,mountChips,chipsHtml,sim:simCard,box,mounted,kelly,hue};
+})();
 /*/V40-JS*/
 </script>
 </body>
