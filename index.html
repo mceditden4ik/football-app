@@ -1498,6 +1498,107 @@ html[data-anim=off] .rv41,html[data-anim=off] .cv41 .pt i::after{animation:none}
 .teams .tm41>i .fv{margin-right:4px}
 .tm41.tm41{gap:8px}
 .hero .mono41 .cr41.cr41 b{font-size:calc(var(--s)*.34)!important}
+
+/* ═════════ v42: Архив матчей (Time Machine) ═════════ */
+/* — 1. Горизонтальные свайпы отключены полностью: список ездит только по вертикали; вкладки переключаются нажатием */
+html,body{overscroll-behavior-x:none}
+#list,#list .row,#list .day,#today,#app .view>h1{touch-action:pan-y}
+
+/* — 2. Лента дат: −14 дней … Сегодня … Неделя. Лента сама прокручивается ТОЛЬКО по горизонтали */
+.tm42{display:flex;align-items:stretch;gap:6px;overflow-x:auto;overflow-y:hidden;margin:0 calc(-1*var(--pad)) 10px;padding:2px var(--pad) 8px;
+  scrollbar-width:none;touch-action:pan-x;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 14px),transparent 100%)}
+.tm42::-webkit-scrollbar{display:none}
+.tm42c{flex:0 0 auto;min-width:50px;height:54px;padding:6px 9px;border-radius:15px;background:var(--card);border:1px solid var(--line);color:var(--muted);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;position:relative;scroll-snap-align:center;font-variant-numeric:tabular-nums;
+  transition:transform .18s var(--ease),background-color .25s,border-color .25s,color .25s,box-shadow .35s;-webkit-tap-highlight-color:transparent}
+.tm42c i{font-style:normal;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;line-height:1;white-space:nowrap}
+.tm42c b{font-size:17px;font-weight:800;line-height:1;color:var(--text)}
+.tm42c.rg{padding:6px 14px}
+.tm42c.rg b{font-size:13.5px;font-weight:700;color:inherit;white-space:nowrap}
+.tm42c.past:not(.on){background:transparent}
+.tm42c.on{background:var(--card2);border-color:var(--blue);color:var(--text);box-shadow:0 8px 20px -10px rgba(96,150,255,.9),inset 0 0 0 1px rgba(96,150,255,.28)}
+.tm42c.on i{color:var(--blue)}
+.tm42c:active{transform:scale(.93)}
+.tm42c.ld::after{content:"";position:absolute;left:50%;bottom:4px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:var(--blue);opacity:.75}
+.tm42m{flex:0 0 auto;align-self:center;writing-mode:vertical-rl;transform:rotate(180deg);font-size:9.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);padding:0 1px;line-height:1}
+.tm42sep{flex:0 0 1px;align-self:stretch;margin:8px 3px;background:var(--line)}
+
+/* плавная перестройка списка при смене даты */
+#list{transition:opacity .16s ease,transform .22s var(--ease)}
+#list.tmo{opacity:0;transform:translateY(8px)}
+
+/* — 3. Подгрузка предыдущего дня */
+.pv42{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:42px;padding:10px 12px;margin:0 0 12px;border-radius:14px;
+  border:1px dashed var(--line);background:transparent;color:var(--muted);font-weight:700;font-size:13px;touch-action:manipulation;transition:transform .15s var(--ease),border-color .2s,color .2s}
+.pv42:active{transform:scale(.98);border-color:var(--blue);color:var(--text)}
+.pv42 svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.pv42.busy svg{animation:spin42 .8s linear infinite}
+.pv42.end{border-style:solid;opacity:.55;pointer-events:none;font-weight:600}
+@keyframes spin42{to{transform:rotate(360deg)}}
+.row.pre42{animation:pre42 .45s var(--ease) both!important;animation-delay:calc(var(--j,0)*35ms)!important}
+@keyframes pre42{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+.day .dn42{margin-left:8px;color:var(--dim);font-weight:600;letter-spacing:0;text-transform:none;font-size:12px}
+
+/* сыгранные матчи архива: без «затемнения» и с итогом ставок бота */
+.row.arc42,.row.is-done.arc42{opacity:1}
+.row.arc42 .score{font-size:22px;font-weight:800;letter-spacing:.06em}
+
+/* — 4. Экран сыгранного матча: итог, оценка прогноза, ключевая статистика */
+.rc42{position:relative;overflow:hidden;padding:18px 16px 16px;text-align:center}
+.rc42::before{content:"";position:absolute;left:-20%;right:-20%;top:-50%;height:100%;background:radial-gradient(55% 55% at 50% 100%,rgba(96,150,255,.16),transparent 72%);pointer-events:none}
+.rc42>*{position:relative}
+.rc42 .hd{display:flex;align-items:center;justify-content:space-between;text-align:left}
+.rc42 .ft42{font-size:10.5px;font-weight:800;letter-spacing:.14em;padding:4px 9px;border-radius:99px;background:var(--card2);color:var(--muted);border:1px solid var(--line)}
+.rc42 .big{display:flex;align-items:center;justify-content:center;gap:12px;margin:10px 0 2px;font-variant-numeric:tabular-nums;line-height:1}
+.rc42 .big b{font-size:clamp(48px,17vw,68px);font-weight:800;letter-spacing:-.03em;min-width:.7em;display:inline-block}
+.rc42 .big b.h{color:var(--blue)}.rc42 .big b.a{color:var(--violet)}
+.rc42 .big u{text-decoration:none;color:var(--dim);font-size:clamp(26px,9vw,38px);font-weight:300;transform:translateY(-3px)}
+.rc42 .res{font-weight:800;font-size:14px;margin:6px 0 12px;display:flex;align-items:center;justify-content:center;gap:8px;min-width:0}
+.rc42 .res span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rc42 .res.w{color:var(--blue)}.rc42 .res.a{color:var(--violet)}.rc42 .res.d{color:var(--amber)}
+.rc42 .fx{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.rc42 .fx i{font-style:normal;font-size:12px;font-weight:700;padding:5px 10px;border-radius:99px;background:var(--card2);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.rc42 .fx i.y{color:var(--green);border-color:rgba(52,211,153,.4)}
+
+.gr42{padding:16px}
+.gr42 .main{display:flex;align-items:center;gap:12px;margin-top:10px;padding:14px;border-radius:16px;border:1px solid var(--line);background:var(--card2);position:relative;overflow:hidden}
+.gr42 .main.w{border-color:rgba(52,211,153,.5);background:linear-gradient(135deg,rgba(52,211,153,.16),transparent 72%)}
+.gr42 .main.l{border-color:rgba(248,113,113,.5);background:linear-gradient(135deg,rgba(248,113,113,.16),transparent 72%)}
+.gr42 .main.p{border-color:rgba(251,191,36,.5);background:linear-gradient(135deg,rgba(251,191,36,.14),transparent 72%)}
+.gr42 .ic{flex:0 0 38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:19px;background:var(--track);color:var(--muted)}
+.gr42 .main.w .ic{background:rgba(52,211,153,.2);color:var(--green)}
+.gr42 .main.l .ic{background:rgba(248,113,113,.2);color:var(--red)}
+.gr42 .main.p .ic{background:rgba(251,191,36,.2);color:var(--amber)}
+.gr42 .tx{min-width:0;flex:1}
+.gr42 .tx small{display:block;color:var(--muted);font-size:11.5px;font-weight:600;letter-spacing:.02em;margin-bottom:3px}
+.gr42 .tx b{display:block;font-size:15px;line-height:1.3;overflow-wrap:anywhere}
+.gr42 .tx b em{font-style:normal;font-weight:800;white-space:nowrap}
+.gr42 .main.w .tx b em{color:var(--green)}.gr42 .main.l .tx b em{color:var(--red)}.gr42 .main.p .tx b em{color:var(--amber)}
+.gr42 .od{flex:none;text-align:right;font-variant-numeric:tabular-nums;font-weight:800;font-size:16px;line-height:1.1}
+.gr42 .od small{display:block;font-size:10.5px;color:var(--dim);font-weight:600;margin-top:2px}
+.gr42 .sum{margin:12px 0 0;font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px}
+.gr42 .sum i{font-style:normal;font-weight:800;padding:3px 9px;border-radius:99px;background:var(--card2);border:1px solid var(--line)}
+.gr42 .sum i.w{color:var(--green)}.gr42 .sum i.l{color:var(--red)}.gr42 .sum i.p{color:var(--amber)}
+.gr42 ul{list-style:none;margin:10px 0 0;padding:0}
+.gr42 li{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line);font-size:13.5px}
+.gr42 li .lb{flex:1;min-width:0}
+.gr42 li .lb b{display:block;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gr42 li .lb small{display:block;color:var(--dim);font-size:11px;margin-top:2px;font-weight:600}
+.gr42 li .rs{flex:none;font-weight:800;font-size:11px;letter-spacing:.04em;padding:4px 9px;border-radius:99px;background:var(--track);color:var(--muted)}
+.gr42 li .rs.w{background:rgba(52,211,153,.16);color:var(--green)}
+.gr42 li .rs.l{background:rgba(248,113,113,.16);color:var(--red)}
+.gr42 li .rs.p{background:rgba(251,191,36,.16);color:var(--amber)}
+.gr42 details{margin-top:2px}
+.gr42 summary{list-style:none;cursor:pointer;padding:10px 0 2px;color:var(--blue);font-weight:700;font-size:13px;touch-action:manipulation}
+.gr42 summary::-webkit-details-marker{display:none}
+.gr42 .none{margin:10px 0 0;color:var(--muted);font-size:13.5px;line-height:1.45}
+
+/* ключевая статистика в «Обзоре» (разметка .sb38 — общая со вкладкой «Статистика») */
+.ks42 .note{margin-top:10px}
+
+.rv42{animation:rise .5s var(--ease) both;animation-delay:calc(var(--i,0)*70ms)}
+@media (prefers-reduced-motion:reduce){.row.pre42,.rv42{animation:none!important}#list,.tm42c{transition:none}}
 /*/V40-CSS*/
 </style>
 </head>
@@ -1660,6 +1761,10 @@ async function staticApi(path){
     const lim=new Date(Date.now()+days*864e5).toISOString().slice(0,10), d0=new Date().toISOString().slice(0,10);
     return S.matches.filter(m=>m.date>=d0 && m.date<=lim && (!lg||m.league===lg));
   }
+  if(p==="/api/archive"){                                                   /* v42: сыгранные матчи за период (поле archive снимка) */
+    const a=q.get("from")||"", b=q.get("to")||a, lg=q.get("league")||"";
+    return (S.archive||[]).filter(m=>m.date>=a&&m.date<=b&&(!lg||m.league===lg));
+  }
   if(p.startsWith("/api/match/")){ const m=S.match[p.split("/").pop()]; if(!m) throw nope(404); return m; }
   if(p.startsWith("/api/analytics/")){ const m=S.match[p.split("/").pop()]; if(!m) throw nope(404); return m.analytics||{empty:true}; }   /* v41 */
   if(p.startsWith("/api/dna/")){ const m=S.match[p.split("/").pop()]; if(!m) throw nope(404); return m.dna||{empty:true}; }       /* v39 */
@@ -1701,7 +1806,7 @@ function when(m){
   return {d, hasTime: !!m.kickoff_at};
 }
 const fmtDay = d=>{const t=new Date(),y=new Date(Date.now()+864e5),s=x=>x.toDateString();
-  if (s(d)===s(t)) return "Сегодня"; if (s(d)===s(y)) return "Завтра";
+  if (s(d)===s(t)) return "Сегодня"; if (s(d)===s(y)) return "Завтра"; if (s(d)===s(new Date(Date.now()-864e5))) return "Вчера";
   return d.toLocaleDateString("ru-RU",{weekday:"long",day:"numeric",month:"long"});};
 const fmtTime = d=>d.toLocaleTimeString("ru-RU",{hour:"2-digit",minute:"2-digit"});
 function ago(iso){ if(!iso) return ""; const s=(Date.now()-new Date(iso).getTime())/1000; if(s<90) return "только что"; if(s<3600) return Math.round(s/60)+" мин назад";
@@ -1741,7 +1846,7 @@ setInterval(()=>{
   rows.forEach(r=>{ r.style.height=r.offsetHeight+"px"; void r.offsetHeight; r.classList.add("leaving"); });
   setTimeout(()=>{ try{ renderList(false); }catch(e){} },650);
 },20000);
-function matchesKey(){ return state.days+"|"+state.league; }
+function matchesKey(){ return state.days+"|"+state.league+"|"+(state.day||""); }
 async function viewMatches(force){
   const key = matchesKey(), have = state.cache.mkey===key && state.cache.matches;
   const v = mount(`<h1>Матчи<span class="grow"></span><button class="iconbtn lang" id="lg2" aria-label="Язык названий команд">${state.lang==="ru"?"RU":"EN"}</button><button class="iconbtn" id="rf" aria-label="Обновить"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.5-5.8M20 4v4h-4"/></svg></button></h1>
@@ -1755,8 +1860,9 @@ async function viewMatches(force){
   lg.innerHTML = `<button class="chip ${state.league===""?"on":""}" data-l="">Все лиги</button>` + Object.keys(LEAGUES).map(k=>`<button class="chip ${state.league===k?"on":""}" data-l="${k}">${LEAGUES[k]}</button>`).join("");
   lg.onclick = e=>{const b=e.target.closest("[data-l]"); if(!b) return; state.league=b.dataset.l; haptic(); viewMatches();};
   const dz = document.getElementById("days");
+  if(!(window.TM42&&TM42.mountStrip())){      /* v42: лента дат; запасной вариант — прежний переключатель периода */
   dz.innerHTML = [[1,"Сегодня"],[2,"2 дня"],[4,"4 дня"],[7,"Неделя"]].map(([n,t])=>`<button class="${state.days===n?"on":""}" data-d="${n}">${t}</button>`).join("");
-  dz.onclick = e=>{const b=e.target.closest("[data-d]"); if(!b) return; state.days=+b.dataset.d; haptic(); viewMatches();};
+  dz.onclick = e=>{const b=e.target.closest("[data-d]"); if(!b) return; state.days=+b.dataset.d; haptic(); viewMatches();}; }
   document.getElementById("q").oninput = e=>{state.q=e.target.value; renderList(false);};
   document.getElementById("tf").onclick = e=>{state.favOnly=!state.favOnly; e.currentTarget.classList.toggle("on",state.favOnly); haptic(); renderList(true);};
   document.getElementById("td").onclick = e=>{state.showDone=!state.showDone; e.currentTarget.classList.toggle("on",state.showDone); haptic(); renderList(true);};
@@ -1766,7 +1872,7 @@ async function viewMatches(force){
   document.getElementById("lg2").onclick = e=>{ toggleLang(); e.currentTarget.textContent=state.lang==="ru"?"RU":"EN"; renderToday(); renderList(false); };
   loadToday();
   if (have) { renderList(false); if(state.scroll){ window.scrollTo(0,state.scroll); state.scroll=0; } }
-  try { state.cache.matches = await api(`/api/matches?days=${state.days}${state.league?"&league="+encodeURIComponent(state.league):""}`); state.cache.mkey=key; state.cache.at=Date.now(); }
+  try { state.cache.matches = await (window.TM42?TM42.load():api(`/api/matches?days=${state.days}${state.league?"&league="+encodeURIComponent(state.league):""}`)); state.cache.mkey=key; state.cache.at=Date.now(); }
   catch(e){ if(!have) return errView(e, viewMatches); toast("Не удалось обновить"); return; }
   if(state.tab!=="matches"||state.detail||!document.getElementById("list")) return;
   renderList(!have);
@@ -1776,27 +1882,29 @@ function renderList(anim){
   const el = document.getElementById("list"); if(!el) return;
   const q = state.q.trim().toLowerCase();
   let items = (state.cache.matches||[]).filter(m=>(!q || (m.home+" "+m.away+" "+(m.home_ru||"")+" "+(m.away_ru||"")).toLowerCase().includes(q)) && (!state.favOnly || isFav(m.home)||isFav(m.away)) && (!state.recOnly || m.n_rec>0));
-  const doneN = items.filter(isDone).length;
+  const doneN = items.filter(m=>isDone(m)&&!(window.TM42&&TM42.isPast(m))).length;
   const tdb = document.getElementById("td"); if(tdb){ tdb.style.display = doneN||state.showDone ? "" : "none"; tdb.textContent = "🏁 Завершённые"+(doneN?" ("+doneN+")":""); }
-  if(!state.showDone) items = items.filter(m=>!isDone(m));
-  if(!items.length){ el.innerHTML = `<div class="empty">${state.favOnly&&!state.favs.length?"Нажмите ★ рядом с названием команды на странице матча — и она появится здесь.":"Матчей не найдено."}<br><span class="sub">${state.favOnly&&!state.favs.length?"":"Попробуйте другой период, лигу или фильтр. Календарь обновляет бот."}</span></div>`; return; }
+  if(!state.showDone) items = items.filter(m=>!isDone(m)||(window.TM42&&TM42.isPast(m)));      /* v42: архивные дни показываются всегда */
+  if(!items.length){ el.innerHTML = (window.TM42?TM42.head():"") + `<div class="empty">${window.TM42&&state.day&&state.day<TM42.todayS()?(typeof STATIC!=="undefined"&&STATIC&&SNAP&&!SNAP.archive?"Архив появится после следующей публикации снимка (run_publish.bat).":"В этот день нет сыгранных матчей по выбранным фильтрам."):state.favOnly&&!state.favs.length?"Нажмите ★ рядом с названием команды на странице матча — и она появится здесь.":"Матчей не найдено."}<br><span class="sub">${state.favOnly&&!state.favs.length?"":"Попробуйте другой период, лигу или фильтр. Календарь обновляет бот."}</span></div>`; return; }
   const byConf = state.sort==="conf";
   if(byConf) items = items.slice().sort((a,b)=>(b.p?Math.max(...b.p):0)-(a.p?Math.max(...a.p):0));
   if(!byConf){ const L=m=>{const w=when(m); const ph=(!m.score&&w.hasTime)?phaseOf(w.d.getTime()).code:""; return ph==="1h"||ph==="2h"||ph==="ht"?0:1;}; items = items.slice().sort((a,b)=>L(a)-L(b)); }   // «Сейчас идёт» наверх
-  let out="", cur="", liveHead=false;
+  let out=(window.TM42?TM42.head():""), cur="", liveHead=false;
+  const dcnt={}; if(window.TM42) items.forEach(m=>{ if(TM42.isPast(m)){ const k=TM42.dayOf(m); dcnt[k]=(dcnt[k]||0)+1; } });
   for(const m of items){
     const w = when(m), day = fmtDay(w.d);
     const isNow = !byConf && !m.score && w.hasTime && ["1h","2h","ht"].includes(phaseOf(w.d.getTime()).code);
     if(isNow && !liveHead){ liveHead=true; out += `<div class="day cap nowhead"><span class="live"></span> Сейчас идёт</div>`; cur="@now"; }
     else if(!isNow && cur==="@now") cur="";
-    if(!byConf && !isNow && day!==cur){ cur=day; out += `<div class="day cap">${esc(day)}</div>`; }
+    if(!byConf && !isNow && day!==cur){ cur=day; const dn=window.TM42&&TM42.isPast(m)?dcnt[TM42.dayOf(m)]:0; out += `<div class="day cap">${esc(day)}${dn?`<span class="dn42">${dn} ${dn%10===1&&dn%100!==11?"матч":dn%10>=2&&dn%10<=4&&(dn%100<10||dn%100>=20)?"матча":"матчей"}</span>`:""}</div>`; }
     const ph = (w.hasTime && !m.score) ? phaseOf(w.d.getTime()).code : "", started = ph==="1h"||ph==="2h", paused = ph==="ht";
     const bd = [];
     if(m.n_placed) bd.push('<span class="badge bg-b">поставлено</span>');
-    else if(m.n_rec) bd.push('<span class="badge bg-g pulse">есть перевес</span>');
+    else if(m.n_rec&&!isDone(m)) bd.push('<span class="badge bg-g pulse">есть перевес</span>');
+    if(m.grade&&(m.grade.w||m.grade.l||m.grade.p)){ if(m.grade.w) bd.push(`<span class="badge bg-g">бот: зашло ${m.grade.w}</span>`); if(m.grade.l) bd.push(`<span class="badge bg-r">не зашло ${m.grade.l}</span>`); if(m.grade.p&&!m.grade.w&&!m.grade.l) bd.push(`<span class="badge bg-m">возврат ${m.grade.p}</span>`); }
     if(m.quality!=null && m.quality<.35) bd.push('<span class="badge bg-r">мало данных</span>');
     const when_ = w.hasTime?(byConf?fmtDay(w.d)+" · ":"")+fmtTime(w.d):(byConf?fmtDay(w.d):"");
-    out += `<button class="row${started?" is-live":paused?" is-ht":""}${isDone(m)?" is-done":""}" data-id="${m.event_id}" data-ko="${w.hasTime?w.d.getTime():""}"${m.score?' data-sc="1"':""}><div class="top"><span><span style="color:${LCOL[m.league]||"var(--muted)"}">●</span> ${esc(LEAGUES[m.league]||m.league)}</span>
+    out += `<button class="row${started?" is-live":paused?" is-ht":""}${isDone(m)?" is-done":""}${window.TM42&&TM42.isPast(m)?" arc42":""}" data-id="${m.event_id}" data-d="${window.TM42?TM42.dayOf(m):""}" data-ko="${w.hasTime?w.d.getTime():""}"${m.score?' data-sc="1"':""}><div class="top"><span><span style="color:${LCOL[m.league]||"var(--muted)"}">●</span> ${esc(LEAGUES[m.league]||m.league)}</span>
       <span class="num">${started?'<span class="live"></span>':paused?'<span class="pause">⏸</span> ':""}${isDone(m)&&!m.score?`<span class="eta">завершён · итог ожидается</span> · `:m.score?`<span class="eta">завершён</span> · `:w.hasTime?`<span class="eta" data-eta="${w.d.getTime()}">${esc(etaText(w.d.getTime()))}</span> · `:""}${esc(when_)}</span></div>
       <div class="teams"><span class="tm41">${cr(m.home,26,mono(nmH(m)))}<i>${isFav(m.home)?'<b class="fv">★</b>':""}${esc(nmH(m))}</i></span><span class="tm41">${cr(m.away,26,mono(nmA(m)))}<i>${isFav(m.away)?'<b class="fv">★</b>':""}${esc(nmA(m))}</i></span></div>${m.score?`<div class="score num">${m.score[0]} : ${m.score[1]}</div>`:pbar(m.p)}
       ${bd.length?`<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">${bd.join("")}</div>`:""}</button>`;
@@ -1905,7 +2013,7 @@ async function viewMatch(id){
    <div class="vs" style="margin-top:12px"><div><div class="mono mono41" style="color:${LCOL[m.league]||"#6096ff"}">${cr(m.home,60,mono(nmH(m)))}</div><div class="tn"><span class="tnm" title="${esc(nmH(m))}">${esc(nmH(m))}</span>${starBtn(m.home)}</div>${a?`<div class="xg">ожид. голы ${cnt(a.xg[0],2)}</div>`:""}</div>
    <div class="at">${m.score?m.score[0]+" : "+m.score[1]:"VS"}</div>
    <div><div class="mono mono41" style="color:#ec6fa0">${cr(m.away,60,mono(nmA(m)))}</div><div class="tn"><span class="tnm" title="${esc(nmA(m))}">${esc(nmA(m))}</span>${starBtn(m.away)}</div>${a?`<div class="xg">ожид. голы ${cnt(a.xg[1],2)}</div>`:""}</div></div></div>`;
-  if(!a){ h += `<div class="card empty">${m.score?"Матч сыгран.":"Прогноз недоступен: не хватает данных по командам."}</div>`; }
+  if(!a){ h += (m.score&&window.R42)?R42.recap(m):`<div class="card empty">${m.score?"Матч сыгран.":"Прогноз недоступен: не хватает данных по командам."}</div>`; }
   else {
     const p=a.p, mx=Math.max(...p);
     h += `<div class="card"><div class="cap">Вероятности исхода</div><div class="sub">ансамбль Пуассон + бустинг + Эло · кэф — справедливый, без маржи</div>
@@ -1938,8 +2046,8 @@ async function viewMatch(id){
       [["Пуассон (вес 0.5)",c.poisson],["Бустинг (0.3)",c.gbm],["Эло (0.2)",c.elo],["Ансамбль",a.p]].filter(r=>r[1]).map(([n,v],i,arr)=>`<tr style="${i==arr.length-1?"font-weight:800":""}"><td>${n}</td>${v.map(x=>`<td class="num">${pc(x,1)}</td>`).join("")}</tr>`).join("") + `</table></div>`;
     h += `<div id="calcbox">${calcCard(a)}</div>`;
   }
-  h += extraCards(m) + actionCard(m);
-  if((m.bets||[]).length){
+  h += extraCards(m) + (m.score?"":actionCard(m));
+  if((m.bets||[]).length&&!m.score){
     h += `<div class="card"><div class="cap">Ставки бота по матчу</div><div style="margin-top:12px">` + m.bets.map(b=>betRow(b,true)).join("") + `</div></div>`;
   } else if (a) h += `<div class="card"><div class="cap">Ставки бота по матчу</div><div class="sub" style="margin-top:8px">Пока нет. Бот добавит ставку, когда найдёт перевес по актуальным кэфам.</div></div>`;
   h += `<div class="foot">Модель проверена walk-forward · точность ≠ прибыль · не гарантия выигрыша</div>`;
@@ -1998,7 +2106,7 @@ function extraCards(m){
         `</table><div class="note">По сыгранным матчам из базы бота (без учёта пропущенных туров) — ориентир, не официальная таблица.</div></div>`;
     }
   }
-  const om=x.odds_moves;
+  const om=m.score?null:x.odds_moves;      /* v42: у сыгранного матча «движение кэфов» — блок для прогноза, не показываем */
   if(om&&om.series){
     const row=(k,t)=>{ const v=om.series[k]||[]; if(v.length<3) return ""; const a=v[0][1], b=v[v.length-1][1], d=(b/a-1)*100; return `<tr><td>${t}</td><td class="num">${a.toFixed(2)}</td><td class="num">${b.toFixed(2)}</td><td class="num ${d<0?"g":d>0?"r":"dim"}">${d>0?"+":""}${d.toFixed(1)}%</td><td class="num dim">${v.length}</td></tr>`; };
     h += `<div class="card"><div class="cap">Движение кэфов · ${esc(om.source)}</div><table style="margin-top:6px"><tr><th></th><th>было</th><th>стало</th><th>Δ</th><th>снимков</th></tr>${row("P1","П1")}${row("X","Х")}${row("P2","П2")}</table>
@@ -2267,14 +2375,8 @@ addEventListener("resize",movePill);
 function gotoTab(t,dir){
   if(t===state.tab) return; state.tab=t; state.detail=null; syncBack(); state.dir=dir; render(); window.scrollTo(0,0); haptic();
 }
-(function(){
-  let x0=0,y0=0,t0=0,ok=false;
-  addEventListener("touchstart",e=>{ if(e.touches.length!==1){ ok=false; return; } const t=e.target;
-    ok = !state.detail && !t.closest("input,textarea,.chips,svg,.pinch,.nbox,table,.row") ; x0=e.touches[0].clientX; y0=e.touches[0].clientY; t0=Date.now(); },{passive:true});
-  addEventListener("touchend",e=>{ if(!ok) return; ok=false; const c=e.changedTouches[0], dx=c.clientX-x0, dy=c.clientY-y0;
-    if(Math.abs(dx)<80||Math.abs(dx)<Math.abs(dy)*1.8||Date.now()-t0>600) return;
-    const i=TABS.indexOf(state.tab), j=dx<0?i+1:i-1; if(j<0||j>=TABS.length) return; gotoTab(TABS[j], dx<0?"fwd":"bwd"); },{passive:true});
-})();
+/* v42: горизонтальные свайпы отключены полностью — вкладки (Матчи, Ставки, …) переключаются только нажатием на нижнюю панель.
+   Раньше здесь был обработчик «свайп влево/вправо = следующая вкладка»; он срабатывал при случайном движении пальца во время прокрутки списка. */
 /* конфетти за новый выигрыш (один раз на ставку) */
 function confetti(n){
   const cv=document.getElementById("conf"); if(!cv||document.documentElement.dataset.fxl==="off") return;
@@ -2629,7 +2731,7 @@ Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensu
       <div><div class="sh-l">Сортировка</div><div class="chips" id="sh-so">${chip(state.sort==="time",'data-s="time"',"По времени")+chip(state.sort==="conf",'data-s="conf"',"По уверенности")}</div></div>`;
     Sheet.open("Фильтры",html,B=>{
       B.querySelector("#sh-lg").onclick=e=>{ const b=e.target.closest("[data-l]"); if(!b) return; state.league=b.dataset.l; haptic(); Sheet.close(); setTimeout(()=>viewMatches(),180); };
-      B.querySelector("#sh-dz").onclick=e=>{ const b=e.target.closest("[data-d]"); if(!b) return; state.days=+b.dataset.d; haptic(); Sheet.close(); setTimeout(()=>viewMatches(),180); };
+      B.querySelector("#sh-dz").onclick=e=>{ const b=e.target.closest("[data-d]"); if(!b) return; state.days=+b.dataset.d; state.day=null; state.pre=[]; haptic(); Sheet.close(); setTimeout(()=>viewMatches(),180); };
       B.querySelector("#sh-tg").onclick=e=>{ const b=e.target.closest("[data-x]"); if(!b) return; const o=document.getElementById(b.dataset.x); if(o){ o.click(); } b.classList.toggle("on"); };
       B.querySelector("#sh-so").onclick=e=>{ const b=e.target.closest("[data-s]"); if(!b) return; const o=document.querySelector('#so [data-s="'+b.dataset.s+'"]'); if(o) o.click(); [...b.parentNode.children].forEach(x=>x.classList.toggle("on",x===b)); };
     });
@@ -2708,7 +2810,7 @@ Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensu
       const t0=SNAP&&SNAP._t; await ensureSnap(0); setOnline(true);
       if(SNAP&&SNAP._t!==t0){
         liveUntil=Date.now()+4500; const y=scrollY;
-        if(state.tab==="matches"&&!state.detail&&document.getElementById("list")){ state.cache.matches=await api(`/api/matches?days=${state.days}${state.league?"&league="+encodeURIComponent(state.league):""}`); state.cache.at=Date.now(); renderList(false); loadToday(); }
+        if(state.tab==="matches"&&!state.detail&&document.getElementById("list")){ state.cache.matches=await (window.TM42?TM42.load(true):api(`/api/matches?days=${state.days}${state.league?"&league="+encodeURIComponent(state.league):""}`)); state.cache.at=Date.now(); renderList(false); loadToday(); }
         else { await render(); }
         scrollTo(0,y); setTimeout(()=>scrollTo(0,y),120);
       }
@@ -2996,7 +3098,8 @@ void main(){
   let undoT=0; function undo(txt,fn){ let u=$("#undo"); if(!u){ u=document.createElement("div"); u.id="undo"; u.setAttribute("role","status"); document.body.appendChild(u); }
     u.innerHTML=`<span></span><button type="button">Отменить</button>`; $("span",u).textContent=txt; $("button",u).onclick=()=>{ fn(); u.classList.remove("on"); haptic(); }; u.classList.add("on"); clearTimeout(undoT); undoT=setTimeout(()=>u.classList.remove("on"),4500); }
   let sw=null, swiped=0;
-  document.addEventListener("pointerdown",e=>{ const row=e.target.closest&&e.target.closest("#list .row"); if(!row||e.button>0) return; sw={row,x:e.clientX,y:e.clientY,mode:0,id:e.pointerId,dx:0}; },{passive:true});
+  window.SWIPE_ROWS=false;       /* v42: свайп по карточке (★ / скрыть) выключен: горизонтальные жесты в списке не нужны. true — вернуть прежнее поведение */
+  document.addEventListener("pointerdown",e=>{ const row=e.target.closest&&e.target.closest("#list .row"); if(!row||e.button>0||!window.SWIPE_ROWS) return; sw={row,x:e.clientX,y:e.clientY,mode:0,id:e.pointerId,dx:0}; },{passive:true});
   document.addEventListener("pointermove",e=>{ if(!sw||e.pointerId!==sw.id) return; const dx=e.clientX-sw.x, dy=e.clientY-sw.y;
     if(!sw.mode){ if(Math.abs(dx)>12&&Math.abs(dx)>Math.abs(dy)*1.5){ sw.mode=1; sw.row.classList.add("sw"); sw.row.classList.remove("swb"); const h=document.createElement("div"); h.className="swh"; sw.hint=h; sw.row.appendChild(h); try{ sw.row.setPointerCapture(e.pointerId); }catch(_){} } else if(Math.abs(dy)>14){ sw=null; return; } else return; }
     sw.dx=dx; const r=Math.sign(dx)*Math.pow(Math.abs(dx),.88); sw.row.style.transform=`translateX(${r.toFixed(1)}px) rotate(${(dx/90).toFixed(2)}deg)`;
@@ -3389,7 +3492,7 @@ void main(){
   function emptyHtml(t,s,extra){ return `<div class="empty34" role="status"><div class="tr" aria-hidden="true">🏆</div><div class="sh" aria-hidden="true"></div><b>${esc(t)}</b><span>${esc(s||"")}</span>${extra||""}</div>`; }
   function applyFilters(d){
     const f=FS(); f.leagues=d.leagues.slice(); f.conf=d.conf; lsSet("f34l",JSON.stringify(f.leagues)); lsSet("f34c",String(f.conf));
-    state.recOnly=!!d.rec; state.favOnly=!!d.fav; state.showDone=!!d.done; const dc=d.days!==state.days; state.days=d.days; badge();
+    state.recOnly=!!d.rec; state.favOnly=!!d.fav; state.showDone=!!d.done; const dc=d.days!==state.days; state.days=d.days; if(dc){ state.day=null; state.pre=[]; } badge();
     if(dc){ viewMatches(); return; }
     [["tf",state.favOnly],["tr",state.recOnly],["td",state.showDone]].forEach(([i,on])=>{ const el=document.getElementById(i); if(el) el.classList.toggle("on",on); }); renderList(true); }
   function badge(){ const b=$("#fl34"); if(!b) return; const n=activeN(); b.innerHTML="⚙ Фильтры"+(n?`<em>${n}</em>`:""); b.classList.toggle("on",n>0); b.setAttribute("aria-label","Фильтры"+(n?`, активно: ${n}`:"")); }
@@ -4468,11 +4571,12 @@ const EXC=(()=>{
   let K=0; const R=()=>`rv41" style="--i:${Math.min(K++,12)}`;     /* ступенчатое появление блоков (staggered reveal) */
 
   function analysis(m,d){ K=0; let h="";
-    const t=d.trap;
+    const arch=!!(m&&m.score)||!!d.archive;          /* v42: сыгранный матч — «Ловушки», RLM и «Консенсус рынка» были блоками для прогноза, не показываем */
+    const t=arch?null:d.trap;
     if(t) h+=`<div class="bx41 ${t.on?"red":""} ${R()}"><h3>Детектор ловушек</h3><div class="tt">${t.on?"Ловушка: фаворит переоценён":"Явной ловушки нет"}</div><p>${E(t.text)}</p></div>`;
-    const r=d.rlm;
+    const r=arch?null:d.rlm;
     if(r) h+=`<div class="bx41 ${r.on?"amb":""} ${R()}"><h3>RLM — движение линии</h3><div class="tt">${E(r.on?"Линия идёт против фаворита":r.dir==="with_fav"?"Рынок едет вместе с фаворитом":"Линия стабильна")}</div><p>${E(r.text)}</p><div class="nt">${E(r.note||"")}</div></div>`;
-    const v=d.value;
+    const v=arch?null:d.value;
     if(v) h+=`<div class="bx41 ${v.best?"grn":""} ${R()}"><h3>Консенсус рынка</h3><div class="tt">Модель против букмекера (без маржи ${N(100*v.margin)}%)</div>${v.rows.map(x=>`<div class="vrow"><b>${E(x.k)}</b><div class="bar"><i style="width:${Math.round(x.model*100)}%"></i><u style="left:${Math.round(x.market*100)}%"></u></div><span class="df ${x.diff>=3?"p":x.diff<=-3?"n":""}">${x.diff>0?"+":""}${N(x.diff)} п.п.</span></div>`).join("")}<p>${E(v.text)}</p><div class="nt">Полоса — модель, засечка — рынок. Кэфы: ${v.rows.map(x=>N(x.odds,2)).join(" / ")}</div></div>`;
     const xr=d.xg_reg||{}, xc=x=>x?`<div class="kv"><span>Голы / xG</span><b>${x.gf} / ${x.xf}</b></div><div class="kv"><span>Атака</span><b>${x.att>0?"+":""}${N(x.att,2)}</b></div><p>${E(x.att_lab)}</p><div class="kv"><span>Пропущено / xGA</span><b>${x.ga} / ${x.xa}</b></div><div class="kv"><span>Защита</span><b>${x.def>0?"+":""}${N(x.def,2)}</b></div><p>${E(x.def_lab)}</p>`:"";
     if(xr.home||xr.away) h+=`<div class="bx41 ${R()}"><h3>Регрессия xG</h3><div class="tt">Реальные голы против ожидаемых (последние 10)</div>${two(m,xc(xr.home),xc(xr.away))}</div>`;
@@ -4505,7 +4609,7 @@ const EXC=(()=>{
     getAn(eid).then(d=>{
       if(!d||d.empty||!v.isConnected||state.detail!==eid) return;
       const hero=$(".hero",v), anchor=hero&&hero.closest(".card")||hero;
-      if(d.conv){ const b=bento(d); if(anchor) anchor.insertAdjacentHTML("afterend",b); else v.insertAdjacentHTML("afterbegin",b); }
+      if(d.conv&&!d.archive&&!m.score){ const b=bento(d); if(anchor) anchor.insertAdjacentHTML("afterend",b); else v.insertAdjacentHTML("afterbegin",b); }
       const a=analysis(m,d), x=dnx(m,d);
       if(a) v.insertAdjacentHTML("beforeend",`<div class="an41">${a}</div>`);
       if(x) v.insertAdjacentHTML("beforeend",`<div class="dx41">${x}</div>`);
@@ -4516,6 +4620,208 @@ const EXC=(()=>{
   try{ const W=window.W39; if(W&&W.mounted){ const _m=W.mounted; W.mounted=function(m,v){ const r=_m.apply(this,arguments); try{ if(v&&v.closest&&v.closest("#mv40")) attach(m,v); }catch(e){} return r; }; } }catch(e){}
   window.V41={crest:window.crest,analysis,dnx,bento};
 }catch(e){ console.warn("v41",e); } })();
+
+/* ═════════ v42: Архив матчей ═════════
+   1) TM42 — лента дат (−14 дней … Сегодня … Неделя), плавная перестройка списка, подгрузка предыдущего дня при прокрутке вверх.
+   2) R42  — экран СЫГРАННОГО матча: «Итог матча», «Оценка прогноза» (по журналу ставок бота), ключевая статистика в «Обзоре».
+   Данные: /api/archive (только чтение БД) либо поле archive снимка (режим GitHub Pages). Горизонтальные свайпы в приложении не используются. */
+(function(){ try{
+const D=document, E=esc, $=(s,r)=>(r||D).querySelector(s);
+const MAXB=14, p2=n=>String(n).padStart(2,"0");
+const ld=d=>d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate());
+const todayS=()=>ld(new Date());
+const parse=s=>{ const a=s.split("-").map(Number); return new Date(a[0],a[1]-1,a[2]); };
+const shift=(s,n)=>{ const t=parse(s); t.setDate(t.getDate()+n); return ld(t); };
+const dayOf=m=>(m.kickoff_at&&!isNaN(new Date(m.kickoff_at)))?ld(new Date(m.kickoff_at)):String(m.date||"").slice(0,10);
+const byKick=(a,b)=>String(a.kickoff_at||a.date).localeCompare(String(b.kickoff_at||b.date))||(a.event_id-b.event_id);
+const WD=["вс","пн","вт","ср","чт","пт","сб"], MN=["янв","фев","мар","апр","май","июн","июл","авг","сен","окт","ноя","дек"];
+const rm=()=>!!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches);
+const hap=k=>{ try{ haptic(k); }catch(e){} };
+if(state.day===undefined) state.day=null;          /* null — режим «период» (Сегодня/2 дня/…); строка YYYY-MM-DD — один день */
+if(!Array.isArray(state.pre)) state.pre=[];         /* дни, подгруженные прокруткой вверх (по возрастанию не гарантируется) */
+
+/* ───── хранилище архива: строки матчей и какие локальные дни уже загружены ───── */
+const A={rows:new Map(), days:new Set(), busy:{}};
+function fetchDay(s){
+  if(A.days.has(s)) return Promise.resolve();
+  if(A.busy[s]) return A.busy[s];
+  /* окно UTC-дат s−1…s+1 покрывает любой часовой пояс; в «свой» день матч относим по локальному времени начала */
+  A.busy[s]=api(`/api/archive?from=${shift(s,-1)}&to=${shift(s,1)}`).then(r=>{
+    if(!Array.isArray(r)) throw new Error("archive");
+    r.forEach(m=>{ m._a=1; A.rows.set(m.event_id,m); }); A.days.add(s);
+  }).finally(()=>{ delete A.busy[s]; });
+  return A.busy[s];
+}
+const rowsOf=s=>[...A.rows.values()].filter(m=>dayOf(m)===s&&(!state.league||m.league===state.league)).sort(byKick);
+const isPast=m=>!!m._a&&dayOf(m)<todayS();
+
+/* ───── что показывает список ───── */
+function oldest(){ const t=todayS(), b=state.day&&state.day<t?state.day:(state.day||t); return state.pre.reduce((a,x)=>x<a?x:a,b); }
+const limitDay=()=>shift(todayS(),-MAXB);
+const canPrev=()=>!(state.day&&state.day>todayS())&&shift(oldest(),-1)>=limitDay();
+let BASE=[];                                         /* строки текущего режима без подгруженных вверх дней */
+function compose(base){                              /* подгруженные дни (по возрастанию) + строки режима; дубликаты по event_id убираем */
+  BASE=base; const pre=state.pre.slice().sort().flatMap(rowsOf), ids=new Set(pre.map(m=>m.event_id));
+  let cur=base.filter(m=>!ids.has(m.event_id));
+  if(state.day==null){                               /* «Сегодня»: добавляем уже сыгранные сегодня (сервер держит в списке только последние 8 ч) */
+    const have=new Set(cur.map(m=>m.event_id)), td=rowsOf(todayS()).filter(m=>!have.has(m.event_id)&&!ids.has(m.event_id));
+    if(td.length) cur=cur.concat(td).sort(byKick);
+  }
+  return pre.concat(cur);
+}
+async function load(force){
+  const t=todayS(), s=state.day, lg=state.league?"&league="+encodeURIComponent(state.league):"";
+  if(s&&s<t){ if(force) A.days.delete(s); await fetchDay(s); return compose(rowsOf(s)); }
+  if(s){ const n=Math.min(10,Math.max(2,Math.round((parse(s)-parse(t))/864e5)+1)); const r=await api(`/api/matches?days=${n}${lg}`); return compose(r.filter(m=>dayOf(m)===s)); }
+  if(force) A.days.delete(t);
+  const [r]=await Promise.all([api(`/api/matches?days=${state.days}${lg}`), fetchDay(t).catch(()=>{})]);
+  return compose(r);
+}
+
+/* ───── лента дат ───── */
+function strip(){
+  const t=todayS(); let h="", lm=-1;
+  for(let i=MAXB;i>=1;i--){
+    const s=shift(t,-i), dt=parse(s);
+    if(dt.getMonth()!==lm){ if(lm!==-1) h+=`<span class="tm42sep"></span>`; h+=`<span class="tm42m">${MN[dt.getMonth()]}</span>`; lm=dt.getMonth(); }
+    h+=`<button type="button" class="tm42c past" data-s="${s}" aria-pressed="false" aria-label="${E(dt.toLocaleDateString("ru-RU",{weekday:"long",day:"numeric",month:"long"}))}"><i>${i===1?"Вчера":WD[dt.getDay()]}</i><b>${dt.getDate()}</b></button>`;
+  }
+  const tm=parse(shift(t,1));
+  h+=`<span class="tm42sep"></span>`
+   +`<button type="button" class="tm42c today" data-n="1" aria-pressed="false"><i>Сегодня</i><b>${parse(t).getDate()}</b></button>`
+   +`<button type="button" class="tm42c" data-s="${shift(t,1)}" aria-pressed="false"><i>Завтра</i><b>${tm.getDate()}</b></button>`
+   +[[2,"2 дня"],[4,"4 дня"],[7,"Неделя"]].map(([n,l])=>`<button type="button" class="tm42c rg" data-n="${n}" aria-pressed="false"><b>${l}</b></button>`).join("");
+  return h;
+}
+function centerOn(b,instant){
+  const el=b&&b.parentNode; if(!el) return;
+  const l=Math.max(0,b.offsetLeft-(el.clientWidth-b.offsetWidth)/2);
+  try{ el.scrollTo({left:l,behavior:instant||rm()?"auto":"smooth"}); }catch(e){ el.scrollLeft=l; }
+}
+function paint(){
+  const el=$("#days"); if(!el||!el.classList.contains("tm42")) return;
+  el.querySelectorAll(".tm42c").forEach(b=>{
+    const on=b.dataset.s!==undefined?state.day===b.dataset.s:(state.day==null&&state.days===+b.dataset.n);
+    b.classList.toggle("on",on); b.setAttribute("aria-pressed",on?"true":"false");
+    b.classList.toggle("ld",b.dataset.s!==undefined&&state.pre.includes(b.dataset.s));
+  });
+}
+function mountStrip(){
+  const el=$("#days"); if(!el) return false;
+  el.className="tm42"; el.innerHTML=strip(); paint();
+  const today=el.querySelector(".today"), on=el.querySelector(".tm42c.on");
+  if(typeof state.tmx==="number") el.scrollLeft=state.tmx;
+  else if(today) el.scrollLeft=Math.max(0,today.offsetLeft-74);          /* «Вчера» выглядывает слева — лента явно листается назад */
+  if(on&&(on.offsetLeft<el.scrollLeft||on.offsetLeft+on.offsetWidth>el.scrollLeft+el.clientWidth)) centerOn(on,true);
+  el.addEventListener("scroll",()=>{ state.tmx=el.scrollLeft; },{passive:true});
+  el.onclick=e=>{ const b=e.target.closest(".tm42c"); if(!b) return; hap(); select(b.dataset.s!==undefined?{s:b.dataset.s}:{n:+b.dataset.n}); };
+  return true;
+}
+
+/* ───── выбор даты ───── */
+let tok=0, armed=false, busy=false;
+async function select(sel){
+  const same=sel.s!==undefined?state.day===sel.s:(state.day==null&&state.days===sel.n);
+  if(same){ if(state.pre.length){ state.pre=[]; } else { window.scrollTo({top:0,behavior:rm()?"auto":"smooth"}); return; } }
+  else if(sel.s!==undefined) state.day=sel.s; else { state.day=null; state.days=sel.n; }
+  state.pre=[]; armed=false; paint();
+  const el=$("#list"); if(!el) return viewMatches();
+  const my=++tok; el.classList.add("tmo"); const t0=Date.now(); let rows;
+  try{ rows=await load(); }catch(e){ if(my===tok){ el.classList.remove("tmo"); toast("Не удалось загрузить"); } return; }
+  await new Promise(r=>setTimeout(r,Math.max(0,150-(Date.now()-t0))));
+  if(my!==tok||state.tab!=="matches"||state.detail||!$("#list")) return;
+  state.cache.matches=rows; state.cache.mkey=matchesKey(); state.cache.at=Date.now();
+  renderList(true); $("#list").classList.remove("tmo");
+  const sp=$("#days"); if(sp&&scrollY>sp.offsetTop+40) window.scrollTo(0,Math.max(0,sp.offsetTop-70));
+}
+
+/* ───── подгрузка предыдущего дня ───── */
+const prevLabel=d=>d===shift(todayS(),-1)?"Вчера":parse(d).toLocaleDateString("ru-RU",{day:"numeric",month:"long"});
+function head(){
+  if(state.day&&state.day>todayS()) return "";
+  if(!canPrev()) return `<div class="pv42 end">Архив хранит ${MAXB} дней</div>`;
+  return `<button type="button" class="pv42" id="pv42"><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>Ранее · ${E(prevLabel(shift(oldest(),-1)))}</button>`;
+}
+async function loadPrev(){
+  if(busy||!canPrev()) return; busy=true;
+  const el=$("#list"); if(!el){ busy=false; return; }
+  const b=$("#pv42"); if(b) b.classList.add("busy");
+  let got=false, tries=0;
+  try{
+    while(tries<4&&canPrev()){
+      const d=shift(oldest(),-1); tries++;
+      const f0=el.querySelector(".row"), id0=f0&&f0.dataset.id, top0=f0?f0.getBoundingClientRect().top:0;
+      await fetchDay(d); state.pre.push(d); state.cache.matches=compose(BASE);
+      renderList(false);
+      const L=$("#list"); if(!L) break;
+      const nr=[...L.querySelectorAll(`.row[data-d="${d}"]`)];
+      nr.forEach((r,i)=>{ r.style.animation=""; r.style.setProperty("--j",Math.min(i,8)); r.classList.add("pre42"); });
+      paint();
+      if(nr.length){ got=true; const f=id0&&L.querySelector(`.row[data-id="${id0}"]`); if(f) window.scrollBy(0,f.getBoundingClientRect().top-top0); hap("ok"); break; }
+    }
+    if(!got) toast(canPrev()?"За эти дни матчей по фильтрам нет — листайте дальше":"Это самое начало архива");
+  }catch(e){ toast("Не удалось загрузить предыдущий день"); }
+  busy=false;
+}
+D.addEventListener("click",e=>{ if(e.target.closest&&e.target.closest("#pv42")){ hap(); loadPrev(); } });
+let lastY=scrollY, wT=0;
+addEventListener("scroll",()=>{
+  const y=scrollY, on=state.tab==="matches"&&!state.detail&&$("#list");
+  if(on){ if(y>90) armed=true; if(armed&&y<=2&&y<lastY&&canPrev()&&!busy){ armed=false; loadPrev(); } }
+  lastY=y;
+},{passive:true});
+addEventListener("wheel",e=>{                                  /* десктоп: колесо вверх у самого начала списка */
+  if(e.deltaY>=0||scrollY>2||state.tab!=="matches"||state.detail||!$("#list")||busy||!canPrev()||Date.now()-wT<900) return;
+  wT=Date.now(); loadPrev();
+},{passive:true});
+
+window.TM42={mountStrip,paint,load,head,loadPrev,select,isPast,dayOf,todayS,shift,compose,_A:A,canPrev};
+
+/* ═════════ R42 — сыгранный матч ═════════ */
+const has=v=>v!=null&&v!==""&&isFinite(+v);
+const WORD={1:["ЗАШЁЛ","w","✓"],0:["ПРОИГРАЛ","l","✕"],2:["ВОЗВРАТ","p","↺"]};
+const rank=b=>b.placed?0:b.recommended?1:2;
+const kind=b=>b.placed?"поставлена":b.recommended?"рекомендация бота":"теневой прогноз";
+const oddsOf=b=>(b.placed&&has(b.placed_odds)?b.placed_odds:b.taken_odds);
+function outcome(m){
+  const [h,a]=m.score;
+  const w=h>a?["w","Победа · "+nmH(m)]:a>h?["a","Победа · "+nmA(m)]:["d","Ничья"];
+  const tot=h+a;
+  const fx=[`Всего голов <b>${tot}</b>`,`ТБ 2.5 ${tot>2.5?"✓":"✕"}`,`Обе забили ${h>0&&a>0?"✓":"✕"}`];
+  const ys=[tot>2.5,h>0&&a>0];
+  return `<div class="card rc42 rv42" style="--i:0"><div class="hd"><div class="cap">Итог матча</div><span class="ft42">ФТ</span></div>
+    <div class="big" aria-label="Счёт ${h}:${a}"><b class="h num">${h}</b><u>:</u><b class="a num">${a}</b></div>
+    <div class="res ${w[0]}"><span>${E(w[1])}</span></div>
+    <div class="fx"><i>${fx[0]}</i><i class="${ys[0]?"y":""}">${fx[1]}</i><i class="${ys[1]?"y":""}">${fx[2]}</i></div></div>`;
+}
+function grade(m){
+  const all=(m.bets||[]).slice().sort((x,y)=>rank(x)-rank(y));
+  if(!all.length) return `<div class="card gr42 rv42" style="--i:1"><div class="cap">Оценка прогноза</div><p class="none">Бот не делал прогнозов на этот матч, поэтому оценивать нечего. Прогноз появляется, когда бот находит перевес по актуальным кэфам.</p></div>`;
+  const main=all.find(b=>b.result!=null)||all[0], w=WORD[main.result];
+  const cnt={w:0,l:0,p:0}; all.forEach(b=>{ const x=WORD[b.result]; if(x) cnt[x[1]]++; });
+  const graded=cnt.w+cnt.l+cnt.p;
+  const li=b=>{ const x=WORD[b.result]; return `<li><div class="lb"><b>${E(b.label_ru||b.label||b.selection)}</b><small>${kind(b)} · модель ${has(b.model_prob)?pc(b.model_prob):"—"} · кэф ${has(oddsOf(b))?(+oddsOf(b)).toFixed(2):"—"}</small></div><span class="rs ${x?x[1]:""}">${x?x[0]:"ЖДЁТ РАСЧЁТА"}</span></li>`; };
+  const rest=all.filter(b=>b!==main);
+  const list=rest.length?`<ul>${rest.slice(0,3).map(li).join("")}</ul>${rest.length>3?`<details><summary>Показать ещё ${rest.length-3}</summary><ul>${rest.slice(3).map(li).join("")}</ul></details>`:""}`:"";
+  return `<div class="card gr42 rv42" style="--i:1"><div class="cap">Оценка прогноза</div>
+    <div class="main ${w?w[1]:""}"><span class="ic" aria-hidden="true">${w?w[2]:"…"}</span>
+      <div class="tx"><small>Прогноз бота</small><b>${E(main.label_ru||main.label||main.selection)} — <em>${w?w[0]:"ожидает расчёта"}</em></b></div>
+      <div class="od">${has(oddsOf(main))?(+oddsOf(main)).toFixed(2):"—"}<small>кэф</small></div></div>
+    ${graded>1?`<div class="sum">Итог по матчу: ${cnt.w?`<i class="w">зашло ${cnt.w}</i>`:""}${cnt.l?`<i class="l">не зашло ${cnt.l}</i>`:""}${cnt.p?`<i class="p">возврат ${cnt.p}</i>`:""}</div>`:""}
+    ${list}
+    <div class="note">Прогнозы взяты из журнала бота (сделаны до матча), результат — из журнала ставок. Это оценка модели, а не совет.</div></div>`;
+}
+function keyStats(m){
+  const g=m.stats, R=[["Владение","hp","ap","%",0],["Удары","hs","as","",0],["В створ","hsot","asot","",0],["xG","hxg","axg","",2],["Угловые","hc","ac","",0]];
+  const rows=g?R.filter(r=>has(g[r[1]])&&has(g[r[2]])):[];
+  if(!rows.length) return `<div class="card ks42 rv42" style="--i:2"><div class="cap">Статистика матча</div><div class="note">Подробная статистика этого матча (владение, удары, xG) в базе не собрана.</div></div>`;
+  const body=rows.map(([t,a,b,u,d],i)=>{ const x=+g[a], y=+g[b], s=x+y, pa=s>0?x/s*100:50, lead=x>y?"a":y>x?"b":"", f=v=>(d?(+v).toFixed(d):String(Math.round(+v)))+u;
+    return `<div class="sr ${lead}" style="--k:${i};--pa:${pa.toFixed(1)}"><div class="sv"><b class="num a">${f(x)}</b><span>${t}</span><b class="num b">${f(y)}</b></div><div class="sbar"><i class="a"></i><i class="b"></i></div></div>`; }).join("");
+  const noXg=!rows.some(r=>r[0]==="xG");
+  return `<div class="card st38 ks42 rv42" style="--i:2"><div class="cap">Статистика матча</div><div class="st38h"><span>${E(nmH(m))}</span><span>${E(nmA(m))}</span></div><div class="sb38">${body}</div>${noXg?`<div class="note">xG для этого матча в базе нет — остальные показатели собраны.</div>`:""}</div>`;
+}
+window.R42={recap:m=>outcome(m)+grade(m)+keyStats(m),outcome,grade,keyStats};
+}catch(e){ console.warn("v42",e); } })();
 /*/V40-JS*/
 </script>
 </body>
