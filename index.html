@@ -1702,6 +1702,18 @@ html,body{overscroll-behavior-x:none}
 .sim43c span.d{border-color:color-mix(in srgb,var(--amber) 40%,transparent)}
 @keyframes pop43{from{opacity:0;transform:scale(.86)}to{opacity:1;transform:none}}
 
+.ht43 .tm{padding:12px 0;border-top:1px solid var(--line)}
+.ht43 .tm:first-of-type{border-top:0}
+.ht43 .hd{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px;font-weight:700;font-size:14px}
+.ht43 .hd em{font-style:normal;color:var(--muted);font-size:11.5px;font-weight:600;text-align:right}
+.ht43 .hm{display:grid;grid-template-columns:72px 1fr;gap:8px;align-items:center;margin-bottom:5px}
+.ht43 .lb{font-size:11.5px;color:var(--muted);font-weight:600}
+.ht43 .cells{display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
+.ht43 .cells i{display:grid;place-items:center;height:34px;border-radius:9px;font-style:normal;font-weight:800;font-size:13px;font-variant-numeric:tabular-nums;
+  background:color-mix(in srgb,var(--c) calc(var(--a)*100%),var(--card2));color:var(--text)}
+.ht43 .cells i.z{color:var(--dim);font-weight:600}
+.ht43 .ax .cells b{font-size:10px;color:var(--dim);font-weight:700;text-align:center;letter-spacing:.02em}
+.ht43 .pk{margin-top:7px;font-size:12px;color:var(--muted);font-weight:600;line-height:1.35}
 .rv43{animation:rise .5s var(--ease) both;animation-delay:calc(var(--i,0)*60ms)}
 @media (prefers-reduced-motion:reduce){.rv43,.sim43c span,.xp43 .br u i{animation:none!important}}
 @media (max-width:360px){.sim43d{grid-template-columns:96px 1fr}.sim43d svg{width:96px;height:96px}}
@@ -5002,6 +5014,16 @@ function stabCard(d,m){ const x=d.stab||{}; const rows=[["home",NH(m),"var(--blu
   if(!rows.length) return "";
   return `<div class="card sb43 rv43" style="--i:1"><div class="cap">Стабильность xG</div><div class="sub">xG за матч в последних играх (справа — свежие); пунктир — среднее. Индекс выше — атака ровнее</div>`+
     rows.map(([k,n,c])=>{ const r=x[k]; return `<div class="tm"><div class="hd"><span>${E(n)}</span><em><span class="ix">${r.idx}</span>/100 · ${E(r.label)} · σ ${r.sd.toFixed(2)}</em></div>${spark(r.series,r.mean,c)}</div>`; }).join("")+`</div>`; }
+const PLM=n=>{n=Math.abs(n);const a=n%10,b=n%100;return a===1&&b!==11?"матч":a>=2&&a<=4&&(b<12||b>14)?"матча":"матчей";};
+function heatTeam(n,r,c){
+  const mx=Math.max(1,...r.for,...r.ag), L=r.labels||[];
+  const row=(t,arr,col)=>`<div class="hm"><span class="lb">${t}</span><div class="cells">`+arr.map((v,i)=>`<i class="${v?"":"z"}" style="--c:${col};--a:${(v?.16+.74*v/mx:.05).toFixed(2)}" title="${L[i]||""} мин: ${v}">${v}</i>`).join("")+`</div></div>`;
+  const peak=(arr,tot,w)=>{ if(tot<8) return ""; const i=arr.indexOf(Math.max(...arr)); return `${w} чаще всего на ${L[i]} мин (${Math.round(100*arr[i]/tot)}% голов)`; };
+  const pk=[peak(r.for,r.gf,"забивает"),peak(r.ag,r.ga,"пропускает")].filter(Boolean).join(" · ");
+  return `<div class="tm"><div class="hd"><span>${E(n)}</span><em>за ${r.n} ${PLM(r.n)} · ${r.gf} забито · ${r.ga} пропущено</em></div>`+row("забивает",r.for,"var(--green)")+row("пропускает",r.ag,"var(--red)")+
+    `<div class="hm ax"><span class="lb"></span><div class="cells">${L.map(x=>`<b>${x}</b>`).join("")}</div></div>${pk?`<div class="pk">${E(pk)}</div>`:""}</div>`; }
+function heatCard(d,m){ const x=d.heat||{}; const rows=[["home",NH(m)],["away",NA(m)]].filter(([k])=>x[k]); if(!rows.length) return "";
+  return `<div class="card ht43 rv43" style="--i:2"><div class="cap">Голы по минутам</div><div class="sub">в какие отрезки матча команда забивает и пропускает; чем ярче клетка, тем больше голов (автоголы учтены)</div>`+rows.map(([k,n])=>heatTeam(n,x[k])).join("")+`</div>`; }
 function mkCard(d,m){ const cd=d.corner_dom, ag=d.aggr; if(!cd&&!ag) return "";
   let h=`<div class="card mk43 rv43" style="--i:2"><div class="cap">Специфические рынки</div>`;
   if(cd) h+=`<div class="sub">Индекс доминирования по угловым</div><div class="row2"><span style="color:var(--blue)">${cd.home.toFixed(1)}</span><span class="sp2"><i style="width:${cd.idx}%;background:var(--blue)"></i><i style="width:${100-cd.idx}%;background:var(--violet)"></i></span><span style="color:var(--violet)">${cd.away.toFixed(1)}</span></div>
@@ -5016,7 +5038,7 @@ async function fill(m,box){
   let d=null; try{ d=await (W.getAn41?W.getAn41(m.event_id):api("/api/analytics/"+m.event_id)); }catch(e){ d=null; }
   if(!box.isConnected) return;
   const v=d&&d.v43; if(!v){ box.remove(); return; }
-  const h=badges(v,m)+warn00(v)+xptsCard(v,m)+stabCard(v,m)+mkCard(v,m)+noXg(v);
+  const h=badges(v,m)+warn00(v)+xptsCard(v,m)+stabCard(v,m)+heatCard(v,m)+mkCard(v,m)+noXg(v);
   if(!h){ box.remove(); return; }
   box.innerHTML=h;
 }
