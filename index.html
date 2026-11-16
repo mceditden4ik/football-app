@@ -4907,7 +4907,9 @@ D.addEventListener("click",e=>{ if(e.target.closest&&e.target.closest("#pv42")){
 let lastY=scrollY, wT=0;
 addEventListener("scroll",()=>{
   const y=scrollY, on=state.tab==="matches"&&!state.detail&&$("#list");
-  if(on){ if(y>90) armed=true; if(armed&&y<=2&&y<lastY&&canPrev()&&!busy){ armed=false; loadPrev(); } }
+  /* v43.5: автоподгрузка при долистывании до верха убрана — при инерционной прокрутке вверх она срабатывала цепочкой и список «уезжал» вниз.
+     Предыдущие дни — только по тапу на кнопку «Ранее ·» (см. обработчик клика выше). */
+  if(on){ if(y>90) armed=true; }
   lastY=y;
 },{passive:true});
 addEventListener("wheel",e=>{                                  /* десктоп: колесо вверх у самого начала списка */
