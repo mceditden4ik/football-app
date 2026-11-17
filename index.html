@@ -1731,6 +1731,114 @@ html,body{overscroll-behavior-x:none}
 .rv43{animation:rise .5s var(--ease) both;animation-delay:calc(var(--i,0)*60ms)}
 @media (prefers-reduced-motion:reduce){.rv43,.sim43c span,.xp43 .br u i{animation:none!important}}
 @media (max-width:360px){.sim43d{grid-template-columns:96px 1fr}.sim43d svg{width:96px;height:96px}}
+
+/* ═════════ v44 «The Megalith» ═════════ */
+/* 1. Премиальные пилюли-теги: мягкое свечение, только opacity/transform в анимации */
+.tg44{display:inline-flex;align-items:center;gap:7px;max-width:100%;padding:5px 11px 5px 9px;border-radius:99px;font-size:12px;font-weight:700;line-height:1.25;color:var(--tc,#93c5fd);
+  background:linear-gradient(135deg,color-mix(in srgb,var(--tc,#60a5fa) 20%,transparent),color-mix(in srgb,var(--tc,#60a5fa) 7%,transparent));
+  border:1px solid color-mix(in srgb,var(--tc,#60a5fa) 38%,transparent);box-shadow:0 0 14px color-mix(in srgb,var(--tc,#60a5fa) 24%,transparent),inset 0 1px 0 rgba(255,255,255,.07);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.tg44>i{flex:0 0 auto;width:7px;height:7px;border-radius:50%;background:var(--tc,#60a5fa);box-shadow:0 0 8px var(--tc,#60a5fa)}
+.tg44>span{min-width:0;overflow-wrap:anywhere}
+.tg44.good{--tc:#4ade80}.tg44.warn{--tc:#fbbf24}.tg44.bad{--tc:#fb7185}.tg44.info{--tc:#60a5fa}
+.tgl44{margin:7px 0 0;display:flex}
+.tgl44 .tg44{font-size:11.5px;padding:4px 10px 4px 8px}
+.tgc44 .tl44{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.tgc44 .tr44{display:flex;flex-direction:column;gap:5px;align-items:flex-start}
+.tgc44 .tr44 small{color:var(--muted);font-size:12.5px;line-height:1.4;padding-left:4px}
+.v44box:empty{display:none}
+
+/* Trust Score */
+.trust44{border-left:3px solid var(--tc,#60a5fa)}
+.trust44.hit{--tc:#4ade80}.trust44.miss{--tc:#fbbf24}
+.trust44 .th{display:flex;gap:12px;align-items:flex-start}
+.trust44 .ic{flex:0 0 auto;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:900;color:var(--tc);background:color-mix(in srgb,var(--tc) 16%,transparent);box-shadow:0 0 14px color-mix(in srgb,var(--tc) 35%,transparent)}
+.trust44 .th b{display:block;font-size:14px;line-height:1.35;margin-top:2px}
+.trust44 .tx,.trust44 .tl2{margin-top:10px;font-size:13px;color:var(--muted);line-height:1.45}
+.trust44 .tn2{margin-top:10px;font-size:11.5px;color:var(--dim,var(--muted));opacity:.8}
+
+/* 2. SGP + Щит */
+.sgp44 .sub,.wi44 .sub,.mc44 .sub{font-size:12.5px;color:var(--muted);line-height:1.4;margin:4px 0 8px}
+.sgp44 .gl44{margin:12px 0 7px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.cw44{display:flex;flex-wrap:wrap;gap:7px}
+.c44{height:36px;padding:0 13px;border-radius:99px;background:var(--card2,rgba(255,255,255,.05));border:1px solid var(--line);color:var(--text,inherit);font-weight:700;font-size:13px;touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  transition:transform .16s var(--ease),background-color .2s,border-color .2s,color .2s,opacity .2s}
+.c44:active{transform:scale(.94)}
+.c44.on{background:linear-gradient(135deg,#34d399,#10b981);border-color:transparent;color:#04130d}
+.c44.dis{opacity:.38}
+.res44{margin-top:14px}
+.hint44{font-size:12.5px;color:var(--muted)}
+.jp44{padding:14px;border-radius:16px;background:linear-gradient(135deg,rgba(52,211,153,.14),rgba(96,165,250,.1));border:1px solid rgba(52,211,153,.28);box-shadow:0 0 22px rgba(52,211,153,.14)}
+.jp44 .jl{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.jp44 .jv{font-size:34px;font-weight:900;line-height:1.1;margin:4px 0}
+.jp44 .js{font-size:12.5px;color:var(--muted)}.jp44 .js b{color:var(--text,inherit)}
+.cm44{margin-top:8px;font-size:12.5px;color:var(--muted)}
+.shield44{margin-top:10px;padding:10px 12px;border-radius:12px;font-size:12.5px;line-height:1.4;color:var(--text,inherit);border:1px solid;animation:v44in .28s var(--ease) both}
+.shield44 b{margin-right:4px}
+.shield44.bad{background:rgba(251,113,133,.12);border-color:rgba(251,113,133,.45);box-shadow:0 0 16px rgba(251,113,133,.18)}
+.shield44.bad b{color:#fb7185}
+.shield44.warn{background:rgba(251,191,36,.1);border-color:rgba(251,191,36,.4)}
+.shield44.warn b{color:#fbbf24}
+.note44{margin-top:10px;font-size:11.5px;color:var(--muted);line-height:1.4;opacity:.9}
+.row44{display:flex;justify-content:flex-end;margin-top:8px}
+.rs44{height:32px;padding:0 12px;border-radius:99px;background:transparent;border:1px solid var(--line);color:var(--muted);font-size:12px;font-weight:700}
+.rs44[hidden]{display:none}
+
+/* 3. What-If */
+.wib{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 4px}
+.wib button{height:36px;padding:0 13px;border-radius:99px;background:var(--card2,rgba(255,255,255,.05));border:1px solid var(--line);color:var(--text,inherit);font-weight:700;font-size:13px;touch-action:manipulation;transition:transform .16s var(--ease),background-color .2s,color .2s}
+.wib button:active{transform:scale(.95)}
+.wib button.on{background:linear-gradient(135deg,#60a5fa,#6366f1);border-color:transparent;color:#fff}
+.wt44{margin:12px 0 6px;font-weight:800;font-size:13.5px}
+.wr44{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr) 46px 62px;gap:8px;align-items:center;padding:5px 0;font-size:12.5px;animation:v44in .3s var(--ease) both;animation-delay:calc(var(--i,0)*45ms)}
+.wr44 .n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wr44 .bar,.dr44 .bar{height:7px;border-radius:99px;background:rgba(148,160,184,.16);overflow:hidden}
+.wr44 .bar i,.dr44 .bar i{display:block;height:100%;width:100%;transform-origin:left center;border-radius:99px;background:#94a3b8;transition:transform .5s var(--ease)}
+.wr44 .bar i.up{background:#4ade80}.wr44 .bar i.dn{background:#fb7185}
+.wr44 .v{text-align:right;font-weight:800}
+.wr44 .d{text-align:right;font-size:11.5px;color:var(--muted)}
+.wr44 .d.up{color:#4ade80}.wr44 .d.dn{color:#fb7185}
+
+/* 4. Монте-Карло */
+.mcb{display:flex;gap:7px;margin:6px 0 10px}
+.mcb button{height:34px;padding:0 14px;border-radius:99px;background:var(--card2,rgba(255,255,255,.05));border:1px solid var(--line);color:var(--muted);font-weight:700;font-size:13px}
+.mcb button.on{background:rgba(96,165,250,.18);border-color:rgba(96,165,250,.55);color:var(--text,inherit)}
+.btn44.go{width:100%;height:46px;border-radius:14px;border:0;font-weight:800;font-size:14px;color:#fff;background:linear-gradient(135deg,#6366f1,#8b5cf6 55%,#ec4899);box-shadow:0 6px 22px rgba(139,92,246,.35);touch-action:manipulation;transition:transform .16s var(--ease)}
+.btn44.go:active{transform:scale(.97)}
+.mco{margin-top:12px}
+.mcr44{display:flex;flex-direction:column;gap:8px}
+.ml44{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:var(--card2,rgba(255,255,255,.04));border:1px solid var(--line);animation:v44in .3s var(--ease) both;animation-delay:calc(var(--i,0)*70ms)}
+.ml44 .mn{flex:0 0 auto;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:900;background:rgba(139,92,246,.22);color:#c4b5fd}
+.ml44 .mt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.ml44 .mt b{font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ml44 i{font-style:normal;font-size:11.5px;color:var(--muted)}
+.ml44 .mp{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.mct44{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px;margin-top:12px}
+.mct44>div{padding:10px;border-radius:14px;background:linear-gradient(135deg,rgba(139,92,246,.14),rgba(96,165,250,.08));border:1px solid rgba(139,92,246,.28)}
+.mct44 i{display:block;font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.mct44 b{font-size:19px;font-weight:900}.mct44 b.g{color:#4ade80}.mct44 b.r{color:#fb7185}
+.dh44{margin:14px 0 6px;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.dr44{display:grid;grid-template-columns:64px 1fr 40px;gap:8px;align-items:center;padding:3px 0;font-size:12.5px}
+.dr44 .bar i.all{background:#4ade80}.dr44 .num{text-align:right;font-weight:800}
+
+/* 5. Live: подсветка цифр, Storm Index */
+.nv-g{animation:v44g 1.3s ease-out both}
+.nv-r{animation:v44r 1.3s ease-out both}
+@keyframes v44g{0%{color:#4ade80;text-shadow:0 0 10px rgba(74,222,128,.85)}100%{text-shadow:0 0 0 rgba(74,222,128,0)}}
+@keyframes v44r{0%{color:#fb7185;text-shadow:0 0 10px rgba(251,113,133,.85)}100%{text-shadow:0 0 0 rgba(251,113,133,0)}}
+.row.storm44{position:relative}
+.row.storm44::after{content:"";position:absolute;inset:0;border-radius:inherit;border:2px solid #ef4444;box-shadow:0 0 18px rgba(239,68,68,.55),inset 0 0 14px rgba(239,68,68,.25);pointer-events:none;animation:v44st 1.4s ease-in-out infinite}
+@keyframes v44st{0%,100%{opacity:.25}50%{opacity:1}}
+.sb44{display:flex;gap:8px;align-items:center;margin-top:8px;padding:6px 10px;border-radius:10px;font-size:12px;font-weight:700;color:#fecaca;background:rgba(239,68,68,.14)}
+.sb44 i{flex:0 0 auto;width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 8px #ef4444}
+
+/* 6. Каскадное появление (задержка по --i) */
+.rv44{animation:v44in .38s var(--ease) both;animation-delay:calc(var(--i,0)*60ms)}
+.tgc44 .tr44{animation:v44in .34s var(--ease) both;animation-delay:calc(var(--i,0)*55ms)}
+@keyframes v44in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.rv44,.tr44,.wr44,.ml44,.shield44,.nv-g,.nv-r{animation:none!important}.row.storm44::after{animation:none;opacity:.85}}
+:root[data-anim="off"] .rv44,:root[data-anim="off"] .tr44,:root[data-anim="off"] .wr44,:root[data-anim="off"] .ml44,:root[data-anim="off"] .shield44,:root[data-anim="off"] .nv-g,:root[data-anim="off"] .nv-r{animation:none!important}
+:root[data-anim="off"] .row.storm44::after{animation:none;opacity:.85}
 /*/V40-CSS*/
 </style>
 </head>
@@ -2040,10 +2148,11 @@ function renderList(anim){
     const when_ = w.hasTime?(byConf?fmtDay(w.d)+" · ":"")+fmtTime(w.d):(byConf?fmtDay(w.d):"");
     out += `<button class="row${started?" is-live":paused?" is-ht":""}${isDone(m)?" is-done":""}${window.TM42&&TM42.isPast(m)?" arc42":""}${window.V43?V43.cls(m):""}"${window.V43?V43.why(m):""} data-id="${m.event_id}" data-d="${window.TM42?TM42.dayOf(m):""}" data-ko="${w.hasTime?w.d.getTime():""}"${m.score?' data-sc="1"':""}><div class="top"><span><span style="color:${LCOL[m.league]||"var(--muted)"}">●</span> ${esc(LEAGUES[m.league]||m.league)}</span>
       <span class="num">${started?'<span class="live"></span>':paused?'<span class="pause">⏸</span> ':""}${isDone(m)&&!m.score?`<span class="eta">завершён · итог ожидается</span> · `:m.score?`<span class="eta">завершён</span> · `:w.hasTime?`<span class="eta" data-eta="${w.d.getTime()}">${esc(etaText(w.d.getTime()))}</span> · `:""}${esc(when_)}</span></div>
-      <div class="teams"><span class="tm41">${cr(m.home,26,mono(nmH(m)))}<i>${isFav(m.home)?'<b class="fv">★</b>':""}${esc(nmH(m))}</i>${window.V43?V43.formH(m):""}</span><span class="tm41">${cr(m.away,26,mono(nmA(m)))}<i>${isFav(m.away)?'<b class="fv">★</b>':""}${esc(nmA(m))}</i>${window.V43?V43.formA(m):""}</span></div>${window.V43?V43.insight(m):""}${m.score?`<div class="score num">${m.score[0]} : ${m.score[1]}</div>`:pbar(m.p)}
+      <div class="teams"><span class="tm41">${cr(m.home,26,mono(nmH(m)))}<i>${isFav(m.home)?'<b class="fv">★</b>':""}${esc(nmH(m))}</i>${window.V43?V43.formH(m):""}</span><span class="tm41">${cr(m.away,26,mono(nmA(m)))}<i>${isFav(m.away)?'<b class="fv">★</b>':""}${esc(nmA(m))}</i>${window.V43?V43.formA(m):""}</span></div>${window.V43?V43.insight(m):""}${window.V44?V44.pill(m):""}${m.score?`<div class="score num">${m.score[0]} : ${m.score[1]}</div>`:pbar(m.p)}
       ${bd.length?`<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">${bd.join("")}</div>`:""}</button>`;
   }
   el.innerHTML = out;
+  if(window.V44) V44.flow(el);
   if(anim) stagger(el,".row"); else el.querySelectorAll(".row,.pbar i").forEach(x=>x.style.animation="none");
   el.querySelectorAll(".row").forEach(x=>{ if(anim) x.style.animation=""; });
   el.onclick = e=>{const b=e.target.closest("[data-id]"); if(b){ haptic(); state.scroll=window.scrollY; openMatch(+b.dataset.id); }};
@@ -2147,11 +2256,12 @@ async function viewMatch(id){
    <div class="vs" style="margin-top:12px"><div><div class="mono mono41" style="color:${LCOL[m.league]||"#6096ff"}">${cr(m.home,60,mono(nmH(m)))}</div><div class="tn"><span class="tnm" title="${esc(nmH(m))}">${esc(nmH(m))}</span>${starBtn(m.home)}</div>${a?`<div class="xg">ожид. голы ${cnt(a.xg[0],2)}</div>`:""}</div>
    <div class="at">${m.score?m.score[0]+" : "+m.score[1]:"VS"}</div>
    <div><div class="mono mono41" style="color:#ec6fa0">${cr(m.away,60,mono(nmA(m)))}</div><div class="tn"><span class="tnm" title="${esc(nmA(m))}">${esc(nmA(m))}</span>${starBtn(m.away)}</div>${a?`<div class="xg">ожид. голы ${cnt(a.xg[1],2)}</div>`:""}</div></div></div>`;
+  if(window.V44) h += V44.box(m);                       /* v44: теги/Trust Score (нет данных — блока нет) */
   if(!a){ h += (m.score&&window.R42)?R42.recap(m):`<div class="card empty">${m.score?"Матч сыгран.":"Прогноз недоступен: не хватает данных по командам."}</div>`; }
   else {
     const p=a.p, mx=Math.max(...p);
     h += `<div class="card"><div class="cap">Вероятности исхода</div><div class="sub">ансамбль Пуассон + бустинг + Эло · кэф — справедливый, без маржи</div>
-     <div class="probs" style="margin-top:12px">${["П1 хозяева","Х ничья","П2 гости"].map((t,i)=>`<div><div class="k">${t}</div><div class="p num" style="color:${p[i]===mx?(i==0?"var(--blue)":i==2?"var(--violet)":"var(--text)"):"var(--muted)"}">${cntp(p[i],1)}</div><div class="f num">кэф ${fair(p[i])}</div></div>`).join("")}</div>
+     <div class="probs" style="margin-top:12px">${["П1 хозяева","Х ничья","П2 гости"].map((t,i)=>`<div><div class="k">${t}</div><div class="p num" data-nv="p:${i}" style="color:${p[i]===mx?(i==0?"var(--blue)":i==2?"var(--violet)":"var(--text)"):"var(--muted)"}">${cntp(p[i],1)}</div><div class="f num" data-nv="f:${i}">кэф ${fair(p[i])}</div></div>`).join("")}</div>
      ${ringSvg(p)}</div>
      <div class="actions"><button id="share"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>Копировать прогноз</button>
        <button id="gocalc"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M12 12h2M8 16h2M12 16h2"/></svg>Проверить кэф</button></div>`;
@@ -2160,7 +2270,7 @@ async function viewMatch(id){
     if(od.length){
       const by = {}; od.forEach(o=>{(by[o.source]=by[o.source]||{})[o.selection]=o;});
       h += `<div class="card"><div class="cap">Кэфы на исход 1X2</div><table style="margin-top:6px"><tr><th>Источник</th><th>П1</th><th>Х</th><th>П2</th><th>когда</th></tr>` +
-        Object.keys(by).map(s=>{const r=by[s],t=r.P1||r.X||r.P2; return `<tr><td>${esc(s)}</td>${["P1","X","P2"].map(k=>`<td class="num">${r[k]?r[k].odds.toFixed(2):"—"}</td>`).join("")}<td class="dim" style="font-size:12px">${esc(ago(t&&t.captured_at))}</td></tr>`;}).join("") +
+        Object.keys(by).map(s=>{const r=by[s],t=r.P1||r.X||r.P2; return `<tr><td>${esc(s)}</td>${["P1","X","P2"].map(k=>`<td class="num"${r[k]?` data-nv="o:${esc(s)}:${k}"`:""}>${r[k]?r[k].odds.toFixed(2):"—"}</td>`).join("")}<td class="dim" style="font-size:12px">${esc(ago(t&&t.captured_at))}</td></tr>`;}).join("") +
         `</table><div class="note">Ориентир. Решение о ставке принимает бот с учётом маржи и подтверждённых сегментов — смотрите блок «Ставки бота» ниже.</div></div>`;
     }
     const f = a.f1x2 || {}, ts = a.top_scores||[], q=a.quality||0, qc = q>=.7?"var(--green)":q>=.35?"var(--amber)":"var(--red)";
@@ -2174,7 +2284,7 @@ async function viewMatch(id){
       return `<div><div class="t">${t}</div><div class="s"><span style="${sk?"":"color:var(--muted)"}">${sides[over?0:1]}</span><b class="num" style="color:${c}">${cntp(pr)}</b></div>
         <div class="meter"><i style="width:${pr*100}%;background:${c}"></i></div><div class="n" style="color:${sk?"var(--green)":"var(--dim)"}">${sk?"навык ✓":"≈ база"}${x.hist_n?` <span class="dim">· n=${x.hist_n}</span>`:""}</div></div>`;}).join("");
     if(cells) h += `<div class="card"><div class="cap">Рынки <span class="sub" style="text-transform:none;letter-spacing:0;font-weight:400">· серым — навыка нет, цифра ≈ базовой частоте</span></div><div class="mk">${cells}</div></div>`;
-    h += heatmap(a,m) + (window.V43?V43.sim(a,m):"") + compare(a,m);
+    h += heatmap(a,m) + (window.V43?V43.sim(a,m):"") + compare(a,m) + (window.V44?V44.cards(a,m):"");
     const c = a.components||{};
     if(c.poisson) h += `<div class="card"><div class="cap">Из чего сложен прогноз</div><table style="margin-top:6px"><tr><th>Модель</th><th>П1</th><th>Х</th><th>П2</th></tr>` +
       [["Пуассон (вес 0.5)",c.poisson],["Бустинг (0.3)",c.gbm],["Эло (0.2)",c.elo],["Ансамбль",a.p]].filter(r=>r[1]).map(([n,v],i,arr)=>`<tr style="${i==arr.length-1?"font-weight:800":""}"><td>${n}</td>${v.map(x=>`<td class="num">${pc(x,1)}</td>`).join("")}</tr>`).join("") + `</table></div>`;
@@ -2189,6 +2299,7 @@ async function viewMatch(id){
   const v = mount(h, "fwd");
   if(window.W39) W39.mounted(m, v);
   if(window.V43) V43.mounted(m, v);
+  if(window.V44) V44.mounted(m, v);
   // избранное
   v.querySelectorAll("[data-fav]").forEach(b=>b.onclick=()=>{ const on=toggleFav(b.dataset.fav); b.classList.toggle("on",on); b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop"); toast(on?"Добавлено в «Мои команды»":"Убрано из «Мои команды»"); });
   if(!a) return;
@@ -2948,7 +3059,9 @@ Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensu
       const t0=SNAP&&SNAP._t; await ensureSnap(0); setOnline(true);
       if(SNAP&&SNAP._t!==t0){
         liveUntil=Date.now()+4500; const y=scrollY;
-        if(state.tab==="matches"&&!state.detail&&document.getElementById("list")){ state.cache.matches=await (window.TM42?TM42.load(true):api(`/api/matches?days=${state.days}${state.league?"&league="+encodeURIComponent(state.league):""}`)); state.cache.at=Date.now(); renderList(false); loadToday(); }
+        if(state.tab==="matches"&&!state.detail&&document.getElementById("list")){ const nm=await (window.TM42?TM42.load(true):api(`/api/matches?days=${state.days}${state.league?"&league="+encodeURIComponent(state.league):""}`));
+          if(!(window.V44&&V44.patchList(nm))){ state.cache.matches=nm; state.cache.at=Date.now(); renderList(false); } loadToday(); }          /* v44: только цифры, без перерисовки списка */
+        else if(state.detail&&window.V44&&await V44.patchDetail()){ /* v44: вероятности и кэфы обновлены на месте */ }
         else { await render(); }
         scrollTo(0,y); setTimeout(()=>scrollTo(0,y),120);
       }
@@ -2956,6 +3069,12 @@ Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensu
     finally{ polling=false; }
   }
   setInterval(livePoll,60000);
+  /* v44: пока идут матчи — проверяем свежесть снимка каждые 30 с лёгким HEAD-запросом (скачиваем его только если он сменился) */
+  let _snapTag=null;
+  async function snapMoved(){ try{ const r=await fetch("snapshot.enc.json?h="+Date.now(),{method:"HEAD",cache:"no-store"}); if(!r.ok) return true;
+      const tg=(r.headers.get("etag")||"")+"|"+(r.headers.get("last-modified")||"")+"|"+(r.headers.get("content-length")||""); if(tg==="||") return true;
+      const ch=_snapTag!==null&&tg!==_snapTag; _snapTag=tg; return ch; }catch(e){ return false; } }
+  setInterval(async()=>{ try{ if(document.hidden||!STATIC||!window.V44||!V44.hasLive()) return; if(await snapMoved()) livePoll(); }catch(e){} },30000);
   document.addEventListener("visibilitychange",()=>{ if(!document.hidden) setTimeout(livePoll,300); });
   /* звук/эффекты при выигрышах */
   try{ const _c=confetti; confetti=function(){ haptic("ok"); return _c.apply(this,arguments); }; }catch(e){}
@@ -4047,6 +4166,7 @@ const EXC=(()=>{
       const l=e.target.closest(".xl"); if(l){ haptic("light"); openMatch(+l.dataset.eid||l.dataset.eid); } };
     const rf=document.getElementById("xrf"); if(rf) rf.onclick=()=>{ haptic("light"); paintDay(true); const on=$(".xp37.on"); if(on) paint("xres",on.dataset.p,true); };
     paintDay(false);
+    if(window.V44) V44.mountExpress();
   };
   /* ── H2H-таймлайн (только данные из базы) ── */
   const H2H={cur:null,games:[]};
@@ -4907,9 +5027,7 @@ D.addEventListener("click",e=>{ if(e.target.closest&&e.target.closest("#pv42")){
 let lastY=scrollY, wT=0;
 addEventListener("scroll",()=>{
   const y=scrollY, on=state.tab==="matches"&&!state.detail&&$("#list");
-  /* v43.5: автоподгрузка при долистывании до верха убрана — при инерционной прокрутке вверх она срабатывала цепочкой и список «уезжал» вниз.
-     Предыдущие дни — только по тапу на кнопку «Ранее ·» (см. обработчик клика выше). */
-  if(on){ if(y>90) armed=true; }
+  if(on){ if(y>90) armed=true; if(armed&&y<=2&&y<lastY&&canPrev()&&!busy){ armed=false; loadPrev(); } }
   lastY=y;
 },{passive:true});
 addEventListener("wheel",e=>{                                  /* десктоп: колесо вверх у самого начала списка */
@@ -5103,6 +5221,353 @@ function simulate(m,v){
 }
 
 W.V43={cls,formH,formA,insight,why,pass,mountChips,chipsHtml,sim:simCard,box,mounted,kelly,hue};
+})();
+
+/* ═════════ v44 «The Megalith»: умные теги, Trust Score, SGP + Щит, What-If, Монте-Карло экспресс, live-пульс, Storm Index ═════════
+   Правила: данные приходят готовыми (m.m44 в списке, v44 в /api/analytics/<id>); нет данных — нет блока. Вся математика — в браузере из матрицы счёта
+   той же модели голов (генератор с зерном, без Math-случайности). Анимации — только transform/opacity (плюс короткая подсветка цифр). */
+(function(){"use strict";
+const W=window, D=document;
+const E=s=>typeof esc==="function"?esc(s):String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const NH=m=>typeof nmH==="function"?nmH(m):m.home, NA=m=>typeof nmA==="function"?nmA(m):m.away;
+const RM=()=>{ try{ return D.documentElement.dataset.anim==="off"||matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){ return false; } };
+const hap=k=>{ try{ if(typeof haptic==="function") haptic(k); }catch(e){} };
+const pl=(n,a,b,c)=>{ n=Math.abs(n)%100; const k=n%10; return n>10&&n<20?c:k===1?a:k>1&&k<5?b:c; };
+const P1=x=>(100*x).toFixed(1)+"%";
+const LIST_W=0.75;                                   /* в списке — только заметный тег (≥0.75), в карточке — все */
+
+/* ───────────────────────── 1. Теги и Trust Score ───────────────────────── */
+function team(t,m){ return t.s==="h"?NH(m):t.s==="a"?NA(m):""; }
+function info(t,m){
+  const x=t.x||{}, T=team(t,m), pre=T?T+": ":"";
+  switch(t.k){
+    case "split": { const home=t.s==="h";
+      return {txt:pre+(x.better?(home?"дома сильнее":"в гостях сильнее"):(home?"дома слабее":"в гостях играет хуже"))+` (${x.rank}-е место)`,
+        det:`${home?"По домашним":"По гостевым"} очкам — ${x.rank}-е место из ${x.of} (${(+x.ppg).toFixed(2)} за игру, ${x.n} ${pl(x.n,"матч","матча","матчей")}); в общей таблице — ${x.all}-е.`}; }
+    case "sos": return x.weak
+      ? {txt:pre+"форма обманчива (играли в основном со слабыми)",det:`${x.pts} очков из 15 в последних 5 играх; средний соперник — ${x.avg_rank}-е место из ${x.of}.`}
+      : {txt:pre+"форма лучше, чем кажется (играли с сильными)",det:`Всего ${x.pts} очков из 15, но средний соперник — ${x.avg_rank}-е место из ${x.of}.`};
+    case "bounce": return {txt:pre+"реакция на разгром (Bounce Back)",
+        det:`В прошлом матче — ${x.score}.`+(x.n?` После тяжёлых поражений набирает ${(+x.ppg).toFixed(1)} очка за игру (${x.n} ${pl(x.n,"случай","случая","случаев")}) при среднем ${(+x.base).toFixed(1)}.`:"")};
+    case "letdown": return {txt:pre+"эмоциональный спад (Letdown)",
+        det:`В прошлом матче — крупная победа ${x.score}. После таких побед набирает ${(+x.ppg).toFixed(1)} очка за игру при среднем ${(+x.base).toFixed(1)} (${x.n} ${pl(x.n,"случай","случая","случаев")}).`};
+    case "giant": return {txt:pre+`гроза авторитетов (очки у Топ-6: ${x.took} из ${x.of})`,
+        det:`В этом сезоне против Топ-6: ${x.wins} ${pl(x.wins,"победа","победы","побед")}, ${x.took-x.wins} ${pl(x.took-x.wins,"ничья","ничьи","ничьих")}, ${x.of-x.took} ${pl(x.of-x.took,"поражение","поражения","поражений")}.`};
+    case "draw": return t.s==="b"
+      ? {txt:`Высокий риск ничьей (${x.pct}% игр)`,det:`Ничьих в последних ${x.n} играх: ${NH(m)} — ${x.h}, ${NA(m)} — ${x.a}.`}
+      : {txt:pre+`${t.s==="h"?x.h:x.a} ничьих в последних ${x.n} играх`,det:`У соперника — ${t.s==="h"?x.a:x.h}. Высокий риск ничьей по форме одной из команд.`};
+    case "btts": return {txt:t.s==="b"?`Серия «Обе забьют» (${NH(m)} — ${x.h}, ${NA(m)} — ${x.a})`:pre+`серия «Обе забьют» (${x.n} ${pl(x.n,"матч","матча","матчей")})`,
+        det:`Подряд сыграли «обе забьют»: ${NH(m)} — ${x.h}, ${NA(m)} — ${x.a}.`};
+    case "over": case "under": { const o=t.k==="over", L=o?"ТБ 2.5":"ТМ 2.5";
+      return {txt:t.s==="b"?`${L}: ${x.h} из ${x.n} у ${NH(m)}, ${x.a} из ${x.n} у ${NA(m)}`:pre+`${L} сыграл в ${t.s==="h"?x.h:x.a} из ${x.n} игр`,
+        det:`Матчей ${o?"с тоталом больше":"с тоталом меньше"} 2.5 из последних ${x.n}: ${NH(m)} — ${x.h}, ${NA(m)} — ${x.a}.`}; }
+  }
+  return {txt:String(t.k),det:""};
+}
+function pillH(t,m,i){ const f=info(t,m); return `<span class="tg44 ${E(t.tone||"info")}" style="--i:${i||0}"><i></i><span>${E(f.txt)}</span></span>`; }
+function topTag(m){ const L=m&&m.m44; if(!Array.isArray(L)) return null; return L.find(x=>x&&x.w>=LIST_W)||null; }
+
+/* строка списка: Storm (если есть live-статистика) важнее тега */
+const STORM={shots:5,corners:3,win:10};
+function storm(m){
+  const L=m&&m.live_stats; if(!L||m.score||!Array.isArray(L.sh)||!Array.isArray(L.co)) return null;
+  const w=+L.win; if(!(w>=8&&w<=12)) return null;                               /* окно ≈ 10 минут; иначе не сравниваем */
+  for(let s=0;s<2;s++){ if(+L.sh[s]>=STORM.shots&&+L.co[s]>=STORM.corners) return {side:s,sh:+L.sh[s],co:+L.co[s]}; }
+  return null;
+}
+function cls(m){ return storm(m)?" storm44":""; }
+function pill(m){
+  const s=storm(m); if(s) return `<div class="sb44" role="status"><i></i>Шторм · ${E(s.side?NA(m):NH(m))}: ${s.sh} ${pl(s.sh,"удар","удара","ударов")} и ${s.co} ${pl(s.co,"угловой","угловых","угловых")} за ${E(m.live_stats.win)} мин. Высокий шанс гола</div>`;
+  const t=topTag(m); return t&&!m.score?`<div class="tgl44">${pillH(t,m,0)}</div>`:"";
+}
+function tagsCard(m,tags){
+  if(!Array.isArray(tags)||!tags.length) return "";
+  return `<div class="card tgc44 rv44" style="--i:0"><div class="cap">Контекст матча</div><div class="sub">автоматические сигналы из истории матчей в базе</div>
+    <div class="tl44">${tags.map((t,i)=>{ const f=info(t,m); return `<div class="tr44" style="--i:${i}"><span class="tg44 ${E(t.tone||"info")}"><i></i><span>${E(f.txt)}</span></span><small>${E(f.det)}</small></div>`; }).join("")}</div></div>`;
+}
+function trustHtml(t,m){
+  if(!t||!t.res) return "";
+  const hit=!!t.hit, fav=t.fav==="home"?NH(m):NA(m), sc=m&&m.score?`${m.score[0]}:${m.score[1]}`:"";
+  const how=t.res==="fav_lost"?`Сработало — фаворит (${E(fav)}) проиграл`:t.res==="draw"?`Сработало — фаворит (${E(fav)}) не выиграл, ничья`:`Не сработало — фаворит (${E(fav)}) выиграл`;
+  const led=t.ledger&&t.ledger.n>=8?`<div class="tl2">За последние ${t.ledger.days} ${pl(t.ledger.days,"день","дня","дней")} модель пометила ${t.ledger.n} ${pl(t.ledger.n,"ловушку","ловушки","ловушек")}: сработало ${t.ledger.k}, не сработало ${t.ledger.n-t.ledger.k}.</div>`:"";
+  const why=t.fav_xg5!=null&&t.dog_xg5!=null?`Кэф на фаворита ${(+t.odds).toFixed(2)}, но его xG за 5 игр (${(+t.fav_xg5).toFixed(2)}) был ниже, чем у аутсайдера (${(+t.dog_xg5).toFixed(2)}).`:`Кэф на фаворита ${(+t.odds).toFixed(2)} не подтверждался игрой.`;
+  return `<div class="card trust44 ${hit?"hit":"miss"} rv44" style="--i:0"><div class="th"><span class="ic" aria-hidden="true">${hit?"✓":"✕"}</span><div><div class="cap">Trust Score</div><b>Модель пометила этот матч как «Ловушку». ${how}${sc?` (счёт ${E(sc)})`:""}.</b></div></div>
+    <div class="tx">${E(why)}</div>${led}<div class="tn2">Считается задним числом по данным, доступным до матча. Промахи показываем так же, как попадания.</div></div>`;
+}
+function listM(m){ try{ const L=(typeof state!=="undefined"&&state.cache&&state.cache.matches)||[]; return L.find(x=>String(x.event_id)===String(m.event_id)); }catch(e){ return null; } }
+function box(m){
+  try{
+    if(m.score||m.done) return `<div class="v44box" data-id="${E(m.event_id)}" data-k="arch"></div>`;
+    const lm=m.m44!==undefined?m:listM(m);
+    if(lm&&Array.isArray(lm.m44)&&lm.m44.length) return tagsCard(m,lm.m44);
+    if(lm&&lm.m44===undefined&&lm.m43!==undefined) return "";                    /* карточка из списка без тегов — данных нет, блока нет */
+    return `<div class="v44box" data-id="${E(m.event_id)}" data-k="up"></div>`;
+  }catch(e){ return ""; }
+}
+async function fill(m,b){
+  let d=null; try{ d=await (W.getAn41?W.getAn41(m.event_id):api("/api/analytics/"+m.event_id)); }catch(e){ d=null; }
+  if(!b.isConnected) return;
+  const v=d&&d.v44, h=v?(b.dataset.k==="arch"?trustHtml(v.trust,m):tagsCard(m,v.tags)):"";
+  if(!h){ b.remove(); return; }
+  b.innerHTML=h;
+}
+
+/* ───────────────────────── 2. Совместная вероятность: SGP + «Щит» ───────────────────────── */
+const R2=(g,f)=>[g,f];
+const OPTS=[
+  ["Результат",[["П1",(i,j)=>i>j],["Х",(i,j)=>i===j],["П2",(i,j)=>i<j],["1X",(i,j)=>i>=j],["12",(i,j)=>i!==j],["X2",(i,j)=>i<=j]]],
+  ["Тотал",[["ТМ 0.5",(i,j)=>i+j<=0],["ТБ 1.5",(i,j)=>i+j>=2],["ТМ 1.5",(i,j)=>i+j<=1],["ТБ 2.5",(i,j)=>i+j>=3],["ТМ 2.5",(i,j)=>i+j<=2],["ТБ 3.5",(i,j)=>i+j>=4],["ТМ 3.5",(i,j)=>i+j<=3]]],
+  ["Обе забьют",[["Да",(i,j)=>i>0&&j>0],["Нет",(i,j)=>i===0||j===0]]],
+  ["Индивидуальный тотал",[["ИТБ1 0.5",(i,j)=>i>=1],["ИТМ1 0.5",(i,j)=>i===0],["ИТБ1 1.5",(i,j)=>i>=2],["ИТМ1 1.5",(i,j)=>i<=1],["ИТБ2 0.5",(i,j)=>j>=1],["ИТМ2 0.5",(i,j)=>j===0],["ИТБ2 1.5",(i,j)=>j>=2],["ИТМ2 1.5",(i,j)=>j<=1]]]
+];
+const SPAN=13;                                       /* счета 0..12 для проверки логики (не зависит от модели) */
+function joint(M,preds){ let s=0,t=0; for(let i=0;i<M.length;i++){ const r=M[i]; for(let j=0;j<r.length;j++){ const p=+r[j]||0; t+=p; if(preds.every(f=>f(i,j))) s+=p; } } return t>0?s/t:0; }
+function sat(preds){ for(let i=0;i<SPAN;i++) for(let j=0;j<SPAN;j++) if(preds.every(f=>f(i,j))) return true; return false; }
+function implies(A,B){ for(let i=0;i<SPAN;i++) for(let j=0;j<SPAN;j++){ if(A.every(f=>f(i,j))&&!B(i,j)) return false; } return true; }
+const SG={};                                          /* event_id → выбранные ["g.o"] */
+const optOf=k=>{ const [g,o]=k.split(".").map(Number); return OPTS[g][1][o]; };
+const lab=k=>optOf(k)[0];
+function sgpCard(a,m){
+  const M=a&&a.matrix&&a.matrix.m; if(!M||!M.length) return "";
+  return `<div class="card sgp44 rv44" style="--i:1" data-eid="${E(m.event_id)}"><div class="cap">Конструктор SGP · один матч</div>
+    <div class="sub">Выберите 2–4 события: модель посчитает их <b>совместную</b> вероятность по матрице счёта, а не перемножит. «Щит» не даст собрать невозможное. ИТ1/ИТ2 — индивидуальный тотал хозяев/гостей.</div>
+    ${OPTS.map(([t,os],g)=>`<div class="gl44">${t}</div><div class="cw44">${os.map(([n],o)=>`<button type="button" class="c44" data-k="${g}.${o}" aria-pressed="false">${E(n)}</button>`).join("")}</div>`).join("")}
+    <div class="res44" aria-live="polite"><div class="hint44">Нажмите на события — результат появится здесь.</div></div>
+    <div class="row44"><button type="button" class="rs44" hidden>Сбросить</button></div></div>`;
+}
+function sgpUpdate(card,m,a,msg){
+  const M=a.matrix.m, S=SG[m.event_id]||(SG[m.event_id]=[]), P=S.map(optOf).map(x=>x[1]);
+  card.querySelectorAll(".c44").forEach(b=>{
+    const k=b.dataset.k, on=S.includes(k); let why="";
+    if(!on&&S.length>=4) why="максимум 4 события";
+    else if(!on&&S.length&&!sat(P.concat(optOf(k)[1]))){ const bad=S.find(x=>!sat([optOf(x)[1],optOf(k)[1]]))||S[0]; why=`несовместимо с «${lab(bad)}»`; }
+    b.classList.toggle("on",on); b.classList.toggle("dis",!!why); b.setAttribute("aria-pressed",on?"true":"false");
+    if(why){ b.setAttribute("aria-disabled","true"); b.title=why; } else { b.removeAttribute("aria-disabled"); b.removeAttribute("title"); }
+  });
+  const r=card.querySelector(".res44"), rs=card.querySelector(".rs44"); rs.hidden=!S.length;
+  let h="";
+  if(msg) h+=`<div class="shield44 ${msg.t}" role="alert"><b>${msg.t==="bad"?"🛡 Щит":"Внимание"}</b> ${E(msg.x)}</div>`;
+  if(!S.length) h+=`<div class="hint44">Нажмите на события — результат появится здесь.</div>`;
+  else {
+    const p=joint(M,P), lg=S.map(lab).join(" + ");
+    const fo=p>=0.001?(1/p).toFixed(2):"—";
+    h+=`<div class="jp44"><div class="jl">${S.length>1?"Совместная вероятность":"Вероятность"}</div><div class="jv num">${p<0.001?"<0.1%":P1(p)}</div><div class="js">${E(lg)} · справедливый кэф <b>${fo}</b></div></div>`;
+    if(S.length>1){
+      const ind=P.reduce((q,f)=>q*joint(M,[f]),1), ratio=ind>0?p/ind:null;
+      h+=`<div class="cm44"><span>Если считать события независимыми: ${ind<0.001?"<0.1%":P1(ind)}</span></div>`;
+      if(ratio!=null&&ratio>=1.15) h+=`<div class="shield44 warn"><b>Положительная корреляция ×${ratio.toFixed(2)}</b> События идут вместе чаще, чем при независимости: букмекер обычно это учитывает и режет кэф SGP.</div>`;
+      else if(ratio!=null&&ratio<=0.85) h+=`<div class="shield44 warn"><b>Отрицательная корреляция ×${ratio.toFixed(2)}</b> Вместе происходят реже, чем кажется при простом перемножении: настоящая вероятность ниже.</div>`;
+      S.forEach(k=>{ const rest=S.filter(x=>x!==k).map(x=>optOf(x)[1]); if(rest.length&&implies(rest,optOf(k)[1])) h+=`<div class="shield44 warn"><b>Лишнее событие</b> «${E(lab(k))}» уже следует из остальных — вероятность без него не меняется.</div>`; });
+      if(p<0.001) h+=`<div class="shield44 warn"><b>Почти невозможно</b> Модель оценивает такой исход меньше чем в 0.1%.</div>`;
+    }
+    const rest=+a.matrix.rest||0; if(rest>=0.005) h+=`<div class="note44">Матрица счёта — до 5 голов у команды; вероятность более высоких счетов (${P1(rest)}) распределена пропорционально.</div>`;
+  }
+  r.innerHTML=h;
+}
+function sgpBind(card,m,a){
+  card.onclick=e=>{
+    const rs=e.target.closest(".rs44"); if(rs){ SG[m.event_id]=[]; sgpUpdate(card,m,a); hap("light"); return; }
+    const b=e.target.closest(".c44"); if(!b) return;
+    const S=SG[m.event_id]||(SG[m.event_id]=[]), k=b.dataset.k, i=S.indexOf(k);
+    if(i>=0){ S.splice(i,1); sgpUpdate(card,m,a); hap("select"); return; }
+    if(S.length>=4){ shake(b); sgpUpdate(card,m,a,{t:"warn",x:"Максимум 4 события в одном купоне."}); return; }
+    const P=S.map(optOf).map(x=>x[1]);
+    if(!sat(P.concat(optOf(k)[1]))){ const bad=S.find(x=>!sat([optOf(x)[1],optOf(k)[1]]))||S[0]; shake(b);
+      sgpUpdate(card,m,a,{t:"bad",x:`«${lab(k)}» несовместимо с «${lab(bad)}» — такого счёта не существует. Событие не добавлено.`}); hap("medium"); return; }
+    S.push(k); sgpUpdate(card,m,a); hap("select");
+  };
+  sgpUpdate(card,m,a);
+}
+function shake(el){ if(RM()||!el.animate) return; try{ el.animate([{transform:"translateX(0)"},{transform:"translateX(-5px)"},{transform:"translateX(5px)"},{transform:"translateX(-3px)"},{transform:"translateX(0)"}],{duration:300,easing:"ease-out"}); }catch(e){} }
+
+/* ───────────────────────── 3. What-If ───────────────────────── */
+function rng(seed){ let a=seed>>>0; return function(){ a=(a+0x6D2B79F5)>>>0; let t=Math.imul(a^(a>>>15),1|a); t=(t+Math.imul(t^(t>>>7),61|t))^t; return((t^(t>>>14))>>>0)/4294967296; }; }
+function pois(R,l){ if(!(l>0)) return 0; const L=Math.exp(-l); let k=0,p=1; do{ k++; p*=R(); }while(p>L&&k<40); return k-1; }
+/* kind: "hf" — хозяева забили первыми · "af" — гости · "h0" — 0:0 к перерыву. Голы — пуассоновский поток с ожидаемыми голами модели, время — доля матча. */
+function whatIfSim(lh,la,kind,N,seed){
+  const R=rng(seed), Lm=lh+la; let n=0,H=0,X=0,A=0,O=0,B=0,tries=0;
+  const add=(h,a)=>{ n++; if(h>a)H++; else if(h===a)X++; else A++; if(h+a>=3)O++; if(h>0&&a>0)B++; };
+  if(kind==="h0"){ for(let k=0;k<N;k++) add(pois(R,lh*0.5),pois(R,la*0.5)); }
+  else { const want=kind==="hf"?0:1;
+    while(n<N&&tries<N*30){ tries++;
+      const T=-Math.log(1-R())/Lm; if(T>=1) continue;                                     /* первого гола не было — сценарий не наступил */
+      const side=R()<lh/Lm?0:1; if(side!==want) continue;
+      const r=1-T, h=(side===0?1:0)+pois(R,lh*r), a=(side===1?1:0)+pois(R,la*r); add(h,a); } }
+  return {n,H:n?H/n:0,X:n?X/n:0,A:n?A/n:0,O:n?O/n:0,B:n?B/n:0,tries};
+}
+function wiCard(a,m){
+  const M=a&&a.matrix&&a.matrix.m, xg=a&&a.xg; if(!M||!M.length||!xg||!(xg[0]>0)||!(xg[1]>0)) return "";
+  return `<div class="card wi44 rv44" style="--i:0"><div class="cap">Что если… · сценарии</div>
+    <div class="sub">Пересчёт вероятностей, если матч пошёл по сценарию. Старт — с момента этого события, дальше голы идут по ожидаемым голам модели пропорционально оставшемуся времени.</div>
+    <div class="wib"><button type="button" data-k="hf">${E(NH(m))} откроет счёт</button><button type="button" data-k="af">${E(NA(m))} откроет счёт</button><button type="button" data-k="h0">0:0 к перерыву</button></div>
+    <div class="wio" aria-live="polite"></div></div>`;
+}
+const WRUN={};
+function wiRun(card,m,a,kind){
+  const out=card.querySelector(".wio"), M=a.matrix.m;
+  const run=(WRUN[m.event_id]=(WRUN[m.event_id]||0)+1), N=3000;
+  const s=whatIfSim(+a.xg[0],+a.xg[1],kind,N,(((+m.event_id||1)*2654435761)+run*40503+kind.charCodeAt(0))>>>0);
+  if(s.n<300){ out.innerHTML=`<div class="note44">Этот сценарий слишком маловероятен, чтобы оценить его надёжно (${s.n} из ${N} розыгрышей).</div>`; return; }
+  const base={H:joint(M,[(i,j)=>i>j]),X:joint(M,[(i,j)=>i===j]),A:joint(M,[(i,j)=>i<j]),O:joint(M,[(i,j)=>i+j>=3]),B:joint(M,[(i,j)=>i>0&&j>0])};
+  const rows=[["П1 · "+NH(m),"H"],["Ничья","X"],["П2 · "+NA(m),"A"],["ТБ 2.5","O"],["Обе забьют","B"]];
+  const nm=kind==="hf"?`${NH(m)} открыл счёт (1:0)`:kind==="af"?`${NA(m)} открыл счёт (0:1)`:"0:0 к перерыву";
+  out.innerHTML=`<div class="wt44">Сценарий: ${E(nm)}</div>`+rows.map(([t,k],i)=>{ const v=s[k], b=base[k], d=100*(v-b), c=d>1?"up":d<-1?"dn":"eq";
+    return `<div class="wr44" style="--i:${i}"><span class="n">${E(t)}</span><span class="bar"><i style="transform:scaleX(${Math.max(0.01,v).toFixed(3)})" class="${c}"></i></span><span class="v num">${P1(v)}</span><span class="d num ${c}">${d>=0?"+":"−"}${Math.abs(d).toFixed(1)} п.п.</span></div>`; }).join("")+
+    `<div class="note44">Слева направо: вероятность в сценарии · изменение к исходному прогнозу (${P1(base.H)} / ${P1(base.X)} / ${P1(base.A)} на П1 / Х / П2). Прогон №${run}, ${s.n} розыгрышей; разброс между прогонами ±1–2 п.п. — шум выборки. Упрощение: без Диксона–Коулза и без учёта карточек и замен.</div>`;
+  hap("select");
+}
+function wiBind(card,m,a){ card.onclick=e=>{ const b=e.target.closest(".wib [data-k]"); if(!b) return; card.querySelectorAll(".wib [data-k]").forEach(x=>x.classList.toggle("on",x===b)); wiRun(card,m,a,b.dataset.k); }; }
+
+function cards(a,m){ try{ if(m.score||m.done) return ""; return wiCard(a,m)+sgpCard(a,m); }catch(e){ return ""; } }
+
+/* ───────────────────────── 4. Монте-Карло экспресс ───────────────────────── */
+const MENU=[["Победа хозяев",(i,j)=>i>j,"P1"],["Ничья",(i,j)=>i===j,"X"],["Победа гостей",(i,j)=>i<j,"P2"],["1X",(i,j)=>i>=j],["X2",(i,j)=>i<=j],
+  ["ТБ 1.5",(i,j)=>i+j>=2],["ТБ 2.5",(i,j)=>i+j>=3],["ТМ 2.5",(i,j)=>i+j<=2],["ТМ 3.5",(i,j)=>i+j<=3],["Обе забьют — да",(i,j)=>i>0&&j>0],["Обе забьют — нет",(i,j)=>i===0||j===0]];
+const MIN_FAIR=1.25;                                 /* не берём «слишком очевидные» исходы (справедливый кэф ниже 1.25) */
+function mcSim(M,N,seed){
+  const R=rng(seed), cells=[]; let acc=0;
+  M.forEach((r,i)=>r.forEach((p,j)=>{ acc+=(+p||0); cells.push([acc,i,j]); }));
+  const out=new Array(N);
+  for(let k=0;k<N;k++){ const u=R()*acc; let lo=0,hi=cells.length-1; while(lo<hi){ const mid=(lo+hi)>>1; if(cells[mid][0]>u) hi=mid; else lo=mid+1; } out[k]=[cells[lo][1],cells[lo][2]]; }
+  return out;
+}
+function mcBuild(pool,n,run,N){
+  N=N||1000; const sims=pool.map(c=>({c,s:mcSim(c.M,N,(((+c.id||1)*2654435761)+run*40503)>>>0)}));
+  sims.forEach(x=>{ let best=null;
+    MENU.forEach(([name,f,sel])=>{ let h=0; for(let k=0;k<N;k++) if(f(x.s[k][0],x.s[k][1])) h++; const p=h/N; if(p>0&&1/p>=MIN_FAIR&&(!best||p>best.p)) best={name,f,sel,p}; });
+    x.best=best; });
+  const ok=sims.filter(x=>x.best).sort((a,b)=>b.best.p-a.best.p||(a.c.ko-b.c.ko)).slice(0,n);
+  if(ok.length<n) return null;
+  ok.sort((a,b)=>a.c.ko-b.c.ko);
+  const dist=new Array(n+1).fill(0); let all=0;
+  for(let k=0;k<N;k++){ let c=0; ok.forEach(x=>{ if(x.best.f(x.s[k][0],x.s[k][1])) c++; }); dist[c]++; if(c===n) all++; }
+  return {legs:ok.map(x=>({c:x.c,name:x.best.name,sel:x.best.sel||null,p:x.best.p})),N,all:all/N,dist:dist.map(v=>v/N),n};
+}
+function medOdds(det,sel){ const rows=(det&&det.odds_1x2)||[], v=rows.filter(o=>o&&o.selection===sel&&o.odds>1).map(o=>+o.odds).sort((a,b)=>a-b); return v.length?v[(v.length-1)>>1]:null; }
+function mcPool(){
+  const now=Date.now(), out=[];
+  try{
+    const S=(typeof SNAP!=="undefined"&&SNAP)||null, rows=(S&&S.matches)||(typeof state!=="undefined"&&state.cache&&state.cache.matches)||[], det=(S&&S.match)||{};
+    rows.forEach(m=>{ try{ if(m.score||m.done||(typeof isDone==="function"&&isDone(m))) return; const ko=when(m).d.getTime(); if(!(ko>now+5*60000&&ko<now+72*36e5)) return;
+      const d=det[m.event_id], M=d&&d.analysis&&d.analysis.matrix&&d.analysis.matrix.m; if(!M||!M.length) return;
+      out.push({id:m.event_id,m,M,d,ko}); }catch(e){} });
+  }catch(e){}
+  return out;
+}
+const MRUN={n:3,run:0};
+function mcHtml(res,pool,n){
+  if(!res) return `<div class="note44">Недостаточно матчей с матрицей счёта в ближайшие 72 часа: нужно ${n}, подходит ${pool.length}. Нужны ещё предстоящие матчи с подробным прогнозом.</div>`;
+  const legs=res.legs.map((l,i)=>{ const mo=l.sel?medOdds(l.c.d,l.sel):null, fo=1/l.p;
+    return `<div class="ml44" style="--i:${i}"><span class="mn">${i+1}</span><span class="mt"><b>${E(NH(l.c.m))} — ${E(NA(l.c.m))}</b><i>${E(l.name)}${typeof etaText==="function"?" · "+E(etaText(l.c.ko)||""):""}</i></span><span class="mp"><b class="num">${P1(l.p)}</b><i class="num">${mo?"рынок "+mo.toFixed(2):"справ. "+fo.toFixed(2)}</i></span></div>`; }).join("");
+  const allMkt=res.legs.every(l=>l.sel&&medOdds(l.c.d,l.sel)), O=allMkt?res.legs.reduce((q,l)=>q*medOdds(l.c.d,l.sel),1):null;
+  const fairO=res.all>0?1/res.all:null;
+  const dist=res.dist.map((v,k)=>[k,v]).reverse().map(([k,v],i)=>`<div class="dr44" style="--i:${i}"><span>${k} из ${res.n}</span><span class="bar"><i style="transform:scaleX(${Math.max(0.01,v).toFixed(3)})" class="${k===res.n?"all":""}"></i></span><span class="num">${(100*v).toFixed(0)}%</span></div>`).join("");
+  return `<div class="mcr44">${legs}</div>
+    <div class="mct44"><div><i>Проход всех ног</i><b class="num">${(100*res.all).toFixed(1)}%</b></div><div><i>Справедливый кэф</i><b class="num">${fairO?fairO.toFixed(2):"—"}</b></div>${O?`<div><i>Кэф рынка</i><b class="num">${O.toFixed(2)}</b></div><div><i>Перевес*</i><b class="num ${res.all*O-1>=0?"g":"r"}">${(res.all*O-1>=0?"+":"")}${((res.all*O-1)*100).toFixed(0)}%</b></div>`:""}</div>
+    <div class="dh44">Сколько ног сыграло в ${res.N} симуляциях</div>${dist}
+    <div class="note44">Каждая нога — исход, который чаще всех остальных (с кэфом не ниже ${MIN_FAIR.toFixed(2)}) сыграл в симуляциях по матрице счёта модели. Матчи независимы. Прогон №${MRUN.run}: разброс между прогонами — шум выборки. ${O?"*Перевес = вероятность симуляции × кэф рынка − 1: оценка, не гарантия.":"Кэфы рынка есть только на исходы 1X2, поэтому для остальных показан справедливый кэф без маржи."}</div>`;
+}
+function mcRun(host){
+  const pool=mcPool(), n=MRUN.n; MRUN.run++;
+  const res=pool.length>=n?mcBuild(pool,n,MRUN.run,1000):null;
+  host.querySelector(".mco").innerHTML=mcHtml(res,pool,n); hap(res?"ok":"light");
+}
+function mountExpress(){
+  try{
+    const x=D.getElementById("xday"); if(!x||D.getElementById("mc44")) return;
+    x.insertAdjacentHTML("afterend",`<div class="card mc44 rv44" id="mc44" style="--i:0"><div class="cap">Экспресс по Монте-Карло</div>
+      <div class="sub">Бот прогоняет 1000 симуляций по матрице счёта модели для ближайших матчей и собирает купон из исходов, которые заходят чаще всего.</div>
+      <div class="mcb"><button type="button" data-n="3" class="on">3 матча</button><button type="button" data-n="4">4 матча</button></div>
+      <button type="button" class="btn44 go">Сгенерировать экспресс по Монте-Карло</button><div class="mco" aria-live="polite"></div></div>`);
+    const h=D.getElementById("mc44");
+    h.onclick=e=>{ const nb=e.target.closest(".mcb [data-n]"); if(nb){ MRUN.n=+nb.dataset.n; h.querySelectorAll(".mcb [data-n]").forEach(b=>b.classList.toggle("on",b===nb)); hap("light"); return; }
+      if(e.target.closest(".go")) mcRun(h); };
+  }catch(e){}
+}
+
+/* ───────────────────────── 5. Live-пульс: подсветка цифр и точечное обновление ───────────────────────── */
+const LAST=new Map();
+let ARMED=0;                                          /* до какого момента (мс) изменения считаются «живыми» и подсвечиваются */
+const NUM=/-?\d+(?:[.,]\d+)?/;
+const NUMP=/-?\d+(?:[.,]\d+)?(?=\s*%)/;                /* «П1 26%» — берём число перед %, а не цифру из названия исхода */
+const numIn=t=>NUMP.exec(t)||NUM.exec(t);
+function curId(){ try{ return String(state.detail||""); }catch(e){ return ""; } }
+function entries(root){
+  const out=[], r=root||D;
+  r.querySelectorAll(".row[data-id]").forEach(row=>{ row.querySelectorAll(".pnum span").forEach((s,i)=>out.push([row.dataset.id+":p"+i,s,"p"])); });
+  const id=curId(); if(id) r.querySelectorAll("[data-nv]").forEach(s=>{ const t=s.dataset.nv.charAt(0); out.push([id+":"+s.dataset.nv,s,t==="o"||t==="f"?"o":"p"]); });
+  return out;
+}
+function tween(el,from,to,txt,m,dec){
+  if(RM()||!W.requestAnimationFrame){ return; }
+  const t0=performance.now(), D0=420, a=txt.slice(0,m.index), b=txt.slice(m.index+m[0].length);
+  (function step(t){ if(!el.isConnected) return; const k=Math.min(1,(t-t0)/D0), e=1-Math.pow(1-k,3); el.textContent=a+(from+(to-from)*e).toFixed(dec)+b; if(k<1) requestAnimationFrame(step); else el.textContent=txt; })(t0);
+}
+function glow(el,dir,kind){
+  /* коэффициент: упал — зелёный (выгоднее), вырос — красный; вероятность: выросла — зелёный, упала — красный */
+  const good=kind==="o"?dir<0:dir>0; el.classList.remove("nv-g","nv-r"); void el.offsetWidth; el.classList.add(good?"nv-g":"nv-r");
+  clearTimeout(el._nt); el._nt=setTimeout(()=>el.classList.remove("nv-g","nv-r"),1300);
+}
+function flow(root,live){
+  try{
+    const on=live||Date.now()<ARMED;
+    entries(root).forEach(([key,el,kind])=>{
+      const txt=el.textContent, m=numIn(txt); if(!m) return; const v=parseFloat(m[0].replace(",",".")); if(!isFinite(v)) return;
+      const prev=LAST.get(key); LAST.set(key,v);
+      if(on&&prev!=null&&prev!==v&&!RM()){ const dec=((m[0].split(/[.,]/)[1])||"").length; tween(el,prev,v,txt,m,dec); glow(el,v-prev,kind); }
+    });
+    if(LAST.size>1500){ let i=0; for(const k of LAST.keys()){ LAST.delete(k); if(++i>500) break; } }
+  }catch(e){}
+}
+function sig(m){ return JSON.stringify([m.score,m.done,m.phase,m.n_rec,m.n_bets,m.n_placed,m.quality,m.m43&&m.m43.sig,m.m44,m.grade,m.kickoff_at,m.live_stats]); }
+/* Подставляет новые вероятности в уже нарисованные строки. true — список не пришлось перерисовывать. */
+function patchList(nm){
+  try{
+    const el=D.getElementById("list"), old=(typeof state!=="undefined"&&state.cache&&state.cache.matches)||[]; if(!el||!Array.isArray(nm)||nm.length!==old.length) return false;
+    const by=new Map(nm.map(m=>[String(m.event_id),m])), prev=new Map(old.map(m=>[String(m.event_id),m]));
+    for(const [id,m] of prev){ const n=by.get(id); if(!n||sig(m)!==sig(n)) return false; }
+    ARMED=Date.now()+4000;
+    el.querySelectorAll(".row[data-id]").forEach(row=>{
+      const n=by.get(row.dataset.id), o=prev.get(row.dataset.id); if(!n||!o||!n.p||!o.p||n.p.join()===o.p.join()) return;
+      const t=D.createElement("div"); t.innerHTML=pbar(n.p);
+      const bar=row.querySelector(".pbar"), num=row.querySelector(".pnum"), nb=t.querySelector(".pbar"), nn=t.querySelector(".pnum");
+      if(!bar||!num||!nb||!nn) return;
+      nb.querySelectorAll("i").forEach(i=>{ i.style.animation="none"; }); bar.replaceWith(nb); num.replaceWith(nn);
+    });
+    state.cache.matches=nm; state.cache.at=Date.now(); flow(el,true); return true;
+  }catch(e){ return false; }
+}
+/* Открытый матч: обновляем вероятности и кэфы на месте. false — что-то существенное изменилось, нужен обычный render() */
+async function patchDetail(){
+  try{
+    const id=state.detail, cur=state.cur; if(!id||!cur||String(cur.event_id)!==String(id)) return false;
+    const nw=await api("/api/match/"+id); if(!nw||nw.event_id==null) return false;
+    const same=k=>JSON.stringify(cur[k])===JSON.stringify(nw[k]);
+    if(!same("score")||!same("bets")||!!cur.analysis!==!!nw.analysis) return false;
+    if(!nw.analysis){ return true; }
+    const a0=cur.analysis, a1=nw.analysis;
+    if(JSON.stringify([a0.xg,a0.top_scores,a0.quality,a0.forecasts,a0.f1x2])!==JSON.stringify([a1.xg,a1.top_scores,a1.quality,a1.forecasts,a1.f1x2])) return false;
+    const root=D.getElementById("app")||D, pr=root.querySelectorAll(".probs > div");
+    if(a1.p&&pr.length===3){ ARMED=Date.now()+4000;
+      pr.forEach((c,i)=>{ const p=c.querySelector(".p"), f=c.querySelector(".f"); if(p) p.textContent=typeof cntp==="function"?cntp(a1.p[i],1):P1(a1.p[i]); if(f) f.textContent="кэф "+(typeof fair==="function"?fair(a1.p[i]):(1/a1.p[i]).toFixed(2)); }); }
+    const od=nw.odds_1x2||[]; root.querySelectorAll("td[data-nv^='o:']").forEach(td=>{ const [,s,k]=td.dataset.nv.split(":"), r=od.find(o=>o.source===s&&o.selection===k); if(r) td.textContent=(+r.odds).toFixed(2); });
+    cur.analysis=a1; cur.odds_1x2=nw.odds_1x2; flow(root,true); return true;
+  }catch(e){ return false; }
+}
+function hasLive(){ try{ return !!(W.V35&&W.V35.liveRows&&W.V35.liveRows().length); }catch(e){ return false; } }
+
+/* ───────────────────────── 6. Подключение к карточке матча ───────────────────────── */
+function mounted(m,v){
+  try{
+    v.querySelectorAll(".v44box").forEach(b=>fill(m,b));
+    const a=m.analysis, sg=v.querySelector(".sgp44"), wi=v.querySelector(".wi44");
+    if(sg&&a) sgpBind(sg,m,a); if(wi&&a) wiBind(wi,m,a);
+    flow(v,false);
+  }catch(e){}
+}
+
+W.V44={pill,cls,box,mounted,cards,mountExpress,flow,patchList,patchDetail,hasLive,storm,
+  _t:{info,joint,sat,implies,OPTS,whatIfSim,mcSim,mcBuild,rng,topTag,trustHtml,tagsCard,storm,mcHtml,LIST_W,STORM,MENU,MIN_FAIR}};
 })();
 /*/V40-JS*/
 </script>
