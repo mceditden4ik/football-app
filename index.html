@@ -1839,6 +1839,12 @@ html,body{overscroll-behavior-x:none}
 @media (prefers-reduced-motion:reduce){.rv44,.tr44,.wr44,.ml44,.shield44,.nv-g,.nv-r{animation:none!important}.row.storm44::after{animation:none;opacity:.85}}
 :root[data-anim="off"] .rv44,:root[data-anim="off"] .tr44,:root[data-anim="off"] .wr44,:root[data-anim="off"] .ml44,:root[data-anim="off"] .shield44,:root[data-anim="off"] .nv-g,:root[data-anim="off"] .nv-r{animation:none!important}
 :root[data-anim="off"] .row.storm44::after{animation:none;opacity:.85}
+
+/* v44.1: строки списка и блоки «Формы» имеют разную высоту, а content-visibility резервирует среднюю — при прокрутке вверх/вниз
+   высота «подскакивала» при отрисовке строки. Отключаем отложенную отрисовку (список остаётся лёгким: строки без тяжёлых слоёв). */
+#list .row,.row:not(.is-live):not(.is-ht),.ft38,.xc37{content-visibility:visible;contain-intrinsic-size:none}
+/* v44.1: блоки вкладок матча (rv39) больше не прячутся до прокрутки и не «пружинят» (spring-кривая с перелётом выглядела как подпрыгивание) */
+.js39 .rv39,.js39 .rv39.in{opacity:1;transform:none;transition:none}
 /*/V40-CSS*/
 </style>
 </head>
@@ -2817,6 +2823,7 @@ Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensu
     if(!io) return;
     document.querySelectorAll("#app .card:not(.rvd), #app .xp37:not(.rvd), #app .row:not(.rvd), #app .bet:not(.rvd), #app .tile:not(.rvd)").forEach(el=>{
       el.classList.add("rvd"); const r=el.getBoundingClientRect(); const isCard=el.classList.contains("card");
+      if(el.closest&&el.closest(".mvs")) return;      /* v44.1: в карточке матча блоки не прячутся и не «выезжают» при прокрутке (на Android это выглядело как подпрыгивание) */
       if(!isCard && r.top<innerHeight*.98) return;
       if(r.top<innerHeight*.9){ el.style.setProperty("--rd",Math.min(order++,6)*70+"ms"); el.classList.add("rv"); requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add("in"))); setTimeout(()=>el.classList.remove("rv","in"),1400); }
       else { el.classList.add("rv"); io.observe(el); }
@@ -5027,13 +5034,11 @@ D.addEventListener("click",e=>{ if(e.target.closest&&e.target.closest("#pv42")){
 let lastY=scrollY, wT=0;
 addEventListener("scroll",()=>{
   const y=scrollY, on=state.tab==="matches"&&!state.detail&&$("#list");
-  if(on){ if(y>90) armed=true; if(armed&&y<=2&&y<lastY&&canPrev()&&!busy){ armed=false; loadPrev(); } }
+  /* v43.5: автоподгрузка при долистывании до верха убрана — при инерционной прокрутке срабатывала цепочкой и «уносила» список в прошлое; предыдущие дни — только по кнопке «Ранее» */
+  if(on){ if(y>90) armed=true; }
   lastY=y;
 },{passive:true});
-addEventListener("wheel",e=>{                                  /* десктоп: колесо вверх у самого начала списка */
-  if(e.deltaY>=0||scrollY>2||state.tab!=="matches"||state.detail||!$("#list")||busy||!canPrev()||Date.now()-wT<900) return;
-  wT=Date.now(); loadPrev();
-},{passive:true});
+/* v43.5: колесо мыши тоже больше не подгружает прошлое автоматически (только кнопка «Ранее») */
 
 window.TM42={mountStrip,paint,load,head,loadPrev,select,isPast,dayOf,todayS,shift,compose,_A:A,canPrev};
 
