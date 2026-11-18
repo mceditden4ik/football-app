@@ -1845,6 +1845,153 @@ html,body{overscroll-behavior-x:none}
 #list .row,.row:not(.is-live):not(.is-ht),.ft38,.xc37{content-visibility:visible;contain-intrinsic-size:none}
 /* v44.1: блоки вкладок матча (rv39) больше не прячутся до прокрутки и не «пружинят» (spring-кривая с перелётом выглядела как подпрыгивание) */
 .js39 .rv39,.js39 .rv39.in{opacity:1;transform:none;transition:none}
+
+/* ═════════ v45 ═════════ */
+/* матрица счёта */
+.mx45 .sub,.bal45 .sub{font-size:12.5px;color:var(--muted);line-height:1.4;margin:4px 0 8px}
+.scn45{display:flex;flex-wrap:wrap;gap:7px;margin:6px 0 10px}
+.scn45 button{height:34px;padding:0 13px;border-radius:99px;background:var(--card2,rgba(255,255,255,.05));border:1px solid var(--line);color:var(--text,inherit);font-weight:700;font-size:12.5px;touch-action:manipulation;transition:transform .16s var(--ease),background-color .2s,color .2s}
+.scn45 button:active{transform:scale(.95)}
+.scn45 button.on{background:linear-gradient(135deg,#60a5fa,#6366f1);border-color:transparent;color:#fff}
+.mxg45{display:grid;grid-template-columns:20px repeat(var(--cols,6),minmax(0,1fr));gap:3px;align-items:center}
+.mxg45 .ax{font-style:normal;font-size:10.5px;font-weight:800;color:var(--muted);text-align:center}
+.cl45{aspect-ratio:1/.82;min-width:0;padding:0;border:0;border-radius:8px;font:700 11px var(--font,system-ui);color:var(--text,inherit);
+  background:rgba(96,165,250,calc(.07 + var(--a,0)*.72));touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:opacity .2s,transform .16s var(--ease),box-shadow .2s}
+.cl45:active{transform:scale(.93)}
+.cl45.sel{box-shadow:0 0 0 2px #fff,0 0 14px rgba(96,165,250,.7)}
+.cl45.off{opacity:.22}
+.mxr45{margin-top:12px;min-height:44px}
+.rt45{font-size:14px}.rt45 b{font-size:20px;margin-right:4px}.rt45 i,.hint45{font-style:normal;font-size:12.5px;color:var(--muted)}
+.gl45{margin:10px 0 6px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.mk45{display:flex;flex-wrap:wrap;gap:6px}
+.mk45 span{padding:5px 10px;border-radius:99px;font-size:12px;background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.3)}
+.mk45 b{margin-left:3px}
+.dvs45{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:14px}
+.dv45{padding:10px 12px;border-radius:14px;background:var(--card2,rgba(255,255,255,.04));border:1px solid var(--line);display:flex;flex-direction:column;gap:2px}
+.dv45 span{font-size:11.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dv45 b{font-size:19px;font-weight:900}.dv45 i{font-style:normal;font-size:11.5px;color:var(--muted)}
+.as45{margin-top:14px}
+.as45 table{width:100%;border-collapse:collapse;font-size:13px}
+.as45 th{font-size:11px;color:var(--muted);text-align:right;font-weight:700;padding:3px 0}.as45 th:first-child,.as45 td:first-child{text-align:left}
+.as45 td{padding:5px 0;text-align:right;border-top:1px solid var(--line)}.as45 td small{color:var(--muted);font-size:11px}
+.note45{margin-top:8px;font-size:11.5px;color:var(--muted);line-height:1.4}
+/* баланс сил */
+.tug45{display:flex;gap:3px;height:12px;margin:12px 0 6px}
+.tug45 span{min-width:0;border-radius:99px;animation:v45tug .6s var(--ease) both}
+.tug45 .h{background:linear-gradient(90deg,#3b82f6,#60a5fa);transform-origin:right center}
+.tug45 .a{background:linear-gradient(90deg,#a78bfa,#8b5cf6);transform-origin:left center}
+@keyframes v45tug{from{transform:scaleX(0);opacity:.2}to{transform:none;opacity:1}}
+.tl45{display:flex;justify-content:space-between;gap:8px;font-size:13px}.tl45 b{font-size:16px}
+.ag45,.em45{margin-top:10px;padding:9px 12px;border-radius:12px;font-size:12.5px;line-height:1.4;background:var(--card2,rgba(255,255,255,.04));border:1px solid var(--line)}
+.ag45.ok{border-color:rgba(74,222,128,.4)}.ag45.bad{border-color:rgba(251,191,36,.5)}
+.em45{border-color:rgba(251,191,36,.4)}
+.tr45{margin-top:10px;display:flex;flex-wrap:wrap;gap:2px 8px;align-items:center;font-size:12.5px;font-weight:700}
+.tr45 i{width:8px;height:8px;border-radius:50%;background:#60a5fa;box-shadow:0 0 8px #60a5fa}
+.tr45.t2 i{background:#fbbf24;box-shadow:0 0 8px #fbbf24}.tr45.t1 i{background:#4ade80;box-shadow:0 0 8px #4ade80}
+.tr45 small{flex-basis:100%;font-weight:400;color:var(--muted);font-size:11.5px}
+/* контекст таблицы, маржа, свежесть */
+.ctx45{display:flex;justify-content:center;gap:8px;margin:6px 0 2px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.ctx45 b{color:var(--text,inherit)}.ctx45 i{font-style:normal;opacity:.5}
+.ovr45{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px;font-size:12px}
+.ovr45 .gl45{margin:0 4px 0 0}
+.ovr45 span:not(.gl45){padding:4px 10px;border-radius:99px;background:var(--card2,rgba(255,255,255,.05));border:1px solid var(--line)}
+.ovr45 .g{border-color:rgba(74,222,128,.45)}.ovr45 .w{border-color:rgba(251,191,36,.5);color:#fbbf24}
+.fr45{margin:10px 0 0;padding:9px 12px;border-radius:12px;font-size:12.5px;line-height:1.4;color:#fbbf24;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.4);display:flex;gap:8px;align-items:flex-start}
+.fr45 i{flex:0 0 auto;width:8px;height:8px;margin-top:5px;border-radius:50%;background:#fbbf24;box-shadow:0 0 8px #fbbf24}
+/* спарклайн */
+.spw45{margin:10px 0 6px}
+.spk45{width:100%;height:auto;display:block;overflow:visible}
+.spk45 .z{stroke:var(--line);stroke-dasharray:3 4;stroke-width:1}
+.spk45 .pin{fill:#fbbf24;stroke:#fff;stroke-width:1.5}
+.lg45{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:4px;font-size:12px;color:var(--muted)}
+.lg45 span{display:inline-flex;align-items:center;gap:5px}.lg45 i{width:10px;height:3px;border-radius:2px;background:var(--c)}
+.pn45{margin-top:8px;padding:8px 12px;border-radius:12px;font-size:12.5px;line-height:1.4;display:flex;gap:8px;border:1px solid var(--line);background:var(--card2,rgba(255,255,255,.04))}
+.pn45 i{flex:0 0 auto;width:8px;height:8px;margin-top:5px;border-radius:50%;background:#fbbf24}
+.pn45.g{border-color:rgba(74,222,128,.45)}.pn45.w{border-color:rgba(251,191,36,.45)}
+.nt45{margin-top:6px;font-size:11.5px;color:var(--muted)}
+/* синергия, спросить ИИ, глоссарий */
+.syn45{height:32px;padding:0 12px;margin-right:auto;border-radius:99px;background:rgba(52,211,153,.14);border:1px solid rgba(52,211,153,.4);color:var(--text,inherit);font-size:12px;font-weight:700}
+.synr45{margin-top:10px}
+.sy45{display:flex;flex-direction:column;gap:2px;align-items:flex-start;width:100%;margin-top:6px;padding:10px 12px;border-radius:12px;text-align:left;background:var(--card2,rgba(255,255,255,.04));border:1px solid var(--line);color:var(--text,inherit);animation:v45in .3s var(--ease) both;animation-delay:calc(var(--i,0)*60ms)}
+.sy45 span{font-size:12px;color:var(--muted)}
+.sy45:active{transform:scale(.98)}
+#ask45{background:linear-gradient(135deg,#6366f1,#8b5cf6 60%,#ec4899)!important;color:#fff!important;border-color:transparent!important}
+.gl45b{margin-left:8px;width:20px;height:20px;padding:0;border-radius:50%;border:1px solid var(--line);background:var(--card2,rgba(255,255,255,.06));color:var(--muted);font:800 12px/18px var(--font,system-ui);text-align:center;vertical-align:middle;text-transform:none;letter-spacing:0}
+.glx45 p{font-size:14.5px;line-height:1.55;margin:4px 0 12px}
+@keyframes v45in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.tug45 span,.sy45{animation:none!important}.cl45,.scn45 button{transition:none}}
+:root[data-anim="off"] .tug45 span,:root[data-anim="off"] .sy45{animation:none!important}
+
+/* ═════ v46 ═════ */
+/* Крестики: не теряют касание при микросдвиге пальца, остаются на виду при прокрутке окна, не лезут в зону системного жеста у края экрана */
+.m38p>.m38x,.m39p>.m39x{position:sticky;top:10px;right:auto;display:grid;width:46px;height:46px;margin:-10px 0 -36px auto;z-index:6;touch-action:none;-webkit-tap-highlight-color:transparent;
+  background:color-mix(in srgb,var(--bg2) 82%,var(--text) 18%)}
+/* окна почти непрозрачные: на слабых WebView размытие фона не работает, и текст страницы просвечивал сквозь панель */
+.m38p,.m39p{background:color-mix(in srgb,var(--bg2) 96%,transparent)}
+.sx46{position:absolute;top:8px;right:14px;z-index:7;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;touch-action:none;color:var(--muted);
+  background:color-mix(in srgb,var(--bg2) 82%,var(--text) 18%);border:1px solid rgba(255,255,255,.1);-webkit-tap-highlight-color:transparent}
+.sx46:active{transform:scale(.88)}.sx46 svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round}
+#sheet .sh-t{padding-right:64px}
+
+/* фильтры */
+#qc43 .rs46{--tc:var(--red);border-color:color-mix(in srgb,var(--red) 45%,transparent);color:var(--red)}
+.row.bot46{border-left:3px solid color-mix(in srgb,var(--blue) 80%,transparent)}
+
+/* пульс дня и итоги вчера */
+.pl46,.yd46{margin:0 0 12px}
+.pg46,.yg46,.kg46,.cs46{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 8px}
+.kg46,.cs46{grid-template-columns:repeat(3,1fr)}
+.pg46>div,.yg46>div,.kg46>div,.cs46>div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.pg46 b,.yg46 b,.kg46 b,.cs46 b{font-size:20px;line-height:1.1;font-weight:700}
+.pg46 b.lv{color:var(--green)}
+.pg46 span,.yg46 span,.kg46 span,.cs46 span{font-size:11px;color:var(--muted);line-height:1.25}
+.pb46{height:6px;border-radius:3px;background:var(--track);overflow:hidden;display:flex}
+.pb46 i{display:block;height:100%}.pb46 .d{background:var(--blue)}.pb46 .v{background:var(--green)}
+.pn46{margin-top:8px}
+.yb46{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-top:6px;font-size:14px}
+.g{color:var(--green)}.r{color:var(--red)}
+
+/* калибровка */
+.cal46{width:100%;height:auto;display:block;margin:6px 0 2px}
+.cal46 .dg{stroke:var(--muted);stroke-width:1;stroke-dasharray:4 4;opacity:.7}
+.cal46 .ax{fill:var(--muted);font-size:9px}
+.cal46 .pt{fill:var(--blue);stroke:var(--bg2);stroke-width:1.5}
+.cal46 .pt.up{fill:var(--green)}.cal46 .pt.dn{fill:var(--red)}
+.cal46 .pt.lo{fill:transparent;stroke-width:2}.cal46 .pt.lo.up{stroke:var(--green)}.cal46 .pt.lo.dn{stroke:var(--red)}
+.kn46{margin-top:4px}
+.kt46{overflow-x:auto;margin-top:8px}
+.kt46 table{width:100%;border-collapse:collapse;font-size:12px}
+.kt46 th{font-weight:500;color:var(--muted);text-align:left;padding:4px 6px 4px 0;white-space:nowrap}
+.kt46 td{padding:5px 6px 5px 0;border-top:1px solid color-mix(in srgb,var(--text) 8%,transparent);white-space:nowrap}
+.kt46 tr.dim td{opacity:.5}
+
+/* модель против Pinnacle */
+.sh46h,.sr46{display:grid;grid-template-columns:28px 1fr 44px 44px 40px;gap:8px;align-items:center;font-size:12px}
+.sh46h{color:var(--muted);margin:8px 0 2px;font-size:11px}
+.sr46{margin:6px 0}
+.sr46 .n{font-weight:600}
+.sr46 .b{position:relative;height:8px;border-radius:4px;background:var(--track);overflow:hidden}
+.sr46 .pn{position:absolute;left:0;top:0;bottom:0;background:var(--blue);opacity:.75}
+.sr46 .md{position:absolute;top:-2px;bottom:-2px;width:3px;margin-left:-1px;background:var(--amber);border-radius:2px}
+.sr46 .mdl{color:var(--amber)}.muted{color:var(--muted)}
+
+/* купон */
+.cbr46{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 6px}
+.cbr46 button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px;border-radius:14px;border:1px solid color-mix(in srgb,var(--text) 14%,transparent);background:color-mix(in srgb,var(--text) 5%,transparent);color:var(--text);font-size:13px;touch-action:manipulation}
+.cbr46 button b{font-size:16px}
+.cbr46 button.on{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 22%,transparent)}
+.lnk46{background:none;border:0;color:var(--blue);padding:6px 0;font-size:13px}
+.cl46{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;padding:10px 0;border-bottom:1px solid color-mix(in srgb,var(--text) 8%,transparent)}
+.cl46 .t{font-size:14px;grid-column:1}.cl46 .s{font-size:12px;color:var(--muted);grid-column:1}
+.cl46 button{grid-column:2;grid-row:1/3;width:36px;height:36px;border-radius:50%;border:0;background:color-mix(in srgb,var(--text) 8%,transparent);color:var(--muted)}
+.cc46{width:100%;margin-top:12px;background:var(--card2,#1a2338);color:var(--text)}
+#cp46{position:fixed;left:50%;bottom:calc(86px + env(safe-area-inset-bottom));transform:translate3d(-50%,20px,0);opacity:0;pointer-events:none;z-index:55;padding:10px 18px;border-radius:999px;border:1px solid color-mix(in srgb,var(--blue) 50%,transparent);
+  background:color-mix(in srgb,var(--bg2) 94%,transparent);color:var(--text);font-size:14px;box-shadow:0 8px 24px -8px rgba(0,0,0,.6);transition:transform .35s ease,opacity .25s ease}
+#cp46.on{transform:translate3d(-50%,0,0);opacity:1;pointer-events:auto}
+#cp46 b{margin-left:6px;color:var(--blue)}
+@media (prefers-reduced-motion:reduce){#cp46{transition:none}}
+html[data-anim=off] #cp46{transition:none}
+#ver46{text-align:center;font-size:10px;color:var(--muted);opacity:.5;padding:14px 0 4px}
 /*/V40-CSS*/
 </style>
 </head>
@@ -1996,7 +2143,7 @@ function ensureSnap(maxAge=45000){
 }
 function snapNote(){
   if(!STATIC||!SNAP) return "";
-  const t=new Date(SNAP.generated_at), age=(Date.now()-t.getTime())/1000, old=age>6*3600;
+  const t=new Date(SNAP.generated_at), age=(Date.now()-t.getTime())/1000, old=window.V45?V45.stale(age):age>6*3600;
   return `<div class="snapnote${old||SNAP_STALE?" warn":""}">${SNAP_STALE?"офлайн-копия · ":""}данные на ${fmtTime(t)} · ${ago(SNAP.generated_at)}${old?" · ноутбук давно не публиковал, цифры могли устареть":""}</div>`;
 }
 async function staticApi(path){
@@ -2159,6 +2306,7 @@ function renderList(anim){
   }
   el.innerHTML = out;
   if(window.V44) V44.flow(el);
+  if(window.V46) V46.afterList(el);
   if(anim) stagger(el,".row"); else el.querySelectorAll(".row,.pbar i").forEach(x=>x.style.animation="none");
   el.querySelectorAll(".row").forEach(x=>{ if(anim) x.style.animation=""; });
   el.onclick = e=>{const b=e.target.closest("[data-id]"); if(b){ haptic(); state.scroll=window.scrollY; openMatch(+b.dataset.id); }};
@@ -2197,8 +2345,8 @@ function mono(n){const w=String(n).replace(/[^\p{L}\s]/gu,"").trim().split(/\s+/
   return ((w.length>1?w[0][0]+w[1][0]:(w[0]||"?").slice(0,2))).toUpperCase();}
 function openMatch(id){ state.detail=id; history.pushState({m:id},""); syncBack(); viewMatch(id); window.scrollTo(0,0); }
 function closeMatch(){ state.detail=null; syncBack(); render(); }
-function syncBack(){ try{ if(!tg||!tg.BackButton) return; if(state.detail){tg.BackButton.show();} else {tg.BackButton.hide();} }catch(e){} }
-if(tg&&tg.BackButton) tg.BackButton.onClick(()=>{ if(state.detail) history.back(); });
+function syncBack(){ try{ if(!tg||!tg.BackButton) return; if(state.detail||(window.V46&&V46.nav.any())){tg.BackButton.show();} else {tg.BackButton.hide();} }catch(e){} }
+if(tg&&tg.BackButton) tg.BackButton.onClick(()=>{ if(window.V46&&V46.nav.back()) return; if(state.detail) history.back(); });
 window.addEventListener("popstate",()=>{ if(state.detail) closeMatch(); });
 
 const STAR = '<svg viewBox="0 0 24 24"><path d="M12 3.2l2.6 5.5 6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.5l6-.8z"/></svg>';
@@ -2290,7 +2438,7 @@ async function viewMatch(id){
       return `<div><div class="t">${t}</div><div class="s"><span style="${sk?"":"color:var(--muted)"}">${sides[over?0:1]}</span><b class="num" style="color:${c}">${cntp(pr)}</b></div>
         <div class="meter"><i style="width:${pr*100}%;background:${c}"></i></div><div class="n" style="color:${sk?"var(--green)":"var(--dim)"}">${sk?"навык ✓":"≈ база"}${x.hist_n?` <span class="dim">· n=${x.hist_n}</span>`:""}</div></div>`;}).join("");
     if(cells) h += `<div class="card"><div class="cap">Рынки <span class="sub" style="text-transform:none;letter-spacing:0;font-weight:400">· серым — навыка нет, цифра ≈ базовой частоте</span></div><div class="mk">${cells}</div></div>`;
-    h += heatmap(a,m) + (window.V43?V43.sim(a,m):"") + compare(a,m) + (window.V44?V44.cards(a,m):"");
+    h += heatmap(a,m) + (window.V43?V43.sim(a,m):"") + compare(a,m) + (window.V45?V45.cards(a,m):"") + (window.V44?V44.cards(a,m):"");
     const c = a.components||{};
     if(c.poisson) h += `<div class="card"><div class="cap">Из чего сложен прогноз</div><table style="margin-top:6px"><tr><th>Модель</th><th>П1</th><th>Х</th><th>П2</th></tr>` +
       [["Пуассон (вес 0.5)",c.poisson],["Бустинг (0.3)",c.gbm],["Эло (0.2)",c.elo],["Ансамбль",a.p]].filter(r=>r[1]).map(([n,v],i,arr)=>`<tr style="${i==arr.length-1?"font-weight:800":""}"><td>${n}</td>${v.map(x=>`<td class="num">${pc(x,1)}</td>`).join("")}</tr>`).join("") + `</table></div>`;
@@ -2306,6 +2454,8 @@ async function viewMatch(id){
   if(window.W39) W39.mounted(m, v);
   if(window.V43) V43.mounted(m, v);
   if(window.V44) V44.mounted(m, v);
+  if(window.V45) V45.mounted(m, v);
+  if(window.V46) V46.mounted(m, v);
   // избранное
   v.querySelectorAll("[data-fav]").forEach(b=>b.onclick=()=>{ const on=toggleFav(b.dataset.fav); b.classList.toggle("on",on); b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop"); toast(on?"Добавлено в «Мои команды»":"Убрано из «Мои команды»"); });
   if(!a) return;
@@ -2770,6 +2920,7 @@ async function viewStats(){
   bindChart(s.equity);
   bindLook();
   loadSegments();
+  if(window.V46) V46.stats(s);
 }
 
 /* ─────────── обновление и жест «потянуть вниз» ─────────── */
@@ -3748,7 +3899,7 @@ void main(){
     const f=FS(), q=norm(state.q); let list=all;
     if(f.leagues.length) list=list.filter(m=>f.leagues.includes(m.league));
     if(f.conf) list=list.filter(m=>m.p&&Math.max(...m.p)>=f.conf);
-    if(q) list=fuzzy(list,q);
+    if(q){ const fz=fuzzy(list,q); const ex=window.V46?list.filter(m=>fz.indexOf(m)<0&&V46.tagHit(m,String(state.q||"").trim().toLowerCase())):[]; list=ex.length?fz.concat(ex):fz; }
     const sq=state.q; state.q=""; state.cache.matches=list;
     try{ _rl2.call(this,anim); } finally{ state.cache.matches=all; state.q=sq; }
     const e=$("#list .empty"); if(e&&!e.dataset.v34){ const ttl=(e.firstChild&&e.firstChild.nodeType===3?e.firstChild.textContent:"Здесь пока пусто"), sub=(q||activeN())?"Попробуйте изменить запрос или сбросить фильтры.":((e.querySelector(".sub")||{}).textContent||"");
@@ -5030,13 +5181,13 @@ async function loadPrev(){
   }catch(e){ toast("Не удалось загрузить предыдущий день"); }
   busy=false;
 }
-D.addEventListener("click",e=>{ if(e.target.closest&&e.target.closest("#pv42")){ hap(); loadPrev(); } });
+D.addEventListener("click",e=>{ if(e.target.closest&&e.target.closest("#pv42")){ if(Date.now()-wT<600) return; /* v46: касание в конце быстрой прокрутки — не нажатие */ hap(); loadPrev(); } });
 let lastY=scrollY, wT=0;
 addEventListener("scroll",()=>{
   const y=scrollY, on=state.tab==="matches"&&!state.detail&&$("#list");
   /* v43.5: автоподгрузка при долистывании до верха убрана — при инерционной прокрутке срабатывала цепочкой и «уносила» список в прошлое; предыдущие дни — только по кнопке «Ранее» */
   if(on){ if(y>90) armed=true; }
-  lastY=y;
+  lastY=y; wT=Date.now();
 },{passive:true});
 /* v43.5: колесо мыши тоже больше не подгружает прошлое автоматически (только кнопка «Ранее») */
 
@@ -5329,7 +5480,7 @@ const SPAN=13;                                       /* счета 0..12 для 
 function joint(M,preds){ let s=0,t=0; for(let i=0;i<M.length;i++){ const r=M[i]; for(let j=0;j<r.length;j++){ const p=+r[j]||0; t+=p; if(preds.every(f=>f(i,j))) s+=p; } } return t>0?s/t:0; }
 function sat(preds){ for(let i=0;i<SPAN;i++) for(let j=0;j<SPAN;j++) if(preds.every(f=>f(i,j))) return true; return false; }
 function implies(A,B){ for(let i=0;i<SPAN;i++) for(let j=0;j<SPAN;j++){ if(A.every(f=>f(i,j))&&!B(i,j)) return false; } return true; }
-const SG={};                                          /* event_id → выбранные ["g.o"] */
+const SG={}, API={};                                          /* event_id → выбранные ["g.o"] */
 const optOf=k=>{ const [g,o]=k.split(".").map(Number); return OPTS[g][1][o]; };
 const lab=k=>optOf(k)[0];
 function sgpCard(a,m){
@@ -5381,6 +5532,7 @@ function sgpBind(card,m,a){
       sgpUpdate(card,m,a,{t:"bad",x:`«${lab(k)}» несовместимо с «${lab(bad)}» — такого счёта не существует. Событие не добавлено.`}); hap("medium"); return; }
     S.push(k); sgpUpdate(card,m,a); hap("select");
   };
+  API[m.event_id]={ set:ks=>{ SG[m.event_id]=ks.slice(0,4); sgpUpdate(card,m,a); hap("select"); } };   /* v45: «Найти синергию» подставляет набор */
   sgpUpdate(card,m,a);
 }
 function shake(el){ if(RM()||!el.animate) return; try{ el.animate([{transform:"translateX(0)"},{transform:"translateX(-5px)"},{transform:"translateX(5px)"},{transform:"translateX(-3px)"},{transform:"translateX(0)"}],{duration:300,easing:"ease-out"}); }catch(e){} }
@@ -5571,8 +5723,597 @@ function mounted(m,v){
   }catch(e){}
 }
 
-W.V44={pill,cls,box,mounted,cards,mountExpress,flow,patchList,patchDetail,hasLive,storm,
+W.V44={sgpSet:(eid,ks)=>{ if(API[eid]) API[eid].set(ks); },pill,cls,box,mounted,cards,mountExpress,flow,patchList,patchDetail,hasLive,storm,
   _t:{info,joint,sat,implies,OPTS,whatIfSim,mcSim,mcBuild,rng,topTag,trustHtml,tagsCard,storm,mcHtml,LIST_W,STORM,MENU,MIN_FAIR}};
+})();
+
+/* ═════════ v45: матрица счёта 6×6, баланс сил, спарклайн кэфов с входом бота, маржа, контекст таблицы, «Найти синергию», глоссарий, «Спросить ИИ» ═════════
+   Правила как в v44: данные берутся из уже готового снимка (analysis.matrix, components, extra.table, extra.odds_moves, odds_1x2, bets);
+   нет данных — нет блока; вся математика в браузере; анимации — только transform/opacity; без случайных чисел и без обращений к сети. */
+(function(){"use strict";
+const W=window, D=document;
+const E=s=>typeof esc==="function"?esc(s):String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const NH=m=>typeof nmH==="function"?nmH(m):m.home, NA=m=>typeof nmA==="function"?nmA(m):m.away;
+const hap=k=>{ try{ if(typeof haptic==="function") haptic(k); }catch(e){} };
+const PC=x=>(100*x).toFixed(1)+"%";
+const FO=p=>p>0.002&&p<0.998?(1/p).toFixed(2):"—";
+const T4=()=>W.V44&&W.V44._t;
+
+/* ───────── математика по матрице счёта (строка — голы хозяев, столбец — голы гостей) ───────── */
+function grid(a){
+  const M=a&&a.matrix&&a.matrix.m; if(!Array.isArray(M)||M.length<2||!Array.isArray(M[0])) return null;
+  let t=0; for(const r of M) for(const v of r) t+=(+v)||0;
+  if(!(t>0.5)) return null;                                   /* масса сетки подозрительно мала — не рисуем */
+  const rest=+(a.matrix.rest)||0;
+  return {M,t,rest,n:M.length,mm:M[0].length};
+}
+const cell=(G,i,j)=>((G.M[i]&&G.M[i][j])||0)/G.t;
+function pr(G,f){ let s=0; for(let i=0;i<G.n;i++) for(let j=0;j<G.mm;j++) if(f(i,j)) s+=G.M[i][j]||0; return s/G.t; }
+function totals(G){ const o=new Array(G.n+G.mm-1).fill(0); for(let i=0;i<G.n;i++) for(let j=0;j<G.mm;j++) o[i+j]+=(G.M[i][j]||0)/G.t; return o; }
+/* минимальное число голов N, при котором P(тотал ≤ N) ≥ q; масса за пределами сетки считается «больше N» (консервативно) */
+function ceiling(G,q){ const tot=totals(G), full=G.t+G.rest; let c=0; for(let k=0;k<tot.length;k++){ c+=tot[k]*G.t/full; if(c>=q) return {n:k,p:c}; } return null; }
+/* азиатский тотал x.25 / x.75: ставка делится пополам на соседние линии; справедливый кэф — при нулевом ожидании */
+function asian(G,line,over){
+  const lo=line-0.25, hi=line+0.25, tot=totals(G); let win=0, lose=0;
+  for(const t of [lo,hi]) for(let k=0;k<tot.length;k++){ const p=tot[k]*0.5; if(k===t) continue;       /* возврат — не учитываем */
+    const w=over?k>t:k<t; if(w) win+=p; else lose+=p; }
+  return win>0.002?{p:win,odds:1+lose/win}:null;
+}
+
+/* ───────── карточка «Матрица счёта» ───────── */
+const SC=[
+  ["dry","Сухая победа",(i,j)=>(i>0&&j===0)||(j>0&&i===0)],
+  ["btts","Обе забьют",(i,j)=>i>0&&j>0],
+  ["gap2","Разница 2+",(i,j)=>Math.abs(i-j)>=2],
+  ["draw","Ничья",(i,j)=>i===j]
+];
+function marketsAt(G,i,j){
+  const T=T4(); if(!T) return [];
+  const out=[]; for(const [gt,os] of T.OPTS) for(const [n,f] of os){ if(f(i,j)) out.push({n,p:pr(G,f)}); }
+  return out;
+}
+function mxCard(a,m){
+  const G=grid(a); if(!G) return "";
+  let mx=0; for(const r of G.M) for(const v of r) if(v>mx) mx=v;
+  if(!(mx>0)) return "";
+  const hd=Array.from({length:G.mm},(_,j)=>`<i class="ax">${j}</i>`).join("");
+  const rows=G.M.map((r,i)=>`<i class="ax">${i}</i>`+r.map((v,j)=>{ const p=(v||0)/G.t; const al=Math.max(0,Math.min(1,(v||0)/mx));
+    return `<button type="button" class="cl45" data-i="${i}" data-j="${j}" style="--a:${al.toFixed(3)}" aria-label="${i}:${j} — ${PC(p)}">${p>=0.0995?(100*p).toFixed(0):p>=0.001?(100*p).toFixed(1):"·"}</button>`; }).join("")).join("");
+  const rs=G.rest>0.04?"":ceiling(G,0.9);
+  const ce=rs?`<div class="dv45"><span>Потолок матча</span><b>≤ ${rs.n} ${rs.n===1?"гол":rs.n>1&&rs.n<5?"гола":"голов"}</b><i>в ${Math.round(rs.p*100)}% сценариев</i></div>`:"";
+  const ph=pr(G,(i,j)=>j===0), pa=pr(G,(i,j)=>i===0);
+  const as=G.rest>0.04?"":[2.25,2.75,3.25].map(L=>{ const o=asian(G,L,true), u=asian(G,L,false); if(!o||!u) return "";
+      return `<tr><td>${L}</td><td class="num">${o.odds.toFixed(2)}<small> ${(o.p*100).toFixed(0)}%</small></td><td class="num">${u.odds.toFixed(2)}<small> ${(u.p*100).toFixed(0)}%</small></td></tr>`; }).join("");
+  return `<div class="card mx45 rv44" style="--i:0" data-eid="${E(m.event_id)}"><div class="cap">Матрица точного счёта</div>
+    <div class="sub">Строки — голы хозяев (${E(NH(m))}), столбцы — голы гостей. Число в ячейке — вероятность счёта, %. Тапните ячейку или выберите сценарий.</div>
+    <div class="scn45">${SC.map(([k,t])=>`<button type="button" data-sc="${k}" aria-pressed="false">${t}</button>`).join("")}</div>
+    <div class="mxg45" style="--cols:${G.mm}"><i class="ax"></i>${hd}${rows}</div>
+    <div class="mxr45" aria-live="polite"><div class="hint45">Выберите счёт или сценарий — здесь появится вероятность и рынки, которые при этом заходят.</div></div>
+    <div class="dvs45"><div class="dv45"><span>${E(NH(m))} не пропустят</span><b>${PC(ph)}</b><i>справ. кэф ${FO(ph)}</i></div>
+      <div class="dv45"><span>${E(NA(m))} не пропустят</span><b>${PC(pa)}</b><i>справ. кэф ${FO(pa)}</i></div>${ce}</div>
+    ${as?`<div class="as45"><div class="gl45">Азиатские тоталы · справедливый кэф (без маржи)</div><table><tr><th>Линия</th><th>Больше</th><th>Меньше</th></tr>${as}</table>
+      <div class="note45">При целом счёте половина ставки возвращается, поэтому кэф не равен 1/вероятность. Это расчёт модели, не котировка конторы.</div></div>`:""}</div>`;
+}
+function mxBind(card,a,m){
+  const G=grid(a); if(!G) return;
+  const res=card.querySelector(".mxr45"), cells=[...card.querySelectorAll(".cl45")], scb=[...card.querySelectorAll("[data-sc]")];
+  let selC=null, selS=null;
+  const paint=()=>{
+    cells.forEach(c=>{ const i=+c.dataset.i, j=+c.dataset.j; c.classList.toggle("sel",!!selC&&selC[0]===i&&selC[1]===j);
+      c.classList.toggle("off",!!selS&&!SC.find(s=>s[0]===selS)[2](i,j)); });
+    scb.forEach(b=>{ const on=b.dataset.sc===selS; b.classList.toggle("on",on); b.setAttribute("aria-pressed",on?"true":"false"); });
+    if(selC){ const [i,j]=selC, p=cell(G,i,j), mk=marketsAt(G,i,j);
+      res.innerHTML=`<div class="rt45"><b>${i}:${j}</b> — ${PC(p)} <i>справ. кэф ${FO(p)}</i></div><div class="gl45">При этом счёте заходят</div>
+        <div class="mk45">${mk.map(x=>`<span>${E(x.n)} <b>${PC(x.p)}</b></span>`).join("")||"—"}</div>`; }
+    else if(selS){ const f=SC.find(s=>s[0]===selS), p=pr(G,f[2]); res.innerHTML=`<div class="rt45"><b>${f[1]}</b> — ${PC(p)} <i>справ. кэф ${FO(p)}</i></div><div class="hint45">Подсвечены счета, которые входят в сценарий.</div>`; }
+    else res.innerHTML=`<div class="hint45">Выберите счёт или сценарий — здесь появится вероятность и рынки, которые при этом заходят.</div>`;
+  };
+  card.addEventListener("click",e=>{
+    const c=e.target.closest(".cl45"), s=e.target.closest("[data-sc]");
+    if(c){ const i=+c.dataset.i, j=+c.dataset.j; selC=(selC&&selC[0]===i&&selC[1]===j)?null:[i,j]; selS=null; hap("select"); paint(); }
+    else if(s){ selS=selS===s.dataset.sc?null:s.dataset.sc; selC=null; hap("select"); paint(); }
+  });
+}
+
+/* ───────── «Баланс сил»: перетягивание каната по ожидаемым голам, согласие моделей, маркер Эло, уровень данных ───────── */
+const TOP6=new Set(["EPL","La_Liga","Bundesliga","Serie_A","Ligue_1","RFPL"]);
+const EURO=new Set(["Champions_League","Europa_League","Conference_League"]);
+function tier(league){
+  if(TOP6.has(league)) return {k:"t1",t:"Данные: xG Understat",d:"Модель обучена на реальном xG этой лиги."};
+  if(EURO.has(league)) return {k:"t2",t:"Данные: смешанные",d:"В еврокубках xG есть не у всех команд — где его нет, модель опирается на удары."};
+  return league?{k:"t2",t:"Данные: удары (прокси xG)",d:"Для этой лиги реального xG в обучении нет — используются удары и их качество."}:null;
+}
+function agree(c){
+  if(!c||!c.poisson||!c.gbm||!c.elo) return null;
+  let sp=0; for(let k=0;k<3;k++){ const v=[c.poisson[k],c.gbm[k],c.elo[k]]; sp=Math.max(sp,Math.max(...v)-Math.min(...v)); }
+  return {pp:sp*100,lvl:sp<=0.06?"ok":sp>=0.12?"bad":"mid"};
+}
+function eloMark(a){
+  const c=a&&a.components; if(!c||!c.poisson||!c.elo||!a.p) return null;
+  const k=a.p[0]>=a.p[2]?0:2; if(a.p[k]<0.4) return null;                    /* явного фаворита нет — маркера нет */
+  const d=c.elo[k]-c.poisson[k]; if(Math.abs(d)<0.08) return null;
+  return {k,d:d*100,up:d>0};
+}
+function balCard(a,m){
+  const x=a&&a.xg; if(!x||!(x[0]>=0)||!(x[1]>=0)||x[0]+x[1]<=0) return "";
+  const s=x[0]+x[1], w=Math.max(8,Math.min(92,100*x[0]/s));
+  const ag=agree(a.components), em=eloMark(a), ti=tier(m.league);
+  const agT=ag?(ag.lvl==="ok"?`Три модели единодушны (разброс ${ag.pp.toFixed(0)} п.п.).`:ag.lvl==="bad"?`Модели расходятся (разброс до ${ag.pp.toFixed(0)} п.п.) — прогноз менее надёжен.`:`Умеренный разброс моделей (${ag.pp.toFixed(0)} п.п.).`):"";
+  const emT=em?`${em.up?"Эло завышает":"Эло занижает"} шансы ${em.k===0?E(NH(m)):E(NA(m))} на ${Math.abs(em.d).toFixed(0)} п.п. против Пуассона: ${em.up?"рейтинг клуба «тянет» вверх сильнее, чем текущая игра":"рейтинг ниже, чем показывает текущая игра"}.`:"";
+  return `<div class="card bal45 rv44" style="--i:0"><div class="cap">Баланс сил</div>
+    <div class="tug45" role="img" aria-label="Ожидаемые голы ${(+x[0]).toFixed(2)} против ${(+x[1]).toFixed(2)}"><span class="h" style="flex-basis:${w.toFixed(1)}%"></span><span class="a" style="flex-basis:${(100-w).toFixed(1)}%"></span></div>
+    <div class="tl45"><span><b>${(+x[0]).toFixed(2)}</b> ${E(NH(m))}</span><span>${E(NA(m))} <b>${(+x[1]).toFixed(2)}</b></span></div>
+    <div class="sub">Ожидаемые голы модели. Шкала показывает, чья атака весомее в этом матче.</div>
+    ${agT?`<div class="ag45 ${ag.lvl}">${agT}</div>`:""}${emT?`<div class="em45">${emT}</div>`:""}
+    ${ti?`<div class="tr45 ${ti.k}" title="${E(ti.d)}"><i></i>${E(ti.t)}<small>${E(ti.d)}</small></div>`:""}</div>`;
+}
+
+/* ───────── контекст таблицы под шапкой ───────── */
+function ctxHtml(m){
+  const tb=(m.extra&&m.extra.table)||[]; if(tb.length<4) return "";
+  const h=tb.find(r=>r.team===m.home), a=tb.find(r=>r.team===m.away); if(!h||!a) return "";
+  return `<div class="ctx45"><span><b>${h.pos}-е</b> место · ${h.pts} оч.</span><i>·</i><span><b>${a.pos}-е</b> место · ${a.pts} оч.</span></div>`;
+}
+
+/* ───────── маржа букмекеров ───────── */
+function overround(odds){          /* [{source,selection,odds}] → [{source,m}] — только источники, где есть все три исхода */
+  const by={}; for(const o of odds||[]){ if(!(o.odds>1)) continue; (by[o.source]=by[o.source]||{})[o.selection]=o.odds; }
+  const out=[]; for(const s of Object.keys(by)){ const r=by[s]; if(r.P1&&r.X&&r.P2) out.push({source:s,m:1/r.P1+1/r.X+1/r.P2-1}); }
+  return out;
+}
+const mcls=v=>v<0.035?"g":v>0.07?"w":"";
+
+/* ───────── спарклайн движения кэфов + вход бота ───────── */
+function sparkHtml(om,bets,m){
+  const S=om&&om.series; if(!S) return "";
+  const keys=["P1","X","P2"].filter(k=>S[k]&&S[k].length>=3); if(!keys.length) return "";
+  const pts={}; let t0=Infinity,t1=-Infinity,lo=Infinity,hi=-Infinity;
+  keys.forEach(k=>{ const v=S[k].map(([t,o])=>[Date.parse(t),+o]).filter(([t,o])=>isFinite(t)&&o>1); if(v.length<3) return; const b=v[0][1];
+    pts[k]=v.map(([t,o])=>[t,(o/b-1)*100]); pts[k].last=v[v.length-1][1]; pts[k].first=b;
+    v.forEach(([t])=>{ t0=Math.min(t0,t); t1=Math.max(t1,t); }); pts[k].forEach(([,y])=>{ lo=Math.min(lo,y); hi=Math.max(hi,y); }); });
+  const ks=Object.keys(pts); if(!ks.length||!(t1>t0)) return "";
+  if(hi-lo<0.6){ const c=(hi+lo)/2; lo=c-0.6; hi=c+0.6; }
+  const Wd=300,Hd=92,px=8,py=10, X=t=>px+(Wd-2*px)*(t-t0)/(t1-t0), Y=y=>Hd-py-(Hd-2*py)*(y-lo)/(hi-lo);
+  const col={P1:"var(--blue)",X:"var(--dim)",P2:"var(--violet)"}, nm={P1:"П1",X:"Х",P2:"П2"};
+  let svg=`<svg viewBox="0 0 ${Wd} ${Hd}" class="spk45" role="img" aria-label="Движение кэфов в процентах от первого снимка"><line x1="${px}" x2="${Wd-px}" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}" class="z"/>`;
+  ks.forEach(k=>{ svg+=`<polyline points="${pts[k].map(([t,y])=>X(t).toFixed(1)+","+Y(y).toFixed(1)).join(" ")}" fill="none" stroke="${col[k]}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`; });
+  /* вход бота: рекомендованная/поставленная ставка на исход 1X2 */
+  const pin=(bets||[]).filter(b=>(b.recommended||b.placed)&&b.market==="1X2"&&pts[b.selection]&&b.predicted_at).sort((p,q)=>(q.placed?1:0)-(p.placed?1:0))[0];
+  let note="";
+  if(pin){ const ts=Date.parse(pin.predicted_at); const entry=+(pin.placed_odds||pin.taken_odds)||0, cur=pts[pin.selection].last;
+    if(isFinite(ts)&&entry>1&&ts>=t0-60000&&ts<=t1+60000){ const k=pin.selection, base=pts[k].first, y=(entry/base-1)*100;
+      svg+=`<circle cx="${X(Math.max(t0,Math.min(t1,ts))).toFixed(1)}" cy="${Y(Math.max(lo,Math.min(hi,y))).toFixed(1)}" r="5" class="pin"/>`;
+      const d=(cur/entry-1)*100, good=cur<entry;
+      note=`<div class="pn45 ${good?"g":"w"}"><i></i>Вход бота: ${nm[k]} @ ${entry.toFixed(2)} → сейчас ${cur.toFixed(2)} (${d>0?"+":""}${d.toFixed(1)}%) — ${good?"линия пошла за ботом":"линия ушла от входа"}</div>`; } }
+  svg+=`</svg>`;
+  const lg=ks.map(k=>`<span style="--c:${col[k]}"><i></i>${nm[k]} ${(pts[k].last>=pts[k].first?"+":"")+((pts[k].last/pts[k].first-1)*100).toFixed(1)}%</span>`).join("");
+  return `<div class="spw45">${svg}<div class="lg45">${lg}</div>${note}<div class="nt45">Каждая линия — изменение кэфа в % от первого снимка. Кружок — момент входа бота.</div></div>`;
+}
+
+/* ───────── «Найти синергию» ───────── */
+function synergy(M,max){
+  const T=T4(); if(!T||!M) return [];
+  const G={M,t:0,n:M.length,mm:M[0].length}; for(const r of M) for(const v of r) G.t+=(+v)||0; if(!(G.t>0)) return [];
+  const all=[]; T.OPTS.forEach(([gt,os],g)=>os.forEach(([n,f],o)=>all.push({k:g+"."+o,g,n,f,p:T.joint(M,[f])})));
+  const out=[];
+  for(let x=0;x<all.length;x++) for(let y=x+1;y<all.length;y++){
+    const A=all[x],B=all[y]; if(A.g===B.g||A.g+B.g===4&&A.g!==2) continue;              /* общий + индивидуальный тотал — связь чисто арифметическая */
+    if(A.p<0.12||A.p>0.88||B.p<0.12||B.p>0.88) continue;
+    if(!T.sat([A.f,B.f])) continue;
+    if(T.implies([A.f],B.f)||T.implies([B.f],A.f)) continue;                 /* одно событие следует из другого — не комбинация */
+    const pj=T.joint(M,[A.f,B.f]); if(pj<0.10) continue;
+    if(pj/Math.min(A.p,B.p)>0.8) continue;                                  /* почти тавтология («ТМ 1.5 + гости не забьют») — не инсайт */
+    const lift=pj/(A.p*B.p); if(lift<1.15) continue;
+    out.push({a:A,b:B,pj,lift,score:(lift-1)*Math.sqrt(pj)});
+  }
+  out.sort((p,q)=>q.score-p.score);
+  const res=[], used=new Set();
+  for(const r of out){ const ids=[r.a.k,r.b.k]; if(ids.every(i=>used.has(i))) continue; res.push(r); ids.forEach(i=>used.add(i)); if(res.length>=max) break; }
+  return res;
+}
+function synBind(v,a,m){
+  const card=v.querySelector(".sgp44"); if(!card||card.querySelector(".syn45")) return;
+  const M=a&&a.matrix&&a.matrix.m; if(!M) return;
+  const row=card.querySelector(".row44"); if(!row) return;
+  const btn=D.createElement("button"); btn.type="button"; btn.className="syn45"; btn.textContent="Найти синергию"; row.prepend(btn);
+  const box=D.createElement("div"); box.className="synr45"; box.hidden=true; card.appendChild(box);
+  btn.onclick=()=>{ hap("light"); const r=synergy(M,3);
+    box.hidden=false;
+    box.innerHTML=r.length?`<div class="gl45">Пары с положительной корреляцией по модели</div>`+r.map((x,i)=>`<button type="button" class="sy45" data-a="${x.a.k}" data-b="${x.b.k}" style="--i:${i}"><b>${E(x.a.n)} + ${E(x.b.n)}</b><span>${PC(x.pj)} · в ${x.lift.toFixed(2)}× чаще, чем при независимости</span></button>`).join("")
+        +`<div class="note45">Это свойство модели счёта, а не гарантия: проверьте кэф в конторе — у связки он должен быть выше произведения кэфов частей.</div>`
+      :`<div class="hint45">По этому матчу выраженной положительной связки не нашлось — события почти независимы.</div>`; };
+  box.onclick=e=>{ const b=e.target.closest(".sy45"); if(!b) return; try{ W.V44.sgpSet(m.event_id,[b.dataset.a,b.dataset.b]); }catch(er){} hap("medium"); card.scrollIntoView({block:"nearest",behavior:RM()?"auto":"smooth"}); };
+}
+const RM=()=>{ try{ return D.documentElement.dataset.anim==="off"||matchMedia("(prefers-reduced-motion: reduce)").matches; }catch(e){ return false; } };
+
+/* ───────── глоссарий ───────── */
+const GL={
+  clv:{t:"CLV",x:"Closing Line Value — насколько кэф, по которому бот взял ставку, выше (или ниже) финального кэфа перед стартом. Положительный CLV на дистанции — главный признак, что линия действительно была выгодной. Один матч ничего не доказывает: нужны десятки ставок."},
+  rlm:{t:"RLM",x:"Reverse Line Movement — линия идёт против публики или против очевидного фаворита (кэф на фаворита растёт, хотя на него ставят больше). Иногда это след крупных денег, но чаще шум; сигнал не гарантирует исход."},
+  xpts:{t:"xPTS",x:"Ожидаемые очки: сколько очков команда «заслужила» по качеству созданных и пропущенных моментов (xG). Большая разница с фактическими очками означает удачу или невезение, которые обычно сглаживаются."},
+  ovr:{t:"Маржа конторы (overround)",x:"Сумма вероятностей, подразумеваемых кэфами, минус 100%. Чем меньше маржа, тем честнее линия. У крупных топ-матчей обычно 2–4%, у менее ликвидных — 6–8% и выше."},
+  trust:{t:"Trust Score",x:"Проверка «Ловушек» задним числом: матч был помечен, если фаворит рынка играл слабее соперника по свежему xG. «Сработало» значит, что фаворит не выиграл. Одна отметка — не доказательство, смотрите сводку по многим матчам."},
+  xg:{t:"xG",x:"Ожидаемые голы: суммарная вероятность забить с созданных моментов. Это оценка качества игры, а не результат."},
+  fair:{t:"Справедливый кэф",x:"1 / вероятность модели, без маржи. Если кэф в конторе выше справедливого, у ставки положительное ожидание — но только если сама вероятность модели верна."}
+};
+const GRX=[[/CLV/i,"clv"],[/RLM/,"rlm"],[/xPTS/i,"xpts"],[/Кэфы на исход|Консенсус рынка|маржа/i,"ovr"],[/Trust|Ловушк/i,"trust"]];
+function glScan(root){
+  if(!root) return;
+  root.querySelectorAll(".cap,.bx41 h3,.tt").forEach(h=>{ if(h.querySelector(".gl45b")||h.dataset.gl45) return;
+    const t=(h.textContent||"").trim(); if(t.length>70) return; const hit=GRX.find(([re])=>re.test(t)); if(!hit) return;
+    h.dataset.gl45="1"; const b=D.createElement("button"); b.type="button"; b.className="gl45b"; b.dataset.gl=hit[1]; b.setAttribute("aria-label","Что это значит?"); b.textContent="?"; h.appendChild(b); });
+}
+D.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest(".gl45b"); if(!b) return; e.preventDefault(); e.stopPropagation();
+  const g=GL[b.dataset.gl]; if(!g||!W.Sheet) return; hap("light"); W.Sheet.open(g.t,`<div class="glx45"><p>${E(g.x)}</p></div>`); },true);
+
+/* ───────── свежесть снимка ───────── */
+function staleLevel(ageSec,matches,now){
+  now=now||Date.now(); const near=(matches||[]).some(m=>{ const k=Date.parse(m&&m.kickoff_at); return isFinite(k)&&k>now-2.5*3600e3&&k<now+3*3600e3; });
+  return near?ageSec>45*60:ageSec>6*3600;
+}
+function stale(age){ try{ const ms=(typeof SNAP!=="undefined"&&SNAP&&SNAP.matches)||[]; return staleLevel(age,ms); }catch(e){ return age>6*3600; } }
+function freshHtml(){
+  try{ if(typeof STATIC==="undefined"||!STATIC||typeof SNAP==="undefined"||!SNAP||!SNAP.generated_at) return "";
+    const age=(Date.now()-new Date(SNAP.generated_at).getTime())/1000; if(!stale(age)) return "";
+    const mins=Math.round(age/60); const t=mins<90?mins+" мин":Math.round(mins/60)+" ч";
+    return `<div class="fr45" role="status"><i></i>Данные обновлялись ${t} назад — кэфы и вероятности могли измениться. Нажмите «обновить» вверху.</div>`; }catch(e){ return ""; }
+}
+
+/* ───────── «Спросить ИИ» ───────── */
+function askAI(m){
+  hap("medium");
+  try{ W.V32.openCopilot32(); }catch(e){ return; }
+  setTimeout(()=>{ try{ const i=D.querySelector("#cpi"), f=D.querySelector("#cpf"); if(!i||!f||i.disabled) return;
+    i.value="Дай короткий разбор матча "+NH(m)+" — "+NA(m)+": ключевые факторы, где модель и рынок расходятся и чего стоит опасаться.";
+    if(f.requestSubmit) f.requestSubmit(); else f.dispatchEvent(new Event("submit",{cancelable:true,bubbles:true})); }catch(e){} },420);
+}
+
+/* ───────── публичное ───────── */
+function cards(a,m){ try{ if(!a) return ""; return balCard(a,m)+mxCard(a,m); }catch(e){ return ""; } }
+function mounted(m,v){
+  try{
+    if(!v) v=D;
+    const a=m.analysis;
+    if(!m.score){ const fh=freshHtml(); if(fh&&!v.querySelector(".fr45")){ const hero=v.querySelector(".hero"); if(hero) hero.insertAdjacentHTML("afterend",fh); } }
+    const hero=v.querySelector(".hero"); if(hero&&!hero.querySelector(".ctx45")){ const c=ctxHtml(m); if(c){ const vs=hero.querySelector(".vs"); (vs||hero).insertAdjacentHTML("afterend",c); } }
+    const mx=v.querySelector(".mx45"); if(mx&&a) mxBind(mx,a,m);
+    const cap=[...v.querySelectorAll(".card .cap")];
+    const om=cap.find(c=>/^Движение кэфов/.test((c.textContent||"").trim()));
+    if(om&&!om.parentNode.querySelector(".spw45")){ const html=sparkHtml(m.extra&&m.extra.odds_moves,m.bets,m); if(html){ const tb=om.parentNode.querySelector("table"); if(tb) tb.insertAdjacentHTML("beforebegin",html); else om.insertAdjacentHTML("afterend",html); } }
+    const oc=cap.find(c=>/^Кэфы на исход 1X2/.test((c.textContent||"").trim()));
+    if(oc&&!oc.parentNode.querySelector(".ovr45")){ const ov=overround(m.odds_1x2); if(ov.length){ oc.parentNode.insertAdjacentHTML("beforeend",`<div class="ovr45"><span class="gl45">Маржа</span>${ov.map(o=>`<span class="${mcls(o.m)}">${E(o.source)} <b>${(o.m*100).toFixed(1)}%</b></span>`).join("")}</div>`); } }
+    const ac=v.querySelector(".actions"); if(ac&&!ac.querySelector("#ask45")&&!m.score){ const b=D.createElement("button"); b.id="ask45"; b.type="button"; b.innerHTML="✨ Спросить ИИ"; b.onclick=()=>askAI(m); ac.appendChild(b); }
+    if(a) synBind(v,a,m);
+    glScan(v);
+  }catch(e){}
+}
+
+W.V45={cards,mounted,stale,glScan,freshHtml,
+  _t:{grid,pr,totals,ceiling,asian,synergy,overround,mcls,agree,eloMark,tier,ctxHtml,sparkHtml,staleLevel,marketsAt,SC,GL}};
+})();
+
+/* ═════════ v46: «Назад» и крестики (закрытие верхнего окна → вкладки → карточки), расширенные фильтры, пульс дня, итоги вчера,
+   калибровка и break-even в Статистике, модель vs Pinnacle, ручной купон с предупреждением о «паровозе» ═════════
+   Правила как в v44/v45: данные берём из снимка/api(); нет данных — нет блока; анимации только opacity/transform; без случайных чисел. */
+(function(){"use strict";
+const W=window, D=document;
+const E=s=>typeof esc==="function"?esc(s):String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const hap=k=>{ try{ if(typeof haptic==="function") haptic(k); }catch(e){} };
+const NH=m=>typeof nmH==="function"?nmH(m):m.home, NA=m=>typeof nmA==="function"?nmA(m):m.away;
+const PC=x=>(100*x).toFixed(0)+"%", PC1=x=>(100*x).toFixed(1)+"%";
+const X_SVG='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+const pl=(n,a,b,c)=>{ const k=n%100; return k>=11&&k<=14?c:n%10===1?a:n%10>=2&&n%10<=4?b:c; };
+
+/* ───────────────────────── 1. Навигация: «Назад» и крестики ───────────────────────── */
+/* Порядок слоёв сверху вниз совпадает с z-index: модалка статистики матча (90) → модалка DNA/форма (88) → шторка (71). */
+const nav=(function(){
+  function layers(){
+    const L=[];
+    try{ if(W.M38&&W.M38.isOpen()) L.push(()=>W.M38.close()); }catch(e){}
+    try{ if(W.W39&&W.W39.M39&&W.W39.M39.isOpen()) L.push(()=>W.W39.M39.close()); }catch(e){}
+    try{ if(W.Sheet&&W.Sheet.isOpen()) L.push(()=>W.Sheet.close()); }catch(e){}
+    return L;
+  }
+  const any=()=>layers().length>0;
+  function closeTop(){ const L=layers(); if(!L.length) return false; try{ L[0](); }catch(e){} hap("light"); return true; }
+  /* системная «Назад» (Telegram BackButton / жест): 1) верхнее окно, 2) вкладка карточки → «Обзор», 3) false — закрывать карточку/выходить */
+  function back(){
+    if(closeTop()) return true;
+    try{ if(typeof state!=="undefined"&&state.detail&&W.V402&&W.V402.isOpen()&&W.V402.tab()!=="ov"){ if(W.V402.go("ov")){ hap("light"); return true; } } }catch(e){}
+    return false;
+  }
+  /* браузерная «назад» (popstate): если открыто окно — закрыть его и вернуть запись истории, чтобы карточка осталась на месте */
+  W.addEventListener("popstate",e=>{
+    if(!any()) return;
+    closeTop();
+    try{ if(typeof state!=="undefined"&&state.detail) history.pushState({m:state.detail},""); }catch(x){}
+    e.stopImmediatePropagation();
+  },true);
+  /* BackButton Telegram виден, пока есть карточка ИЛИ открыто окно — иначе системная «Назад» закрывала бы всё приложение */
+  try{ new MutationObserver(()=>{ try{ if(typeof syncBack==="function") syncBack(); }catch(e){} }).observe(D.documentElement,{attributes:true,attributeFilter:["data-sheet"]}); }catch(e){}
+  return {any,closeTop,back,layers};
+})();
+
+/* Крестик: закрываем по отпусканию пальца (touch-action:none в CSS отменяет «захват» касания прокруткой), клик остаётся запасным путём. */
+(function(){
+  const SEL=".m38x,.m39x,.sx46"; let d=null;
+  D.addEventListener("pointerdown",e=>{ const x=e.target.closest&&e.target.closest(SEL); d=x?{x:e.clientX,y:e.clientY,el:x}:null; },true);
+  D.addEventListener("pointerup",e=>{
+    const s=d; d=null; if(!s||e.pointerType==="mouse") return;
+    const x=e.target.closest&&e.target.closest(SEL); if(!x||x!==s.el) return;
+    if(Math.hypot(e.clientX-s.x,e.clientY-s.y)>16) return;
+    try{
+      if(x.classList.contains("m38x")&&W.M38) W.M38.close();
+      else if(x.classList.contains("m39x")&&W.W39&&W.W39.M39) W.W39.M39.close();
+      else if(W.Sheet) W.Sheet.close();
+    }catch(err){}
+  },true);
+  /* у шторки раньше не было крестика — закрыть можно было только тягом или тапом по фону */
+  function addSheetX(){
+    const sh=D.getElementById("sheet"); if(!sh||sh.querySelector(".sx46")) return;
+    const b=D.createElement("button"); b.type="button"; b.className="sx46"; b.setAttribute("aria-label","Закрыть"); b.innerHTML=X_SVG;
+    b.addEventListener("click",()=>{ try{ W.Sheet.close(); }catch(e){} }); sh.appendChild(b);
+  }
+  if(D.readyState==="loading") D.addEventListener("DOMContentLoaded",addSheetX); else addSheetX();
+})();
+
+/* «Потянуть для обновления» не должно срабатывать на касании сразу после быстрой прокрутки к верху (иначе список резко перерисовывается) */
+(function(){ let LS=0; addEventListener("scroll",()=>{ LS=Date.now(); },{passive:true});
+  const o=W.__noPtr; W.__noPtr=function(e){ return Date.now()-LS<500||(typeof o==="function"&&o(e)); }; })();
+
+/* ───────────────────────── 2. Фильтры списка ───────────────────────── */
+const TOP6=new Set(["EPL","La_Liga","Bundesliga","Serie_A","Ligue_1","RFPL"]);
+const XC=[["bot","Ставки бота","var(--blue)"],["top6","Топ‑6","var(--violet)"],["soon","Старт ≤ 2 ч","var(--amber)"],["notrap","Без ловушек","var(--green)"],["tgs","С тегами","var(--muted)"]];
+const qs=()=>(state.qc||(state.qc={}));
+const koOf=m=>{ const t=Date.parse(m.kickoff_at||""); return isNaN(t)?null:t; };
+const fresh=m=>!m.score&&!(typeof isDone==="function"&&isDone(m));
+function xpass(m,k){
+  switch(k){
+    case "bot": return (m.n_rec>0||m.n_placed>0);
+    case "top6": return TOP6.has(m.league);
+    case "soon": { const t=koOf(m), n=Date.now(); return fresh(m)&&t!=null&&t>=n-3*60000&&t<=n+2*36e5; }
+    case "notrap": return !(m.m43&&m.m43.sig==="trap");
+    case "tgs": return Array.isArray(m.m44)&&m.m44.length>0;
+  }
+  return true;
+}
+/* поиск по тегам: «серия», «ничь», «дома»… ищется по тексту сигнала */
+function tagText(m){
+  try{ const L=m&&m.m44; if(!Array.isArray(L)||!L.length) return ""; const I=W.V44&&W.V44._t&&W.V44._t.info; if(!I) return L.map(t=>t.k).join(" ");
+    return L.map(t=>{ try{ return I(t,m).txt; }catch(e){ return String(t.k); } }).join(" ").toLowerCase(); }catch(e){ return ""; }
+}
+const tagHit=(m,q)=>!!q&&q.length>=3&&tagText(m).includes(q);
+
+function install(){
+  try{ const G=W.V45&&W.V45._t&&W.V45._t.GL; if(G&&!G.sharp) G.sharp={t:"Модель против Pinnacle",x:"Pinnacle — одна из самых «острых» линий: её кэфы быстро поправляют крупные игроки. Мы убираем маржу и сравниваем вероятности исходов с моделью. Большое расхождение — повод перепроверить состав и новости; оно не означает, что ставка выгодна."}; }catch(e){}
+  const V=W.V43; if(!V||V.__v46) return; V.__v46=1;
+  const p0=V.pass;
+  V.pass=m=>{ const q=qs(); for(const [k] of XC){ if(q[k]&&!xpass(m,k)) return false; } return p0(m); };
+  function html(){
+    const L=(state.cache&&state.cache.matches||[]).filter(fresh);
+    if(!L.length) return "";
+    const q=qs(); let h=(V.chipsHtml&&V.chipsHtml())||"";
+    h+=XC.map(([k,t,c])=>{ const n=L.filter(m=>xpass(m,k)).length; return `<button type="button" data-q="${k}" style="--tc:${c}" class="${q[k]?"on":""}${n?"":" z"}" aria-pressed="${!!q[k]}"><i></i>${t}<b>${n}</b></button>`; }).join("");
+    if(active()) h+=`<button type="button" class="rs46" data-r46="1">✕ Сбросить</button>`;
+    return h;
+  }
+  const active=()=>{ const q=qs(); return !!(Object.keys(q).some(k=>q[k])||state.favOnly||state.recOnly||(state.q&&state.q.trim())||state.league); };
+  function reset(){
+    state.qc={}; state.favOnly=false; state.recOnly=false; state.q=""; state.league=""; hap("medium");
+    try{ viewMatches(); }catch(e){ try{ renderList(true); }catch(x){} }
+  }
+  V.mountChips=function(){
+    const el=D.getElementById("qc43"); if(!el) return;
+    const h=html(); el.innerHTML=h; el.hidden=!h;
+    if(!el.dataset.w46){ el.dataset.w46="1";
+      el.onclick=e=>{ if(e.target.closest("[data-r46]")){ reset(); return; }
+        const b=e.target.closest("[data-q]"); if(!b) return; const q=qs(); q[b.dataset.q]=!q[b.dataset.q]; hap();
+        V.mountChips(); renderList(true); }; }
+  };
+}
+
+/* ───────────────────────── 3. Пульс дня, итоги вчера, акцент строк ───────────────────────── */
+const phc=t=>{ try{ return typeof phaseOf==="function"?phaseOf(t).code:""; }catch(e){ return ""; } };
+function dayItems(){
+  const T=W.TM42, t=T?T.todayS():new Date().toISOString().slice(0,10);
+  if(typeof state==="undefined"||(state.day&&state.day!==t)) return null;
+  return (state.cache.matches||[]).filter(m=>(T?T.dayOf(m):String(m.date||"").slice(0,10))===t);
+}
+function pulseHtml(){
+  const L=dayItems(); if(!L||!L.length) return "";
+  let live=0,done=0,next=null,w=0,l=0,p=0,bot=0;
+  for(const m of L){
+    const t=koOf(m), c=t!=null?phc(t):"";
+    const fin=m.score||(typeof isDone==="function"&&isDone(m));
+    if(fin) done++;
+    else if(t!=null&&(c==="1h"||c==="2h"||c==="ht")) live++;
+    else if(t!=null&&t>Date.now()&&(next==null||t<next)) next=t;
+    if(m.n_rec>0||m.n_placed>0) bot++;
+    if(m.grade){ w+=m.grade.w||0; l+=m.grade.l||0; p+=m.grade.p||0; }
+  }
+  const total=L.length, left=Math.max(0,total-done-live), pct=x=>(100*x/total).toFixed(1);
+  const eta=next!=null&&typeof etaText==="function"?etaText(next):"";
+  const bt=(w||l||p)?`Бот сегодня: зашло <b class="g">${w}</b> · не зашло <b class="r">${l}</b>${p?` · возврат ${p}`:""}`:(bot?`Матчей с ставками бота: <b>${bot}</b>`:"");
+  return `<div class="card pl46"><div class="cap">Пульс дня</div>
+    <div class="pg46"><div><b class="num">${total}</b><span>матчей</span></div><div><b class="num ${live?"lv":""}">${live}</b><span>идут</span></div><div><b class="num">${done}</b><span>сыграно</span></div><div><b class="num">${left}</b><span>впереди</span></div></div>
+    <div class="pb46" role="img" aria-label="Доля сыгранных и идущих матчей"><i class="d" style="width:${pct(done)}%"></i><i class="v" style="width:${pct(live)}%"></i></div>
+    ${bt||eta?`<div class="sub pn46">${bt}${bt&&eta?" · ":""}${eta?`ближайший старт ${E(eta)}`:""}</div>`:""}</div>`;
+}
+const YD={day:"",html:"",busy:false};
+function ymd(t,k){ try{ return W.TM42?W.TM42.shift(t,k):""; }catch(e){ return ""; } }
+async function ydLoad(){
+  const T=W.TM42; if(!T||typeof api!=="function") return "";
+  const y=ymd(T.todayS(),-1); if(!y) return "";
+  if(YD.day===y) return YD.html; if(YD.busy) return YD.html;
+  YD.busy=true;
+  try{
+    let rows=[]; try{ const r=await api(`/api/archive?from=${y}&to=${y}`); if(Array.isArray(r)) rows=r.filter(m=>m&&m.score&&(T.dayOf(m)===y||m.date===y)); }catch(e){}
+    let bets=[]; try{ const b=await api("/api/bets?status=settled&limit=1000"); if(Array.isArray(b)) bets=b.filter(x=>x&&x.result!=null&&String(x.match_date||"").slice(0,10)===y); }catch(e){}
+    YD.day=y; YD.html=ydHtml(y,rows,bets); return YD.html;
+  }finally{ YD.busy=false; }
+}
+function ydHtml(y,rows,bets){
+  if(!rows.length&&!bets.length) return "";
+  const dl=new Date(y+"T12:00:00").toLocaleDateString("ru-RU",{day:"numeric",month:"long"});
+  let t="";
+  if(rows.length){
+    const n=rows.length; let g=0,o25=0,bt=0,h=0,d=0,a=0;
+    for(const m of rows){ const s=m.score, tg=s[0]+s[1]; g+=tg; if(tg>2.5) o25++; if(s[0]>0&&s[1]>0) bt++; if(s[0]>s[1]) h++; else if(s[0]===s[1]) d++; else a++; }
+    t+=`<div class="yg46"><div><b class="num">${n}</b><span>${pl(n,"матч","матча","матчей")}</span></div><div><b class="num">${(g/n).toFixed(2)}</b><span>голов за игру</span></div><div><b class="num">${PC(o25/n)}</b><span>ТБ 2.5</span></div><div><b class="num">${PC(bt/n)}</b><span>обе забили</span></div></div>
+      <div class="sub">Исходы: победы хозяев ${h} · ничьи ${d} · победы гостей ${a}</div>`;
+  }
+  if(bets.length){
+    let w=0,l=0,p=0,pnl=0,pp=0; for(const b of bets){ if(b.result===1) w++; else if(b.result===2) p++; else l++; pnl+=+b.pnl||0; if(b.placed) pp+=+b.pnl||0; }
+    const MON=typeof mon==="function"?mon:(x=>Math.round(x)+" ₽");
+    t+=`<div class="yb46"><span>Ставки бота: зашло <b class="g">${w}</b> · не зашло <b class="r">${l}</b>${p?` · возврат ${p}`:""}</span><span class="num ${pnl<0?"r":pnl>0?"g":""}">${pnl>0?"+":""}${MON(pnl)}</span></div>`;
+    if(bets.some(b=>b.placed)) t+=`<div class="sub">Из них ваши реальные: ${MON(pp)}</div>`;
+  }
+  return `<div class="card yd46"><div class="cap">Итоги вчера · ${E(dl)}</div>${t}</div>`;
+}
+function afterList(el){
+  try{
+    if(!el||!el.parentNode) return;
+    const by=new Map((state.cache.matches||[]).map(m=>[String(m.event_id),m]));
+    el.querySelectorAll(".row[data-id]").forEach(r=>{ const m=by.get(r.dataset.id); if(m&&(m.n_rec>0||m.n_placed>0)&&fresh(m)) r.classList.add("bot46"); });
+    let box=D.getElementById("pulse46");
+    if(!box){ box=D.createElement("div"); box.id="pulse46"; el.parentNode.insertBefore(box,el); }
+    const keep=(fn)=>{ const h0=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight, y0=scrollY; fn(); if(y0>10){ const d=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight-h0; if(d) scrollBy(0,d); } };
+    const h=pulseHtml(); if(box.__h!==h) keep(()=>{ box.__h=h; box.innerHTML=h; });
+    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.1"; el.parentNode.appendChild(v); }
+    let yb=D.getElementById("yd46box");
+    if(!yb){ yb=D.createElement("div"); yb.id="yd46box"; el.parentNode.insertBefore(yb,el); }
+    const show=!!dayItems();
+    if(!show){ yb.innerHTML=""; yb.__h=""; return; }
+    ydLoad().then(h2=>{ const b=D.getElementById("yd46box"); if(b&&b.__h!==h2) keep(()=>{ b.__h=h2; b.innerHTML=h2||""; }); }).catch(()=>{});
+  }catch(e){}
+}
+
+/* ───────────────────────── 4. Статистика: калибровка и break-even ───────────────────────── */
+const EDGES=[0,.35,.45,.55,.65,1];
+function calib(bets){
+  const R=(bets||[]).filter(b=>b&&(b.result===0||b.result===1)&&b.model_prob>0&&b.model_prob<1&&b.taken_odds>1);
+  const bins=EDGES.slice(0,-1).map((lo,i)=>({lo,hi:EDGES[i+1],n:0,w:0,sp:0,so:0}));
+  for(const b of R){ const k=bins.findIndex(x=>b.model_prob>=x.lo&&b.model_prob<x.hi); if(k<0) continue; const x=bins[k]; x.n++; x.w+=b.result; x.sp+=b.model_prob; x.so+=b.taken_odds; }
+  const n=R.length, w=R.reduce((s,b)=>s+b.result,0), so=R.reduce((s,b)=>s+b.taken_odds,0), sp=R.reduce((s,b)=>s+b.model_prob,0);
+  return {bins:bins.filter(x=>x.n>0),n,hit:n?w/n:null,avgOdds:n?so/n:null,avgP:n?sp/n:null,be:n?n/so:null};
+}
+function calibHtml(c){
+  if(!c||c.n<1) return "";
+  const Wd=300,H=190,P=26, X=v=>P+v*(Wd-P-8), Y=v=>H-P-v*(H-P-10);
+  let svg=`<svg class="cal46" viewBox="0 0 ${Wd} ${H}" role="img" aria-label="Калибровка: вероятность модели против фактической доли выигрышей">
+    <line x1="${X(0)}" y1="${Y(0)}" x2="${X(1)}" y2="${Y(1)}" class="dg"/>
+    ${[0,.25,.5,.75,1].map(v=>`<text x="${X(v)}" y="${H-8}" class="ax" text-anchor="middle">${Math.round(v*100)}</text><text x="${P-5}" y="${Y(v)+3}" class="ax" text-anchor="end">${Math.round(v*100)}</text>`).join("")}`;
+  for(const b of c.bins){ const px=b.sp/b.n, py=b.w/b.n, r=3+Math.min(7,Math.sqrt(b.n)); const ok=b.n>=8;
+    svg+=`<circle cx="${X(px).toFixed(1)}" cy="${Y(py).toFixed(1)}" r="${r.toFixed(1)}" class="pt ${ok?"":"lo"} ${py>=px?"up":"dn"}"/>`; }
+  svg+=`</svg>`;
+  const rows=c.bins.map(b=>{ const px=b.sp/b.n, py=b.w/b.n, be=b.n/b.so, edge=(py-be)*100;
+    return `<tr class="${b.n<8?"dim":""}"><td>${Math.round(b.lo*100)}–${Math.round(b.hi*100)}%</td><td class="num">${b.n}</td><td class="num">${PC(px)}</td><td class="num">${PC(py)}</td><td class="num">${PC(be)}</td><td class="num ${edge<0?"r":"g"}">${edge>0?"+":""}${edge.toFixed(0)} п.п.</td></tr>`; }).join("");
+  const se=Math.sqrt(c.hit*(1-c.hit)/c.n)*1.64, lo=Math.max(0,c.hit-se), hi=Math.min(1,c.hit+se);
+  const gap=(c.hit-c.be)*100, small=c.n<30;
+  const verdict=small?`Выборка мала (n=${c.n}): точки на графике и разница с безубыточностью пока в пределах шума.`
+    :gap<-2?`Фактическая доля ниже безубыточной на ${Math.abs(gap).toFixed(1)} п.п.: при таких кэфах ставки в среднем убыточны.`
+    :gap>2?`Доля выше безубыточной на ${gap.toFixed(1)} п.п.: перевес на этой выборке подтверждается, но ещё проверьте CLV.`:`Разница с безубыточностью в пределах ±2 п.п.: перевеса не видно.`;
+  return `<div class="card kb46"><div class="cap">Калибровка и безубыточность <span class="sub" style="text-transform:none;letter-spacing:0;font-weight:400">· рассчитанные ставки бота, без возвратов</span></div>
+    <div class="kg46"><div><b class="num">${PC1(c.hit)}</b><span>угадано (±${(se*100).toFixed(0)} п.п.)</span></div><div><b class="num">${PC1(c.be)}</b><span>нужно для нуля при кэфе ${c.avgOdds.toFixed(2)}</span></div><div><b class="num">${PC1(c.avgP)}</b><span>в среднем обещала модель</span></div></div>
+    ${svg}<div class="sub kn46">Точки на диагонали — модель честна; ниже диагонали — завышает шансы; пустые точки — меньше 8 ставок. Диапазон 90% для доли: ${PC(lo)}–${PC(hi)}.</div>
+    <div class="kt46"><table><thead><tr><th>Вероятн.</th><th>n</th><th>модель</th><th>факт</th><th>нужно</th><th>разница</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="alert ${small?"neutral":gap>2?"ok":""}" style="margin-top:10px">${verdict}</div></div>`;
+}
+async function stats(){
+  try{
+    if(D.getElementById("kb46")||D.querySelector(".kb46")||typeof api!=="function") return;
+    const b=await api("/api/bets?status=settled&limit=1000");
+    if(state.tab!=="stats") return;
+    const h=calibHtml(calib(Array.isArray(b)?b:[])); if(!h||D.querySelector(".kb46")) return;
+    const anchor=D.getElementById("segbox"); if(anchor) anchor.insertAdjacentHTML("beforebegin",h); else { const ap=D.getElementById("app"); ap&&ap.insertAdjacentHTML("beforeend",h); }
+  }catch(e){}
+}
+
+/* ───────────────────────── 5. Модель против Pinnacle ───────────────────────── */
+function sharp(m){
+  const O=m&&m.odds_1x2; if(!Array.isArray(O)) return null;
+  const by={}; for(const o of O){ if(!(o.odds>1)||!/pinn/i.test(o.source||"")) continue; by[o.selection]=o.odds; }
+  if(!(by.P1&&by.X&&by.P2)) return null;
+  const q=[1/by.P1,1/by.X,1/by.P2], s=q[0]+q[1]+q[2]; return {fair:q.map(v=>v/s),margin:s-1,odds:[by.P1,by.X,by.P2]};
+}
+function sharpHtml(m){
+  const a=m.analysis, p=a&&a.p; if(!Array.isArray(p)||p.length<3) return "";
+  const s=sharp(m); if(!s) return "";
+  const nm=["П1","Х","П2"];
+  const rows=[0,1,2].map(i=>{ const d=(p[i]-s.fair[i])*100, big=Math.abs(d)>=5;
+    return `<div class="sr46"><span class="n">${nm[i]}</span><span class="b"><i class="pn" style="width:${(s.fair[i]*100).toFixed(1)}%"></i><i class="md" style="left:${(p[i]*100).toFixed(1)}%"></i></span><span class="num">${PC(s.fair[i])}</span><span class="num mdl">${PC(p[i])}</span><span class="num ${big?(d>0?"g":"r"):"muted"}">${d>0?"+":""}${d.toFixed(0)}</span></div>`; }).join("");
+  const mx=Math.max(...[0,1,2].map(i=>Math.abs(p[i]-s.fair[i])*100));
+  return `<div class="card sh46"><div class="cap">Модель против Pinnacle <button type="button" class="gl45b" data-gl="sharp" aria-label="Что это">?</button></div>
+    <div class="sh46h"><span></span><span></span><span>Pinnacle</span><span>модель</span><span>Δ п.п.</span></div>${rows}
+    <div class="sub">Вероятности Pinnacle — без маржи (${(s.margin*100).toFixed(1)}%). ${mx>=8?"Расхождение больше 8 п.п.: чаще это повод проверить модель, а не гарантированная ставка.":mx>=4?"Небольшое расхождение — внимательно смотрите на состав и новости.":"Модель и острая линия почти совпадают — значимого перевеса над рынком нет."}</div></div>`;
+}
+
+/* ───────────────────────── 6. Купон (ручной) и «паровоз» ───────────────────────── */
+const CP=[];                         /* только в памяти: [{id,home,away,sel,odds,p}] */
+function best(m,sel){ let b=0,src=""; for(const o of m.odds_1x2||[]){ if(o.selection===sel&&o.odds>b){ b=o.odds; src=o.source; } } return b>1?{o:b,src}:null; }
+function cpAdd(m,i){
+  const a=m.analysis, p=a&&a.p; if(!p) return; const sel=["P1","X","P2"][i], bo=best(m,sel); if(!bo) return;
+  const k=CP.findIndex(x=>x.id===m.event_id); const leg={id:m.event_id,home:NH(m),away:NA(m),sel,lbl:["П1","Х","П2"][i],odds:bo.o,p:p[i]};
+  if(k>=0&&CP[k].sel===sel){ CP.splice(k,1); } else if(k>=0) CP[k]=leg; else CP.push(leg);
+  hap("select"); cpPill();
+}
+function cpStat(){
+  const n=CP.length; if(!n) return null;
+  const odds=CP.reduce((s,x)=>s*x.odds,1), prob=CP.reduce((s,x)=>s*x.p,1), fair=1/prob, ev=prob*odds-1;
+  return {n,odds,prob,fair,ev};
+}
+function cpHtml(){
+  const s=cpStat(); if(!s) return `<div class="note">Купон пуст. В карточке матча нажмите П1 / Х / П2 в блоке «В купон».</div>`;
+  const legs=CP.map((x,i)=>`<div class="cl46"><span class="t">${E(x.home)} — ${E(x.away)}</span><span class="s"><b>${x.lbl}</b> ${x.odds.toFixed(2)} · модель ${PC(x.p)}</span><button type="button" data-rm="${i}" aria-label="Убрать">✕</button></div>`).join("");
+  const warn=[];
+  if(s.n>=4) warn.push(`«Паровоз» из ${s.n} событий: шанс, что зайдут все, по модели — ${PC1(s.prob)}. Это ставка на то, что не подведёт ни одна ножка; ошибки модели перемножаются.`);
+  else if(s.prob<.12) warn.push(`Шанс купона по модели всего ${PC1(s.prob)} — в 9 случаях из 10 он не зайдёт.`);
+  if(s.ev<0) warn.push(`Ожидание по модели отрицательное: ${(s.ev*100).toFixed(1)}% от ставки. Рынок платит ${s.odds.toFixed(2)}, а справедливый кэф по модели — ${s.fair.toFixed(2)}.`);
+  else warn.push(`По модели ожидание ${s.ev>0?"+":""}${(s.ev*100).toFixed(1)}% — но вероятности ножек считаются независимыми и берутся из модели; реальную прибыль это не гарантирует.`);
+  return `${legs}<div class="cs46"><div><b class="num">${s.odds.toFixed(2)}</b><span>кэф купона (лучшие линии)</span></div><div><b class="num">${s.fair.toFixed(2)}</b><span>справедливый по модели</span></div><div><b class="num">${PC1(s.prob)}</b><span>шанс зайти</span></div></div>
+    ${warn.map((w,i)=>`<div class="alert ${i===0&&(s.n>=4||s.prob<.12||s.ev<0)?"":"neutral"}">${E(w)}</div>`).join("")}
+    <button type="button" class="btn cc46" data-clr="1">Очистить купон</button>`;
+}
+function cpOpen(){
+  if(!W.Sheet) return;
+  W.Sheet.open("Купон",`<div id="cp46b">${cpHtml()}</div>`,B=>{
+    B.onclick=e=>{ const r=e.target.closest("[data-rm]"), c=e.target.closest("[data-clr]");
+      if(r){ CP.splice(+r.dataset.rm,1); } else if(c){ CP.length=0; } else return;
+      hap("light"); const b=D.getElementById("cp46b"); if(b) b.innerHTML=cpHtml(); cpPill(); };
+  });
+}
+function cpPill(){
+  let el=D.getElementById("cp46");
+  if(!CP.length){ if(el) el.classList.remove("on"); }
+  else{
+    if(!el){ el=D.createElement("button"); el.id="cp46"; el.type="button"; el.onclick=()=>{ hap("light"); cpOpen(); }; D.body.appendChild(el); }
+    const s=cpStat(); el.innerHTML=`Купон · ${s.n} <b class="num">${s.odds.toFixed(2)}</b>`; el.classList.add("on");
+  }
+  const row=D.querySelector(".cb46"); if(row&&row.__m){ const t=D.createElement("div"); t.innerHTML=cpRow(row.__m); const n=t.firstElementChild; if(n) row.innerHTML=n.innerHTML; }
+}
+function cpRow(m){
+  if(!m) return "";
+  const sels=["P1","X","P2"], L=["П1","Х","П2"], a=m.analysis; if(!a||!a.p) return "";
+  const cur=CP.find(x=>x.id===m.event_id);
+  const btns=sels.map((s,i)=>{ const bo=best(m,s); return bo?`<button type="button" data-cp="${i}" class="${cur&&cur.sel===s?"on":""}">${L[i]}<b class="num">${bo.o.toFixed(2)}</b></button>`:""; }).join("");
+  if(!btns) return "";
+  return `<div class="card cb46"><div class="cap">В купон</div><div class="cbr46">${btns}</div>${CP.length?`<button type="button" class="lnk46" data-opencp="1">Открыть купон (${CP.length})</button>`:`<div class="sub">Лучшие кэфы среди источников; купон живёт, пока приложение открыто.</div>`}</div>`;
+}
+
+/* ───────────────────────── 7. Подключение к карточке матча ───────────────────────── */
+function mounted(m,v){
+  try{
+    if(!v) v=D; if(m.score) return;
+    if(!v.querySelector(".sh46")){ const h=sharpHtml(m); if(h){ const t=v.querySelector(".bal45")||v.querySelector(".mx45"); if(t) t.insertAdjacentHTML("afterend",h); } }
+    if(!v.querySelector(".cb46")){ const h=cpRow(m); if(h){ const t=v.querySelector(".sh46")||v.querySelector(".bal45")||v.querySelector(".mx45"); if(t){ t.insertAdjacentHTML("afterend",h); const r=v.querySelector(".cb46"); if(r) r.__m=m; } } }
+    const row=v.querySelector(".cb46"); if(row&&!row.__w){ row.__w=1; row.__m=m;
+      row.onclick=e=>{ const b=e.target.closest("[data-cp]"); if(b){ cpAdd(m,+b.dataset.cp); return; } if(e.target.closest("[data-opencp]")) cpOpen(); }; }
+  }catch(e){}
+}
+W.V46={nav,afterList,mounted,stats,tagHit,install,
+  _t:{xpass,calib,calibHtml,sharp,cpStat,CP,pulseHtml,ydHtml,tagText,TOP6}};
+if(D.readyState==="loading") D.addEventListener("DOMContentLoaded",install); else install();
+setTimeout(install,0);
 })();
 /*/V40-JS*/
 </script>
