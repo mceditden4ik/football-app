@@ -6046,11 +6046,17 @@ const nav=(function(){
 /* Крестик: закрываем по отпусканию пальца (touch-action:none в CSS отменяет «захват» касания прокруткой), клик остаётся запасным путём. */
 (function(){
   const SEL=".m38x,.m39x,.sx46,.cpx"; let d=null;
+  function swallow(){
+    const h=e=>{ e.stopImmediatePropagation(); e.preventDefault(); }, ev=["click","mousedown","mouseup"];
+    ev.forEach(n=>D.addEventListener(n,h,true));
+    setTimeout(()=>ev.forEach(n=>D.removeEventListener(n,h,true)),550);
+  }
   D.addEventListener("pointerdown",e=>{ const x=e.target.closest&&e.target.closest(SEL); d=x?{x:e.clientX,y:e.clientY,el:x}:null; },true);
   D.addEventListener("pointerup",e=>{
     const s=d; d=null; if(!s||e.pointerType==="mouse") return;
     const x=e.target.closest&&e.target.closest(SEL); if(!x||x!==s.el) return;
     if(Math.hypot(e.clientX-s.x,e.clientY-s.y)>16) return;
+    swallow();   /* без этого «хвостовой» клик после закрытия попадал в блок под окном и открывал соседний сценарий/карточку */
     try{
       if(x.classList.contains("m38x")&&W.M38) W.M38.close();
       else if(x.classList.contains("m39x")&&W.W39&&W.W39.M39) W.W39.M39.close();
@@ -6188,7 +6194,7 @@ function afterList(el){
     if(!box){ box=D.createElement("div"); box.id="pulse46"; el.parentNode.insertBefore(box,el); }
     const keep=(fn)=>{ const h0=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight, y0=scrollY; fn(); if(y0>10){ const d=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight-h0; if(d) scrollBy(0,d); } };
     const h=pulseHtml(); if(box.__h!==h) keep(()=>{ box.__h=h; box.innerHTML=h; });
-    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.2"; el.parentNode.appendChild(v); }
+    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.3"; el.parentNode.appendChild(v); }
     let yb=D.getElementById("yd46box");
     if(!yb){ yb=D.createElement("div"); yb.id="yd46box"; el.parentNode.insertBefore(yb,el); }
     const show=!!dayItems();
