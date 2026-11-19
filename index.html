@@ -1992,6 +1992,15 @@ html,body{overscroll-behavior-x:none}
 @media (prefers-reduced-motion:reduce){#cp46{transition:none}}
 html[data-anim=off] #cp46{transition:none}
 #ver46{text-align:center;font-size:10px;color:var(--muted);opacity:.5;padding:14px 0 4px}
+
+/* v46.2: у окна ИИ свой крестик — второй не нужен */
+#sheet:has(.cpx) .sx46{display:none}
+.cpx{touch-action:none}
+/* v46.2: на сенсорных экранах без «пятна света» за пальцем и без сжатия крупных блоков: касание, переходящее в прокрутку, не должно дёргать блок */
+@media (hover:none){
+  .spec40{display:none}
+  .sc39:active,.fc38:active,.sy45:active,.gl39:active,.cl45:active,.row:active,.card:active{transition-delay:.18s}
+}
 /*/V40-CSS*/
 </style>
 </head>
@@ -4703,7 +4712,7 @@ const EXC=(()=>{
     const t=e.target.closest&&e.target.closest(PRESS); if(!t||t.closest("input,select,textarea")) return;
     release(); pressed=t;
     if(t.matches(BUZZ)){ t.classList.add("prs40"); H40.light(); }
-    else pt=setTimeout(()=>{ if(pressed===t) t.classList.add("prs40"); },70);     /* карточки: сжатие только если палец не начал скролл */
+    else if(e.pointerType!=="touch") pt=setTimeout(()=>{ if(pressed===t) t.classList.add("prs40"); },70);   /* v46.2: на тач-экране большие блоки не сжимаем — касание, переходящее в прокрутку, давало «подпрыгивание» */     /* карточки: сжатие только если палец не начал скролл */
   },{passive:true});
   ["pointerup","pointercancel","dragstart"].forEach(n=>D.addEventListener(n,()=>setTimeout(release,80),{passive:true}));
   addEventListener("scroll",release,{passive:true,capture:true});
@@ -6036,7 +6045,7 @@ const nav=(function(){
 
 /* Крестик: закрываем по отпусканию пальца (touch-action:none в CSS отменяет «захват» касания прокруткой), клик остаётся запасным путём. */
 (function(){
-  const SEL=".m38x,.m39x,.sx46"; let d=null;
+  const SEL=".m38x,.m39x,.sx46,.cpx"; let d=null;
   D.addEventListener("pointerdown",e=>{ const x=e.target.closest&&e.target.closest(SEL); d=x?{x:e.clientX,y:e.clientY,el:x}:null; },true);
   D.addEventListener("pointerup",e=>{
     const s=d; d=null; if(!s||e.pointerType==="mouse") return;
@@ -6179,7 +6188,7 @@ function afterList(el){
     if(!box){ box=D.createElement("div"); box.id="pulse46"; el.parentNode.insertBefore(box,el); }
     const keep=(fn)=>{ const h0=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight, y0=scrollY; fn(); if(y0>10){ const d=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight-h0; if(d) scrollBy(0,d); } };
     const h=pulseHtml(); if(box.__h!==h) keep(()=>{ box.__h=h; box.innerHTML=h; });
-    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.1"; el.parentNode.appendChild(v); }
+    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.2"; el.parentNode.appendChild(v); }
     let yb=D.getElementById("yd46box");
     if(!yb){ yb=D.createElement("div"); yb.id="yd46box"; el.parentNode.insertBefore(yb,el); }
     const show=!!dayItems();
