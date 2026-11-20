@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="fb-static" content="1">
-<meta name="build" content="v46.7">
+<meta name="build" content="v46.8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>Football Value</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -4286,25 +4286,31 @@ const EXC=(()=>{
     if(!best) return null; const c=best.slice().sort((x,y)=>x.ko-y.ko||(x.id<y.id?-1:1)); return Object.assign({profile:prof,legs:c,size:c.length},stats(c));
   }
   /* v46.6: свой экспресс — нужное число событий, целевой общий кэф, минимальный кэф ноги (без «1.05–1.10»), разные рынки */
-  const MINOD={safe:1.3,mid:1.45,risky:1.7}, AUTO_N={safe:4,mid:4,risky:5};
+  /* v46.8: единственное ограничение — кэф каждого события не ниже 1.30; верхнего предела нет. Профиль задаёт только цель по общему кэфу и числу событий (можно менять вручную) */
+  const MINOD=1.3, DEF={safe:{n:3,t:3},mid:{n:5,t:8},risky:{n:6,t:25}};
   function mtype(l){ const k=String(l.id).split("|"), s=k[2]||"", mk=String(l.mk||"").toLowerCase();
     if(l.src==="model") return /^[ou]/.test(s)?"tot":s==="bt"?"btts":(s==="1X"||s==="X2")?"dc":"w";
     if(k[1]==="1X2") return "w"; return mk.indexOf("тотал")>=0?"tot":mk.indexOf("обе")>=0?"btts":"o"; }
-  function autoN(prof,target){ if(target>1) return Math.max(2,Math.min(8,Math.round(Math.log(target)/Math.log(1.55)))); return AUTO_N[prof]||4; }
+  function plan(prof,n,t){ const d=DEF[prof]||DEF.safe, avg=Math.pow(d.t,1/d.n);
+    if(n>=2&&t>1) return {n:Math.min(8,n),t}; if(n>=2) return {n:Math.min(8,n),t:Math.round(Math.pow(avg,Math.min(8,n))*10)/10};
+    if(t>1) return {n:Math.max(2,Math.min(8,Math.round(Math.log(t)/Math.log(avg)))),t}; return {n:d.n,t:d.t}; }
   function assemble(legs,prof,n,target){
-    const tg=target>1, mn=tg?({safe:1.25,mid:1.3,risky:1.4}[prof]||1.3):(MINOD[prof]||1.3), cf=CFG[prof]||CFG.safe, sc=l=>tg?.15*Math.log(l.p)-Math.abs(Math.log(l.od)-Math.log(target)/n):ls(l,prof); n=n>=2?Math.min(8,n):autoN(prof,target);
-    const sorted=legs.filter(l=>l&&l.od>=mn&&l.p>0).sort((x,y)=>sc(y)-sc(x)||(x.id<y.id?-1:1));
-    const by=new Map(); sorted.forEach(l=>{ const g=by.get(l.eid)||[]; if(g.length<3&&!g.some(z=>mtype(z)===mtype(l))) g.push(l); by.set(l.eid,g); });
-    let c=[]; by.forEach(g=>g.forEach(l=>c.push(l))); c.sort((x,y)=>sc(y)-sc(x)||(x.id<y.id?-1:1));
-    const evs=new Set(c.map(l=>l.eid)); if(evs.size<2) return null; n=Math.min(n,evs.size);
-    c=c.slice(0,22); let cap=Math.max(1,Math.ceil(n/2)); const tc={};
-    const div=cmb=>{ const m={}; let pen=1; cmb.forEach(l=>{ const t=mtype(l); m[t]=(m[t]||0)+1; if(m[t]>2) pen*=.88; else if(m[t]>1) pen*=.96; }); return pen; };
-    let best=null,bu=-1; const cur=[], used=new Set();
-    const run=()=>(function go(st){ if(cur.length===n){ const s2=stats(cur); const u=(target>1?s2.P*Math.exp(-4*Math.abs(Math.log(s2.O/target))):Math.pow(s2.P,cf.a)*Math.pow(Math.max(1,s2.O),cf.b))*div(cur); if(u>bu+1e-12){ bu=u; best=cur.slice(); } return; }
-      for(let i=st;i<c.length;i++){ const l=c[i]; const t=mtype(l); if(used.has(l.eid)||(tc[t]||0)>=cap) continue; used.add(l.eid); tc[t]=(tc[t]||0)+1; cur.push(l); go(i+1); cur.pop(); used.delete(l.eid); tc[t]--; } })(0);
-    run(); if(!best){ cap=n; run(); }
+    const pl=plan(prof,n,target); n=pl.n; const T=pl.t;
+    const ok=legs.filter(l=>l&&l.od>=MINOD&&l.p>0).sort((x,y)=>x.ko-y.ko||(x.id<y.id?-1:1));
+    const by=new Map(); ok.forEach(l=>{ const g=by.get(l.eid)||[]; if(g.length<3&&!g.some(z=>mtype(z)===mtype(l))) g.push(l); by.set(l.eid,g); });
+    const evs=[...by.keys()]; if(evs.length<2) return null; n=Math.min(n,evs.length);
+    let c=[]; evs.slice(0,14).forEach(e=>by.get(e).slice().sort((x,y)=>y.p-x.p).slice(0,2).forEach(l=>c.push(l)));
+    const sd=a=>{ const m=a.reduce((x,y)=>x+y,0)/a.length; return Math.sqrt(a.reduce((x,y)=>x+(y-m)*(y-m),0)/a.length); };
+    let cap=Math.max(1,Math.ceil(n/2)), lim=1.6; const tc={}; let best=null,bu=-1; const cur=[], used=new Set();
+    const score=()=>{ const s2=stats(cur), types={}; let pen=1; cur.forEach(l=>{ const t=mtype(l); types[t]=(types[t]||0)+1; });
+      Object.keys(types).forEach(t=>{ if(types[t]>2) pen*=.9; });
+      return s2.P*Math.exp(-6*Math.abs(Math.log(s2.O/T)))*pen*(1+.6*sd(cur.map(l=>Math.log(l.od)))); };
+    const run=()=>(function go(st,O){ if(cur.length===n){ const u=score(); if(u>bu+1e-12){ bu=u; best=cur.slice(); } return; }
+      for(let i=st;i<c.length;i++){ const l=c[i], t=mtype(l); if(used.has(l.eid)||(tc[t]||0)>=cap) continue; if(O*l.od*Math.pow(MINOD,n-cur.length-1)>T*lim) continue;
+        used.add(l.eid); tc[t]=(tc[t]||0)+1; cur.push(l); go(i+1,O*l.od); cur.pop(); used.delete(l.eid); tc[t]--; } })(0,1);
+    run(); if(!best){ cap=n; run(); } if(!best){ cap=n; lim=1e9; run(); }
     if(!best) return null; best.sort((x,y)=>x.ko-y.ko||(x.id<y.id?-1:1));
-    return Object.assign({profile:prof,legs:best,size:best.length,target:target>1?target:0},stats(best));
+    return Object.assign({profile:prof,legs:best,size:best.length,target:T},stats(best));
   }
   function parseAI(text){
     const m=/ВЫБОР\s*:\s*([\d\s,;и]+)/i.exec(String(text||"")); if(!m) return null;
@@ -4317,7 +4323,7 @@ const EXC=(()=>{
     const c=idx.map(i=>cs[i-1]); if(new Set(c.map(l=>l.eid)).size!==c.length) return null;
     c.sort((x,y)=>x.ko-y.ko||(x.id<y.id?-1:1)); return Object.assign({size:c.length,legs:c},stats(c));
   }
-  return {fromBet,fromMatch,fromModel,assemble,autoN,dedupe,pool,cands,pick,stats,parseAI,applyAI,CFG};
+  return {fromBet,fromMatch,fromModel,assemble,plan,dedupe,pool,cands,pick,stats,parseAI,applyAI,CFG};
 })();
 /*EX37-CORE-END*/
 (function(){ try{
@@ -4384,7 +4390,7 @@ const EXC=(()=>{
     const mdl=res.legs.some(l=>l.src==="model"), allm=res.legs.every(l=>l.src==="model");
     const mnote=mdl?`<div class="xwarn">ℹ ${allm?"Кэфы":"Часть кэфов"} рассчитаны по вероятностям модели (без маржи букмекера) — у букмекера они будут ниже. Сверьте линию перед ставкой.</div>`:"";
     const warn=mnote+(res.legs.some(l=>l.src==="bot"&&l.ev>.15)?`<div class="xwarn">⚠ В одной из ставок перевес выше 15% — чаще это ошибка кэфа, проверьте перед ставкой.</div>`:"");
-    const ai=res.by==="ai"&&res.text?`<div class="xai">${esc(res.text)}</div><div class="xai mt">Выбор и пояснение — ИИ, из кандидатов бота.</div>`:`<div class="xai mt">${res.by==="ai"?"":"ИИ недоступен или не подключён — подобрано по правилам профиля."}</div>`;
+    const ai=res.by==="ai"&&res.text?`<div class="xai">${esc(res.text)}</div><div class="xai mt">Выбор и пояснение — ИИ, из кандидатов бота.</div>`:`<div class="xai mt">${res.by==="ai"?"":"Подобрано алгоритмом по данным модели и бота."}</div>`;
     return `<div class="g37 xc37" style="--c1:${P.c1};--c2:${P.c2}"><div class="xh"><span class="xtag">⚡ ${P.t}</span><span class="xby">${res.legs.length} соб. · ${res.by==="ai"?"ИИ":"правила"}</span></div>
       <div class="xlegs">${legs}</div><div class="xtot"><div><i>Общий кэф</i><b class="num">${o.O.toFixed(2)}</b></div><div><i>Проход*</i><b class="num">${pct(o.P,o.P<.1?1:0)}</b></div><div><i>Перевес*</i><b class="num">${mdl?"—":(o.ev>=0?"+":"")+(o.ev*100).toFixed(0)+"%"}</b></div></div>
       ${ai}${warn}<div class="note" style="margin-top:8px">* Произведение вероятностей модели при допущении, что события независимы. Это оценка, а не гарантия.</div></div>`;
@@ -4421,7 +4427,7 @@ const EXC=(()=>{
       <div class="xprof37" id="xprof">${["safe","mid","risky"].map(k=>`<button type="button" class="g37 xp37 xc-p" data-p="${k}" style="--c:${PROF[k].c1}"><span class="xp-ic">${PROF[k].ic}</span><span class="xp-t"><b>${PROF[k].n}</b><i>${PROF[k].d}</i></span><span class="xp-go">›</span></button>`).join("")}</div>
       <div class="xopt46"><div class="xcap2">Событий в экспрессе</div><div class="xchips46" id="xn">${[0,2,3,4,5,6,7,8].map(v=>`<button type="button" class="xo46${OPT.n===v?" on":""}" data-n="${v}">${v?v:"Авто"}</button>`).join("")}</div>
       <div class="xcap2">Итоговый кэф</div><div class="xchips46" id="xt">${[0,3,5,10,20,50].map(v=>`<button type="button" class="xo46${OPT.t===v?" on":""}" data-t="${v}">${v?"≈ "+v:"Любой"}</button>`).join("")}</div>
-      <div class="note">Каждое событие — с кэфом не ниже 1.30 (безопасный), 1.45 (средний), 1.70 (рисковый); рынки чередуются.</div></div>
+      <div class="note">Единственное ограничение — кэф каждого события не ниже 1.30; верхнего предела нет. «Авто»: безопасный ≈ 3, средний ≈ 8, рисковый ≈ 25 по общему кэфу.</div></div>
       <div id="xres" style="margin-top:14px"></div>`);
     XCLICK=e=>{ const o=e.target.closest(".xo46"); if(o){ haptic("light"); const isN=o.dataset.n!=null; if(isN) OPT.n=+o.dataset.n; else OPT.t=+o.dataset.t; saveOpt(); $$(isN?"#xn .xo46":"#xt .xo46").forEach(x=>x.classList.toggle("on",x===o)); const on=$(".xp37.on"); if(on) paint("xres",on.dataset.p,true); return; }
       const p=e.target.closest(".xp37"); if(p){ haptic("medium"); $$(".xp37").forEach(x=>x.classList.toggle("on",x===p)); paint("xres",p.dataset.p,false); const r=$("#xres"); if(r) setTimeout(()=>r.scrollIntoView({behavior:RMq()?"auto":"smooth",block:"nearest"}),60); return; }
@@ -6289,7 +6295,7 @@ function afterList(el){
     if(!box){ box=D.createElement("div"); box.id="pulse46"; el.parentNode.insertBefore(box,el); }
     const keep=(fn)=>{ const h0=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight, y0=scrollY; fn(); if(y0>10){ const d=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight-h0; if(d) scrollBy(0,d); } };
     const h=pulseHtml(); if(box.__h!==h) keep(()=>{ box.__h=h; box.innerHTML=h; });
-    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.7"; el.parentNode.appendChild(v); }
+    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.8"; el.parentNode.appendChild(v); }
     let yb=D.getElementById("yd46box");
     if(!yb){ yb=D.createElement("div"); yb.id="yd46box"; el.parentNode.insertBefore(yb,el); }
     const show=!!dayItems();
