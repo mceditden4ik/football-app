@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="fb-static" content="1">
+<meta name="build" content="v46.5">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>Football Value</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1927,7 +1928,6 @@ html,body{overscroll-behavior-x:none}
 .m38p>.m38x,.m39p>.m39x{position:sticky;top:10px;right:auto;display:grid;width:46px;height:46px;margin:-10px 0 -36px auto;z-index:6;touch-action:none;-webkit-tap-highlight-color:transparent;
   background:color-mix(in srgb,var(--bg2) 82%,var(--text) 18%)}
 /* окна почти непрозрачные: на слабых WebView размытие фона не работает, и текст страницы просвечивал сквозь панель */
-.m38p,.m39p{background:color-mix(in srgb,var(--bg2) 96%,transparent)}
 .sx46{position:absolute;top:8px;right:14px;z-index:7;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;touch-action:none;color:var(--muted);
   background:color-mix(in srgb,var(--bg2) 82%,var(--text) 18%);border:1px solid rgba(255,255,255,.1);-webkit-tap-highlight-color:transparent}
 .sx46:active{transform:scale(.88)}.sx46 svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round}
@@ -2001,6 +2001,12 @@ html[data-anim=off] #cp46{transition:none}
   .spec40{display:none}
   .sc39:active,.fc38:active,.sy45:active,.gl39:active,.cl45:active,.row:active,.card:active{transition-delay:.18s}
 }
+
+/* v46.4: окна сценария/матча больше не «просвечивают» при открытии и закрытии: панель всегда непрозрачная, без размытия и без анимации прозрачности — только выезд снизу */
+.m38p,.m39p,#m38.on .m38p,#m39.on .m39p,#m38:not(.on) .m38p,#m39:not(.on) .m39p{opacity:1;background:var(--bg2);-webkit-backdrop-filter:none;backdrop-filter:none;transition-property:transform}
+#m38:not(.on) .m38p,#m39:not(.on) .m39p{transition-duration:.3s}
+#ver46{opacity:.5}
+#m39.vt .m39p{transition:none}
 /*/V40-CSS*/
 </style>
 </head>
@@ -3242,6 +3248,22 @@ Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensu
       const tg=(r.headers.get("etag")||"")+"|"+(r.headers.get("last-modified")||"")+"|"+(r.headers.get("content-length")||""); if(tg==="||") return true;
       const ch=_snapTag!==null&&tg!==_snapTag; _snapTag=tg; return ch; }catch(e){ return false; } }
   setInterval(async()=>{ try{ if(document.hidden||!STATIC||!window.V44||!V44.hasLive()) return; if(await snapMoved()) livePoll(); }catch(e){} },30000);
+/* v46.4: проверка новой сборки — если на сервере лежит более свежий index.html, показываем кнопку «Обновить» (WebView Telegram любит держать старую копию в кэше) */
+(function(){ try{
+  const num=s=>(String(s||"").match(/\d+/g)||[]).map(Number);
+  const newer=(a,b)=>{ const x=num(a),y=num(b); for(let i=0;i<Math.max(x.length,y.length);i++){ const d=(x[i]||0)-(y[i]||0); if(d) return d>0; } return false; };
+  const cur=(document.querySelector('meta[name="build"]')||{}).content||""; let shown=false;
+  async function check(){ if(shown||document.hidden) return;
+    try{ const r=await fetch(location.pathname+"?_b="+Date.now(),{cache:"no-store"}); if(!r.ok) return; const t=await r.text(); const m=/<meta name="build" content="([^"]+)"/.exec(t);
+      if(!m||!newer(m[1],cur)) return; shown=true;
+      const b=document.createElement("button"); b.type="button"; b.id="upd46"; b.textContent="Доступна новая версия "+m[1]+" — обновить";
+      b.style.cssText="position:fixed;left:50%;transform:translateX(-50%);top:calc(10px + env(safe-area-inset-top));z-index:200;padding:10px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.2);background:#2563eb;color:#fff;font-size:14px";
+      b.onclick=()=>{ location.replace(location.pathname+"?v="+encodeURIComponent(m[1])+location.hash); };
+      document.body.appendChild(b);
+    }catch(e){} }
+  setTimeout(check,4000); document.addEventListener("visibilitychange",()=>{ if(!document.hidden) setTimeout(check,800); });
+}catch(e){} })();
+
   document.addEventListener("visibilitychange",()=>{ if(!document.hidden) setTimeout(livePoll,300); });
   /* звук/эффекты при выигрышах */
   try{ const _c=confetti; confetti=function(){ haptic("ok"); return _c.apply(this,arguments); }; }catch(e){}
@@ -3687,7 +3709,7 @@ void main(){
           const list=(code==="stub"&&Array.isArray(errs)&&errs.length)?'<ul class="errs">'+errs.map(x=>`<li data-k="${esc(String(x.kind||""))}"><span>${esc(String(x.dot||"⚫"))}</span><div><b>${esc(String(x.name||x.id||"ИИ"))}</b>${x.code?` <i>${esc(String(x.code))}</i>`:""}<br>${esc(String(x.msg||"ошибка"))}</div></li>`).join("")+'</ul><p class="errh">Подробности и советы — в окне ai_server на ПК или: <code>python ai_selftest.py</code></p>':"";
           const key=preset; b.innerHTML=`<p>${esc(stub)}</p>${list}${key?`<p><b>А пока — расчёт по данным бота:</b></p>`+local(key):""}<button type="button" class="retry" data-retry>🔄 Повторить</button>`; r.dataset.done="1"; haptic("err"); try{ Snd.play("err"); }catch(x){}
           const rb=b.querySelector("[data-retry]"); if(rb) rb.onclick=()=>{ busy=false; ask(question,preset,{r,b}); }; }
-        busy=false; snd.disabled=false; inp.disabled=!hasAI; if(hasAI) try{ inp.focus({preventScroll:true}); }catch(x){}
+        busy=false; snd.disabled=false; inp.disabled=!hasAI; /* v46.5: после ответа поле ввода не фокусируем — клавиатура сама больше не выезжает */
       }
 
       /* приветствие */
@@ -4214,6 +4236,23 @@ const EXC=(()=>{
     return {id:m.event_id+"|1X2|"+sel,eid:m.event_id,home:m.home,away:m.away,home_ru:m.home_ru,away_ru:m.away_ru,lg:m.league,
       mk:best===0?"Победа хозяев":best===2?"Победа гостей":"Ничья",od:Math.round(od*100)/100,p,ev:p*od-1,ko:m.ko,src:"1x2",why:"фаворит по модели"};
   }
+  /* v46.4: когда у матча нет кэфов рынка и ставки бота — варианты по вероятностям модели (справедливый кэф = 1/p, без маржи букмекера) */
+  function fromModel(m,det,now){
+    if(!m||m.score||m.done||m.ko==null||m.ko<now+MIN5||m.ko>now+H72) return [];
+    const a=det&&det.analysis, p=(a&&Array.isArray(a.p)&&a.p.length===3)?a.p:m.p; if(!Array.isArray(p)||p.length!==3||!p.every(x=>x>=0&&x<=1)) return [];
+    const out=[], base={eid:m.event_id,home:m.home,away:m.away,home_ru:m.home_ru,away_ru:m.away_ru,lg:m.league,ko:m.ko,src:"model",ev:0,why:"оценка модели, кэф расчётный"};
+    const add=(key,mk,pp)=>{ if(pp>=.45&&pp<=.93) out.push(Object.assign({id:m.event_id+"|M|"+key,mk,od:Math.max(1.05,Math.round(100/pp)/100),p:pp},base)); };
+    add("1",  "Победа хозяев",p[0]); add("2","Победа гостей",p[2]);
+    add("1X","Хозяева не проиграют",p[0]+p[1]); add("X2","Гости не проиграют",p[1]+p[2]);
+    const M=a&&a.matrix&&a.matrix.m;
+    if(Array.isArray(M)&&M.length>1&&Array.isArray(M[0])){
+      let t=0,bt=0; const tot=[]; M.forEach((r,i)=>r.forEach((v,j)=>{ v=+v||0; t+=v; if(i>0&&j>0) bt+=v; tot[i+j]=(tot[i+j]||0)+v; }));
+      const full=t+Math.max(0,+(a.matrix.rest)||0);
+      if(full>.5){ const cum=k=>{ let c=0; for(let i=0;i<k&&i<tot.length;i++) c+=tot[i]||0; return c/full; };
+        add("o15","Тотал больше 1.5",1-cum(2)); add("o25","Тотал больше 2.5",1-cum(3)); add("u35","Тотал меньше 3.5",cum(4)); add("bt","Обе забьют",bt/full); }
+    }
+    return out;
+  }
   function dedupe(legs,prof){ const by=new Map(); legs.forEach(l=>{ const c=by.get(l.eid); if(!c||ls(l,prof)>ls(c,prof)+1e-12||(Math.abs(ls(l,prof)-ls(c,prof))<1e-12&&l.src==="bot")) by.set(l.eid,l); }); return [...by.values()]; }
   function pool(legs,prof){
     let a=dedupe(legs,prof); if(prof==="safe"||prof==="day"){ const hi=a.filter(l=>l.p>=.5); if(hi.length>=2) a=hi; }
@@ -4240,7 +4279,7 @@ const EXC=(()=>{
     const c=idx.map(i=>cs[i-1]); if(new Set(c.map(l=>l.eid)).size!==c.length) return null;
     c.sort((x,y)=>x.ko-y.ko||(x.id<y.id?-1:1)); return Object.assign({size:c.length,legs:c},stats(c));
   }
-  return {fromBet,fromMatch,dedupe,pool,cands,pick,stats,parseAI,applyAI,CFG};
+  return {fromBet,fromMatch,fromModel,dedupe,pool,cands,pick,stats,parseAI,applyAI,CFG};
 })();
 /*EX37-CORE-END*/
 (function(){ try{
@@ -4262,6 +4301,15 @@ const EXC=(()=>{
     rows.forEach(m=>{ try{ const ko=when(m).d.getTime(); const l=EXC.fromMatch(Object.assign({},m,{ko}),det[m.event_id],now); if(l) legs.push(l); }catch(e){} });
     LEGS=legs; LEGS_AT=now; return legs;
   }
+  /* v46.4: к реальным ногам (ставки бота, кэфы 1X2) добавляем расчётные по модели для ближайших матчей без рыночных данных */
+  async function loadAll(force){
+    const real=await loadLegs(force), have=new Set(real.map(l=>l.eid)), now=Date.now(); let add=[];
+    try{ const rows=((typeof SNAP!=="undefined"&&SNAP&&SNAP.matches)||(state.cache&&state.cache.matches)||[]), det=(typeof SNAP!=="undefined"&&SNAP&&SNAP.match)||{};
+      const near=[]; rows.forEach(m=>{ try{ const ko=when(m).d.getTime(); if(!have.has(m.event_id)&&isFinite(ko)) near.push(Object.assign({},m,{ko})); }catch(e){} });
+      near.sort((a,b)=>a.ko-b.ko).slice(0,30).forEach(m=>{ EXC.fromModel(m,det[m.event_id],now).forEach(l=>add.push(l)); });
+    }catch(e){}
+    return real.concat(add);
+  }
   const etaT=ko=>{ try{ return etaText(ko)||(fmtDay(new Date(ko))+" · "+fmtTime(new Date(ko))); }catch(e){ return ""; } };
   /* ── ИИ: выбирает из кандидатов; при недоступности — подбор по правилам ── */
   async function aiExpress(cs,prof,n){
@@ -4279,7 +4327,7 @@ const EXC=(()=>{
   }
   /* итог: правила → кандидат; ИИ (если ответил корректно) → итог и пояснение */
   async function build(prof,force){
-    const legs=await loadLegs(force), base=EXC.pick(legs,prof); if(!base) return {none:true,n:EXC.pool(legs,prof).length};
+    const legs=prof==="day"?await loadLegs(force):await loadAll(force), base=EXC.pick(legs,prof); if(!base) return {none:true,n:EXC.pool(legs,prof).length};
     const cs=EXC.cands(legs,prof), sig=prof+"|"+cs.map(l=>l.id+"@"+l.od).join(","); const C=J("ex37",{}), c=C[sig];
     if(!force&&c&&Date.now()-c.ts<40*60000&&c.ids){ const m=new Map(cs.map(l=>[l.id,l])); const ls=c.ids.map(i=>m.get(i)); if(ls.every(Boolean)) return Object.assign({profile:prof,legs:ls,size:ls.length},EXC.stats(ls),{text:c.text,by:c.by}); }
     const r=await aiExpress(cs,prof,base.size); let res=null;
@@ -4292,10 +4340,12 @@ const EXC=(()=>{
   function cardHtml(res,prof){
     const P=PROF[prof]||PROF.safe, o=EXC.stats(res.legs);
     const legs=res.legs.map((l,i)=>`<button type="button" class="xl" data-eid="${esc(l.eid)}" style="--k:${i}"><span class="xn">${i+1}</span><span class="xm"><b>${esc(lname(l))}</b><i>${esc(l.mk)} · ${esc(LEAGUES[l.lg]||l.lg||"")} · ${esc(etaT(l.ko))}</i></span><span class="xo"><b class="num">@ ${l.od.toFixed(2)}</b><i>${pct(l.p)}</i></span></button>`).join("");
-    const warn=res.legs.some(l=>l.src==="bot"&&l.ev>.15)?`<div class="xwarn">⚠ В одной из ставок перевес выше 15% — чаще это ошибка кэфа, проверьте перед ставкой.</div>`:"";
-    const ai=res.by==="ai"&&res.text?`<div class="xai">${esc(res.text)}</div><div class="xai mt">Выбор и пояснение — ИИ, из кандидатов бота.</div>`:`<div class="xai mt">${res.by==="ai"?"":"ИИ недоступен или не подключён — подобрано по правилам профиля из данных бота."}</div>`;
+    const mdl=res.legs.some(l=>l.src==="model"), allm=res.legs.every(l=>l.src==="model");
+    const mnote=mdl?`<div class="xwarn">ℹ ${allm?"Кэфы":"Часть кэфов"} рассчитаны по вероятностям модели (без маржи букмекера) — у букмекера они будут ниже. Сверьте линию перед ставкой.</div>`:"";
+    const warn=mnote+(res.legs.some(l=>l.src==="bot"&&l.ev>.15)?`<div class="xwarn">⚠ В одной из ставок перевес выше 15% — чаще это ошибка кэфа, проверьте перед ставкой.</div>`:"");
+    const ai=res.by==="ai"&&res.text?`<div class="xai">${esc(res.text)}</div><div class="xai mt">Выбор и пояснение — ИИ, из кандидатов бота.</div>`:`<div class="xai mt">${res.by==="ai"?"":"ИИ недоступен или не подключён — подобрано по правилам профиля."}</div>`;
     return `<div class="g37 xc37" style="--c1:${P.c1};--c2:${P.c2}"><div class="xh"><span class="xtag">⚡ ${P.t}</span><span class="xby">${res.by==="ai"?"ИИ":"правила"}</span></div>
-      <div class="xlegs">${legs}</div><div class="xtot"><div><i>Общий кэф</i><b class="num">${o.O.toFixed(2)}</b></div><div><i>Проход*</i><b class="num">${pct(o.P,o.P<.1?1:0)}</b></div><div><i>Перевес*</i><b class="num">${o.ev>=0?"+":""}${(o.ev*100).toFixed(0)}%</b></div></div>
+      <div class="xlegs">${legs}</div><div class="xtot"><div><i>Общий кэф</i><b class="num">${o.O.toFixed(2)}</b></div><div><i>Проход*</i><b class="num">${pct(o.P,o.P<.1?1:0)}</b></div><div><i>Перевес*</i><b class="num">${mdl?"—":(o.ev>=0?"+":"")+(o.ev*100).toFixed(0)+"%"}</b></div></div>
       ${ai}${warn}<div class="note" style="margin-top:8px">* Произведение вероятностей модели при допущении, что события независимы. Это оценка, а не гарантия.</div></div>`;
   }
   const SK=`<div class="xskc"><div class="xsk"><i></i><i></i><i></i><i></i></div></div>`;
@@ -4304,7 +4354,7 @@ const EXC=(()=>{
     const put=()=>{ if(!el.isConnected) return; el.innerHTML=html; const c=el.firstElementChild; if(c&&!RMq()) c.classList.add("xin37"); };
     if(sk&&sk.classList.contains("xskc")&&!RMq()){ sk.classList.add("out"); setTimeout(()=>requestAnimationFrame(put),200); } else put();
   }
-  const emptyHtml=n=>`<div class="xempty"><b>Пока не из чего собрать экспресс.</b><br>Нужно минимум 2 предстоящих матча (ближайшие 72 часа), по которым у бота есть ставка с перевесом или известны кэфы 1X2.${n?` Сейчас подходит: ${n}.`:""} Бот сам ничего не выдумывает — экспресс строится только из его данных.</div>`;
+  const emptyHtml=n=>`<div class="xempty"><b>Пока не из чего собрать экспресс.</b><br>Нужно минимум 2 предстоящих матча (ближайшие 72 часа), по которым у бота есть ставка с перевесом или известны кэфы 1X2 — либо хотя бы 2 матча с расчётом модели.${n?` Сейчас подходит: ${n}.`:""} Экспресс строится только из данных бота и модели.</div>`;
   const tok={};
   async function paint(boxId,prof,force){
     const box=document.getElementById(boxId); if(!box) return; const my=(tok[boxId]=(tok[boxId]||0)+1);
@@ -6194,7 +6244,7 @@ function afterList(el){
     if(!box){ box=D.createElement("div"); box.id="pulse46"; el.parentNode.insertBefore(box,el); }
     const keep=(fn)=>{ const h0=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight, y0=scrollY; fn(); if(y0>10){ const d=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight-h0; if(d) scrollBy(0,d); } };
     const h=pulseHtml(); if(box.__h!==h) keep(()=>{ box.__h=h; box.innerHTML=h; });
-    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.3"; el.parentNode.appendChild(v); }
+    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.5"; el.parentNode.appendChild(v); }
     let yb=D.getElementById("yd46box");
     if(!yb){ yb=D.createElement("div"); yb.id="yd46box"; el.parentNode.insertBefore(yb,el); }
     const show=!!dayItems();
