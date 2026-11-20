@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="fb-static" content="1">
-<meta name="build" content="v46.15">
+<meta name="build" content="v46.16">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>Football Value</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3011,6 +3011,7 @@ Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensu
       el.classList.add("rvd"); const r=el.getBoundingClientRect(); const isCard=el.classList.contains("card");
       if(el.closest&&el.closest(".mvs")) return;      /* v44.1: в карточке матча блоки не прячутся и не «выезжают» при прокрутке (на Android это выглядело как подпрыгивание) */
       if(!isCard && r.top<innerHeight*.98) return;
+      if(el.classList.contains("row")) return;      /* v46.16: строки списка матчей ниже экрана не прячем и не «выезжаем» по очереди — иначе после смены дня/фильтра при быстром скролле они появлялись с задержкой 1–2 с */
       if(r.top<innerHeight*.9){ el.style.setProperty("--rd",Math.min(order++,6)*70+"ms"); el.classList.add("rv"); requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add("in"))); setTimeout(()=>el.classList.remove("rv","in"),1400); }
       else { el.classList.add("rv"); io.observe(el); }
     });
@@ -6351,7 +6352,7 @@ function afterList(el){
     if(!box){ box=D.createElement("div"); box.id="pulse46"; el.parentNode.insertBefore(box,el); }
     const keep=(fn)=>{ const h0=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight, y0=scrollY; fn(); if(y0>10){ const d=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight-h0; if(d) scrollBy(0,d); } };
     const h=pulseHtml(); if(box.__h!==h) keep(()=>{ box.__h=h; box.innerHTML=h; });
-    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.15"; el.parentNode.appendChild(v); }
+    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.16"; el.parentNode.appendChild(v); }
     let yb=D.getElementById("yd46box");
     if(!yb){ yb=D.createElement("div"); yb.id="yd46box"; el.parentNode.insertBefore(yb,el); }
     const show=!!dayItems();
