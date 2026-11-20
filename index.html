@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="fb-static" content="1">
-<meta name="build" content="v46.8">
+<meta name="build" content="v46.12">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>Football Value</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2024,6 +2024,9 @@ html[data-anim=off] #cp46{transition:none}
 #m38.on,#m39.on{transition-delay:0s}
 #m39.vt .m39p{transition:none}
 @media (min-width:640px){.m38p,.m39p{transform:translate3d(0,40px,0)}}
+
+/* v46.12: спрятанная плашка дня (её перекрывает следующая) */
+.day.cap.ov46{opacity:0;pointer-events:none}
 /*/V40-CSS*/
 </style>
 </head>
@@ -4251,14 +4254,14 @@ const EXC=(()=>{
     const sel=["P1","X","P2"][best], ods=rows.filter(o=>o&&o.selection===sel&&o.odds>1).map(o=>+o.odds); if(!ods.length) return null;
     const od=med(ods), p=m.p[best]; if(!(p>0&&p<1)||od<1.05) return null;
     return {id:m.event_id+"|1X2|"+sel,eid:m.event_id,home:m.home,away:m.away,home_ru:m.home_ru,away_ru:m.away_ru,lg:m.league,
-      mk:best===0?"Победа хозяев":best===2?"Победа гостей":"Ничья",od:Math.round(od*100)/100,p,ev:p*od-1,ko:m.ko,src:"1x2",why:"фаворит по модели"};
+      mk:best===0?"Победа хозяев":best===2?"Победа гостей":"Ничья",od:Math.round(od*100)/100,p,ev:p*od-1,ko:m.ko,src:"1x2",ck:["1","X","2"][best],why:"фаворит по модели"};
   }
   /* v46.4: когда у матча нет кэфов рынка и ставки бота — варианты по вероятностям модели (справедливый кэф = 1/p, без маржи букмекера) */
   function fromModel(m,det,now){
     if(!m||m.score||m.done||m.ko==null||m.ko<now+MIN5||m.ko>now+H72) return [];
     const a=det&&det.analysis, p=(a&&Array.isArray(a.p)&&a.p.length===3)?a.p:m.p; if(!Array.isArray(p)||p.length!==3||!p.every(x=>x>=0&&x<=1)) return [];
     const out=[], base={eid:m.event_id,home:m.home,away:m.away,home_ru:m.home_ru,away_ru:m.away_ru,lg:m.league,ko:m.ko,src:"model",ev:0,why:"оценка модели, кэф расчётный"};
-    const add=(key,mk,pp)=>{ if(pp>=.45&&pp<=.93) out.push(Object.assign({id:m.event_id+"|M|"+key,mk,od:Math.max(1.05,Math.round(100/pp)/100),p:pp},base)); };
+    const add=(key,mk,pp)=>{ if(pp>=.45&&pp<=.93) out.push(Object.assign({id:m.event_id+"|M|"+key,ck:key,mk,od:Math.max(1.05,Math.round(100/pp)/100),p:pp},base)); };
     add("1",  "Победа хозяев",p[0]); add("2","Победа гостей",p[2]);
     add("1X","Хозяева не проиграют",p[0]+p[1]); add("X2","Гости не проиграют",p[1]+p[2]);
     const M=a&&a.matrix&&a.matrix.m;
@@ -4267,6 +4270,27 @@ const EXC=(()=>{
       const full=t+Math.max(0,+(a.matrix.rest)||0);
       if(full>.5){ const cum=k=>{ let c=0; for(let i=0;i<k&&i<tot.length;i++) c+=tot[i]||0; return c/full; };
         add("o15","Тотал больше 1.5",1-cum(2)); add("o25","Тотал больше 2.5",1-cum(3)); add("u35","Тотал меньше 3.5",cum(4)); add("bt","Обе забьют",bt/full); }
+    }
+    return out;
+  }
+  /* v46.9: реальные кэфы Фонбета (приходят в снимке: odds_1x2 и odds_mk) × вероятности модели. Свежесть кэфа — не старше 24 ч */
+  function fromMarkets(m,det,now){
+    if(!m||m.score||m.done||m.ko==null||m.ko<now+MIN5||m.ko>now+H72||!det) return [];
+    const a=det.analysis, p3=(a&&Array.isArray(a.p)&&a.p.length===3)?a.p:m.p; const out=[];
+    const fresh=r=>{ const t=r&&r.captured_at?Date.parse(r.captured_at):NaN; return !isFinite(t)||now-t<864e5; };
+    const pick=(rows,sel)=>{ const v=rows.filter(o=>o&&o.selection===sel&&o.odds>1&&fresh(o)); if(!v.length) return null; const f=v.find(o=>o.source==="fonbet"); return f||v.slice().sort((x,y)=>x.odds-y.odds)[Math.floor((v.length-1)/2)]; };
+    const base={eid:m.event_id,home:m.home,away:m.away,home_ru:m.home_ru,away_ru:m.away_ru,lg:m.league,ko:m.ko};
+    const add=(id,ck,mk,pp,r)=>{ if(!(pp>0&&pp<1)) return; const od=Math.round(r.odds*100)/100; out.push(Object.assign({id:m.event_id+"|F|"+id,ck,mk,od,p:pp,ev:pp*od-1,src:r.source==="fonbet"?"fonbet":"mkt",why:"кэф букмекера, вероятность модели"},base)); };
+    const r1=det.odds_1x2||[];
+    if(Array.isArray(p3)&&p3.length===3){ [["P1","1","Победа хозяев",0],["P2","2","Победа гостей",2],["X","X","Ничья",1]].forEach(([sel,ck,mk,i])=>{ const r=pick(r1,sel); if(r) add(sel,ck,mk,p3[i],r); }); }
+    const M=a&&a.matrix&&a.matrix.m, rk=det.odds_mk||[];
+    if(Array.isArray(M)&&M.length>1&&Array.isArray(M[0])&&rk.length){
+      let t=0; const tot=[]; M.forEach((r,i)=>r.forEach((v,j)=>{ v=+v||0; t+=v; tot[i+j]=(tot[i+j]||0)+v; }));
+      const full=t+Math.max(0,+(a.matrix.rest)||0);
+      if(full>.5){ const cum=k=>{ let c=0; for(let i=0;i<k&&i<tot.length;i++) c+=tot[i]||0; return c/full; };
+        [1.5,2.5,3.5,4.5].forEach(L=>{ const over=1-cum(Math.floor(L)+1), kk="o"+String(L).replace(".","");
+          const ro=pick(rk,"TB_"+L+":OVER"), ru=pick(rk,"TB_"+L+":UNDER");
+          if(ro) add("TB_"+L+":OVER",kk,"Тотал больше "+L,over,ro); if(ru) add("TB_"+L+":UNDER","u"+String(L).replace(".",""),"Тотал меньше "+L,1-over,ru); }); }
     }
     return out;
   }
@@ -4289,28 +4313,47 @@ const EXC=(()=>{
   /* v46.8: единственное ограничение — кэф каждого события не ниже 1.30; верхнего предела нет. Профиль задаёт только цель по общему кэфу и числу событий (можно менять вручную) */
   const MINOD=1.3, DEF={safe:{n:3,t:3},mid:{n:5,t:8},risky:{n:6,t:25}};
   function mtype(l){ const k=String(l.id).split("|"), s=k[2]||"", mk=String(l.mk||"").toLowerCase();
+    if(k[1]==="F") return /^TB_/.test(s)?"tot":"w";
     if(l.src==="model") return /^[ou]/.test(s)?"tot":s==="bt"?"btts":(s==="1X"||s==="X2")?"dc":"w";
     if(k[1]==="1X2") return "w"; return mk.indexOf("тотал")>=0?"tot":mk.indexOf("обе")>=0?"btts":"o"; }
   function plan(prof,n,t){ const d=DEF[prof]||DEF.safe, avg=Math.pow(d.t,1/d.n);
     if(n>=2&&t>1) return {n:Math.min(8,n),t}; if(n>=2) return {n:Math.min(8,n),t:Math.round(Math.pow(avg,Math.min(8,n))*10)/10};
     if(t>1) return {n:Math.max(2,Math.min(8,Math.round(Math.log(t)/Math.log(avg)))),t}; return {n:d.n,t:d.t}; }
-  function assemble(legs,prof,n,target){
+  function assembleCore(legs,prof,n,target,seed){
     const pl=plan(prof,n,target); n=pl.n; const T=pl.t;
     const ok=legs.filter(l=>l&&l.od>=MINOD&&l.p>0).sort((x,y)=>x.ko-y.ko||(x.id<y.id?-1:1));
     const by=new Map(); ok.forEach(l=>{ const g=by.get(l.eid)||[]; if(g.length<3&&!g.some(z=>mtype(z)===mtype(l))) g.push(l); by.set(l.eid,g); });
     const evs=[...by.keys()]; if(evs.length<2) return null; n=Math.min(n,evs.length);
-    let c=[]; evs.slice(0,14).forEach(e=>by.get(e).slice().sort((x,y)=>y.p-x.p).slice(0,2).forEach(l=>c.push(l)));
+    let rs=((seed|0)*2654435761+12345)>>>0; const rnd=()=>{ rs=(Math.imul(rs,1664525)+1013904223)>>>0; return rs/4294967296; };
+    let pick=evs.slice(0,14);
+    if(seed>0){ const pool=evs.slice(0,60), q=pool.slice(); for(let i=q.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); const t=q[i]; q[i]=q[j]; q[j]=t; } pick=q.slice(0,Math.max(14,n+6)); }
+    let c=[]; pick.forEach(e=>{ const tl=Math.log(T)/n; let g=by.get(e).slice().sort((x,y)=>Math.abs(Math.log(x.od)-tl)-Math.abs(Math.log(y.od)-tl)||y.p-x.p); if(seed>0&&g.length>2){ const k=Math.floor(rnd()*g.length); g=g.filter((_,i)=>i!==k); } g.slice(0,2).forEach(l=>c.push(l)); });
     const sd=a=>{ const m=a.reduce((x,y)=>x+y,0)/a.length; return Math.sqrt(a.reduce((x,y)=>x+(y-m)*(y-m),0)/a.length); };
     let cap=Math.max(1,Math.ceil(n/2)), lim=1.6; const tc={}; let best=null,bu=-1; const cur=[], used=new Set();
     const score=()=>{ const s2=stats(cur), types={}; let pen=1; cur.forEach(l=>{ const t=mtype(l); types[t]=(types[t]||0)+1; });
       Object.keys(types).forEach(t=>{ if(types[t]>2) pen*=.9; });
-      return s2.P*Math.exp(-6*Math.abs(Math.log(s2.O/T)))*pen*(1+.6*sd(cur.map(l=>Math.log(l.od)))); };
+      return s2.P*Math.exp(-6*Math.abs(Math.log(s2.O/T)))*pen*(1+.6*sd(cur.map(l=>Math.log(l.od))))*Math.pow(1.1,cur.filter(l=>l.src!=="model").length); };   /* реальные кэфы (Фонбет, ставки бота) предпочтительнее расчётных */
     const run=()=>(function go(st,O){ if(cur.length===n){ const u=score(); if(u>bu+1e-12){ bu=u; best=cur.slice(); } return; }
       for(let i=st;i<c.length;i++){ const l=c[i], t=mtype(l); if(used.has(l.eid)||(tc[t]||0)>=cap) continue; if(O*l.od*Math.pow(MINOD,n-cur.length-1)>T*lim) continue;
         used.add(l.eid); tc[t]=(tc[t]||0)+1; cur.push(l); go(i+1,O*l.od); cur.pop(); used.delete(l.eid); tc[t]--; } })(0,1);
     run(); if(!best){ cap=n; run(); } if(!best){ cap=n; lim=1e9; run(); }
     if(!best) return null; best.sort((x,y)=>x.ko-y.ko||(x.id<y.id?-1:1));
     return Object.assign({profile:prof,legs:best,size:best.length,target:T},stats(best));
+  }
+  /* v46.12: защита от несовместимых настроек: каждое событие даёт минимум ×1.30, поэтому 8 событий при цели ≈3 невозможны; недостижимую цель честно помечаем */
+  function assemble(legs,prof,n,target,seed){
+    const userN=n>=2, userT=target>1, nUser=n, notes=[];
+    if(userN&&userT){ const mo=new Map(); legs.forEach(l=>{ if(l&&l.od>=MINOD&&l.p>0){ const c=mo.get(l.eid); if(!c||l.od<c) mo.set(l.eid,l.od); } });
+      const cheap=[...mo.values()].sort((x,y)=>x-y); let mx=2, pr=cheap.length>1?cheap[0]*cheap[1]:MINOD*MINOD; for(let k=3;k<=Math.min(8,cheap.length);k++){ pr*=cheap[k-1]; if(pr<=target*1.15) mx=k; else break; }
+      if(n>mx){ notes.push("При общем кэфе ≈"+target+" больше "+mx+" событий не набрать: у самых низких кэфов (от ×"+MINOD.toFixed(2)+") произведение уже выше цели. Взято "+mx+"."); n=mx; } }
+    let r=assembleCore(legs,prof,n,target,seed); if(!r) return null;
+    if(userT&&userN){ const n0=r.size; while(r.O>target*1.25&&r.size>2){ const r2=assembleCore(legs,prof,r.size-1,target,seed); if(!r2) break; r=r2; } if(r.size<nUser){ notes.length=0; notes.push("Событий "+r.size+" вместо "+nUser+": при общем кэфе ≈"+target+" больше не набрать — каждое событие даёт минимум ×"+MINOD.toFixed(2)+"."); } }
+    if(userT){
+      if(!userN){ for(let k=r.size+1;k<=8&&r.O<target*.8;k++){ const r2=assembleCore(legs,prof,k,target,seed); if(r2&&r2.O>r.O) r=r2; } }
+      if(r.O<target*.8) notes.push("Цель ≈"+target+" недостижима при "+r.size+" событиях с имеющимися кэфами: лучшее найденное — "+r.O+"."+(userN?" Увеличьте число событий.":""));
+      else if(r.O>target*1.25) notes.push("Ближе к цели ≈"+target+" подобрать не удалось: получилось "+r.O+".");
+    }
+    r.note=notes.join(" "); return r;
   }
   function parseAI(text){
     const m=/ВЫБОР\s*:\s*([\d\s,;и]+)/i.exec(String(text||"")); if(!m) return null;
@@ -4323,7 +4366,7 @@ const EXC=(()=>{
     const c=idx.map(i=>cs[i-1]); if(new Set(c.map(l=>l.eid)).size!==c.length) return null;
     c.sort((x,y)=>x.ko-y.ko||(x.id<y.id?-1:1)); return Object.assign({size:c.length,legs:c},stats(c));
   }
-  return {fromBet,fromMatch,fromModel,assemble,plan,dedupe,pool,cands,pick,stats,parseAI,applyAI,CFG};
+  return {fromBet,fromMatch,fromModel,fromMarkets,assemble,plan,dedupe,pool,cands,pick,stats,parseAI,applyAI,CFG};
 })();
 /*EX37-CORE-END*/
 (function(){ try{
@@ -4350,7 +4393,9 @@ const EXC=(()=>{
     const real=await loadLegs(force), have=new Set(real.map(l=>l.eid)), now=Date.now(); let add=[];
     try{ const rows=((typeof SNAP!=="undefined"&&SNAP&&SNAP.matches)||(state.cache&&state.cache.matches)||[]), det=(typeof SNAP!=="undefined"&&SNAP&&SNAP.match)||{};
       const near=[]; rows.forEach(m=>{ try{ const ko=when(m).d.getTime(); if(isFinite(ko)) near.push(Object.assign({},m,{ko})); }catch(e){} });
-      near.sort((a,b)=>a.ko-b.ko).slice(0,40).forEach(m=>{ EXC.fromModel(m,det[m.event_id],now).forEach(l=>add.push(l)); });
+      const rk=new Set(real.filter(l=>l.ck).map(l=>l.eid+"|"+l.ck));
+      near.sort((a,b)=>a.ko-b.ko).slice(0,80).forEach(m=>{ const d=det[m.event_id], mk=EXC.fromMarkets(m,d,now).filter(l=>!rk.has(l.eid+"|"+l.ck)), have2=new Set(real.filter(l=>l.eid===m.event_id&&l.ck).map(l=>l.ck).concat(mk.map(l=>l.ck)));
+        mk.forEach(l=>add.push(l)); EXC.fromModel(m,d,now).filter(l=>!have2.has(l.ck)).forEach(l=>add.push(l)); });
     }catch(e){}
     return real.concat(add);
   }
@@ -4370,10 +4415,11 @@ const EXC=(()=>{
     }catch(e){ return null; } finally{ clearTimeout(to); }
   }
   /* итог: правила → кандидат; ИИ (если ответил корректно) → итог и пояснение */
+  let SEED=0;
   const OPT=(()=>{ const o=J("ex46o",{}); return {n:+o.n>=2?+o.n:0,t:+o.t>1?+o.t:0}; })();
   const saveOpt=()=>{ try{ lsSet("ex46o",JSON.stringify(OPT)); }catch(e){} };
   async function build(prof,force){
-    if(prof!=="day"){ const legs=await loadAll(force), r=EXC.assemble(legs,prof,OPT.n,OPT.t); if(!r) return {none:true,n:EXC.pool(legs,prof).length}; return Object.assign(r,{text:"",by:"rules"}); }
+    if(prof!=="day"){ const legs=await loadAll(force), r=EXC.assemble(legs,prof,OPT.n,OPT.t,SEED); if(!r) return {none:true,n:EXC.pool(legs,prof).length}; return Object.assign(r,{text:"",by:"rules"}); }
     const legs=prof==="day"?await loadLegs(force):await loadAll(force), base=EXC.pick(legs,prof); if(!base) return {none:true,n:EXC.pool(legs,prof).length};
     const cs=EXC.cands(legs,prof), sig=prof+"|"+cs.map(l=>l.id+"@"+l.od).join(","); const C=J("ex37",{}), c=C[sig];
     if(!force&&c&&Date.now()-c.ts<40*60000&&c.ids){ const m=new Map(cs.map(l=>[l.id,l])); const ls=c.ids.map(i=>m.get(i)); if(ls.every(Boolean)) return Object.assign({profile:prof,legs:ls,size:ls.length},EXC.stats(ls),{text:c.text,by:c.by}); }
@@ -4386,14 +4432,15 @@ const EXC=(()=>{
   /* ── отрисовка ── */
   function cardHtml(res,prof){
     const P=PROF[prof]||PROF.safe, o=EXC.stats(res.legs);
-    const legs=res.legs.map((l,i)=>`<button type="button" class="xl" data-eid="${esc(l.eid)}" style="--k:${i}"><span class="xn">${i+1}</span><span class="xm"><b>${esc(lname(l))}</b><i>${esc(l.mk)} · ${esc(LEAGUES[l.lg]||l.lg||"")} · ${esc(etaT(l.ko))}</i></span><span class="xo"><b class="num">@ ${l.od.toFixed(2)}</b><i>${pct(l.p)}</i></span></button>`).join("");
+    const legs=res.legs.map((l,i)=>`<button type="button" class="xl" data-eid="${esc(l.eid)}" style="--k:${i}"><span class="xn">${i+1}</span><span class="xm"><b>${esc(lname(l))}</b><i>${esc(l.mk)}${l.src==="fonbet"?" · Фонбет":l.src==="model"?" · расчёт":""} · ${esc(LEAGUES[l.lg]||l.lg||"")} · ${esc(etaT(l.ko))}</i></span><span class="xo"><b class="num">@ ${l.od.toFixed(2)}</b><i>${pct(l.p)}</i></span></button>`).join("");
     const mdl=res.legs.some(l=>l.src==="model"), allm=res.legs.every(l=>l.src==="model");
-    const mnote=mdl?`<div class="xwarn">ℹ ${allm?"Кэфы":"Часть кэфов"} рассчитаны по вероятностям модели (без маржи букмекера) — у букмекера они будут ниже. Сверьте линию перед ставкой.</div>`:"";
+    const nnote=res.note?`<div class="xwarn">⚠ ${esc(res.note)}</div>`:"";
+    const mnote=nnote+(mdl?`<div class="xwarn">ℹ ${allm?"Кэфы":"Часть кэфов (помечены «расчёт»)"} рассчитаны по вероятностям модели без маржи букмекера — у букмекера они будут ниже. Остальные взяты из Фонбета; сверьте линию перед ставкой.</div>`:"");
     const warn=mnote+(res.legs.some(l=>l.src==="bot"&&l.ev>.15)?`<div class="xwarn">⚠ В одной из ставок перевес выше 15% — чаще это ошибка кэфа, проверьте перед ставкой.</div>`:"");
     const ai=res.by==="ai"&&res.text?`<div class="xai">${esc(res.text)}</div><div class="xai mt">Выбор и пояснение — ИИ, из кандидатов бота.</div>`:`<div class="xai mt">${res.by==="ai"?"":"Подобрано алгоритмом по данным модели и бота."}</div>`;
     return `<div class="g37 xc37" style="--c1:${P.c1};--c2:${P.c2}"><div class="xh"><span class="xtag">⚡ ${P.t}</span><span class="xby">${res.legs.length} соб. · ${res.by==="ai"?"ИИ":"правила"}</span></div>
-      <div class="xlegs">${legs}</div><div class="xtot"><div><i>Общий кэф</i><b class="num">${o.O.toFixed(2)}</b></div><div><i>Проход*</i><b class="num">${pct(o.P,o.P<.1?1:0)}</b></div><div><i>Перевес*</i><b class="num">${mdl?"—":(o.ev>=0?"+":"")+(o.ev*100).toFixed(0)+"%"}</b></div></div>
-      ${ai}${warn}<div class="note" style="margin-top:8px">* Произведение вероятностей модели при допущении, что события независимы. Это оценка, а не гарантия.</div></div>`;
+      <div class="xlegs">${legs}</div><div class="xtot"><div><i>Общий кэф</i><b class="num">${o.O.toFixed(2)}</b></div><div><i>Проход*</i><b class="num">${pct(o.P,o.P<.1?1:0)}</b></div><div><i>Перевес*</i><b class="num">${allm?"—":(o.ev>=0?"+":"")+(o.ev*100).toFixed(0)+"%"}</b></div></div>
+      ${ai}${warn}${prof!=="day"?`<button type="button" class="lnk46 xre46">🔄 Другой вариант</button>`:""}<div class="note" style="margin-top:8px">* Произведение вероятностей модели при допущении, что события независимы. Это оценка, а не гарантия.</div></div>`;
   }
   const SK=`<div class="xskc"><div class="xsk"><i></i><i></i><i></i><i></i></div></div>`;
   function swapIn(el,html){
@@ -4429,10 +4476,11 @@ const EXC=(()=>{
       <div class="xcap2">Итоговый кэф</div><div class="xchips46" id="xt">${[0,3,5,10,20,50].map(v=>`<button type="button" class="xo46${OPT.t===v?" on":""}" data-t="${v}">${v?"≈ "+v:"Любой"}</button>`).join("")}</div>
       <div class="note">Единственное ограничение — кэф каждого события не ниже 1.30; верхнего предела нет. «Авто»: безопасный ≈ 3, средний ≈ 8, рисковый ≈ 25 по общему кэфу.</div></div>
       <div id="xres" style="margin-top:14px"></div>`);
-    XCLICK=e=>{ const o=e.target.closest(".xo46"); if(o){ haptic("light"); const isN=o.dataset.n!=null; if(isN) OPT.n=+o.dataset.n; else OPT.t=+o.dataset.t; saveOpt(); $$(isN?"#xn .xo46":"#xt .xo46").forEach(x=>x.classList.toggle("on",x===o)); const on=$(".xp37.on"); if(on) paint("xres",on.dataset.p,true); return; }
-      const p=e.target.closest(".xp37"); if(p){ haptic("medium"); $$(".xp37").forEach(x=>x.classList.toggle("on",x===p)); paint("xres",p.dataset.p,false); const r=$("#xres"); if(r) setTimeout(()=>r.scrollIntoView({behavior:RMq()?"auto":"smooth",block:"nearest"}),60); return; }
+    XCLICK=e=>{ const re=e.target.closest(".xre46"); if(re){ haptic("light"); SEED++; const on=$(".xp37.on"); if(on) paint("xres",on.dataset.p,true); return; }
+      const o=e.target.closest(".xo46"); if(o){ haptic("light"); const isN=o.dataset.n!=null; if(isN) OPT.n=+o.dataset.n; else OPT.t=+o.dataset.t; saveOpt(); $$(isN?"#xn .xo46":"#xt .xo46").forEach(x=>x.classList.toggle("on",x===o)); const on=$(".xp37.on"); if(on) paint("xres",on.dataset.p,true); return; }
+      const p=e.target.closest(".xp37"); if(p){ haptic("medium"); if(p.classList.contains("on")) SEED++; $$(".xp37").forEach(x=>x.classList.toggle("on",x===p)); paint("xres",p.dataset.p,false); const r=$("#xres"); if(r) setTimeout(()=>r.scrollIntoView({behavior:RMq()?"auto":"smooth",block:"nearest"}),60); return; }
       const l=e.target.closest(".xl"); if(l){ haptic("light"); openMatch(+l.dataset.eid||l.dataset.eid); } };
-    const rf=document.getElementById("xrf"); if(rf) rf.onclick=()=>{ haptic("light"); paintDay(true); const on=$(".xp37.on"); if(on) paint("xres",on.dataset.p,true); };
+    const rf=document.getElementById("xrf"); if(rf) rf.onclick=()=>{ haptic("light"); SEED++; paintDay(true); const on=$(".xp37.on"); if(on) paint("xres",on.dataset.p,true); };
     paintDay(false);
     if(window.V44) V44.mountExpress();
   };
@@ -5203,7 +5251,8 @@ async function load(force){
   if(s){ const n=Math.min(10,Math.max(2,Math.round((parse(s)-parse(t))/864e5)+1)); const r=await api(`/api/matches?days=${n}${lg}`); return compose(r.filter(m=>dayOf(m)===s)); }
   if(force) A.days.delete(t);
   const [r]=await Promise.all([api(`/api/matches?days=${state.days}${lg}`), fetchDay(t).catch(()=>{})]);
-  return compose(r);
+  const last=shift(t,Math.max(1,state.days)-1);          /* v46.12: «Сегодня» = только сегодня, «2 дня» = сегодня+завтра и т.д. (статичный снимок отдавал на день больше) */
+  return compose(r.filter(m=>dayOf(m)<=last));
 }
 
 /* ───── лента дат ───── */
@@ -6295,7 +6344,7 @@ function afterList(el){
     if(!box){ box=D.createElement("div"); box.id="pulse46"; el.parentNode.insertBefore(box,el); }
     const keep=(fn)=>{ const h0=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight, y0=scrollY; fn(); if(y0>10){ const d=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight-h0; if(d) scrollBy(0,d); } };
     const h=pulseHtml(); if(box.__h!==h) keep(()=>{ box.__h=h; box.innerHTML=h; });
-    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.8"; el.parentNode.appendChild(v); }
+    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.12"; el.parentNode.appendChild(v); }
     let yb=D.getElementById("yd46box");
     if(!yb){ yb=D.createElement("div"); yb.id="yd46box"; el.parentNode.insertBefore(yb,el); }
     const show=!!dayItems();
@@ -6426,6 +6475,17 @@ function mounted(m,v){
       row.onclick=e=>{ const b=e.target.closest("[data-cp]"); if(b){ cpAdd(m,+b.dataset.cp); return; } if(e.target.closest("[data-opencp]")) cpOpen(); }; }
   }catch(e){}
 }
+/* ───── липкие плашки дней: прилипшая прячет предыдущие, иначе они накладывались друг на друга ───── */
+let ovq=0;
+function ovSync(){ ovq=0;
+  const c=Array.from(document.querySelectorAll(".day.cap")); if(c.length<2) return;
+  const stk=(W.W40&&W.W40.STK)||46, tops=c.map(n=>n.getBoundingClientRect());
+  let k=-1; for(let i=0;i<c.length;i++){ if(tops[i].top<=stk+3) k=i; }
+  c.forEach((n,i)=>{ let hide=i<k; if(i===k&&c[i+1]&&tops[i+1].top<stk+tops[i].height+6) hide=true; n.classList.toggle("ov46",hide); });
+}
+const ovAsk=()=>{ if(!ovq) ovq=requestAnimationFrame(ovSync); };
+addEventListener("scroll",ovAsk,{passive:true,capture:true});
+try{ new MutationObserver(ovAsk).observe(document.getElementById("app")||document.body,{childList:true,subtree:true}); }catch(e){}
 W.V46={nav,afterList,mounted,stats,tagHit,install,
   _t:{xpass,calib,calibHtml,sharp,cpStat,CP,pulseHtml,ydHtml,tagText,TOP6}};
 if(D.readyState==="loading") D.addEventListener("DOMContentLoaded",install); else install();
