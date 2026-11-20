@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="fb-static" content="1">
-<meta name="build" content="v46.6">
+<meta name="build" content="v46.7">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>Football Value</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2013,6 +2013,17 @@ html[data-anim=off] #cp46{transition:none}
 .xchips46{display:flex;flex-wrap:wrap;gap:8px}
 .xo46{padding:9px 14px;min-height:40px;border-radius:999px;border:1px solid color-mix(in srgb,var(--text) 14%,transparent);background:color-mix(in srgb,var(--text) 5%,transparent);color:var(--text);font-size:14px;touch-action:manipulation}
 .xo46.on{border-color:var(--blue);background:color-mix(in srgb,var(--blue) 22%,transparent)}
+
+/* v46.7: окно сценария — простой выезд снизу и уезд вниз без масштаба и без «зависания» в конце:
+   панель непрозрачная, исчезает не по таймеру, а когда доехала за край экрана */
+.m38p,.m39p{transform:translate3d(0,105%,0)}
+#m38.on .m38p,#m39.on .m39p{transform:none}
+#m38.on .m38p,#m39.on .m39p{transition-duration:.42s;transition-timing-function:cubic-bezier(.2,.85,.25,1)}
+#m38:not(.on) .m38p,#m39:not(.on) .m39p{transition-duration:.28s;transition-timing-function:cubic-bezier(.45,0,.9,.6)}
+#m38,#m39{transition-property:visibility;transition-duration:0s;transition-timing-function:linear;transition-delay:.3s}
+#m38.on,#m39.on{transition-delay:0s}
+#m39.vt .m39p{transition:none}
+@media (min-width:640px){.m38p,.m39p{transform:translate3d(0,40px,0)}}
 /*/V40-CSS*/
 </style>
 </head>
@@ -6278,7 +6289,7 @@ function afterList(el){
     if(!box){ box=D.createElement("div"); box.id="pulse46"; el.parentNode.insertBefore(box,el); }
     const keep=(fn)=>{ const h0=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight, y0=scrollY; fn(); if(y0>10){ const d=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight-h0; if(d) scrollBy(0,d); } };
     const h=pulseHtml(); if(box.__h!==h) keep(()=>{ box.__h=h; box.innerHTML=h; });
-    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.6"; el.parentNode.appendChild(v); }
+    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.7"; el.parentNode.appendChild(v); }
     let yb=D.getElementById("yd46box");
     if(!yb){ yb=D.createElement("div"); yb.id="yd46box"; el.parentNode.insertBefore(yb,el); }
     const show=!!dayItems();
