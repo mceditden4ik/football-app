@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="fb-static" content="1">
-<meta name="build" content="v46.16">
+<meta name="build" content="v46.17">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>Football Value</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2153,6 +2153,8 @@ function askKey(msg){
 }
 function ensureSnap(maxAge=45000){
   if(SNAP && Date.now()-SNAP_AT<maxAge) return Promise.resolve(SNAP);
+  /* v46.17: данные уже есть — отдаём их сразу, а свежий снимок подтягиваем в фоне (livePoll). Раньше каждая смена дня/фильтра после 45 с ждала повторной загрузки всего снимка: список пустел на секунды и всё подтормаживало */
+  if(SNAP && maxAge>0){ if(window.__lp46&&!SNAP_P) setTimeout(window.__lp46,0); return Promise.resolve(SNAP); }
   if(SNAP_P) return SNAP_P;
   SNAP_P=(async()=>{
     try{
@@ -3011,7 +3013,7 @@ Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensu
       el.classList.add("rvd"); const r=el.getBoundingClientRect(); const isCard=el.classList.contains("card");
       if(el.closest&&el.closest(".mvs")) return;      /* v44.1: в карточке матча блоки не прячутся и не «выезжают» при прокрутке (на Android это выглядело как подпрыгивание) */
       if(!isCard && r.top<innerHeight*.98) return;
-      if(el.classList.contains("row")) return;      /* v46.16: строки списка матчей ниже экрана не прячем и не «выезжаем» по очереди — иначе после смены дня/фильтра при быстром скролле они появлялись с задержкой 1–2 с */
+      if(el.classList.contains("row")) return;      /* v46.17: строки списка матчей ниже экрана не прячем и не «выезжаем» по очереди — иначе после смены дня/фильтра при быстром скролле они появлялись с задержкой 1–2 с */
       if(r.top<innerHeight*.9){ el.style.setProperty("--rd",Math.min(order++,6)*70+"ms"); el.classList.add("rv"); requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add("in"))); setTimeout(()=>el.classList.remove("rv","in"),1400); }
       else { el.classList.add("rv"); io.observe(el); }
     });
@@ -3262,7 +3264,7 @@ Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensu
     }catch(e){ if(!navigator.onLine) setOnline(false); }
     finally{ polling=false; }
   }
-  setInterval(livePoll,60000);
+  window.__lp46=livePoll; setInterval(livePoll,60000);
   /* v44: пока идут матчи — проверяем свежесть снимка каждые 30 с лёгким HEAD-запросом (скачиваем его только если он сменился) */
   let _snapTag=null;
   async function snapMoved(){ try{ const r=await fetch("snapshot.enc.json?h="+Date.now(),{method:"HEAD",cache:"no-store"}); if(!r.ok) return true;
@@ -6352,7 +6354,7 @@ function afterList(el){
     if(!box){ box=D.createElement("div"); box.id="pulse46"; el.parentNode.insertBefore(box,el); }
     const keep=(fn)=>{ const h0=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight, y0=scrollY; fn(); if(y0>10){ const d=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight-h0; if(d) scrollBy(0,d); } };
     const h=pulseHtml(); if(box.__h!==h) keep(()=>{ box.__h=h; box.innerHTML=h; });
-    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.16"; el.parentNode.appendChild(v); }
+    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.17"; el.parentNode.appendChild(v); }
     let yb=D.getElementById("yd46box");
     if(!yb){ yb=D.createElement("div"); yb.id="yd46box"; el.parentNode.insertBefore(yb,el); }
     const show=!!dayItems();
