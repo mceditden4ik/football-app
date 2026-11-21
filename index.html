@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="fb-static" content="1">
-<meta name="build" content="v46.17">
+<meta name="build" content="v46.18">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>Football Value</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -739,6 +739,9 @@ html[data-fxl="off"] #silk{display:none}
 #sheet:has(#cp) .cpn{font-size:11px;line-height:1.35;margin-top:6px}
 .cpx{position:absolute;right:14px;top:-4px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card2);color:var(--text);font-size:18px;line-height:1;cursor:pointer;display:grid;place-items:center}
 .cpx:active{transform:scale(.92)}
+/* v46.18: плавность прокрутки — на время скролла фоновые анимации и размытие отключены, бары строк не анимируются заново при каждом рендере */
+html.scr46 #silk,html.scr46 #silk *,html.scr46 .live,html.scr46 .pulse{animation-play-state:paused!important}
+#list .row .pbar i,#list .row .meter i,#list .row .tb i{animation:none!important}
 </style>
 <style id="v34css">
 /* ═════════ v34: Ставка Дня, фильтры, морфинг, пустые состояния (только transform/opacity в анимациях) ═════════ */
@@ -2056,7 +2059,7 @@ const LEAGUES = {EPL:"АПЛ",La_Liga:"Ла Лига",Bundesliga:"Бундесл
 const LCOL = {EPL:"#a770ff",La_Liga:"#ff9646",Bundesliga:"#f05a5a",Serie_A:"#5aa0ff",Ligue_1:"#50cdeb",RFPL:"#eb5564",Champions_League:"#5082ff",
   Europa_League:"#ff8c3c",Conference_League:"#46c882",Eredivisie:"#ff783c",Portugal:"#3cbe78",Turkey:"#f04650",Belgium:"#fac83c"};
 const MARKETS = [["TB_2.5","Тотал 2.5",["Больше","Меньше"]],["BTTS","Обе забьют",["Да","Нет"]],["CORN_9.5","Угловые 9.5",["Больше","Меньше"]],["CARD_3.5","Карточки 3.5",["Больше","Меньше"]]];
-const state = {tab:"matches", league:"", days:4, q:"", detail:null, betsTab:"open", sort:"time", favOnly:false, recOnly:false, showDone:false, cache:{}, favs:[], scroll:0, lang:"ru", today:null};
+const state = {tab:"matches", league:"", days:4, q:"", detail:null, betsTab:"open", sort:"time", favOnly:false, recOnly:false, showDone:true, cache:{}, favs:[], scroll:0, lang:"ru", today:null};
 
 /* ─────────── утилиты ─────────── */
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
@@ -2317,7 +2320,7 @@ function renderList(anim){
   const doneN = items.filter(m=>isDone(m)&&!(window.TM42&&TM42.isPast(m))).length;
   const tdb = document.getElementById("td"); if(tdb){ tdb.style.display = doneN||state.showDone ? "" : "none"; tdb.textContent = "🏁 Завершённые"+(doneN?" ("+doneN+")":""); }
   if(!state.showDone) items = items.filter(m=>!isDone(m)||(window.TM42&&TM42.isPast(m)));      /* v42: архивные дни показываются всегда */
-  if(!items.length){ el.innerHTML = (window.TM42?TM42.head():"") + `<div class="empty">${window.TM42&&state.day&&state.day<TM42.todayS()?(typeof STATIC!=="undefined"&&STATIC&&SNAP&&!SNAP.archive?"Архив появится после следующей публикации снимка (run_publish.bat).":"В этот день нет сыгранных матчей по выбранным фильтрам."):state.favOnly&&!state.favs.length?"Нажмите ★ рядом с названием команды на странице матча — и она появится здесь.":"Матчей не найдено."}<br><span class="sub">${state.favOnly&&!state.favs.length?"":"Попробуйте другой период, лигу или фильтр. Календарь обновляет бот."}</span></div>`; return; }
+  if(!items.length){ el.innerHTML = (window.TM42?TM42.head():"") + `<div class="empty">${window.TM42&&state.day&&state.day<TM42.todayS()?(typeof STATIC!=="undefined"&&STATIC&&SNAP&&!SNAP.archive?"Архив появится после следующей публикации снимка (run_publish.bat).":"В этот день нет сыгранных матчей по выбранным фильтрам."):state.favOnly&&!state.favs.length?"Нажмите ★ рядом с названием команды на странице матча — и она появится здесь.":"Матчей не найдено."}<br><span class="sub">${state.favOnly&&!state.favs.length?"":"Попробуйте другой период, лигу или фильтр. Календарь обновляет бот."}</span></div>`; if(window.V46) V46.afterList(el); return; }
   const byConf = state.sort==="conf";
   if(byConf) items = items.slice().sort((a,b)=>(b.p?Math.max(...b.p):0)-(a.p?Math.max(...a.p):0));
   if(!byConf){ const L=m=>{const w=when(m); const ph=(!m.score&&w.hasTime)?phaseOf(w.d.getTime()).code:""; return ph==="1h"||ph==="2h"||ph==="ht"?0:1;}; items = items.slice().sort((a,b)=>L(a)-L(b)); }   // «Сейчас идёт» наверх
@@ -3990,7 +3993,7 @@ void main(){
         pl.onclick=e=>{ const u=e.target.closest(".use"), x=e.target.closest("[id^=fl-pd-]"); if(u){ const p=pres()[+u.dataset.i]; if(!p) return; applyFilters({leagues:(p.leagues||[]).filter(k=>LEAGUES[k]),conf:p.conf||0,days:p.days||4,rec:!!p.rec,fav:!!p.fav,done:!!p.done}); Sheet.close(); toast("Шаблон «"+p.n+"» применён"); haptic("ok"); }
           else if(x){ const a=pres(); a.splice(+x.dataset.i,1); lsSet(PRE,JSON.stringify(a)); haptic("warn"); redraw(); } };
         $("#fl-save",B).onclick=()=>{ const n=($("#fl-name",B).value||"").trim().slice(0,24)||("Набор "+(pres().length+1)); const a=pres().filter(x=>x.n!==n); a.push({n,leagues:d.leagues.slice(),conf:d.conf,days:d.days,rec:d.rec,fav:d.fav,done:d.done}); lsSet(PRE,JSON.stringify(a.slice(-8))); haptic("ok"); toast("Шаблон сохранён"); redraw(); };
-        $("#fl-clr",B).onclick=()=>{ d.leagues=[]; d.conf=0; d.rec=false; d.fav=false; d.done=false; d.days=4; haptic("light"); redraw(); };
+        $("#fl-clr",B).onclick=()=>{ d.leagues=[]; d.conf=0; d.rec=false; d.fav=false; d.done=true; d.days=4; haptic("light"); redraw(); };
         $("#fl-ok",B).onclick=()=>{ applyFilters(d); Sheet.close(); haptic("ok"); }; }
       bind();
     }); }
@@ -4295,9 +4298,20 @@ const EXC=(()=>{
       let t=0; const tot=[]; M.forEach((r,i)=>r.forEach((v,j)=>{ v=+v||0; t+=v; tot[i+j]=(tot[i+j]||0)+v; }));
       const full=t+Math.max(0,+(a.matrix.rest)||0);
       if(full>.5){ const cum=k=>{ let c=0; for(let i=0;i<k&&i<tot.length;i++) c+=tot[i]||0; return c/full; };
-        [1.5,2.5,3.5,4.5].forEach(L=>{ const over=1-cum(Math.floor(L)+1), kk="o"+String(L).replace(".","");
+        const lines=pre=>[...new Set(rk.map(o=>{ const q=String(o.selection||"").match(new RegExp("^"+pre+"_(-?\\d+\\.5):")); return q?+q[1]:null; }).filter(x=>x!=null))];
+        const lbl=x=>(x>0?"+":"")+x, key=x=>String(x).replace(".","").replace("-","m");
+        lines("TB").forEach(L=>{ const over=1-cum(Math.floor(L)+1), kk="o"+key(L);
           const ro=pick(rk,"TB_"+L+":OVER"), ru=pick(rk,"TB_"+L+":UNDER");
-          if(ro) add("TB_"+L+":OVER",kk,"Тотал больше "+L,over,ro); if(ru) add("TB_"+L+":UNDER","u"+String(L).replace(".",""),"Тотал меньше "+L,1-over,ru); }); }
+          if(ro) add("TB_"+L+":OVER",kk,"Тотал больше "+L,over,ro); if(ru) add("TB_"+L+":UNDER","u"+key(L),"Тотал меньше "+L,1-over,ru); });
+        /* v46.18: индивидуальные тоталы и форы — реальные кэфы Фонбета; вероятность из матрицы счёта модели */
+        const hg=[],ag=[]; M.forEach((r,i)=>r.forEach((v,j)=>{ v=+v||0; hg[i]=(hg[i]||0)+v; ag[j]=(ag[j]||0)+v; }));
+        const gt=(arr,L)=>{ let c=0; arr.forEach((v,i)=>{ if(i>L) c+=v||0; }); return c/full; };
+        [["ITB1",hg,"Инд. тотал хозяев","ih"],["ITB2",ag,"Инд. тотал гостей","ia"]].forEach(([nm,arr,tx,ck])=>{ lines(nm).forEach(L=>{ const over=gt(arr,L);
+          const ro=pick(rk,nm+"_"+L+":OVER"), ru=pick(rk,nm+"_"+L+":UNDER");
+          if(ro) add(nm+"_"+L+":OVER",ck+key(L),tx+" больше "+L,over,ro); if(ru) add(nm+"_"+L+":UNDER",ck+"u"+key(L),tx+" меньше "+L,1-over,ru); }); });
+        lines("F1").forEach(L=>{ let ph=0; M.forEach((r,i)=>r.forEach((v,j)=>{ if(i-j+L>0) ph+=+v||0; })); ph=ph/t;
+          const rh=pick(rk,"F1_"+L+":HOME"), ra=pick(rk,"F1_"+L+":AWAY");
+          if(rh) add("F1_"+L+":HOME","hp"+key(L),"Фора хозяев "+lbl(L),ph,rh); if(ra) add("F1_"+L+":AWAY","ap"+key(-L),"Фора гостей "+lbl(-L),1-ph,ra); }); }
     }
     return out;
   }
@@ -4320,7 +4334,7 @@ const EXC=(()=>{
   /* v46.8: единственное ограничение — кэф каждого события не ниже 1.30; верхнего предела нет. Профиль задаёт только цель по общему кэфу и числу событий (можно менять вручную) */
   const MINOD=1.3, DEF={safe:{n:3,t:3},mid:{n:5,t:8},risky:{n:6,t:25}};
   function mtype(l){ const k=String(l.id).split("|"), s=k[2]||"", mk=String(l.mk||"").toLowerCase();
-    if(k[1]==="F") return /^TB_/.test(s)?"tot":"w";
+    if(k[1]==="F") return /^TB_/.test(s)?"tot":/^ITB/.test(s)?"tt":/^F1_/.test(s)?"hc":"w";
     if(l.src==="model") return /^[ou]\d/.test(s)?"tot":(s==="bt"||s==="bn")?"btts":(s==="1X"||s==="X2")?"dc":/^i[ha]/.test(s)?"tt":/^[ha]p/.test(s)?"hc":"w";
     if(k[1]==="1X2") return "w"; return mk.indexOf("тотал")>=0?"tot":mk.indexOf("обе")>=0?"btts":"o"; }
   function plan(prof,n,t){ const d=DEF[prof]||DEF.safe, avg=Math.pow(d.t,1/d.n);
@@ -4912,8 +4926,11 @@ const EXC=(()=>{
   const live=new Set(); let tx=0,ty=0,cx=0,cy=0,sraf=0,idle=0;
   const spIO="IntersectionObserver" in window?new IntersectionObserver(es=>es.forEach(en=>{ const s=en.target.__spec; if(!s) return; if(en.isIntersecting&&live.size<10){ live.add(s); s.classList.add("on"); } else { live.delete(s); s.classList.remove("on"); } }),{threshold:0}):null;
   const arm=()=>{ $$(SPEC).forEach(n=>{ if(n.__spec||!spIO) return; const s=D.createElement("i"); s.className="spec40"; s.setAttribute("aria-hidden","true"); s.innerHTML="<b></b>"; n.appendChild(s); n.__spec=s; spIO.observe(n); }); };
+  let SCR=false, scT=0;   /* v46.18: во время прокрутки блик и фоновые анимации стоят — главный источник подвисаний на телефоне */
+  addEventListener("scroll",()=>{ if(!SCR){ SCR=true; R.classList.add("scr46"); } clearTimeout(scT); scT=setTimeout(()=>{ SCR=false; R.classList.remove("scr46"); },140); },{passive:true,capture:true});
   const loop=()=>{ sraf=0; if(LOW()||RM()) return; cx+=(tx-cx)*.12; cy+=(ty-cy)*.12;
-    live.forEach(s=>{ const r=s.parentNode; const w=r.offsetWidth, h=r.offsetHeight, b=s.firstChild; b.style.transform=`translate3d(${(cx*w*.42).toFixed(1)}px,${(cy*Math.min(h,260)*.42).toFixed(1)}px,0)`; });
+    const now=performance.now(); if(SCR) { sraf=requestAnimationFrame(loop); return; }
+    live.forEach(s=>{ const r=s.parentNode; if(!s.__t||now-s.__t>600){ s.__w=r.offsetWidth; s.__h=r.offsetHeight; s.__t=now; } const w=s.__w, h=s.__h, b=s.firstChild; b.style.transform=`translate3d(${(cx*w*.42).toFixed(1)}px,${(cy*Math.min(h,260)*.42).toFixed(1)}px,0)`; });
     if(Math.abs(tx-cx)>.002||Math.abs(ty-cy)>.002||performance.now()-idle<700) sraf=requestAnimationFrame(loop); };
   const kick=()=>{ idle=performance.now(); if(!sraf) sraf=requestAnimationFrame(loop); };
   addEventListener("pointermove",e=>{ if(e.pointerType==="mouse"&&!e.buttons&&!fine) return; tx=clamp(e.clientX/innerWidth*2-1,-1,1); ty=clamp(e.clientY/innerHeight*2-1,-1,1); kick(); },{passive:true});
@@ -6294,8 +6311,14 @@ function dayItems(){
   if(typeof state==="undefined"||(state.day&&state.day!==t)) return null;
   return (state.cache.matches||[]).filter(m=>(T?T.dayOf(m):String(m.date||"").slice(0,10))===t);
 }
+/* v46.18: пульс считается по выбранному дню («Завтра», прошедший день), а в режиме периода — по сегодняшнему */
+function pulseDay(){ const T=W.TM42; return (typeof state!=="undefined"&&state.day)||(T?T.todayS():new Date().toISOString().slice(0,10)); }
+function pulseItems(){
+  const T=W.TM42, d=pulseDay(); if(typeof state==="undefined") return null;
+  return (state.cache.matches||[]).filter(m=>(T?T.dayOf(m):String(m.date||"").slice(0,10))===d);
+}
 function pulseHtml(){
-  const L=dayItems(); if(!L||!L.length) return "";
+  const L=pulseItems(); if(!L||!L.length) return "";
   let live=0,done=0,next=null,w=0,l=0,p=0,bot=0;
   for(const m of L){
     const t=koOf(m), c=t!=null?phc(t):"";
@@ -6309,11 +6332,12 @@ function pulseHtml(){
   const total=L.length, left=Math.max(0,total-done-live), pct=x=>(100*x/total).toFixed(1);
   const eta=next!=null&&typeof etaText==="function"?etaText(next):"";
   const bt=(w||l||p)?`Бот сегодня: зашло <b class="g">${w}</b> · не зашло <b class="r">${l}</b>${p?` · возврат ${p}`:""}`:(bot?`Матчей с ставками бота: <b>${bot}</b>`:"");
-  return `<div class="card pl46"><div class="cap">Пульс дня</div>
+  return `<div class="card pl46"><div class="cap">${E(pulseCap())}</div>
     <div class="pg46"><div><b class="num">${total}</b><span>матчей</span></div><div><b class="num ${live?"lv":""}">${live}</b><span>идут</span></div><div><b class="num">${done}</b><span>сыграно</span></div><div><b class="num">${left}</b><span>впереди</span></div></div>
     <div class="pb46" role="img" aria-label="Доля сыгранных и идущих матчей"><i class="d" style="width:${pct(done)}%"></i><i class="v" style="width:${pct(live)}%"></i></div>
     ${bt||eta?`<div class="sub pn46">${bt}${bt&&eta?" · ":""}${eta?`ближайший старт ${E(eta)}`:""}</div>`:""}</div>`;
 }
+function pulseCap(){ const T=W.TM42, t=T?T.todayS():"", d=pulseDay(); if(!d||d===t||!T) return "Пульс дня"; try{ return "Пульс · "+new Date(d+"T12:00:00").toLocaleDateString("ru-RU",{day:"numeric",month:"long"}); }catch(e){ return "Пульс дня"; } }
 const YD={day:"",html:"",busy:false};
 function ymd(t,k){ try{ return W.TM42?W.TM42.shift(t,k):""; }catch(e){ return ""; } }
 async function ydLoad(){
@@ -6354,7 +6378,7 @@ function afterList(el){
     if(!box){ box=D.createElement("div"); box.id="pulse46"; el.parentNode.insertBefore(box,el); }
     const keep=(fn)=>{ const h0=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight, y0=scrollY; fn(); if(y0>10){ const d=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight-h0; if(d) scrollBy(0,d); } };
     const h=pulseHtml(); if(box.__h!==h) keep(()=>{ box.__h=h; box.innerHTML=h; });
-    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.17"; el.parentNode.appendChild(v); }
+    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.18"; el.parentNode.appendChild(v); }
     let yb=D.getElementById("yd46box");
     if(!yb){ yb=D.createElement("div"); yb.id="yd46box"; el.parentNode.insertBefore(yb,el); }
     const show=!!dayItems();
@@ -6458,6 +6482,7 @@ function cpOpen(){
   });
 }
 function cpPill(){
+  const sb=D.getElementById("cp46b"); if(sb) sb.innerHTML=cpHtml();   /* v46.18: открытая шторка обновляется сразу */
   let el=D.getElementById("cp46");
   if(!CP.length){ if(el) el.classList.remove("on"); }
   else{
