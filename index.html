@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="fb-static" content="1">
-<meta name="build" content="v46.18">
+<meta name="build" content="v46.19">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <title>Football Value</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2030,6 +2030,35 @@ html[data-anim=off] #cp46{transition:none}
 
 /* v46.12: спрятанная плашка дня (её перекрывает следующая) */
 .day.cap.ov46{opacity:0;pointer-events:none}
+
+/* ═════════ v46.19: плавность списка и единый отклик на касание ═════════ */
+/* 1. сыгранные строки не полупрозрачны: opacity<1 на каждой карточке — отдельный слой поверх анимированного фона (мерцание и подпрыгивание при прокрутке «Сегодня») */
+.row.is-done{opacity:1}
+.row.is-done .teams,.row.is-done .tm41 i{color:color-mix(in srgb,var(--text) 82%,transparent)}
+.row.is-done .top,.row.is-done .pnum{color:var(--dim)}
+.row.is-done .score{color:var(--text)}
+/* 2. переходы строк: без height/margin/padding/opacity и без пружины */
+.row,.tile,.card{transition:background-color .15s ease-out,border-color .2s,box-shadow .2s,transform .18s var(--e-out)}
+.row.leaving{transition:height .5s var(--e-out),opacity .35s,margin .5s,padding .5s,transform .5s var(--e-out)}
+/* 3. касание: подсветка фона без сжатия и подпрыгивания */
+:root .row:active,:root .card:active,:root .tile:active{transform:none;background-color:color-mix(in srgb,var(--card2) 88%,var(--blue) 10%)}
+.row.prs40,.card.prs40,.tile.prs40{transform:none!important}
+.prs40{filter:none;transition:transform .1s ease-out!important}
+.lp{transform:none!important}
+@media (hover:none),(pointer:coarse){.row:hover,.tile:hover{transform:none;box-shadow:var(--sh1)}}
+/* вместо «волн» и пятен на каждое касание — одна короткая вспышка после тапа */
+.rip,#silk .rp{display:none!important}
+.row::after,.card::after,.tile::after{transition:none}
+html[data-fx="on"] .lit::after{opacity:0}
+.tap46::after{animation:tap46 .45s ease-out both}
+@keyframes tap46{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.tap46::after{animation:none}}
+html[data-anim=off] .tap46::after{animation:none}
+/* 4. липкие плашки не масштабируются при залипании */
+.tb39.stuck40{transform:none}
+.day.cap,.day.cap.stuck40{transition:none}
+/* 5. полноэкранный слой с mix-blend-mode перекомпоновывал весь экран на каждом кадре прокрутки */
+#noise{display:none}
 /*/V40-CSS*/
 </style>
 </head>
@@ -2271,14 +2300,19 @@ function pbar(p){
   <div class="pnum num"><span class="${p[0]===mx?"b":"muted"}">П1 ${pc(p[0])}</span><span class="${p[1]===mx?"":"muted"}">Х ${pc(p[1])}</span><span class="${p[2]===mx?"":"muted"}" style="${p[2]===mx?"color:var(--violet)":""}">П2 ${pc(p[2])}</span></div>`;
 }
 function isDone(m){ if(m.score) return true; const w=when(m); if(!w.hasTime) return false; const c=phaseOf(w.d.getTime()).code; return c==="ft"||c==="old"; }
-/* Закончившиеся матчи исчезают сами: раз в 20 с находим строки, плавно схлопываем и пересчитываем список */
+/* v46.19: режимы списка. «Сегодня» — идут/будут сверху, завершённые отдельным блоком ниже; «Завтра/2/4 дня/Неделя» — только будущие; прошедшие дни — только сыгранные */
+function listMode(){ const td=window.TM42?TM42.todayS():null; if(state.day) return td&&state.day<td?"past":"future"; return state.days===1?"today":"future"; }
+function grpOf(m){ if(window.TM42&&TM42.isPast(m)) return 0; if(isDone(m)) return 3; const w=when(m); const c=(!m.score&&w.hasTime)?phaseOf(w.d.getTime()).code:""; return (c==="1h"||c==="2h"||c==="ht")?1:2; }
+const grpOfKo=ko=>{ const c=phaseOf(ko).code; return (c==="ft"||c==="old")?3:(c==="1h"||c==="2h"||c==="ht")?1:2; };
+const plMatch=n=>n%10===1&&n%100!==11?"матч":n%10>=2&&n%10<=4&&(n%100<10||n%100>=20)?"матча":"матчей";
+/* список перестраивается только когда матч сменил фазу (скоро → идёт → завершён), а не по таймеру */
 setInterval(()=>{
-  if(state.showDone||state.detail) return;
-  const rows=[...document.querySelectorAll("#list .row[data-ko]")].filter(r=>r.dataset.ko&&!r.dataset.sc&&!r.classList.contains("is-done")&&["ft","old"].includes(phaseOf(+r.dataset.ko).code));
+  if(document.hidden||state.detail||state.tab!=="matches"||document.documentElement.dataset.sheet) return;
+  const rows=[...document.querySelectorAll("#list .row[data-ko]")].filter(r=>r.dataset.ko&&!r.dataset.sc&&r.dataset.g&&r.dataset.g!=="0"&&String(grpOfKo(+r.dataset.ko))!==r.dataset.g);
   if(!rows.length) return;
-  rows.forEach(r=>{ r.style.height=r.offsetHeight+"px"; void r.offsetHeight; r.classList.add("leaving"); });
-  setTimeout(()=>{ try{ renderList(false); }catch(e){} },650);
-},20000);
+  if(listMode()==="future"&&rows.every(r=>grpOfKo(+r.dataset.ko)===3)){ rows.forEach(r=>{ r.style.height=r.offsetHeight+"px"; void r.offsetHeight; r.classList.add("leaving"); }); setTimeout(()=>{ try{ renderList(false); }catch(e){} },650); }
+  else { try{ renderList(false); }catch(e){} }
+},30000);
 function matchesKey(){ return state.days+"|"+state.league+"|"+(state.day||""); }
 async function viewMatches(force){
   const key = matchesKey(), have = state.cache.mkey===key && state.cache.matches;
@@ -2286,7 +2320,7 @@ async function viewMatches(force){
    <div id="today"></div>
    <input class="search" id="q" placeholder="Поиск команды (рус. или англ.)" value="${esc(state.q)}" autocomplete="off">
    <div class="chips" id="lg"></div><div class="seg" id="days"></div>
-   <div class="tools"><button class="chip fav ${state.favOnly?"on":""}" id="tf">★ Мои команды</button><button class="chip rec ${state.recOnly?"on":""}" id="tr">С перевесом</button><button class="chip ${state.showDone?"on":""}" id="td" style="display:none">🏁 Завершённые</button><span class="sp"></span>
+   <div class="tools"><button class="chip fav ${state.favOnly?"on":""}" id="tf">★ Мои команды</button><button class="chip rec ${state.recOnly?"on":""}" id="tr">С перевесом</button><span class="sp"></span>
      <div class="sort" id="so"><button data-s="time" class="${state.sort==="time"?"on":""}">Время</button><button data-s="conf" class="${state.sort==="conf"?"on":""}">Уверенность</button></div></div>
    <div class="qc43" id="qc43" hidden></div>
    <div id="list">${have?"":skel(4)}</div><div class="foot" id="upd"></div>`, have?"":"");
@@ -2299,7 +2333,7 @@ async function viewMatches(force){
   dz.onclick = e=>{const b=e.target.closest("[data-d]"); if(!b) return; state.days=+b.dataset.d; haptic(); viewMatches();}; }
   document.getElementById("q").oninput = e=>{state.q=e.target.value; renderList(false);};
   document.getElementById("tf").onclick = e=>{state.favOnly=!state.favOnly; e.currentTarget.classList.toggle("on",state.favOnly); haptic(); renderList(true);};
-  document.getElementById("td").onclick = e=>{state.showDone=!state.showDone; e.currentTarget.classList.toggle("on",state.showDone); haptic(); renderList(true);};
+
   document.getElementById("tr").onclick = e=>{state.recOnly=!state.recOnly; e.currentTarget.classList.toggle("on",state.recOnly); haptic(); renderList(true);};
   document.getElementById("so").onclick = e=>{const b=e.target.closest("[data-s]"); if(!b) return; state.sort=b.dataset.s; document.querySelectorAll("#so button").forEach(x=>x.classList.toggle("on",x===b)); haptic(); renderList(true);};
   document.getElementById("rf").onclick = ()=>refresh();
@@ -2317,21 +2351,23 @@ function renderList(anim){
   if(window.V43) V43.mountChips();                    /* v43: быстрые фильтры */
   const q = state.q.trim().toLowerCase();
   let items = (state.cache.matches||[]).filter(m=>(!q || (m.home+" "+m.away+" "+(m.home_ru||"")+" "+(m.away_ru||"")).toLowerCase().includes(q)) && (!state.favOnly || isFav(m.home)||isFav(m.away)) && (!state.recOnly || m.n_rec>0) && (!window.V43 || V43.pass(m)));
-  const doneN = items.filter(m=>isDone(m)&&!(window.TM42&&TM42.isPast(m))).length;
-  const tdb = document.getElementById("td"); if(tdb){ tdb.style.display = doneN||state.showDone ? "" : "none"; tdb.textContent = "🏁 Завершённые"+(doneN?" ("+doneN+")":""); }
-  if(!state.showDone) items = items.filter(m=>!isDone(m)||(window.TM42&&TM42.isPast(m)));      /* v42: архивные дни показываются всегда */
+const MODE=listMode();
+  if(MODE==="future") items = items.filter(m=>!isDone(m)&&!(window.TM42&&TM42.isPast(m)));      /* v46.19: в будущих вкладках сыгранных нет вообще */
   if(!items.length){ el.innerHTML = (window.TM42?TM42.head():"") + `<div class="empty">${window.TM42&&state.day&&state.day<TM42.todayS()?(typeof STATIC!=="undefined"&&STATIC&&SNAP&&!SNAP.archive?"Архив появится после следующей публикации снимка (run_publish.bat).":"В этот день нет сыгранных матчей по выбранным фильтрам."):state.favOnly&&!state.favs.length?"Нажмите ★ рядом с названием команды на странице матча — и она появится здесь.":"Матчей не найдено."}<br><span class="sub">${state.favOnly&&!state.favs.length?"":"Попробуйте другой период, лигу или фильтр. Календарь обновляет бот."}</span></div>`; if(window.V46) V46.afterList(el); return; }
   const byConf = state.sort==="conf";
   if(byConf) items = items.slice().sort((a,b)=>(b.p?Math.max(...b.p):0)-(a.p?Math.max(...a.p):0));
-  if(!byConf){ const L=m=>{const w=when(m); const ph=(!m.score&&w.hasTime)?phaseOf(w.d.getTime()).code:""; return ph==="1h"||ph==="2h"||ph==="ht"?0:1;}; items = items.slice().sort((a,b)=>L(a)-L(b)); }   // «Сейчас идёт» наверх
-  let out=(window.TM42?TM42.head():""), cur="", liveHead=false;
+if(MODE==="today"){ const part=[[],[],[],[]]; items.forEach(m=>part[grpOf(m)].push(m)); if(!byConf) part[3].sort((a,b)=>when(b).d.getTime()-when(a).d.getTime()); items=part[0].concat(part[1],part[2],part[3]); }   // сначала идут и будут, ниже — завершённые (свежие сверху)
+  else if(!byConf){ const L=m=>{const w=when(m); const ph=(!m.score&&w.hasTime)?phaseOf(w.d.getTime()).code:""; return ph==="1h"||ph==="2h"||ph==="ht"?0:1;}; items = items.slice().sort((a,b)=>L(a)-L(b)); }   // «Сейчас идёт» наверх
+  let out=(window.TM42?TM42.head():""), cur="", liveHead=false, finHead=false; const nFin=MODE==="today"?items.filter(m=>grpOf(m)===3).length:0;
   const dcnt={}; if(window.TM42) items.forEach(m=>{ if(TM42.isPast(m)){ const k=TM42.dayOf(m); dcnt[k]=(dcnt[k]||0)+1; } });
   for(const m of items){
     const w = when(m), day = fmtDay(w.d);
     const isNow = !byConf && !m.score && w.hasTime && ["1h","2h","ht"].includes(phaseOf(w.d.getTime()).code);
     if(isNow && !liveHead){ liveHead=true; out += `<div class="day cap nowhead"><span class="live"></span> Сейчас идёт</div>`; cur="@now"; }
     else if(!isNow && cur==="@now") cur="";
-    if(!byConf && !isNow && day!==cur){ cur=day; const dn=window.TM42&&TM42.isPast(m)?dcnt[TM42.dayOf(m)]:0; out += `<div class="day cap">${esc(day)}${dn?`<span class="dn42">${dn} ${dn%10===1&&dn%100!==11?"матч":dn%10>=2&&dn%10<=4&&(dn%100<10||dn%100>=20)?"матча":"матчей"}</span>`:""}</div>`; }
+    const g_=grpOf(m);
+    if(MODE==="today"&&g_===3){ if(!finHead){ finHead=true; out += `<div class="day cap fin46">🏁 Завершённые<span class="dn42">${nFin} ${plMatch(nFin)}</span></div>`; } cur="@fin"; }
+    else if(!byConf && !isNow && day!==cur){ cur=day; const dn=window.TM42&&TM42.isPast(m)?dcnt[TM42.dayOf(m)]:0; out += `<div class="day cap">${esc(day)}${dn?`<span class="dn42">${dn} ${dn%10===1&&dn%100!==11?"матч":dn%10>=2&&dn%10<=4&&(dn%100<10||dn%100>=20)?"матча":"матчей"}</span>`:""}</div>`; }
     const ph = (w.hasTime && !m.score) ? phaseOf(w.d.getTime()).code : "", started = ph==="1h"||ph==="2h", paused = ph==="ht";
     const bd = [];
     if(m.n_placed) bd.push('<span class="badge bg-b">поставлено</span>');
@@ -2339,7 +2375,7 @@ function renderList(anim){
     if(m.grade&&(m.grade.w||m.grade.l||m.grade.p)){ if(m.grade.w) bd.push(`<span class="badge bg-g">бот: зашло ${m.grade.w}</span>`); if(m.grade.l) bd.push(`<span class="badge bg-r">не зашло ${m.grade.l}</span>`); if(m.grade.p&&!m.grade.w&&!m.grade.l) bd.push(`<span class="badge bg-m">возврат ${m.grade.p}</span>`); }
     if(m.quality!=null && m.quality<.35) bd.push('<span class="badge bg-r">мало данных</span>');
     const when_ = w.hasTime?(byConf?fmtDay(w.d)+" · ":"")+fmtTime(w.d):(byConf?fmtDay(w.d):"");
-    out += `<button class="row${started?" is-live":paused?" is-ht":""}${isDone(m)?" is-done":""}${window.TM42&&TM42.isPast(m)?" arc42":""}${window.V43?V43.cls(m):""}"${window.V43?V43.why(m):""} data-id="${m.event_id}" data-d="${window.TM42?TM42.dayOf(m):""}" data-ko="${w.hasTime?w.d.getTime():""}"${m.score?' data-sc="1"':""}><div class="top"><span><span style="color:${LCOL[m.league]||"var(--muted)"}">●</span> ${esc(LEAGUES[m.league]||m.league)}</span>
+    out += `<button class="row${started?" is-live":paused?" is-ht":""}${isDone(m)?" is-done":""}${window.TM42&&TM42.isPast(m)?" arc42":""}${window.V43?V43.cls(m):""}"${window.V43?V43.why(m):""} data-id="${m.event_id}" data-d="${window.TM42?TM42.dayOf(m):""}" data-ko="${w.hasTime?w.d.getTime():""}" data-g="${g_}"${m.score?' data-sc="1"':""}><div class="top"><span><span style="color:${LCOL[m.league]||"var(--muted)"}">●</span> ${esc(LEAGUES[m.league]||m.league)}</span>
       <span class="num">${started?'<span class="live"></span>':paused?'<span class="pause">⏸</span> ':""}${isDone(m)&&!m.score?`<span class="eta">завершён · итог ожидается</span> · `:m.score?`<span class="eta">завершён</span> · `:w.hasTime?`<span class="eta" data-eta="${w.d.getTime()}">${esc(etaText(w.d.getTime()))}</span> · `:""}${esc(when_)}</span></div>
       <div class="teams"><span class="tm41">${cr(m.home,26,mono(nmH(m)))}<i>${isFav(m.home)?'<b class="fv">★</b>':""}${esc(nmH(m))}</i>${window.V43?V43.formH(m):""}</span><span class="tm41">${cr(m.away,26,mono(nmA(m)))}<i>${isFav(m.away)?'<b class="fv">★</b>':""}${esc(nmA(m))}</i>${window.V43?V43.formA(m):""}</span></div>${window.V43?V43.insight(m):""}${window.V44?V44.pill(m):""}${m.score?`<div class="score num">${m.score[0]} : ${m.score[1]}</div>`:pbar(m.p)}
       ${bd.length?`<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">${bd.join("")}</div>`:""}</button>`;
@@ -2752,14 +2788,14 @@ const FX = (()=>{
   function applyAccent(){
     const a=accent(), r=document.documentElement.style; r.setProperty("--blue",a);
   }
-  /* световое пятно и волна при нажатии */
-  document.addEventListener("pointerdown",e=>{
-    if(document.documentElement.dataset.fxl==="off") return;
-    const el=e.target.closest(".card,.row,.tile"); if(el){ const b=el.getBoundingClientRect(); el.style.setProperty("--mx",(e.clientX-b.left)+"px"); el.style.setProperty("--my",(e.clientY-b.top)+"px"); el.classList.add("lit"); setTimeout(()=>el.classList.remove("lit"),420); }
-    const bt=e.target.closest(".chip,.seg button,.nav button,.btn,.bgpick button,.sort button");
-    if(bt){ bt.classList.add("rip-host"); const b=bt.getBoundingClientRect(), d=Math.max(b.width,b.height)*2, sp=document.createElement("span");
-      sp.className="rip"; sp.style.cssText=`width:${d}px;height:${d}px;left:${e.clientX-b.left-d/2}px;top:${e.clientY-b.top-d/2}px`; bt.appendChild(sp); setTimeout(()=>sp.remove(),650); }
-  },{passive:true});
+  /* v46.19: один эффект касания. Вспышка — только после подтверждённого тапа (не в начале прокрутки), один раз, без повторов и без «волн» по всему экрану */
+  (function(){ let p=null; const rt=document.documentElement;
+    document.addEventListener("pointerdown",e=>{ p={x:e.clientX,y:e.clientY,t:performance.now(),el:e.target.closest?e.target.closest(".card,.row,.tile"):null}; },{passive:true});
+    document.addEventListener("pointermove",e=>{ if(p&&Math.hypot(e.clientX-p.x,e.clientY-p.y)>8) p=null; },{passive:true});
+    document.addEventListener("pointercancel",()=>{ p=null; },{passive:true});
+    document.addEventListener("pointerup",e=>{ const q=p; p=null; if(!q||!q.el||performance.now()-q.t>450) return; if(rt.dataset.fxl==="off"||rt.dataset.anim==="off") return; const el=q.el; if(el.classList.contains("tap46")) return;
+      const b=el.getBoundingClientRect(); el.style.setProperty("--mx",(e.clientX-b.left)+"px"); el.style.setProperty("--my",(e.clientY-b.top)+"px"); el.classList.add("tap46"); setTimeout(()=>el.classList.remove("tap46"),480); },{passive:true});
+  })();
   applyAccent(); start();
   return {start, applyAccent, STATIC:Object.keys(STATIC), recolor(){ if(document.documentElement.dataset.fx==="on") size(); }};
 })();
@@ -3175,7 +3211,7 @@ Promise.all([loadFavs(),loadLang()]).then(async()=>{ if(STATIC){ try{ await ensu
     const chip=(on,attr,t)=>`<button class="chip ${on?"on":""}" ${attr}>${t}</button>`;
     const html=`<div><div class="sh-l">Лига</div><div class="chips" id="sh-lg">${chip(lg==="",'data-l=""',"Все лиги")+Object.keys(LEAGUES).map(k=>chip(lg===k,`data-l="${k}"`,esc(LEAGUES[k]))).join("")}</div></div>
       <div><div class="sh-l">Период</div><div class="chips" id="sh-dz">${[[1,"Сегодня"],[2,"2 дня"],[4,"4 дня"],[7,"Неделя"]].map(([n,t])=>chip(dz===n,`data-d="${n}"`,t)).join("")}</div></div>
-      <div><div class="sh-l">Показывать</div><div class="chips" id="sh-tg">${chip(state.favOnly,'data-x="tf"',"★ Мои команды")+chip(state.recOnly,'data-x="tr"',"С перевесом")+chip(state.showDone,'data-x="td"',"🏁 Завершённые")}</div></div>
+      <div><div class="sh-l">Показывать</div><div class="chips" id="sh-tg">${chip(state.favOnly,'data-x="tf"',"★ Мои команды")+chip(state.recOnly,'data-x="tr"',"С перевесом")}</div></div>
       <div><div class="sh-l">Сортировка</div><div class="chips" id="sh-so">${chip(state.sort==="time",'data-s="time"',"По времени")+chip(state.sort==="conf",'data-s="conf"',"По уверенности")}</div></div>`;
     Sheet.open("Фильтры",html,B=>{
       B.querySelector("#sh-lg").onclick=e=>{ const b=e.target.closest("[data-l]"); if(!b) return; state.league=b.dataset.l; haptic(); Sheet.close(); setTimeout(()=>viewMatches(),180); };
@@ -3398,7 +3434,6 @@ void main(){
     function build(){ if(el) return; el=document.createElement("div"); el.id="silk"; el.setAttribute("aria-hidden","true");
       el.innerHTML='<div class="par"><i class="b b1"></i><i class="b b2"></i><i class="b b3"></i><i class="b b4"></i></div>'+'<i class="rp"></i><i class="rp"></i><i class="rp"></i><i class="rp"></i>';
       document.body.insertBefore(el,document.getElementById("fx")); par=el.querySelector(".par"); rps=[...el.querySelectorAll(".rp")];
-      document.addEventListener("pointerdown",e=>ripple(e.clientX,e.clientY),{passive:true});
       window.__parX=(cx,cy)=>{ if(on&&par) par.style.transform="translate3d("+(cx*-16).toFixed(1)+"px,"+(cy*-16).toFixed(1)+"px,0)"; }; }
     return { on(){ build(); on=true; }, off(){ on=false; if(par) par.style.transform=""; rps.forEach(r=>{ if(r._a){ r._a.cancel(); r._a=null; } }); } }; })();
   BGS.unshift(["fluid","Жидкость · GPU"]); BGS.unshift(["silk","Шёлк · лёгкий"]);
@@ -3965,7 +4000,7 @@ void main(){
   function emptyHtml(t,s,extra){ return `<div class="empty34" role="status"><div class="tr" aria-hidden="true">🏆</div><div class="sh" aria-hidden="true"></div><b>${esc(t)}</b><span>${esc(s||"")}</span>${extra||""}</div>`; }
   function applyFilters(d){
     const f=FS(); f.leagues=d.leagues.slice(); f.conf=d.conf; lsSet("f34l",JSON.stringify(f.leagues)); lsSet("f34c",String(f.conf));
-    state.recOnly=!!d.rec; state.favOnly=!!d.fav; state.showDone=!!d.done; const dc=d.days!==state.days; state.days=d.days; if(dc){ state.day=null; state.pre=[]; } badge();
+    state.recOnly=!!d.rec; state.favOnly=!!d.fav; state.showDone=true; const dc=d.days!==state.days; state.days=d.days; if(dc){ state.day=null; state.pre=[]; } badge();
     if(dc){ viewMatches(); return; }
     [["tf",state.favOnly],["tr",state.recOnly],["td",state.showDone]].forEach(([i,on])=>{ const el=document.getElementById(i); if(el) el.classList.toggle("on",on); }); renderList(true); }
   function badge(){ const b=$("#fl34"); if(!b) return; const n=activeN(); b.innerHTML="⚙ Фильтры"+(n?`<em>${n}</em>`:""); b.classList.toggle("on",n>0); b.setAttribute("aria-label","Фильтры"+(n?`, активно: ${n}`:"")); }
@@ -3978,7 +4013,7 @@ void main(){
     const body=()=>`<div class="fl"><div class="cap">Лиги</div><div class="wrap" id="fl-lg">${lgs.map(k=>`<button type="button" class="chip ${d.leagues.includes(k)?"on":""}" id="fl-l-${k}" data-k="${k}" aria-pressed="${d.leagues.includes(k)}">${esc(LEAGUES[k])}${cnt[k]?` · ${cnt[k]}`:""}</button>`).join("")}</div>
       <div class="cap">Период</div><div class="seg" id="fl-dy">${[[1,"Сегодня"],[2,"2 дня"],[4,"4 дня"],[7,"Неделя"]].map(([n,t])=>`<button type="button" id="fl-d-${n}" data-k="${n}" class="${d.days===n?"on":""}">${t}</button>`).join("")}</div>
       <div class="cap">Уверенность модели</div><div class="seg" id="fl-cf">${[[0,"Любая"],[.45,"от 45%"],[.55,"от 55%"],[.65,"от 65%"]].map(([n,t])=>`<button type="button" id="fl-c-${Math.round(n*100)}" data-k="${n}" class="${d.conf===n?"on":""}">${t}</button>`).join("")}</div>
-      <div class="cap">Показывать</div><div class="wrap" id="fl-tg"><button type="button" class="chip ${d.rec?"on":""}" id="fl-t-rec" data-k="rec" aria-pressed="${d.rec}">С перевесом</button><button type="button" class="chip ${d.fav?"on":""}" id="fl-t-fav" data-k="fav" aria-pressed="${d.fav}">★ Мои команды</button><button type="button" class="chip ${d.done?"on":""}" id="fl-t-done" data-k="done" aria-pressed="${d.done}">🏁 Завершённые</button></div>
+      <div class="cap">Показывать</div><div class="wrap" id="fl-tg"><button type="button" class="chip ${d.rec?"on":""}" id="fl-t-rec" data-k="rec" aria-pressed="${d.rec}">С перевесом</button><button type="button" class="chip ${d.fav?"on":""}" id="fl-t-fav" data-k="fav" aria-pressed="${d.fav}">★ Мои команды</button></div>
       <div class="cap">Шаблоны</div><div id="fl-pl">${pres().length?pres().map((x,i)=>`<div class="pre"><b>${esc(x.n)}</b><button type="button" class="use" id="fl-pu-${i}" data-i="${i}">Применить</button><button type="button" id="fl-pd-${i}" data-i="${i}" aria-label="Удалить шаблон ${esc(x.n)}">✕</button></div>`).join(""):'<div class="muted" style="font-size:13px">Сохраните текущий набор фильтров, чтобы включать его одним касанием.</div>'}</div>
       <div class="save"><input class="search" id="fl-name" maxlength="24" placeholder="Название шаблона" autocomplete="off"><button type="button" class="chip" id="fl-save">Сохранить</button></div>
       <div class="row2"><button type="button" class="btn sec" id="fl-clr">Сбросить</button><button type="button" class="btn" id="fl-ok">Применить</button></div></div>`;
@@ -4927,7 +4962,7 @@ const EXC=(()=>{
   const spIO="IntersectionObserver" in window?new IntersectionObserver(es=>es.forEach(en=>{ const s=en.target.__spec; if(!s) return; if(en.isIntersecting&&live.size<10){ live.add(s); s.classList.add("on"); } else { live.delete(s); s.classList.remove("on"); } }),{threshold:0}):null;
   const arm=()=>{ $$(SPEC).forEach(n=>{ if(n.__spec||!spIO) return; const s=D.createElement("i"); s.className="spec40"; s.setAttribute("aria-hidden","true"); s.innerHTML="<b></b>"; n.appendChild(s); n.__spec=s; spIO.observe(n); }); };
   let SCR=false, scT=0;   /* v46.18: во время прокрутки блик и фоновые анимации стоят — главный источник подвисаний на телефоне */
-  addEventListener("scroll",()=>{ if(!SCR){ SCR=true; R.classList.add("scr46"); } clearTimeout(scT); scT=setTimeout(()=>{ SCR=false; R.classList.remove("scr46"); },140); },{passive:true,capture:true});
+  addEventListener("scroll",()=>{ SCR=true; clearTimeout(scT); scT=setTimeout(()=>{ SCR=false; },140); },{passive:true,capture:true});
   const loop=()=>{ sraf=0; if(LOW()||RM()) return; cx+=(tx-cx)*.12; cy+=(ty-cy)*.12;
     const now=performance.now(); if(SCR) { sraf=requestAnimationFrame(loop); return; }
     live.forEach(s=>{ const r=s.parentNode; if(!s.__t||now-s.__t>600){ s.__w=r.offsetWidth; s.__h=r.offsetHeight; s.__t=now; } const w=s.__w, h=s.__h, b=s.firstChild; b.style.transform=`translate3d(${(cx*w*.42).toFixed(1)}px,${(cy*Math.min(h,260)*.42).toFixed(1)}px,0)`; });
@@ -5342,7 +5377,7 @@ async function select(sel){
 /* ───── подгрузка предыдущего дня ───── */
 const prevLabel=d=>d===shift(todayS(),-1)?"Вчера":parse(d).toLocaleDateString("ru-RU",{day:"numeric",month:"long"});
 function head(){
-  if(state.day&&state.day>todayS()) return "";
+  if((state.day&&state.day>todayS())||(state.day==null&&state.days>1)) return "";
   if(!canPrev()) return `<div class="pv42 end">Архив хранит ${MAXB} дней</div>`;
   return `<button type="button" class="pv42" id="pv42"><svg viewBox="0 0 24 24"><path d="M6 15l6-6 6 6"/></svg>Ранее · ${E(prevLabel(shift(oldest(),-1)))}</button>`;
 }
@@ -6378,7 +6413,7 @@ function afterList(el){
     if(!box){ box=D.createElement("div"); box.id="pulse46"; el.parentNode.insertBefore(box,el); }
     const keep=(fn)=>{ const h0=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight, y0=scrollY; fn(); if(y0>10){ const d=box.offsetHeight+(D.getElementById("yd46box")||{offsetHeight:0}).offsetHeight-h0; if(d) scrollBy(0,d); } };
     const h=pulseHtml(); if(box.__h!==h) keep(()=>{ box.__h=h; box.innerHTML=h; });
-    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.18"; el.parentNode.appendChild(v); }
+    if(!D.getElementById("ver46")){ const v=D.createElement("div"); v.id="ver46"; v.textContent="версия интерфейса v46.19"; el.parentNode.appendChild(v); }
     let yb=D.getElementById("yd46box");
     if(!yb){ yb=D.createElement("div"); yb.id="yd46box"; el.parentNode.insertBefore(yb,el); }
     const show=!!dayItems();
